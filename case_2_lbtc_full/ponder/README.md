@@ -6,4 +6,4 @@ PGPASSWORD="YRKZwZHCsTgVvFThgvynDcxiemFwxAPs" psql -h maglev.proxy.rlwy.net -p 4
 
 
 SET search_path TO "4e9e047f-0601-4497-b364-8369ad14d401";
-SELECT COUNT(*) FROM lbtc_transfer; 
+SELECT COUNT(*) FROM lbtc_transfer;
