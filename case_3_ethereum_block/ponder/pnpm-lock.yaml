@@ -8,12 +8,18 @@ importers:
 
   .:
     dependencies:
+      '@commander-js/extra-typings':
+        specifier: ^13.1.0
+        version: 13.1.0(commander@12.1.0)
+      dotenv:
+        specifier: ^16.4.7
+        version: 16.4.7
       hono:
         specifier: ^4.5.0
         version: 4.7.6
       ponder:
-        specifier: ^0.10.11
-        version: 0.10.11(@opentelemetry/api@1.9.0)(@types/node@20.17.30)(hono@4.7.6)(typescript@5.8.3)(viem@2.26.2(typescript@5.8.3))
+        specifier: ^0.10.0
+        version: 0.10.12(@opentelemetry/api@1.9.0)(@types/node@20.17.30)(hono@4.7.6)(typescript@5.8.3)(viem@2.26.2(typescript@5.8.3))
       viem:
         specifier: ^2.21.3
         version: 2.26.2(typescript@5.8.3)
@@ -25,8 +31,8 @@ importers:
         specifier: ^8.54.0
         version: 8.57.1
       eslint-config-ponder:
-        specifier: ^0.10.11
-        version: 0.10.11(@typescript-eslint/eslint-plugin@6.21.0(@typescript-eslint/parser@6.21.0(eslint@8.57.1)(typescript@5.8.3))(eslint@8.57.1)(typescript@5.8.3))(@typescript-eslint/parser@6.21.0(eslint@8.57.1)(typescript@5.8.3))(eslint@8.57.1)
+        specifier: ^0.10.0
+        version: 0.10.12(@typescript-eslint/eslint-plugin@6.21.0(@typescript-eslint/parser@6.21.0(eslint@8.57.1)(typescript@5.8.3))(eslint@8.57.1)(typescript@5.8.3))(@typescript-eslint/parser@6.21.0(eslint@8.57.1)(typescript@5.8.3))(eslint@8.57.1)
       typescript:
         specifier: ^5.3.2
         version: 5.8.3
@@ -48,6 +54,11 @@ packages:
     resolution: {integrity: sha512-wf/lwQvWAA0goIghcb91dQYpkLBcyhOhQNqG/VgWhnKzgt+UOMvra7EX/2fv70arm5RW+PUHoQHHDa6/p77Eqg==}
     peerDependencies:
       commander: ~12.1.0
+
+  '@commander-js/extra-typings@13.1.0':
+    resolution: {integrity: sha512-q5P52BYb1hwVWE6dtID7VvuJWrlfbCv4klj7BjUUOqMz4jbSZD4C9fJ9lRjL2jnBGTg+gDDlaXN51rkWcLk4fg==}
+    peerDependencies:
+      commander: ~13.1.0
 
   '@electric-sql/pglite@0.2.13':
     resolution: {integrity: sha512-YRY806NnScVqa21/1L1vaysSQ+0/cAva50z7vlwzaGiBOTS9JhdzIRHN0KfgMhobFAphbznZJ7urMso4RtMBIQ==}
@@ -859,8 +870,8 @@ packages:
     resolution: {integrity: sha512-TtpcNJ3XAzx3Gq8sWRzJaVajRs0uVxA2YAkdb1jm2YkPz4G6egUFAyA3n5vtEIZefPk5Wa4UXbKuS5fKkJWdgA==}
     engines: {node: '>=10'}
 
-  eslint-config-ponder@0.10.11:
-    resolution: {integrity: sha512-GtG+lb9ICQibltWcw52oBvNu08qEOD7b2o4rmR7t7sWYs7GRDmBxLbpDAHoLfbNRobOIgM3YEDF7gsPNc3qv4g==}
+  eslint-config-ponder@0.10.12:
+    resolution: {integrity: sha512-Z603Y1yyyWoL4Jem4+kNnarIAU7KO2Ig8L/5cqU2BRLpTTupnipOddeY0GWMS1SYFzfDaMcD6G8e+5I6f3AGcA==}
     peerDependencies:
       '@typescript-eslint/eslint-plugin': ^6.3.0
       '@typescript-eslint/parser': ^6.3.0
@@ -1319,8 +1330,8 @@ packages:
     resolution: {integrity: sha512-ip4qdzjkAyDDZklUaZkcRFb2iA118H9SgRh8yzTkSQK8HilsOJF7rSY8HoW5+I0M46AZgX/pxbprf2vvzQCE0Q==}
     hasBin: true
 
-  ponder@0.10.11:
-    resolution: {integrity: sha512-gHbAptdU1o0IpiaItkkesY3Flyd4fShr1RrUCFOFGsEOo1IU0ohdV37s6rcVD7xUTsjPXYUBLzLoIASb+ZDuEg==}
+  ponder@0.10.12:
+    resolution: {integrity: sha512-+Z185kl8GRBdzGKOGxYR210oNcX6Bnhs/I7mVaVSXlOYJBtZbTludEyHBV70xfAd/sasyOPvz2REJYCvDaaITQ==}
     engines: {node: '>=18.14'}
     hasBin: true
     peerDependencies:
@@ -1683,6 +1694,10 @@ snapshots:
   '@babel/helper-validator-identifier@7.25.9': {}
 
   '@commander-js/extra-typings@12.1.0(commander@12.1.0)':
+    dependencies:
+      commander: 12.1.0
+
+  '@commander-js/extra-typings@13.1.0(commander@12.1.0)':
     dependencies:
       commander: 12.1.0
 
@@ -2348,7 +2363,7 @@ snapshots:
 
   escape-string-regexp@4.0.0: {}
 
-  eslint-config-ponder@0.10.11(@typescript-eslint/eslint-plugin@6.21.0(@typescript-eslint/parser@6.21.0(eslint@8.57.1)(typescript@5.8.3))(eslint@8.57.1)(typescript@5.8.3))(@typescript-eslint/parser@6.21.0(eslint@8.57.1)(typescript@5.8.3))(eslint@8.57.1):
+  eslint-config-ponder@0.10.12(@typescript-eslint/eslint-plugin@6.21.0(@typescript-eslint/parser@6.21.0(eslint@8.57.1)(typescript@5.8.3))(eslint@8.57.1)(typescript@5.8.3))(@typescript-eslint/parser@6.21.0(eslint@8.57.1)(typescript@5.8.3))(eslint@8.57.1):
     dependencies:
       '@typescript-eslint/eslint-plugin': 6.21.0(@typescript-eslint/parser@6.21.0(eslint@8.57.1)(typescript@5.8.3))(eslint@8.57.1)(typescript@5.8.3)
       '@typescript-eslint/parser': 6.21.0(eslint@8.57.1)(typescript@5.8.3)
@@ -2830,7 +2845,7 @@ snapshots:
       sonic-boom: 3.8.1
       thread-stream: 2.7.0
 
-  ponder@0.10.11(@opentelemetry/api@1.9.0)(@types/node@20.17.30)(hono@4.7.6)(typescript@5.8.3)(viem@2.26.2(typescript@5.8.3)):
+  ponder@0.10.12(@opentelemetry/api@1.9.0)(@types/node@20.17.30)(hono@4.7.6)(typescript@5.8.3)(viem@2.26.2(typescript@5.8.3)):
     dependencies:
       '@babel/code-frame': 7.26.2
       '@commander-js/extra-typings': 12.1.0(commander@12.1.0)
