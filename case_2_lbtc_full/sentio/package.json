@@ -1,0 +1,22 @@
+{
+  "private": true,
+  "name": "lbtc",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "build": "sentio build",
+    "gen": "sentio gen",
+    "test": "sentio test",
+    "upload": "sentio upload",
+    "postinstall": "sentio gen"
+  },
+  "dependencies": {
+    "@sentio/sdk": "^2.57.12"
+  },
+  "devDependencies": {
+    "@sentio/cli": "^2.25.5",
+    "@types/chai": "^5.2.1",
+    "chai": "^5.2.0",
+    "typescript": "^5.5.2"
+  }
+}
