@@ -71,11 +71,28 @@ ponder.on("LBTC:Transfer", async ({ event, context }) => {
     transactionHash: event.transaction.hash
   });
   
-  // Batch insert snapshots - no conflicts expected since we use unique IDs
-  if (snapshots.size > 0) {
+  // Validate snapshot objects before insertion
+  const validSnapshots = [...snapshots.values()].filter(snapshot => 
+    snapshot && snapshot.id && typeof snapshot.id === 'string'
+  );
+  
+  // Batch insert snapshots - with conflict handling to update existing snapshots
+  if (validSnapshots.length > 0) {
     await context.db.insert(schema.snapshot)
-      .values([...snapshots.values()])
-      .onConflictDoNothing();
+      .values(validSnapshots)
+      .onConflictDoUpdate((existing) => {
+        const snapshot = snapshots.get(existing.id);
+        if (!snapshot) {
+          return {}; // No changes if snapshot not found
+        }
+        return {
+          accountId: snapshot.accountId,  // match schema
+          balance: snapshot.balance,
+          point: snapshot.point,
+          mintAmount: snapshot.mintAmount,
+          timestampMilli: snapshot.timestampMilli
+        };
+      });
   }
   
   // Batch insert/update accounts with conflict handling
@@ -148,11 +165,28 @@ ponder.on("HourlyUpdate:block", async ({ event, context }) => {
     }
   }
   
-  // Batch insert snapshots
-  if (snapshots.size > 0) {
+  // Validate snapshot objects before insertion
+  const validSnapshots = [...snapshots.values()].filter(snapshot => 
+    snapshot && snapshot.id && typeof snapshot.id === 'string'
+  );
+  
+  // Batch insert snapshots - with conflict handling
+  if (validSnapshots.length > 0) {
     await context.db.insert(schema.snapshot)
-      .values([...snapshots.values()])
-      .onConflictDoNothing();
+      .values(validSnapshots)
+      .onConflictDoUpdate((existing) => {
+        const snapshot = snapshots.get(existing.id);
+        if (!snapshot) {
+          return {}; // No changes if snapshot not found
+        }
+        return {
+          accountId: snapshot.accountId,  // match schema
+          balance: snapshot.balance,
+          point: snapshot.point,
+          mintAmount: snapshot.mintAmount,
+          timestampMilli: snapshot.timestampMilli
+        };
+      });
   }
   
   // Batch insert/update accounts
@@ -219,18 +253,19 @@ async function getLastSnapshotData(db: any, accountId: string) {
   
   const account = await db.find(schema.accounts, { id: accountId });
   
-  if (account && account.lastSnapshotTimestamp) {
-    const snapshotId = `${accountId}-${account.lastSnapshotTimestamp.toString()}`;
-    const lastSnapshot = await db.find(schema.snapshot, { id: snapshotId });
-    
-    if (lastSnapshot) {
-      return {
-        point: lastSnapshot.point || 0n,
-        balance: lastSnapshot.balance,
-        timestamp: account.lastSnapshotTimestamp,
-        mintAmount: lastSnapshot.mintAmount || 0n
-      };
-    }
+  if (!account || !account.lastSnapshotTimestamp) return defaultData;
+  
+  // Direct lookup by ID using our simplified format: accountId-timestamp
+  const snapshotId = `${accountId}-${account.lastSnapshotTimestamp.toString()}`;
+  const snapshot = await db.find(schema.snapshot, { id: snapshotId });
+  
+  if (snapshot) {
+    return {
+      point: snapshot.point || 0n,
+      balance: snapshot.balance,
+      timestamp: account.lastSnapshotTimestamp,
+      mintAmount: snapshot.mintAmount || 0n
+    };
   }
   
   return defaultData;
@@ -253,7 +288,7 @@ async function createAndSaveSnapshot(
   if (accountId === "0x0000000000000000000000000000000000000000") {
     return;
   }
-  
+
   // Normalize account ID to lowercase
   const normalizedAccountId = accountId.toLowerCase();
   
@@ -266,8 +301,8 @@ async function createAndSaveSnapshot(
   // Get last snapshot data
   const lastData = await getLastSnapshotData(db, normalizedAccountId);
   
-  // Use transaction hash in the ID to ensure uniqueness
-  const snapshotId = `${normalizedAccountId}-${timestamp.toString()}-${transactionHash}`;
+  // Simplified ID without transaction hash - allows natural overwriting
+  const snapshotId = `${normalizedAccountId}-${timestamp.toString()}`;
   
   // Calculate new mint amount
   let newMintAmount = lastData.mintAmount;
@@ -285,19 +320,25 @@ async function createAndSaveSnapshot(
     point = lastData.point + pointsToAdd;
   }
   
-  // Add snapshot to collection instead of inserting immediately
-  snapshots.set(snapshotId, {
-    id: snapshotId,
-    accountId: normalizedAccountId,
-    timestampMilli: timestamp,
-    balance,
-    point,
-    mintAmount: newMintAmount
-  });
+  // Get the full account object for proper relationship
+  const account = await db.find(schema.accounts, { id: normalizedAccountId });
   
-  // Add account update to collection instead of updating immediately
-  accountsToUpdate.set(normalizedAccountId, {
-    id: normalizedAccountId,
-    lastSnapshotTimestamp: timestamp
-  });
+  // Only proceed if we have a valid account
+  if (account) {
+    // Add snapshot to collection instead of inserting immediately
+    snapshots.set(snapshotId, {
+      id: snapshotId,
+      accountId: normalizedAccountId,  // Changed from account: account to match schema
+      timestampMilli: timestamp,
+      balance,
+      point,
+      mintAmount: newMintAmount
+    });
+    
+    // Add account update to collection instead of updating immediately
+    accountsToUpdate.set(normalizedAccountId, {
+      id: normalizedAccountId,
+      lastSnapshotTimestamp: timestamp
+    });
+  }
 }
