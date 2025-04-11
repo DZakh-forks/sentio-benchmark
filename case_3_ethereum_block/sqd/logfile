@@ -1,0 +1,68 @@
+2025-04-10 18:13:57.041 EDT [84131] LOG:  starting PostgreSQL 14.17 (Homebrew) on aarch64-apple-darwin23.6.0, compiled by Apple clang version 16.0.0 (clang-1600.0.26.6), 64-bit
+2025-04-10 18:13:57.044 EDT [84131] LOG:  listening on IPv6 address "::1", port 5432
+2025-04-10 18:13:57.044 EDT [84131] LOG:  listening on IPv4 address "127.0.0.1", port 5432
+2025-04-10 18:13:57.044 EDT [84131] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5432"
+2025-04-10 18:13:57.048 EDT [84132] LOG:  database system was shut down at 2025-04-10 18:13:53 EDT
+2025-04-10 18:13:57.051 EDT [84131] LOG:  database system is ready to accept connections
+2025-04-10 18:49:50.703 EDT [92017] FATAL:  role "username" does not exist
+2025-04-10 18:50:09.798 EDT [92176] FATAL:  database "yufeili" does not exist
+2025-04-10 18:51:16.673 EDT [92739] ERROR:  relation "public.kysely_migration" does not exist at character 15
+2025-04-10 18:51:16.673 EDT [92739] STATEMENT:  SELECT * FROM public.kysely_migration LIMIT 1
+2025-04-10 19:13:35.241 EDT [95645] FATAL:  role "username" does not exist
+2025-04-10 19:14:32.739 EDT [95905] FATAL:  role "username" does not exist
+2025-04-10 19:15:13.474 EDT [96623] ERROR:  relation "public.kysely_migration" does not exist at character 15
+2025-04-10 19:15:13.474 EDT [96623] STATEMENT:  SELECT * FROM public.kysely_migration LIMIT 1
+2025-04-10 19:15:46.493 EDT [96733] FATAL:  role "username" does not exist
+2025-04-10 19:16:43.073 EDT [97007] FATAL:  role "username" does not exist
+2025-04-10 19:17:34.913 EDT [97174] FATAL:  role "username" does not exist
+2025-04-10 19:17:58.440 EDT [97351] ERROR:  relation "public.kysely_migration" does not exist at character 15
+2025-04-10 19:17:58.440 EDT [97351] STATEMENT:  SELECT * FROM public.kysely_migration LIMIT 1
+2025-04-10 19:18:17.189 EDT [97438] FATAL:  role "username" does not exist
+2025-04-10 19:18:49.864 EDT [97572] ERROR:  relation "public.kysely_migration" does not exist at character 15
+2025-04-10 19:18:49.864 EDT [97572] STATEMENT:  SELECT * FROM public.kysely_migration LIMIT 1
+2025-04-10 19:19:02.958 EDT [97653] FATAL:  role "username" does not exist
+2025-04-10 19:19:17.593 EDT [97805] ERROR:  relation "public.kysely_migration" does not exist at character 15
+2025-04-10 19:19:17.593 EDT [97805] STATEMENT:  SELECT * FROM public.kysely_migration LIMIT 1
+2025-04-10 19:19:51.881 EDT [98021] ERROR:  relation "public.kysely_migration" does not exist at character 15
+2025-04-10 19:19:51.881 EDT [98021] STATEMENT:  SELECT * FROM public.kysely_migration LIMIT 1
+2025-04-10 19:20:15.645 EDT [98119] FATAL:  role "username" does not exist
+2025-04-10 19:20:22.829 EDT [98150] ERROR:  database "dbname" already exists
+2025-04-10 19:20:22.829 EDT [98150] STATEMENT:  CREATE DATABASE dbname;
+2025-04-10 19:20:31.285 EDT [98272] ERROR:  relation "public.kysely_migration" does not exist at character 15
+2025-04-10 19:20:31.285 EDT [98272] STATEMENT:  SELECT * FROM public.kysely_migration LIMIT 1
+2025-04-10 19:20:49.655 EDT [98375] ERROR:  relation "public.kysely_migration" does not exist at character 15
+2025-04-10 19:20:49.655 EDT [98375] STATEMENT:  SELECT * FROM public.kysely_migration LIMIT 1
+2025-04-10 19:21:47.892 EDT [98553] FATAL:  role "username" does not exist
+2025-04-10 19:22:00.437 EDT [98638] ERROR:  relation "public.kysely_migration" does not exist at character 15
+2025-04-10 19:22:00.437 EDT [98638] STATEMENT:  SELECT * FROM public.kysely_migration LIMIT 1
+2025-04-10 19:36:43.722 EDT [1368] ERROR:  relation "public.kysely_migration" does not exist at character 15
+2025-04-10 19:36:43.722 EDT [1368] STATEMENT:  SELECT * FROM public.kysely_migration LIMIT 1
+2025-04-10 19:37:23.258 EDT [1474] FATAL:  role "username" does not exist
+2025-04-10 19:37:38.385 EDT [1561] ERROR:  relation "public.kysely_migration" does not exist at character 15
+2025-04-10 19:37:38.385 EDT [1561] STATEMENT:  SELECT * FROM public.kysely_migration LIMIT 1
+2025-04-10 19:37:43.834 EDT [1567] LOG:  could not receive data from client: Connection reset by peer
+2025-04-10 19:37:43.834 EDT [1560] LOG:  unexpected EOF on client connection with an open transaction
+2025-04-10 19:41:40.567 EDT [2680] ERROR:  relation "public.kysely_migration" does not exist at character 15
+2025-04-10 19:41:40.567 EDT [2680] STATEMENT:  SELECT * FROM public.kysely_migration LIMIT 1
+2025-04-11 10:19:57.094 EDT [15572] ERROR:  relation "public.kysely_migration" does not exist at character 15
+2025-04-11 10:19:57.094 EDT [15572] STATEMENT:  SELECT * FROM public.kysely_migration LIMIT 1
+2025-04-11 10:20:44.708 EDT [15673] ERROR:  relation "public.kysely_migration" does not exist at character 15
+2025-04-11 10:20:44.708 EDT [15673] STATEMENT:  SELECT * FROM public.kysely_migration LIMIT 1
+2025-04-11 10:20:58.078 EDT [15718] ERROR:  relation "public.kysely_migration" does not exist at character 15
+2025-04-11 10:20:58.078 EDT [15718] STATEMENT:  SELECT * FROM public.kysely_migration LIMIT 1
+2025-04-11 10:20:58.269 EDT [15723] ERROR:  relation "public.kysely_migration" does not exist at character 15
+2025-04-11 10:20:58.269 EDT [15723] STATEMENT:  SELECT * FROM public.kysely_migration LIMIT 1
+2025-04-11 15:42:22.679 EDT [61840] FATAL:  role "username" does not exist
+2025-04-11 15:44:21.140 EDT [62098] FATAL:  role "username" does not exist
+2025-04-11 15:49:26.605 EDT [63303] FATAL:  role "username" does not exist
+2025-04-11 15:49:43.742 EDT [63445] FATAL:  role "username" does not exist
+2025-04-11 15:49:52.383 EDT [63540] FATAL:  role "username" does not exist
+2025-04-11 15:49:57.851 EDT [63589] FATAL:  database "yufeili" does not exist
+2025-04-11 15:50:01.522 EDT [63631] ERROR:  database "ponder_dev" already exists
+2025-04-11 15:50:01.522 EDT [63631] STATEMENT:  CREATE DATABASE ponder_dev;
+2025-04-11 15:50:21.084 EDT [63808] FATAL:  role "username" does not exist
+2025-04-11 15:50:25.383 EDT [63851] FATAL:  role "postgres" does not exist
+2025-04-11 15:50:45.763 EDT [64068] FATAL:  role "username" does not exist
+2025-04-11 15:51:10.004 EDT [64349] FATAL:  role "username" does not exist
+2025-04-11 16:08:35.309 EDT [67716] FATAL:  role "username" does not exist
+2025-04-11 16:08:40.904 EDT [67770] FATAL:  role "username" does not exist
