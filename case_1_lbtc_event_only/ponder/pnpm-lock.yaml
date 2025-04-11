@@ -8,12 +8,15 @@ importers:
 
   .:
     dependencies:
+      '@ponder/utils':
+        specifier: ^0.2.3
+        version: 0.2.3(typescript@5.8.3)(viem@2.25.0(typescript@5.8.3))
       hono:
         specifier: ^4.5.0
         version: 4.7.5
       ponder:
-        specifier: ^0.10.9
-        version: 0.10.9(@opentelemetry/api@1.9.0)(@types/node@20.17.30)(hono@4.7.5)(typescript@5.8.3)(viem@2.25.0(typescript@5.8.3))
+        specifier: ^0.10.13
+        version: 0.10.13(@opentelemetry/api@1.9.0)(@types/node@20.17.30)(hono@4.7.5)(typescript@5.8.3)(viem@2.25.0(typescript@5.8.3))
       viem:
         specifier: ^2.21.3
         version: 2.25.0(typescript@5.8.3)
@@ -25,8 +28,8 @@ importers:
         specifier: ^8.53.0
         version: 8.57.1
       eslint-config-ponder:
-        specifier: ^0.10.9
-        version: 0.10.9(@typescript-eslint/eslint-plugin@6.21.0(@typescript-eslint/parser@6.21.0(eslint@8.57.1)(typescript@5.8.3))(eslint@8.57.1)(typescript@5.8.3))(@typescript-eslint/parser@6.21.0(eslint@8.57.1)(typescript@5.8.3))(eslint@8.57.1)
+        specifier: ^0.10.13
+        version: 0.10.13(@typescript-eslint/eslint-plugin@6.21.0(@typescript-eslint/parser@6.21.0(eslint@8.57.1)(typescript@5.8.3))(eslint@8.57.1)(typescript@5.8.3))(@typescript-eslint/parser@6.21.0(eslint@8.57.1)(typescript@5.8.3))(eslint@8.57.1)
       typescript:
         specifier: ^5.2.2
         version: 5.8.3
@@ -740,8 +743,8 @@ packages:
     resolution: {integrity: sha512-47qPchRCykZC03FhkYAhrvwU4xDBFIj1QPqaarj6mdM/hgUzfPHcpkHJOn3mJAufFeeAxAzeGsr5X0M4k6fLZQ==}
     engines: {node: '>=12'}
 
-  drizzle-orm@0.39.3:
-    resolution: {integrity: sha512-EZ8ZpYvDIvKU9C56JYLOmUskazhad+uXZCTCRN4OnRMsL+xAJ05dv1eCpAG5xzhsm1hqiuC5kAZUCS924u2DTw==}
+  drizzle-orm@0.41.0:
+    resolution: {integrity: sha512-7A4ZxhHk9gdlXmTdPj/lREtP+3u8KvZ4yEN6MYVxBzZGex5Wtdc+CWSbu7btgF6TB0N+MNPrvW7RKBbxJchs/Q==}
     peerDependencies:
       '@aws-sdk/client-rds-data': '>=3'
       '@cloudflare/workers-types': '>=4'
@@ -762,6 +765,7 @@ packages:
       better-sqlite3: '>=7'
       bun-types: '*'
       expo-sqlite: '>=14.0.0'
+      gel: '>=2'
       knex: '*'
       kysely: '*'
       mysql2: '>=2'
@@ -808,6 +812,8 @@ packages:
       bun-types:
         optional: true
       expo-sqlite:
+        optional: true
+      gel:
         optional: true
       knex:
         optional: true
@@ -856,8 +862,8 @@ packages:
     resolution: {integrity: sha512-TtpcNJ3XAzx3Gq8sWRzJaVajRs0uVxA2YAkdb1jm2YkPz4G6egUFAyA3n5vtEIZefPk5Wa4UXbKuS5fKkJWdgA==}
     engines: {node: '>=10'}
 
-  eslint-config-ponder@0.10.9:
-    resolution: {integrity: sha512-wG1rG9lcAzGjK4tAvND2oY9eJ1VLGbTEzAqUh7oal61el4dHWqyDXkUYdH/BdKtMaMb45URl0zC+1xblnHJrsg==}
+  eslint-config-ponder@0.10.13:
+    resolution: {integrity: sha512-gn/S+t2gzQohESoyrsJYHQcMmJRalzVxxu5Tr3M8qBvDJBoY1bBL3t4U0nveq8aop+blE8cGbqamaC7b780AfQ==}
     peerDependencies:
       '@typescript-eslint/eslint-plugin': ^6.3.0
       '@typescript-eslint/parser': ^6.3.0
@@ -1316,8 +1322,8 @@ packages:
     resolution: {integrity: sha512-ip4qdzjkAyDDZklUaZkcRFb2iA118H9SgRh8yzTkSQK8HilsOJF7rSY8HoW5+I0M46AZgX/pxbprf2vvzQCE0Q==}
     hasBin: true
 
-  ponder@0.10.9:
-    resolution: {integrity: sha512-gzfhivZ+GvBizRhtmNIQFXlcn6bjvJwIBz75s35iPOvdkHZAnSVut8wmi5V8dWhPxVnQBJjM6XSWnA8zESCMYQ==}
+  ponder@0.10.13:
+    resolution: {integrity: sha512-kE9whazBCMV7xcOE3Ay99e1oGPAv/QH7wkFNWQ2zpuIVc0rxyzW9HbV/Y+EQdr+6WUkEdzhbZJup0VGO5J30QQ==}
     engines: {node: '>=18.14'}
     hasBin: true
     peerDependencies:
@@ -2298,7 +2304,7 @@ snapshots:
 
   dotenv@16.4.7: {}
 
-  drizzle-orm@0.39.3(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(kysely@0.26.3)(pg@8.14.1):
+  drizzle-orm@0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(kysely@0.26.3)(pg@8.14.1):
     optionalDependencies:
       '@electric-sql/pglite': 0.2.13
       '@opentelemetry/api': 1.9.0
@@ -2345,7 +2351,7 @@ snapshots:
 
   escape-string-regexp@4.0.0: {}
 
-  eslint-config-ponder@0.10.9(@typescript-eslint/eslint-plugin@6.21.0(@typescript-eslint/parser@6.21.0(eslint@8.57.1)(typescript@5.8.3))(eslint@8.57.1)(typescript@5.8.3))(@typescript-eslint/parser@6.21.0(eslint@8.57.1)(typescript@5.8.3))(eslint@8.57.1):
+  eslint-config-ponder@0.10.13(@typescript-eslint/eslint-plugin@6.21.0(@typescript-eslint/parser@6.21.0(eslint@8.57.1)(typescript@5.8.3))(eslint@8.57.1)(typescript@5.8.3))(@typescript-eslint/parser@6.21.0(eslint@8.57.1)(typescript@5.8.3))(eslint@8.57.1):
     dependencies:
       '@typescript-eslint/eslint-plugin': 6.21.0(@typescript-eslint/parser@6.21.0(eslint@8.57.1)(typescript@5.8.3))(eslint@8.57.1)(typescript@5.8.3)
       '@typescript-eslint/parser': 6.21.0(eslint@8.57.1)(typescript@5.8.3)
@@ -2827,7 +2833,7 @@ snapshots:
       sonic-boom: 3.8.1
       thread-stream: 2.7.0
 
-  ponder@0.10.9(@opentelemetry/api@1.9.0)(@types/node@20.17.30)(hono@4.7.5)(typescript@5.8.3)(viem@2.25.0(typescript@5.8.3)):
+  ponder@0.10.13(@opentelemetry/api@1.9.0)(@types/node@20.17.30)(hono@4.7.5)(typescript@5.8.3)(viem@2.25.0(typescript@5.8.3)):
     dependencies:
       '@babel/code-frame': 7.26.2
       '@commander-js/extra-typings': 12.1.0(commander@12.1.0)
@@ -2844,7 +2850,7 @@ snapshots:
       dataloader: 2.2.3
       detect-package-manager: 3.0.2
       dotenv: 16.4.7
-      drizzle-orm: 0.39.3(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(kysely@0.26.3)(pg@8.14.1)
+      drizzle-orm: 0.41.0(@electric-sql/pglite@0.2.13)(@opentelemetry/api@1.9.0)(kysely@0.26.3)(pg@8.14.1)
       glob: 10.4.5
       graphql: 16.10.0
       graphql-yoga: 5.13.2(graphql@16.10.0)
@@ -2888,6 +2894,7 @@ snapshots:
       - better-sqlite3
       - bun-types
       - expo-sqlite
+      - gel
       - knex
       - less
       - lightningcss
