@@ -6,5 +6,4 @@ export const block = onchainTable("block", (t) => ({
   hash: t.varchar().notNull(),
   parentHash: t.varchar().notNull(),
   timestamp: t.bigint().notNull(),
-  transactions: t.text().array(),
 }));
