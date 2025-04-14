@@ -53,17 +53,16 @@ Our benchmark cases are designed to test different aspects of indexer performanc
 
 | Chain | Sentio | Envio | Ponder | Subsquid | Subgraph |
 |-------|--------|-------|--------|----------|----------|
-| EVM | ✅ | ✅* | ✅ | ✅ | ✅ |
+| EVM* | ✅ | ✅ | ✅ | ✅ | ✅ |
 | Sui | ✅ | ❌ | ❌ | ✅ | ❌ |
-| Move | ✅ | ❌ | ❌ | ❌ | ❌ |
+| Aptos | ✅ | ❌ | ❌ | ❌ | ❌ |
 | StarkNet | ✅ | ❌ | ❌ | ✅ | ✅ |
-| Cosmos | ✅ | ❌ | ❌ | ✅ | ✅ |
-| Solana | ✅ | ❌ | ✅ | ✅ | ✅ |
-| Arweave | ❌ | ❌ | ❌ | ✅ | ✅ |
-| Bitcoin | ❌ | ❌ | ✅ | ✅ | ✅ |
-| Near | ❌ | ❌ | ❌ | ✅ | ❌ |
+| Cosmos | ⚠️ | ❌ | ❌ | ✅ | ✅ |
+| Solana | ⚠️ | ❌ | ✅ | ✅ | ✅ |
+| Bitcoin | ⚠️ | ❌ | ✅ | ✅ | ✅ |
 
-\* Envio supports hundreds of EVM-compatible chains through their HyperIndex technology
+\* Including many EVM-compatible L1/L2 chains
+⚠️ Limited support
 
 ### Supported Features
 

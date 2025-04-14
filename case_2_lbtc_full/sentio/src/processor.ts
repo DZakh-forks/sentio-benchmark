@@ -12,7 +12,7 @@ import { getPriceByType, token } from "@sentio/sdk/utils"
 import { BigDecimal, Counter, Gauge } from "@sentio/sdk"
 import { EthChainId, isNullAddress } from "@sentio/sdk/eth";
 import { LBTC_PROXY, } from "./constant.js"
-import { AccountSnapshot } from './schema/schema.js'
+import { AccountSnapshot, Transfer } from './schema/schema.js'
 
 const MILLISECOND_PER_DAY = 60 * 60 * 1000 * 24;
 const DAILY_POINTS = 1000;
@@ -29,7 +29,7 @@ export const volOptions = {
 }
 
 const mint = Gauge.register("mint", volOptions)
-const transfer = Gauge.register("transfer", volOptions)
+const transferGauge = Gauge.register("transfer", volOptions)
 const mintAcc = Counter.register("mint_acc")
 const transferAcc = Counter.register("transfer_acc")
 
@@ -45,6 +45,15 @@ const transferEventHandler = async function (event: TransferEvent, ctx: LBTCCont
     const { from, to, value } = event.args
     const amount = value.scaleDown(tokenInfo.decimal)
 
+    const transfer = new Transfer({
+        id: `${ctx.chainId}_${event.blockNumber}_${event.index}`,
+        from: event.args.from,
+        to: event.args.to,
+        value: event.args.value,
+        blockNumber: BigInt(event.blockNumber),
+    });
+    await ctx.store.upsert(transfer);
+
     if (isNullAddress(event.args.from)) {
         mint.record(ctx, amount, { token: symbol })
         mintAcc.add(ctx, amount, { token: symbol })
@@ -53,9 +62,9 @@ const transferEventHandler = async function (event: TransferEvent, ctx: LBTCCont
             amount: amount,
         })
     } else {
-        transfer.record(ctx, amount, { token: symbol })
+        transferGauge.record(ctx, amount, { token: symbol })
         transferAcc.add(ctx, amount, { token: symbol })
-        ctx.eventLogger.emit("Transfer", {
+        ctx.eventLogger.emit("TokenTransfer", {
             from: event.args.from,
             to: event.args.to,
             amount: amount,
