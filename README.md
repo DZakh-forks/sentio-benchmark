@@ -15,7 +15,7 @@ This repository contains performance benchmarks for various blockchain indexers,
 Our most recent benchmark (April 2025) shows significant performance differences between indexers:
 
 - **Fastest Event Processing**: Envio (2m) and Sentio (6m) for simple event indexing
-- **Best RPC Performance**: Sentio (27m) for complex RPC interactions
+- **Best RPC Performance**: Envio/Sentio (45m) for complex RPC interactions
 - **Block Processing Leader**: Sentio (4m) for block-level indexing
 
 See the [complete benchmark results](#current-benchmark-results---april-2025) for detailed timing data, completeness metrics, and analysis.
@@ -60,6 +60,7 @@ Our benchmark cases are designed to test different aspects of indexer performanc
 | Cosmos | ⚠️ | ❌ | ❌ | ✅ | ✅ |
 | Solana | ⚠️ | ❌ | ✅ | ✅ | ✅ |
 | Bitcoin | ⚠️ | ❌ | ✅ | ✅ | ✅ |
+| Fuel | ✅ | ❌ | ❌ | ✅ | ❌ |
 
 \* Including many EVM-compatible L1/L2 chains
 
@@ -101,7 +102,7 @@ This benchmark provides a comparative analysis of indexer performance across dif
 | Case | Sentio | Envio | Ponder | Subsquid | Subgraph |
 |------|--------|-------|--------|----------|----------|
 | case_1_lbtc_event_only | 6m | 2m | 1h40m* | 10m | 3h9m |
-| case_2_lbtc_full | 27m | 45m | 4h38m | 32m | 18h38m |
+| case_2_lbtc_full | 45m | 45m | 4h38m | 32m | 18h38m |
 | case_3_ethereum_block | 4m | N/A† | 55h37m | 45h‡ | 24h |
 
 \* Ponder is missing about 5% of data in case_1  
@@ -113,7 +114,7 @@ This benchmark provides a comparative analysis of indexer performance across dif
 | Case | Sentio | Envio | Ponder | Subsquid | Subgraph |
 |------|--------|-------|--------|----------|----------|
 | case_1_lbtc_event_only | 296,734 | 296,734 | 296,138* | 296,734 | 296,734 |
-| case_2_lbtc_full | 11,552 transfers, 213,782 positions | 12,165 transfers, 2,663 accounts, 16,338 snapshots | 12,165 transfers, 2,684 accounts, 501,711 snapshots | 12,165 transfers, 2,685 accounts, 24,618 snapshots | 12,165 transfers, N/A accounts‡ |
+| case_2_lbtc_full | 12,165 transfers, 2,663 accounts | 12,165 transfers, 2,663 accounts, 16,338 snapshots | 12,165 transfers, 2,684 accounts, 501,711 snapshots | 12,165 transfers, 2,685 accounts, 24,618 snapshots | 12,165 transfers, N/A accounts‡ |
 | case_3_ethereum_block | 10,000,001 | N/A | 10,000,001 | 8,498,930† | 10,000,001 |
 
 \* Missing ~5% of events  

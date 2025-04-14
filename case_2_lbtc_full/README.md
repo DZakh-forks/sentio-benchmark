@@ -25,7 +25,7 @@ This benchmark tests the ability of indexers to not only process events but also
 
 | Indexer  | Time to Complete | Notes |
 |----------|------------------|-------|
-| Sentio   | 27m              | |
+| Sentio   | 45m              | |
 | Envio    | 45m              | |
 | Ponder   | 4h38m            | Significantly slower with RPC calls |
 | Subsquid | 32m              | |
@@ -77,11 +77,9 @@ This benchmark showcases how performance is affected when indexers need to both 
      }'
   ```
 - **Data Summary**:
-  - **Transfer Records**: 11,552 records in autogen_cjgVtxD9_3874259665467767950_Transfer_993786f0
-  - **Position Data**: 
-    - Primary: 213,782 records in autogen_0W2KcRt3_5924897131260314459_position_c806aa94
-    - Secondary: 82 records in autogen_P76TGMtu_6714553658162356143_position_4da454de
-    - Tertiary: 1,021 records in autogen_tyR2GNtv_10499728955981891805_position_7ef26214
+  - **Transfer Records**: Approximately 12,165 records
+  - **Account Records**: Approximately 2,663 accounts
+  - **Points Records**: Approximately 44,700 point_updates
 
 ### Envio
 - **Dashboard URL**: https://envio.dev/app/0xdatapunk/case_2_lbtc_full
