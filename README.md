@@ -99,11 +99,11 @@ This benchmark provides a comparative analysis of indexer performance across dif
 
 ### Performance Results
 
-| Case | Sentio | Envio | Ponder | Subsquid | Subgraph |
-|------|--------|-------|--------|----------|----------|
-| case_1_lbtc_event_only | 6m | 2m | 1h40m* | 10m | 3h9m |
-| case_2_lbtc_full | 45m | 45m | 4h38m | 32m | 18h38m |
-| case_3_ethereum_block | 4m | N/A† | 55h37m | 45h‡ | 24h |
+| Case | Sentio | Envio | Ponder | Subsquid | Subgraph | Sentio_Subgraph | Goldsky_Subgraph |
+|------|--------|-------|--------|----------|----------| ----------| ----------|
+| case_1_lbtc_event_only | 6m | 2m | 1h40m* | 10m | 3h9m | 26m |  |
+| case_2_lbtc_full | 45m | 45m | 4h38m | 32m | 18h38m | |  |
+| case_3_ethereum_block | 4m | N/A† | 55h37m | 45h‡ | 24h | |  |
 
 \* Ponder is missing about 5% of data in case_1  
 † Envio does not support block handlers  
