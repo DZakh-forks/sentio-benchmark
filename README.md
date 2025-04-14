@@ -12,17 +12,13 @@ This repository contains performance benchmarks for various blockchain indexers,
 
 ## [Latest Benchmark Results](#latest-benchmark-results)
 
-| Metric | Sentio | Envio | Ponder | Subsquid | Subgraph |
-|--------|--------|-------|--------|----------|----------|
-| case_1_lbtc_event_only | 6m | 2m | 1h40m* | 10m | 3h9m |
-| case_2_lbtc_full | 27m | 45m | 4h38m | 32m | 18h38m |
-| case_3_ethereum_block | 4m | N/A† | 55h37m | 45h‡ | 24h |
+Our most recent benchmark (April 2025) shows significant performance differences between indexers:
 
-\* Ponder is missing about 5% of data in case_1  
-† Envio does not support block handlers  
-‡ Subsquid is missing about 15% of blocks  
+- **Fastest Event Processing**: Envio (2m) and Sentio (6m) for simple event indexing
+- **Best RPC Performance**: Sentio (27m) for complex RPC interactions
+- **Block Processing Leader**: Sentio (4m) for block-level indexing
 
-For detailed historical benchmark results, see the [Benchmark Results](#benchmark-results-2025-04-11) section below.
+See the [complete benchmark results](#benchmark-results-2025-04-11) for detailed timing data, completeness metrics, and analysis.
 
 ## Test Methodology
 
@@ -120,7 +116,7 @@ Our benchmark cases are designed to test different aspects of indexer performanc
 
 This benchmark provides a comparative analysis of indexer performance across different scenarios, helping developers choose the most appropriate indexing solution for their specific needs.
 
-## Benchmark Results (2025-04-11) {#benchmark-results-2025-04-11}
+## Current Benchmark Results - April 2025 {#benchmark-results-2025-04-11}
 
 ### Test Data
 
