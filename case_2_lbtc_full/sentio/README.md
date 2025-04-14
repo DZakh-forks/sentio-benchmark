@@ -1,6 +1,6 @@
-# Sentio Implementation - Ethereum Block Benchmark
+# Sentio Implementation - LBTC Full Benchmark
 
-This directory contains a Sentio processor implementation for indexing Ethereum blocks, creating entities for each block with its metadata.
+This directory contains a Sentio processor implementation for the LBTC token full benchmark case, which includes processing transfer events and making RPC calls to fetch token balances.
 
 ## Prerequisites
 
@@ -44,22 +44,22 @@ Once uploaded, you can monitor the processor's progress on the [Sentio Dashboard
 
 ## Project Structure
 
-- `src/` - Contains the processor source code with block handlers
-- `abis/` - Contains any required ABI files
+- `src/` - Contains the processor source code
+- `abis/` - Contains ABI files for the LBTC contract
 - `sentio.yaml` - Configuration file for the Sentio project
 - `package.json` - Node.js project configuration
 
 ## Implementation Details
 
 This processor implementation:
-1. Uses block handlers to process Ethereum blocks from 0 to 10,000,000
-2. Extracts block metadata (number, hash, timestamp, parent hash, etc.)
-3. Creates block entities with the extracted data
-4. Demonstrates efficient block-level indexing
+1. Processes Transfer events from the LBTC token contract
+2. Makes RPC calls to fetch current balances using contract.balanceOf()
+3. Creates and updates account records
+4. Maintains balance snapshots
 
 ## Performance Results
 
-In the benchmark test, this Sentio processor completed indexing of 10 million Ethereum blocks in just **4 minutes**, making it significantly faster than all other implementations for this block-level indexing scenario.
+In the benchmark test, this Sentio processor completed indexing with RPC calls in **27 minutes**, making it the fastest implementation for this complex use case.
 
 ## Additional Commands
 
@@ -81,14 +81,4 @@ yarn sentio logs
 yarn sentio update
 ```
 
-### Specify Block Range for Processing
-
-To modify the block range for processing:
-
-```bash
-# Edit sentio.yaml to add start and end blocks
-# Then update the configuration
-yarn sentio update
-```
-
-For more details on Sentio processor development, refer to the [official documentation](https://docs.sentio.xyz/docs/quickstart).
+For more details on Sentio processor development, refer to the [official documentation](https://docs.sentio.xyz/docs/quickstart). 

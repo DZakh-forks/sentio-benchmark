@@ -1,24 +1,99 @@
-## Envio Indexer
+# Envio Implementation - LBTC Full Benchmark
 
-*Please refer to the [documentation website](https://docs.envio.dev) for a thorough guide on all [Envio](https://envio.dev) indexer features*
+This directory contains an Envio implementation for indexing LBTC token transfers with RPC calls to fetch token balances, demonstrating Envio's ability to handle complex data relationships and contract interactions.
 
-### Run
+## Prerequisites
+
+- [Node.js (v18 or newer)](https://nodejs.org/en/download/current)
+- [pnpm (v8 or newer)](https://pnpm.io/installation)
+- [Docker desktop](https://www.docker.com/products/docker-desktop/)
+
+## Setup & Running Instructions
+
+### 1. Install Dependencies
 
 ```bash
-pnpm dev
+pnpm install
 ```
 
-Visit http://localhost:8080 to see the GraphQL Playground, local password is `testing`.
-
-### Generate files from `config.yaml` or `schema.graphql`
+### 2. Generate TypeScript Files from Config and Schema
 
 ```bash
 pnpm codegen
 ```
 
-### Pre-requisites
+### 3. Start the Development Server
 
-- [Node.js (use v18 or newer)](https://nodejs.org/en/download/current)
-- [pnpm (use v8 or newer)](https://pnpm.io/installation)
-- [Docker desktop](https://www.docker.com/products/docker-desktop/)
- 
+```bash
+pnpm dev
+```
+
+This will:
+- Start the local indexer service
+- Begin indexing event data with RPC calls using HyperSync technology
+- Process events and fetch token balances
+- Set up a local GraphQL playground
+
+### 4. Access the GraphQL API
+
+Once running, you can access the GraphQL Playground at:
+```
+http://localhost:8080
+```
+Local password is `testing`.
+
+## Project Structure
+
+- `src/` - Contains event handlers and RPC call logic
+- `config.yaml` - Configuration for networks, contracts, and event handlers
+- `schema.graphql` - GraphQL schema definition for transfers, accounts, and snapshots
+- `generated/` - Auto-generated TypeScript files
+
+## Implementation Details
+
+This implementation:
+1. Uses Envio's HyperSync technology for ultra-fast blockchain data access
+2. Processes Transfer events from the LBTC token contract
+3. Makes balanceOf() RPC calls to fetch current token balances
+4. Creates and updates Account entities with balance information
+5. Creates Snapshot entities to track historical balances
+6. Demonstrates Envio's ability to handle read-after-write operations
+
+## Performance Advantages
+
+Envio's HyperSync technology offers significant advantages for this complex use case:
+- Optimized RPC call handling with minimized latency
+- Efficient data retrieval with field selection to reduce bandwidth
+- Flexible join modes to control how related data is connected
+- Transaction streaming with automatic retry and error handling
+
+## Performance Results
+
+In the benchmark test, this Envio implementation indexed LBTC transfers with RPC calls in **45 minutes**, showing excellent performance for complex data processing with external contract calls.
+
+## Additional Commands
+
+### Run Tests
+
+```bash
+pnpm test
+```
+
+### Build for Production
+
+```bash
+pnpm build
+```
+
+### Query Indexed Data
+
+```bash
+# Example query to fetch account balances
+curl -X POST \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer testing" \
+  --data '{"query": "{ accounts { id balance lastUpdated } }"}' \
+  http://localhost:8080/graphql
+```
+
+For more details on Envio and HyperSync, refer to the [official documentation](https://docs.envio.dev). 
