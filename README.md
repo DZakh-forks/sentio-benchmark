@@ -1,20 +1,29 @@
 # benchmark:
 
 case_1_lbtc_event_only
- - README.md: description, features: event, no rpc call, write only
- - sentio
- - envio
- - ponder
+This benchmark focuses on indexing transfer events from the LBTC token contract from block 0 to 22200000. It represents a simple event indexing scenario with the following characteristics:
+Only processes Transfer events
+No RPC calls to external services
+Write-only operations (no read operations after writing)
+Tests the indexer's ability to efficiently process and store a large number of events
+All data is derived directly from event logs without additional computation
 case_2_lbtc_full
-    transfer+balanceOf 22210000-22239000
-
- - README.md: description, features: event, rpc call, read after write
-
-case_3_ethereum_block: 0-10000000,
-  onBlockHandler -> entity
-
-  envio has no block handlers
-
+This benchmark indexes LBTC token transfer events and performs balanceOf RPC calls from block 22100000 to 22200000. It represents a more complex scenario with:
+Processes Transfer events
+Makes RPC calls to fetch token balances using contract.balanceOf()
+Performs read-after-write operations
+Creates snapshots of account balances
+Tests the indexer's ability to manage both event data and RPC call results
+Evaluates performance when combining on-chain data with additional queries
+case_3_ethereum_block
+This benchmark focuses on processing Ethereum blocks from 0 to 10000000, creating entities for each block with its metadata. Key characteristics include:
+Uses block handlers instead of event handlers
+No specific contract focus - processes all blocks
+Creates block entities with block metadata (number, hash, timestamp, etc.)
+Tests the indexer's ability to process large volumes of block data
+Evaluates performance for block-level indexing scenarios
+Note: Envio does not support block handlers, so it cannot be tested in this case
+These benchmarks provide a comprehensive evaluation of different indexing patterns, from simple event indexing to complex scenarios with external calls and block-level processing.
 
 
 
@@ -55,16 +64,13 @@ benchmark_result_2025_2_5.md
 test data 
 
 performance
- ------              |  sentio    | envio | ponder
-  lbtc_event_only    |    3ns     |       |  7m (missing 5% data)
-  lbtc_full          |
 
 | Metric | Sentio | Envio | Ponder | Subsquid | Subgraph |
 |--------|--------|-------|--------|----------|----------|
-| case_1_lbtc_event_only | 8m | 3m | 76m | 8m | 4h |
-|   # records up to block 22210921 | 296734 | 296734 | 296138 | 296734 | 296734 |
-| case_2_lbtc_full  | 12m | 40m | - | 34m | - |
-| case_3_ethereum_block | 11m | * | - | - | - |
+| case_1_lbtc_event_only | 6m | 2m | 1h40m | 10m | 3h9m |
+| # records up to block 22210921 | 296734 | 296734 | 296138 | 296734 | 296734 |
+| case_2_lbtc_full | 27m | 45m | 4h38m | 32m | 18h38m |
+| case_3_ethereum_block | 4m | - | 55h37m | 45h | 24h |
 
 * to 22200000
 * startBlock: 22100000, endBlock: 22200000

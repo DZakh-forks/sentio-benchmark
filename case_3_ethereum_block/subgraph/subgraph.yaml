@@ -1,0 +1,30 @@
+specVersion: 1.2.0
+indexerHints:
+  prune: auto
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: case_3_ethereum_block
+    network: mainnet
+    source:
+      address: "0x0000000000000000000000000000000000000000"  # Dummy address for block indexing
+      abi: BlockIndexer
+      startBlock: 0
+      endBlock: 10000000
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.9
+      language: wasm/assemblyscript
+      entities:
+        - Block
+      abis:
+        - name: BlockIndexer
+          file: ./abis/BlockIndexer.json
+      blockHandlers:
+        - handler: handleBlock
+          filter:
+            kind: polling
+            # Ethereum blocks are ~12 seconds, so ~300 blocks ≈ 1 hour
+            every: 300
+      file: ./src/subgraph.ts

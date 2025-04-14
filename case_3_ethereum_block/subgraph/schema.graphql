@@ -1,0 +1,7 @@
+type Block @entity(immutable: true) {
+  id: ID!
+  number: BigInt!
+  hash: String!
+  parentHash: String!
+  timestamp: BigInt!
+}

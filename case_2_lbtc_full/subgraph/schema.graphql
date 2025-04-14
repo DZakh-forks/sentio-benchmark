@@ -1,0 +1,31 @@
+type Snapshot @entity(immutable: false) {
+  id: ID! # account-timestamp
+  account: Accounts! @index
+  timestampMilli: BigInt! @index
+  mintAmount: BigDecimal
+  balance: BigDecimal!
+  point: BigDecimal
+}
+
+type Accounts @entity(immutable: false) {
+  id: ID! # account
+  lastSnapshotTimestamp: BigInt!
+  snapshots: [Snapshot!]! @derivedFrom(field: "account")
+}
+
+type AccountRegistry @entity(immutable: false) {
+  id: ID!
+  accounts: [String!]!
+}
+
+
+type Transfer @entity(immutable: true) {
+  id: Bytes!
+  from: Bytes! # address
+  to: Bytes! # address
+  value: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
