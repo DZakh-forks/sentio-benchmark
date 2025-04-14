@@ -62,6 +62,7 @@ Our benchmark cases are designed to test different aspects of indexer performanc
 | Bitcoin | ⚠️ | ❌ | ✅ | ✅ | ✅ |
 
 \* Including many EVM-compatible L1/L2 chains
+
 ⚠️ Limited support
 
 ### Supported Features
