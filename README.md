@@ -1,77 +1,100 @@
 # Indexer Benchmarks
 
-This repository contains benchmarks for various blockchain indexers, comparing their performance across different indexing scenarios.
+This repository contains performance benchmarks for various blockchain indexers, comparing their capabilities and performance across different indexing scenarios.
 
 ## Benchmark Cases
 
-### case_1_lbtc_event_only
-This benchmark focuses on indexing transfer events from the LBTC token contract from block 0 to 22200000. It represents a simple event indexing scenario with the following characteristics:
-- Only processes Transfer events
-- No RPC calls to external services
-- Write-only operations (no read operations after writing)
-- Tests the indexer's ability to efficiently process and store a large number of events
-- All data is derived directly from event logs without additional computation
+| Case | Description | Features |
+|------|-------------|----------|
+| [case_1_lbtc_event_only](./case_1_lbtc_event_only/) | Simple event indexing of LBTC token transfers | Event handling, No RPC calls, Write-only operations |
+| [case_2_lbtc_full](./case_2_lbtc_full/) | Complex indexing with RPC calls for token balances | Event handling, RPC calls, Read-after-write operations |
+| [case_3_ethereum_block](./case_3_ethereum_block/) | Block-level indexing of Ethereum blocks | Block handling, Metadata extraction |
 
-### case_2_lbtc_full
-This benchmark indexes LBTC token transfer events and performs balanceOf RPC calls from block 22100000 to 22200000. It represents a more complex scenario with:
-- Processes Transfer events
-- Makes RPC calls to fetch token balances using contract.balanceOf()
-- Performs read-after-write operations
-- Creates snapshots of account balances
-- Tests the indexer's ability to manage both event data and RPC call results
-- Evaluates performance when combining on-chain data with additional queries
-
-### case_3_ethereum_block
-This benchmark focuses on processing Ethereum blocks from 0 to 10000000, creating entities for each block with its metadata. Key characteristics include:
-- Uses block handlers instead of event handlers
-- No specific contract focus - processes all blocks
-- Creates block entities with block metadata (number, hash, timestamp, etc.)
-- Tests the indexer's ability to process large volumes of block data
-- Evaluates performance for block-level indexing scenarios
-- Note: Envio does not support block handlers, so it cannot be tested in this case
-
-## Performance Results
+## [Latest Benchmark Results](#latest-benchmark-results)
 
 | Metric | Sentio | Envio | Ponder | Subsquid | Subgraph |
 |--------|--------|-------|--------|----------|----------|
-| case_1_lbtc_event_only | 6m | 2m | 1h40m | 10m | 3h9m |
-| # records up to block 22210921 | 296,734 | 296,734 | 296,138 | 296,734 | 296,734 |
+| case_1_lbtc_event_only | 6m | 2m | 1h40m* | 10m | 3h9m |
 | case_2_lbtc_full | 27m | 45m | 4h38m | 32m | 18h38m |
-| case_3_ethereum_block | 4m | N/A | 55h37m | 45h | 24h |
+| case_3_ethereum_block | 4m | N/A† | 55h37m | 45h‡ | 24h |
 
-## Notes
-- case_1: Blocks 0 to 22200000
-- case_2: Blocks 22100000 to 22200000
-- case_3: Blocks 0 to 10000000
-- Ponder is missing about 5% of data in case_1
-- Envio does not support block handlers, so case_3 cannot be tested
+\* Ponder is missing about 5% of data in case_1  
+† Envio does not support block handlers  
+‡ Subsquid is missing about 15% of blocks  
+
+For detailed historical benchmark results, see the [Benchmark Results](#benchmark-results-2025-04-11) section below.
+
+## Test Methodology
+
+### Test Configuration
+- All benchmarks run on standardized hardware environments
+- Each test runs until completion or timeout (72 hours)
+- RPC providers: When built-in RPC support isn't available, we use Alchemy Growth tier
+
+### Test Case Design
+Our benchmark cases are designed to test different aspects of indexer performance:
+
+1. **Chain Selection**: 
+   - Ethereum Mainnet for all test cases
+
+2. **Data Types**:
+   - Events: Transfer events in case_1 and case_2
+   - Blocks: Block data in case_3
+   - Transactions: Included within block data
+
+3. **RPC Patterns**:
+   - No RPC: case_1 tests raw event processing
+   - RPC Calls: case_2 tests balanceOf() calls
+   - Block Data: case_3 tests block processing
+
+4. **Write Patterns**:
+   - Write-only: case_1 tests simple data storage
+   - Read-after-write: case_2 tests database interaction complexity
+
+## Indexer Platforms
+
+### Supported Chains
+
+| Chain | Sentio | Envio | Ponder | Subsquid | Subgraph |
+|-------|--------|-------|--------|----------|----------|
+| EVM | ✅ | ✅* | ✅ | ✅ | ✅ |
+| Sui | ✅ | ❌ | ❌ | ✅ | ❌ |
+| Move | ✅ | ❌ | ❌ | ❌ | ❌ |
+| StarkNet | ✅ | ❌ | ❌ | ✅ | ✅ |
+| Cosmos | ✅ | ❌ | ❌ | ✅ | ✅ |
+| Solana | ✅ | ❌ | ✅ | ✅ | ✅ |
+| Arweave | ❌ | ❌ | ❌ | ✅ | ✅ |
+| Bitcoin | ❌ | ❌ | ✅ | ✅ | ✅ |
+| Near | ❌ | ❌ | ❌ | ✅ | ❌ |
+
+\* Envio supports hundreds of EVM-compatible chains through their HyperIndex technology
+
+### Supported Features
+
+| Feature | Sentio | Envio | Ponder | Subsquid | Subgraph |
+|---------|--------|-------|--------|----------|----------|
+| Event Handler | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Block Handler | ✅ | ❌ | ✅ | ✅ | ✅ |
+| Transaction Handler | ✅ | ❌ | ✅ | ✅ | ✅ |
+| Native RPC | ✅ | ✅ | ✅ | ✅ | ❌ |
+| Read-After-Write | ✅ | ✅ | ✅ | ✅ | ✅ |
+| High-Speed Data Access | ✅ | ✅* | ⚠️ | ✅ | ⚠️ |
+| SQL Querying | ✅ | ✅ | ✅ | ✅ | ❌ |
+| GraphQL API | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Auto Scaling | ✅ | ✅ | ⚠️ | ✅ | ✅ |
+| Decentralized Network | ❌ | ❌ | ❌ | ✅ | ✅ |
+
+\* Envio's HyperSync technology offers up to 2000x faster data access compared to traditional RPC methods
+
+⚠️ Limited capability or requires additional configuration
 
 ## Detailed Timing Logs
 
-### Sentio
-1. case_1: 15:06:51 - 15:12:55 (6m)
-2. case_2: 15:25:55 - 15:52:14 (27m)
-3. case_3: 13:54:48 - 13:58:57 (4m)
-
-### Envio
-1. case_1: 4:55 PM - 4:57 PM (2m)
-2. case_2: 4:55 PM - 5:40:02 PM (45m)
-3. case_3: Not supported
-
-### Ponder
-1. case_1: 8:29 PM - 10:09:43 PM (1h40m)
-2. case_2: 8:30:24 PM - 3:08:00 AM (4h38m)
-3. case_3: 4/11 8:29:41 PM - 4/14 4:06:45 AM (55h37m)
-
-### Subsquid
-1. case_1: 15:21:20 - 15:31:40 (10m)
-2. case_2: 14:08:47 - 14:40:34 (32m)
-3. case_3: 11.04.2025 14:21:04 - 13.04.2025 11:21:44 (45h)
-
-### Subgraph
-1. case_1: 2025-04-11 05:15:47 PM - 2025-04-11 08:25:44 PM (3h9m)
-2. case_2: 2025-04-11 05:16:30 PM - 2025-04-12 11:54:25 AM (18h38m)
-3. case_3: 2025-04-11 05:14:26 PM - 2025-04-12 05:14:53 PM (24h)
+| Case | Sentio | Envio | Ponder | Subsquid | Subgraph |
+|------|--------|-------|--------|----------|----------|
+| case_1_lbtc_event_only | 6m | 2m | 1h40m | 10m | 3h9m |
+| case_2_lbtc_full | 27m | 45m | 4h38m | 32m | 18h38m |
+| case_3_ethereum_block | 4m | N/A | 55h37m | 45h | 24h |
 
 ## Key Observations
 
@@ -82,7 +105,8 @@ This benchmark focuses on processing Ethereum blocks from 0 to 10000000, creatin
 
 2. **Data Completeness**:
    - Ponder is missing approximately 5% of data in case_1
-   - All other indexers processed the complete dataset
+   - Subsquid is missing about 15% of blocks in case_3
+   - All other indexers processed the complete dataset in their supported cases
 
 3. **Specialized Capabilities**:
    - Envio shows excellent performance for event processing but lacks block handler support
@@ -95,3 +119,36 @@ This benchmark focuses on processing Ethereum blocks from 0 to 10000000, creatin
    - RPC calls and complex data handling (case_2) increase indexing time for all indexers
 
 This benchmark provides a comparative analysis of indexer performance across different scenarios, helping developers choose the most appropriate indexing solution for their specific needs.
+
+## Benchmark Results (2025-04-11) {#benchmark-results-2025-04-11}
+
+### Test Data
+
+| Case | Description | Chain | Block Range | Features |
+|------|-------------|-------|------------|----------|
+| case_1_lbtc_event_only | LBTC Token Transfer Events | Ethereum | 0 to 22200000 | Event handling, No RPC calls, Write-only |
+| case_2_lbtc_full | LBTC Token with RPC calls | Ethereum | 22100000 to 22200000 | Event handling, RPC calls, Read-after-write |
+| case_3_ethereum_block | Ethereum Block Processing | Ethereum | 0 to 10000000 | Block handling, Metadata extraction |
+
+### Performance Results
+
+| Case | Sentio | Envio | Ponder | Subsquid | Subgraph |
+|------|--------|-------|--------|----------|----------|
+| case_1_lbtc_event_only | 6m | 2m | 1h40m* | 10m | 3h9m |
+| case_2_lbtc_full | 27m | 45m | 4h38m | 32m | 18h38m |
+| case_3_ethereum_block | 4m | N/A† | 55h37m | 45h‡ | 24h |
+
+\* Ponder is missing about 5% of data in case_1  
+† Envio does not support block handlers  
+‡ Subsquid is missing about 15% of blocks  
+
+### Data Completeness
+
+| Case | Sentio | Envio | Ponder | Subsquid | Subgraph |
+|------|--------|-------|--------|----------|----------|
+| case_1_lbtc_event_only | 296,734 | 296,734 | 296,138* | 296,734 | 296,734 |
+| case_2_lbtc_full | Complete | Complete | Complete | Complete | Complete |
+| case_3_ethereum_block | 10,000,001 | N/A | 10,000,001 | 8,498,930† | 10,000,001 |
+
+\* Missing ~5% of events  
+† Missing 1,501,071 blocks (15% of target range)
