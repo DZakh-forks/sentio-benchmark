@@ -10,7 +10,7 @@ This repository contains performance benchmarks for various blockchain indexers,
 | [case_2_lbtc_full](./case_2_lbtc_full/) | Complex indexing with RPC calls for token balances | Event handling, RPC calls, Read-after-write operations |
 | [case_3_ethereum_block](./case_3_ethereum_block/) | Block-level indexing of Ethereum blocks | Block handling, Metadata extraction |
 
-## [Latest Benchmark Results](#latest-benchmark-results)
+## Latest Benchmark Results
 
 Our most recent benchmark (April 2025) shows significant performance differences between indexers:
 
@@ -18,7 +18,7 @@ Our most recent benchmark (April 2025) shows significant performance differences
 - **Best RPC Performance**: Sentio (27m) for complex RPC interactions
 - **Block Processing Leader**: Sentio (4m) for block-level indexing
 
-See the [complete benchmark results](#current-benchmark-results-april-2025) for detailed timing data, completeness metrics, and analysis.
+See the [complete benchmark results](#current-benchmark-results---april-2025) for detailed timing data, completeness metrics, and analysis.
 
 ## Test Methodology
 
@@ -86,7 +86,7 @@ Our benchmark cases are designed to test different aspects of indexer performanc
 
 This benchmark provides a comparative analysis of indexer performance across different scenarios, helping developers choose the most appropriate indexing solution for their specific needs.
 
-## Current Benchmark Results - April 2025 {#current-benchmark-results-april-2025}
+## Current Benchmark Results - April 2025
 
 ### Test Data
 
