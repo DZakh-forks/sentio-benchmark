@@ -13,6 +13,4 @@ ponder.on("EveryBlock:block", async ({ event, context }) => {
     parentHash: block.parentHash,
     timestamp: BigInt(block.timestamp)
   });
-  
-  console.log(`Indexed block ${block.number}`);
 });

@@ -1,0 +1,17 @@
+# yaml-language-server: $schema=./node_modules/envio/evm.schema.json
+name: case_2_lbtc_full
+networks:
+- id: 1
+  start_block: 22100000
+  end_block: 22200000
+  contracts:
+  - name: LBTC
+    address:
+    - 0x8236a87084f8B84306f72007F36F2618A5634494
+    handler: src/EventHandlers.ts
+    events:
+    - event: Transfer(address indexed from, address indexed to, uint256 value)
+      field_selection:
+        transaction_fields:
+        - hash
+unordered_multichain_mode: true

@@ -1,0 +1,98 @@
+specVersion: 1.3.0
+indexerHints:
+  prune: auto
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: LBTC
+    network: mainnet
+    source:
+      address: "0xa1bc65ecf8bc7b2faa22c53bcc49b0376da3845a"
+      abi: LBTC
+      startBlock: 21586074
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.9
+      language: wasm/assemblyscript
+      entities:
+        - Approval
+        - BasculeChanged
+        - BatchMintSkipped
+        - BridgeChanged
+        - BurnCommissionChanged
+        - ClaimerUpdated
+        - ConsortiumChanged
+        - DustFeeRateChanged
+        - EIP712DomainChanged
+        - FeeChanged
+        - FeeCharged
+        - Initialized
+        - MintProofConsumed
+        - MinterUpdated
+        - NameAndSymbolChanged
+        - OperatorRoleTransferred
+        - OwnershipTransferStarted
+        - OwnershipTransferred
+        - Paused
+        - PauserRoleTransferred
+        - Transfer
+        - TreasuryAddressChanged
+        - Unpaused
+        - UnstakeRequest
+        - WithdrawalsEnabled
+      abis:
+        - name: LBTC
+          file: ./abis/LBTC.json
+      eventHandlers:
+        - event: Approval(indexed address,indexed address,uint256)
+          handler: handleApproval
+        - event: BasculeChanged(indexed address,indexed address)
+          handler: handleBasculeChanged
+        - event: BatchMintSkipped(indexed bytes32,bytes)
+          handler: handleBatchMintSkipped
+        - event: BridgeChanged(indexed address,indexed address)
+          handler: handleBridgeChanged
+        - event: BurnCommissionChanged(indexed uint64,indexed uint64)
+          handler: handleBurnCommissionChanged
+        - event: ClaimerUpdated(indexed address,bool)
+          handler: handleClaimerUpdated
+        - event: ConsortiumChanged(indexed address,indexed address)
+          handler: handleConsortiumChanged
+        - event: DustFeeRateChanged(indexed uint256,indexed uint256)
+          handler: handleDustFeeRateChanged
+        - event: EIP712DomainChanged()
+          handler: handleEIP712DomainChanged
+        - event: FeeChanged(indexed uint256,indexed uint256)
+          handler: handleFeeChanged
+        - event: FeeCharged(indexed uint256,bytes)
+          handler: handleFeeCharged
+        - event: Initialized(uint64)
+          handler: handleInitialized
+        - event: MintProofConsumed(indexed address,indexed bytes32,bytes)
+          handler: handleMintProofConsumed
+        - event: MinterUpdated(indexed address,bool)
+          handler: handleMinterUpdated
+        - event: NameAndSymbolChanged(string,string)
+          handler: handleNameAndSymbolChanged
+        - event: OperatorRoleTransferred(indexed address,indexed address)
+          handler: handleOperatorRoleTransferred
+        - event: OwnershipTransferStarted(indexed address,indexed address)
+          handler: handleOwnershipTransferStarted
+        - event: OwnershipTransferred(indexed address,indexed address)
+          handler: handleOwnershipTransferred
+        - event: Paused(address)
+          handler: handlePaused
+        - event: PauserRoleTransferred(indexed address,indexed address)
+          handler: handlePauserRoleTransferred
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+        - event: TreasuryAddressChanged(indexed address,indexed address)
+          handler: handleTreasuryAddressChanged
+        - event: Unpaused(address)
+          handler: handleUnpaused
+        - event: UnstakeRequest(indexed address,bytes,uint256)
+          handler: handleUnstakeRequest
+        - event: WithdrawalsEnabled(bool)
+          handler: handleWithdrawalsEnabled
+      file: ./src/lbtc.ts

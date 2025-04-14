@@ -1,0 +1,28 @@
+{
+  "name": "lbtc",
+  "license": "UNLICENSED",
+  "scripts": {
+    "codegen": "graph codegen",
+    "build": "graph build",
+    "deploy": "graph deploy --node https://api.studio.thegraph.com/deploy/ lbtc",
+    "create-local": "graph create --node http://localhost:8020/ lbtc",
+    "remove-local": "graph remove --node http://localhost:8020/ lbtc",
+    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 lbtc",
+    "test": "graph test"
+  },
+  "dependencies": {
+    "@graphprotocol/graph-ts": "^0.38.0"
+  },
+  "devDependencies": {
+    "@graphprotocol/graph-cli": "^0.97.0",
+    "matchstick-as": "0.6.0"
+  },
+  "version": "1.0.0",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "keywords": [],
+  "author": "",
+  "description": ""
+}
