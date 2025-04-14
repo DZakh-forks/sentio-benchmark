@@ -140,3 +140,4 @@ SELECT AVG(gas_used) FROM block_stats;
 ```
 
 For more details on Subsquid SDK, refer to the [official documentation](https://docs.sqd.ai/sdk/quickstart/).
+

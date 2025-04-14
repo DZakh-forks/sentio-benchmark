@@ -141,3 +141,5 @@ SELECT COUNT(*) FROM transfer;
 ```
 
 For more details on Subsquid SDK, refer to the [official documentation](https://docs.sqd.ai/sdk/quickstart/).
+
+
