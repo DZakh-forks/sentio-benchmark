@@ -1,0 +1,29 @@
+type Snapshot {
+  id: ID! # account-timestamp or GLOBAL_UPDATE_KEY for global state
+  account: Accounts @index # Null for global update tracker
+  timestampMilli: BigInt! @index # Block timestamp in milliseconds
+  mintAmount: BigDecimal # Amount minted in this snapshot (if applicable)
+  balance: BigDecimal! # Current token balance
+  point: BigDecimal # Accumulated points
+}
+
+type Accounts {
+  id: ID! # Account address
+  lastSnapshotTimestamp: BigInt! # Timestamp of the last snapshot for this account
+  snapshots: [Snapshot!]! @derivedFrom(field: "account") # All snapshots for this account
+}
+
+type AccountRegistry {
+  id: ID! # Always "main"
+  accounts: [String!]! # List of all account addresses
+  lastSnapshotTimestamp: BigInt! # Timestamp of the last snapshot for global update
+}
+
+type Transfer @entity {
+  id: ID!
+  from: String!
+  to: String!
+  value: BigInt!
+  blockNumber: BigInt!
+  transactionHash: Bytes
+}

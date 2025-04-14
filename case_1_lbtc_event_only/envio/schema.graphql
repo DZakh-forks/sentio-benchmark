@@ -1,0 +1,9 @@
+type TransparentUpgradeableProxy_Transfer {
+  id: ID!
+  from: String!
+  to: String!
+  value: BigInt!
+  blockNumber: BigInt!
+  transactionHash: Bytes 
+}
+
