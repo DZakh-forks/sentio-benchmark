@@ -78,7 +78,7 @@ This benchmark showcases how performance is affected when indexers need to both 
   ```
 - **Data Summary**:
   - **Transfer Records**: Approximately 12,165 records
-  - **Account Records**: Approximately 2,663 accounts
+  - **Account Records**: Approximately 2,684 accounts
   - **Points Records**: Approximately 44,700 point_updates
 
 ### Envio
