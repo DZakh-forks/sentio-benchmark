@@ -114,7 +114,7 @@ This benchmark provides a comparative analysis of indexer performance across dif
 | Case | Sentio | Envio | Ponder | Subsquid | Subgraph |
 |------|--------|-------|--------|----------|----------|
 | case_1_lbtc_event_only | 296,734 | 296,734 | 296,138* | 296,734 | 296,734 |
-| case_2_lbtc_full | 12,165 transfers, 2,663 accounts | 12,165 transfers, 2,663 accounts, 16,338 snapshots | 12,165 transfers, 2,684 accounts, 501,711 snapshots | 12,165 transfers, 2,685 accounts, 24,618 snapshots | 12,165 transfers, N/A accounts‡ |
+| case_2_lbtc_full | 12,165 transfers, 2,684 accounts | 12,165 transfers, 2,663 accounts, 16,338 snapshots | 12,165 transfers, 2,684 accounts, 501,711 snapshots | 12,165 transfers, 2,685 accounts, 24,618 snapshots | 12,165 transfers, N/A accounts‡ |
 | case_3_ethereum_block | 10,000,001 | N/A | 10,000,001 | 8,498,930† | 10,000,001 |
 
 \* Missing ~5% of events  
