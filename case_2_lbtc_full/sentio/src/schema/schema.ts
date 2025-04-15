@@ -37,15 +37,62 @@ export class AccountSnapshot extends AbstractEntity  {
 }
 
 
+interface TransferConstructorInput {
+  id: ID;
+  from: String;
+  to: String;
+  value: BigInt;
+  blockNumber: BigInt;
+  transactionHash?: Bytes;
+}
+@Entity("Transfer")
+export class Transfer extends AbstractEntity  {
+
+	@Required
+	@Column("ID")
+	id: ID
+
+	@Required
+	@Column("String")
+	from: String
+
+	@Required
+	@Column("String")
+	to: String
+
+	@Required
+	@Column("BigInt")
+	value: BigInt
+
+	@Required
+	@Column("BigInt")
+	blockNumber: BigInt
+
+	@Column("Bytes")
+	transactionHash?: Bytes
+  constructor(data: TransferConstructorInput) {super()}
+  
+}
+
+
 const source = `type AccountSnapshot @entity {
   id: String!,
   timestampMilli: BigInt!
   lbtcBalance: BigDecimal!
 }
-`
+
+type Transfer @entity {
+  id: ID!
+  from: String! @index
+  to: String! @index
+  value: BigInt!
+  blockNumber: BigInt!
+  transactionHash: Bytes
+}`
 DatabaseSchema.register({
   source,
   entities: {
-    "AccountSnapshot": AccountSnapshot
+    "AccountSnapshot": AccountSnapshot,
+		"Transfer": Transfer
   }
 })
