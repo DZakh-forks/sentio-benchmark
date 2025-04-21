@@ -1,3 +1,4 @@
+// Production ready version
 import { ponder } from "ponder:registry";
 import schema from "ponder:schema";
 
