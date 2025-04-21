@@ -1,0 +1,77 @@
+{
+  "timestamp": "2025-04-16T21:44:11.239Z",
+  "dataCount": {
+    "sentio": {
+      "count": 100,
+      "loadSuccess": true,
+      "error": null
+    },
+    "envio": {
+      "count": 100,
+      "loadSuccess": true,
+      "error": null
+    },
+    "subgraph": {
+      "count": 90,
+      "loadSuccess": true,
+      "error": null
+    }
+  },
+  "uniqueCounts": {
+    "sentio": {
+      "uniqueBlocks": 94,
+      "uniqueTxs": 100
+    },
+    "envio": {
+      "uniqueBlocks": 96,
+      "uniqueTxs": 100
+    },
+    "subgraph": {
+      "uniqueBlocks": 87,
+      "uniqueTxs": 90
+    }
+  },
+  "blockRanges": {
+    "sentio": {
+      "min": 22280012,
+      "max": 22280998,
+      "count": 987
+    },
+    "envio": {
+      "min": 22280031,
+      "max": 22281000,
+      "count": 970
+    },
+    "subgraph": {
+      "min": 22280002,
+      "max": 22280990,
+      "count": 989
+    }
+  },
+  "consistencyResults": {
+    "sentio_vs_envio": {
+      "platform1Count": 100,
+      "platform2Count": 100,
+      "commonTxs": 0,
+      "uniqueToPlat1": 100,
+      "uniqueToPlat2": 100,
+      "jaccardSimilarity": 0
+    },
+    "sentio_vs_subgraph": {
+      "platform1Count": 100,
+      "platform2Count": 90,
+      "commonTxs": 0,
+      "uniqueToPlat1": 100,
+      "uniqueToPlat2": 90,
+      "jaccardSimilarity": 0
+    },
+    "envio_vs_subgraph": {
+      "platform1Count": 100,
+      "platform2Count": 90,
+      "commonTxs": 0,
+      "uniqueToPlat1": 100,
+      "uniqueToPlat2": 90,
+      "jaccardSimilarity": 0
+    }
+  }
+}

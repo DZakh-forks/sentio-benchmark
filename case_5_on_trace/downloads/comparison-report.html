@@ -1,0 +1,307 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Uniswap V2 Swap Trace Indexing Comparison</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    h1, h2, h3 {
+      color: #2c3e50;
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin-bottom: 20px;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+    tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+    .chart-container {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+    .chart {
+      flex: 1;
+      max-width: 500px;
+      height: 400px;
+    }
+    .status-success {
+      color: green;
+    }
+    .status-error {
+      color: red;
+    }
+    .summary {
+      background-color: #f8f9fa;
+      padding: 15px;
+      border-radius: 5px;
+      margin-bottom: 20px;
+    }
+    .timestamp {
+      font-style: italic;
+      color: #666;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Uniswap V2 Swap Trace Indexing Comparison</h1>
+  <p class="timestamp">Report generated on: 4/16/2025, 5:40:06 PM</p>
+  
+  <div class="summary">
+    <h2>Overview</h2>
+    <p>This report compares the performance and consistency of different indexing platforms for Uniswap V2 swap trace data.</p>
+  </div>
+  
+  <h2>Data Load Status</h2>
+  <table>
+    <tr>
+      <th>Platform</th>
+      <th>Status</th>
+      <th>Data Count</th>
+      <th>Error (if any)</th>
+    </tr>
+    
+    <tr>
+      <td>sentio</td>
+      <td class="status-success">Success</td>
+      <td>100</td>
+      <td>None</td>
+    </tr>
+    
+    <tr>
+      <td>envio</td>
+      <td class="status-success">Success</td>
+      <td>100</td>
+      <td>None</td>
+    </tr>
+    
+    <tr>
+      <td>subgraph</td>
+      <td class="status-success">Success</td>
+      <td>90</td>
+      <td>None</td>
+    </tr>
+    
+  </table>
+  
+  <h2>Unique Counts</h2>
+  <table>
+    <tr>
+      <th>Platform</th>
+      <th>Unique Blocks</th>
+      <th>Unique Transactions</th>
+    </tr>
+    
+    <tr>
+      <td>sentio</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    
+    <tr>
+      <td>envio</td>
+      <td>97</td>
+      <td>100</td>
+    </tr>
+    
+    <tr>
+      <td>subgraph</td>
+      <td>88</td>
+      <td>90</td>
+    </tr>
+    
+  </table>
+  
+  <h2>Block Range Analysis</h2>
+  <table>
+    <tr>
+      <th>Platform</th>
+      <th>Min Block</th>
+      <th>Max Block</th>
+      <th>Block Range</th>
+    </tr>
+    
+    <tr>
+      <td>sentio</td>
+      <td>N/A</td>
+      <td>N/A</td>
+      <td>N/A</td>
+    </tr>
+    
+    <tr>
+      <td>envio</td>
+      <td>22280004</td>
+      <td>22280991</td>
+      <td>988</td>
+    </tr>
+    
+    <tr>
+      <td>subgraph</td>
+      <td>22280002</td>
+      <td>22281000</td>
+      <td>999</td>
+    </tr>
+    
+  </table>
+  
+  <h2>Data Consistency Comparison</h2>
+  <table>
+    <tr>
+      <th>Comparison</th>
+      <th>Platform 1 Count</th>
+      <th>Platform 2 Count</th>
+      <th>Common Transactions</th>
+      <th>Unique to Platform 1</th>
+      <th>Unique to Platform 2</th>
+      <th>Jaccard Similarity</th>
+    </tr>
+    
+    <tr>
+      <td>sentio vs vs_envio</td>
+      <td>0</td>
+      <td>100</td>
+      <td>0</td>
+      <td>0</td>
+      <td>100</td>
+      <td>0.0000</td>
+    </tr>
+    
+    <tr>
+      <td>sentio vs vs_subgraph</td>
+      <td>0</td>
+      <td>90</td>
+      <td>0</td>
+      <td>0</td>
+      <td>90</td>
+      <td>0.0000</td>
+    </tr>
+    
+    <tr>
+      <td>envio vs vs_subgraph</td>
+      <td>100</td>
+      <td>90</td>
+      <td>0</td>
+      <td>100</td>
+      <td>90</td>
+      <td>0.0000</td>
+    </tr>
+    
+  </table>
+  
+  <h2>Visualizations</h2>
+  
+  <div class="chart-container">
+    <div class="chart">
+      <canvas id="countChart"></canvas>
+    </div>
+    <div class="chart">
+      <canvas id="similarityChart"></canvas>
+    </div>
+  </div>
+  
+  <script>
+    // Data from the report
+    const reportData = {"timestamp":"2025-04-16T21:40:06.399Z","dataCount":{"sentio":{"count":100,"loadSuccess":true,"error":null},"envio":{"count":100,"loadSuccess":true,"error":null},"subgraph":{"count":90,"loadSuccess":true,"error":null}},"uniqueCounts":{"sentio":{"uniqueBlocks":0,"uniqueTxs":0},"envio":{"uniqueBlocks":97,"uniqueTxs":100},"subgraph":{"uniqueBlocks":88,"uniqueTxs":90}},"blockRanges":{"sentio":{"min":null,"max":null,"count":null},"envio":{"min":22280004,"max":22280991,"count":988},"subgraph":{"min":22280002,"max":22281000,"count":999}},"consistencyResults":{"sentio_vs_envio":{"platform1Count":0,"platform2Count":100,"commonTxs":0,"uniqueToPlat1":0,"uniqueToPlat2":100,"jaccardSimilarity":0},"sentio_vs_subgraph":{"platform1Count":0,"platform2Count":90,"commonTxs":0,"uniqueToPlat1":0,"uniqueToPlat2":90,"jaccardSimilarity":0},"envio_vs_subgraph":{"platform1Count":100,"platform2Count":90,"commonTxs":0,"uniqueToPlat1":100,"uniqueToPlat2":90,"jaccardSimilarity":0}}};
+    
+    // Event Count Chart
+    const countCtx = document.getElementById('countChart').getContext('2d');
+    const platforms = Object.keys(reportData.dataCount);
+    const counts = platforms.map(platform => reportData.dataCount[platform].count);
+    
+    new Chart(countCtx, {
+      type: 'bar',
+      data: {
+        labels: platforms,
+        datasets: [{
+          label: 'Number of Swap Events Indexed',
+          data: counts,
+          backgroundColor: [
+            'rgba(54, 162, 235, 0.6)',
+            'rgba(255, 99, 132, 0.6)',
+            'rgba(75, 192, 192, 0.6)',
+            'rgba(255, 206, 86, 0.6)',
+            'rgba(153, 102, 255, 0.6)'
+          ],
+          borderColor: [
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 99, 132, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(153, 102, 255, 1)'
+          ],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          title: {
+            display: true,
+            text: 'Number of Uniswap V2 Swap Events by Platform'
+          },
+        },
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+    
+    // Jaccard Similarity Chart
+    const similarityCtx = document.getElementById('similarityChart').getContext('2d');
+    const comparisons = Object.keys(reportData.consistencyResults).map(key => key.replace('_', ' vs '));
+    const similarities = Object.values(reportData.consistencyResults).map(value => value.jaccardSimilarity);
+    
+    new Chart(similarityCtx, {
+      type: 'bar',
+      data: {
+        labels: comparisons,
+        datasets: [{
+          label: 'Jaccard Similarity',
+          data: similarities,
+          backgroundColor: 'rgba(75, 192, 192, 0.6)',
+          borderColor: 'rgba(75, 192, 192, 1)',
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          title: {
+            display: true,
+            text: 'Data Consistency (Jaccard Similarity) Between Platforms'
+          },
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            max: 1
+          }
+        }
+      }
+    });
+  </script>
+</body>
+</html>
+    
