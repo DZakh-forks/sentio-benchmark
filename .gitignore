@@ -70,12 +70,11 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# Data folders - large files should be stored elsewhere
-**/data/*.parquet
+# Data files only - keep all code
+# Exclude parquet and large data files
+**/*.parquet
 **/data/*.json
 **/downloads/*.json
-**/downloads/*.parquet
-**/downloads/node_modules/
 
 # But keep the directory structure
 !**/data/.gitkeep
