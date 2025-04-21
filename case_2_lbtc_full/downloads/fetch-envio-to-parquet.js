@@ -10,7 +10,7 @@ if (!fs.existsSync(dataDir)) {
 }
 
 // Envio GraphQL details - Updated to use the latest working endpoint
-const ENVIO_ENDPOINT = 'https://indexer.dev.hyperindex.xyz/1cadf75/v1/graphql';  // Latest working endpoint
+const ENVIO_ENDPOINT = 'https://indexer.dev.hyperindex.xyz/6b5188a/v1/graphql';  // Latest working endpoint
 
 // Schema definitions
 const transferSchema = new parquet.ParquetSchema({

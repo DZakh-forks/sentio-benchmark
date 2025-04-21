@@ -1,0 +1,164 @@
+
+  <!DOCTYPE html>
+  <html>
+  <head>
+    <title>Gas Usage Comparison - Case 4</title>
+    <style>
+      body { font-family: Arial, sans-serif; line-height: 1.6; padding: 20px; max-width: 1200px; margin: 0 auto; }
+      h1, h2, h3 { color: #333; }
+      table { border-collapse: collapse; width: 100%; margin-bottom: 20px; }
+      th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+      th { background-color: #f2f2f2; }
+      tr:nth-child(even) { background-color: #f9f9f9; }
+      .chart-container { height: 400px; margin: 20px 0; }
+      .success { color: green; }
+      .failure { color: red; }
+    </style>
+  </head>
+  <body>
+    <h1>Gas Usage Comparison Report - Case 4</h1>
+    <p>Generated at: 2025-04-21T20:37:02.526Z</p>
+    
+    <h2>1. Record Counts</h2>
+    <table>
+      <tr>
+        <th>Platform</th>
+        <th>Record Count</th>
+        <th>Status</th>
+      </tr>
+      
+        <tr>
+          <td>envio</td>
+          <td>1,696,423</td>
+          <td class="success">Success</td>
+        </tr>
+      
+        <tr>
+          <td>envio-json</td>
+          <td>1,696,423</td>
+          <td class="success">Success</td>
+        </tr>
+      
+        <tr>
+          <td>sentio</td>
+          <td>0</td>
+          <td class="failure">Failed</td>
+        </tr>
+      
+        <tr>
+          <td>subsquid</td>
+          <td>0</td>
+          <td class="failure">Failed</td>
+        </tr>
+      
+        <tr>
+          <td>ponder</td>
+          <td>0</td>
+          <td class="failure">Failed</td>
+        </tr>
+      
+        <tr>
+          <td>prisma</td>
+          <td>0</td>
+          <td class="failure">Failed</td>
+        </tr>
+      
+    </table>
+    
+    <h2>2. Block Ranges</h2>
+    <table>
+      <tr>
+        <th>Platform</th>
+        <th>Min Block</th>
+        <th>Max Block</th>
+        <th>Block Count</th>
+      </tr>
+      
+        <tr>
+          <td>envio</td>
+          <td>22,280,000</td>
+          <td>22,289,954</td>
+          <td>9,955</td>
+        </tr>
+      
+        <tr>
+          <td>envio-json</td>
+          <td>22,280,000</td>
+          <td>22,289,954</td>
+          <td>9,955</td>
+        </tr>
+      
+    </table>
+    
+    <h2>3. Address Statistics</h2>
+    <table>
+      <tr>
+        <th>Platform</th>
+        <th>Unique Senders</th>
+        <th>Unique Recipients</th>
+      </tr>
+      
+        <tr>
+          <td>envio</td>
+          <td>493,181</td>
+          <td>315,861</td>
+        </tr>
+      
+        <tr>
+          <td>envio-json</td>
+          <td>493,181</td>
+          <td>315,861</td>
+        </tr>
+      
+    </table>
+    
+    <h2>4. Gas Statistics</h2>
+    <table>
+      <tr>
+        <th>Platform</th>
+        <th>Total Gas Value</th>
+        <th>Avg Gas Per Transaction</th>
+      </tr>
+      
+        <tr>
+          <td>envio</td>
+          <td>10,161,297,133,770,000,000,000</td>
+          <td>5,989,836,929,686,758</td>
+        </tr>
+      
+        <tr>
+          <td>envio-json</td>
+          <td>10,161,297,133,770,000,000,000</td>
+          <td>5,989,836,929,686,758</td>
+        </tr>
+      
+    </table>
+    
+    <h2>5. Content Similarity</h2>
+    <table>
+      <tr>
+        <th>Comparison</th>
+        <th>Common Transactions</th>
+        <th>Unique to First</th>
+        <th>Unique to Second</th>
+        <th>Jaccard Similarity</th>
+      </tr>
+      
+          <tr>
+            <td>envio_vs_envio-json</td>
+            <td>1,696,423</td>
+            <td>0</td>
+            <td>0</td>
+            <td>100.00%</td>
+          </tr>
+        
+    </table>
+    
+    <h2>6. Summary</h2>
+    <p>
+      This report compares gas usage data from 6 different platforms.
+      The most complete dataset came from envio with 1,696,423 records.
+    </p>
+  </body>
+  </html>
+  

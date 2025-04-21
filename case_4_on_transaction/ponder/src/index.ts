@@ -3,7 +3,6 @@ import schema from "ponder:schema";
 
 ponder.on("EveryBlock:block", async ({ event, context }) => {
   const blockNumber = BigInt(event.block.number);
-  console.log(`Processing block ${event.block.number}`);
   
   try {
     // Get all transaction hashes from the block
@@ -13,11 +12,8 @@ ponder.on("EveryBlock:block", async ({ event, context }) => {
     });
     
     if (!blockWithTransactions.transactions || blockWithTransactions.transactions.length === 0) {
-      console.log(`Block ${event.block.number} has no transactions`);
       return;
     }
-    
-    console.log(`Found ${blockWithTransactions.transactions.length} transactions in block ${event.block.number}`);
     
     // Prepare batch records for insertion
     const gasSpentRecords = [];
@@ -56,8 +52,12 @@ ponder.on("EveryBlock:block", async ({ event, context }) => {
     
     // Insert records in batch if any were collected
     if (gasSpentRecords.length > 0) {
-      await context.db.insert(schema.gasSpent).values(gasSpentRecords);
-      console.log(`Block ${event.block.number}: Inserted ${gasSpentRecords.length} gas records`);
+      try {
+        await context.db.insert(schema.gasSpent).values(gasSpentRecords);
+        console.log(`Block ${event.block.number}: Inserted ${gasSpentRecords.length} gas records`);
+      } catch (dbError) {
+        console.error(`Database insertion error for block ${event.block.number}:`, dbError);
+      }
     }
     
   } catch (error) {

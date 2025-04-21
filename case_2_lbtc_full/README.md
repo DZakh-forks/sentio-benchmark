@@ -26,7 +26,7 @@ This benchmark tests the ability of indexers to not only process events but also
 | Indexer  | Time to Complete | Notes |
 |----------|------------------|-------|
 | Sentio   | 45m              | |
-| Envio    | 12m              | |
+| Envio    | 13m              | |
 | Ponder   | 4h38m            | Significantly slower with RPC calls |
 | Subsquid | 32m              | |
 | Subgraph | 18h38m           | Longest processing time |
@@ -83,7 +83,7 @@ This benchmark showcases how performance is affected when indexers need to both 
 
 ### Envio
 - **Dashboard URL**: https://envio.dev/app/0xdatapunk/case_2_lbtc_full
-- **GraphQL Endpoint**: https://indexer.dev.hyperindex.xyz/1cadf75/v1/graphql
+- **GraphQL Endpoint**: https://indexer.dev.hyperindex.xyz/6b5188a/v1/graphql
 - **RPC Provider**: Using Sentio's RPC endpoint for blockchain interactions
 - **Data Summary**:
   - **Transfer Records**: Approximately 12,165 records

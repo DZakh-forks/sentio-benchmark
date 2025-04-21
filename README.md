@@ -9,14 +9,16 @@ This repository contains performance benchmarks for various blockchain indexers,
 | [case_1_lbtc_event_only](./case_1_lbtc_event_only/) | Simple event indexing of LBTC token transfers | Event handling, No RPC calls, Write-only operations |
 | [case_2_lbtc_full](./case_2_lbtc_full/) | Complex indexing with RPC calls for token balances | Event handling, RPC calls, Read-after-write operations |
 | [case_3_ethereum_block](./case_3_ethereum_block/) | Block-level indexing of Ethereum blocks | Block handling, Metadata extraction |
+| [case_4_on_transaction](./case_4_on_transaction/) | Transaction gas usage indexing | Transaction handling, Gas calculations |
 
 ## Latest Benchmark Results
 
 Our most recent benchmark (April 2025) shows significant performance differences between indexers:
 
 - **Fastest Event Processing**: Envio (2m) and Sentio (6m) for simple event indexing
-- **Best RPC Performance**: Envio (12m) and Sentio (45m) for complex RPC interactions
+- **Best RPC Performance**: Envio (13m) and Sentio (45m) for complex RPC interactions
 - **Block Processing Leader**: Sentio (4m) for block-level indexing
+- **Transaction Processing**: Subsquid (5m) and Envio with HyperSync (1.5m) for gas usage indexing
 
 See the [complete benchmark results](#current-benchmark-results---april-2025) for detailed timing data, completeness metrics, and analysis.
 
@@ -36,16 +38,18 @@ Our benchmark cases are designed to test different aspects of indexer performanc
 2. **Data Types**:
    - Events: Transfer events in case_1 and case_2
    - Blocks: Block data in case_3
-   - Transactions: Included within block data
+   - Transactions: Gas usage in case_4
 
 3. **RPC Patterns**:
    - No RPC: case_1 tests raw event processing
    - RPC Calls: case_2 tests balanceOf() calls
    - Block Data: case_3 tests block processing
+   - Transaction Data: case_4 tests transaction processing
 
 4. **Write Patterns**:
    - Write-only: case_1 tests simple data storage
    - Read-after-write: case_2 tests database interaction complexity
+   - Computational: case_4 tests calculation and derivation of metrics
 
 ## Indexer Platforms
 
@@ -96,18 +100,21 @@ This benchmark provides a comparative analysis of indexer performance across dif
 | case_1_lbtc_event_only | LBTC Token Transfer Events | Ethereum | 0 to 22200000 | Event handling, No RPC calls, Write-only |
 | case_2_lbtc_full | LBTC Token with RPC calls | Ethereum | 22100000 to 22200000 | Event handling, RPC calls, Read-after-write |
 | case_3_ethereum_block | Ethereum Block Processing | Ethereum | 0 to 10000000 | Block handling, Metadata extraction |
+| case_4_on_transaction | Ethereum Transaction Gas Usage | Ethereum | 22280000 to 22290000 | Transaction handling, Gas calculations |
 
 ### Performance Results
 
 | Case | Sentio | Envio | Ponder | Subsquid | Subgraph | Sentio_Subgraph | Goldsky_Subgraph |
 |------|--------|-------|--------|----------|----------| ----------| ----------|
 | case_1_lbtc_event_only | 8m | 2m | 1h40m* | 10m | 3h9m | 26m |  |
-| case_2_lbtc_full | 45m | 12m | 4h38m | 32m | 18h38m | |  |
+| case_2_lbtc_full | 45m | 13m | 4h38m | 32m | 18h38m | |  |
 | case_3_ethereum_block | 4m | N/A† | 55h37m | 45h‡ | 24h | |  |
+| case_4_on_transaction | 23m | 1m 25s†† | 49h45m | 5m | N/A | |  |
 
 \* Ponder is missing about 5% of data in case_1  
 † Envio does not support block handlers  
 ‡ Subsquid is missing about 15% of blocks  
+†† Envio implementation uses HyperSync technology  
 
 ### Data Completeness
 
@@ -116,6 +123,7 @@ This benchmark provides a comparative analysis of indexer performance across dif
 | case_1_lbtc_event_only | 296,734 | 296,734 | 296,138* | 296,734 | 296,734 |
 | case_2_lbtc_full | 12,165 transfers, 2,684 accounts | 12,165 transfers, 2,685 accounts | 12,165 transfers, 2,684 accounts | 12,165 transfers, 2,685 accounts | 12,165 transfers, N/A accounts‡ |
 | case_3_ethereum_block | 10,000,001 | N/A | 10,000,001 | 8,498,930† | 10,000,001 |
+| case_4_on_transaction | 1,696,641 | 1,696,423 | ~1.7M | ~1.7M | N/A |
 
 \* Missing ~5% of events  
 † Missing 1,501,071 blocks (15% of target range)  

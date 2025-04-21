@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-04-21T19:10:12.905Z",
+  "timestamp": "2025-04-21T19:59:43.039Z",
   "data_type": "accounts",
   "data_counts": {
     "sentio": {
@@ -71,8 +71,8 @@
             "balance": "3077"
           },
           {
-            "id": "0x00c600b30fb0400701010f4b080409018b9006e0",
-            "balance": "1"
+            "id": "0x01f237fd4688aa8a973e3f2de3db42b334b1b497",
+            "balance": "2275769"
           }
         ],
         "unique_to_2": [
@@ -196,8 +196,8 @@
             "balance": "3077"
           },
           {
-            "id": "0x00c600b30fb0400701010f4b080409018b9006e0",
-            "balance": "1"
+            "id": "0x01f237fd4688aa8a973e3f2de3db42b334b1b497",
+            "balance": "2275769"
           }
         ]
       }
@@ -254,8 +254,8 @@
             "balance": "3077"
           },
           {
-            "id": "0x00c600b30fb0400701010f4b080409018b9006e0",
-            "balance": "1"
+            "id": "0x01f237fd4688aa8a973e3f2de3db42b334b1b497",
+            "balance": "2275769"
           }
         ]
       }
@@ -290,8 +290,8 @@
             "balance": "4215"
           },
           {
-            "id": "0x00c600b30fb0400701010f4b080409018b9006e0",
-            "balance": "8"
+            "id": "0x01f237fd4688aa8a973e3f2de3db42b334b1b497",
+            "balance": "0"
           }
         ],
         "unique_to_2": [
@@ -312,8 +312,8 @@
             "balance": "3077"
           },
           {
-            "id": "0x00c600b30fb0400701010f4b080409018b9006e0",
-            "balance": "1"
+            "id": "0x01f237fd4688aa8a973e3f2de3db42b334b1b497",
+            "balance": "2275769"
           }
         ]
       }

@@ -1,45 +1,45 @@
-# LBTC Event-Only Indexing Benchmark
+# Ethereum Transaction Gas Usage Indexing Benchmark
 
-This benchmark tests the performance of various indexers when processing simple Transfer events from the LBTC token contract.
+This benchmark tests the performance of various indexers when processing transaction data and computing gas usage metrics from Ethereum transactions.
 
 ## Benchmark Specification
 
-- **Target Contract**: LBTC Token (0x8236a87084f8B84306f72007F36F2618A5634494)
-- **Events Indexed**: Transfer events only
-- **Block Range**: 0 to 22200000
-- **Data Operations**: Write-only (no read-after-write)
-- **RPC Calls**: None (data derived directly from event logs)
+- **Target Data**: All Ethereum transactions in the specified block range
+- **Data Processed**: Transaction gas usage
+- **Block Range**: 22280000 to 22290000 (10,000 blocks)
+- **Data Operations**: Transaction processing with gas calculations
+- **RPC Calls**: Required for transaction data retrieval
 
 ## Implementation Details
 
 The benchmark requires each indexer to:
-1. Listen for `Transfer(address indexed from, address indexed to, uint256 value)` events
-2. Create a record for each Transfer event with the following fields:
-   - ID (unique identifier)
-   - From address
-   - To address
-   - Value transferred
-   - Block number
+1. Process all transactions within the target block range
+2. Extract gas usage data from each transaction
+3. Create records with the following information:
    - Transaction hash
+   - Sender (from address)
+   - Recipient (to address)
+   - Gas price
+   - Gas used
+   - Block number
+   - Transaction index
 
 ## Performance Results
 
 | Indexer  | Time to Complete | Records Indexed | Notes |
 |----------|------------------|----------------|-------|
-| Sentio   | 6m               | 296,734        | |
-| Envio    | 2m               | 296,734        | Fastest processing time |
-| Ponder   | 1h40m            | 296,138        | Missing ~5% of events |
-| Subsquid | 10m              | 296,734        | |
-| Subgraph | 3h9m             | 296,734        | |
+| Sentio   | 23m              | 1,696,641      | |
+| Envio    | 1m 25s           | 1,696,423      | Using HyperSync technology |
+| Ponder   | 49h 45m          | ~1.7M          | Significantly slower processing time |
+| Subsquid | 5m               | ~1.7M          | Fastest standard indexer |
 
 ## Implementation Examples
 
 Each subdirectory contains the implementation for a specific indexing platform:
 - `/sentio`: Sentio implementation 
-- `/envio`: Envio implementation
+- `/envio`: Envio implementation with HyperSync
 - `/ponder`: Ponder implementation
 - `/sqd`: Subsquid implementation
-- `/subgraph`: The Graph subgraph implementation
 
 ## Running the Benchmark
 
@@ -53,77 +53,49 @@ Each implementation includes its own setup and execution instructions. Generally
 
 ## Key Observations
 
-- Envio demonstrates the fastest processing time for this simple event indexing scenario
-- Ponder processes events significantly slower and misses approximately 5% of the data
-- Sentio and Subsquid offer good balance of speed and completeness
-- Subgraph requires significantly more time to complete the indexing
+- Subsquid demonstrates the fastest processing time for standard indexing
+- Envio achieves exceptional performance through HyperSync technology
+- Sentio provides solid performance for transaction processing
+- Ponder requires significantly more time to process the same transaction volume
 
-This benchmark showcases performance differences when handling straightforward event-only indexing, which is a common use case for blockchain data indexing.
+This benchmark showcases performance differences when processing raw transaction data and computing derivatives, which is a common pattern for dashboards, analytics, and monitoring applications.
 
 ## Access Information
 
 ### Sentio
-- **Dashboard URL**: https://app.sentio.xyz/yufei/case_1_lbtc_event_only/data-explorer/sql
+- **Dashboard URL**: https://app.sentio.xyz/yufei/case_4_on_transaction/data-explorer/sql
 - **API Access**: 
   ```
-  READ_ONLY KEY: hnZ7Z8cRsoxRadrVdhih2jRjBlH0lIYWl
-  curl -L -X POST 'https://app.sentio.xyz/api/v1/analytics/yufei/case_1_lbtc_event_only/sql/execute' \
+  curl -L -X POST 'https://app.sentio.xyz/api/v1/analytics/yufei/case_4_on_transaction/sql/execute' \
      -H 'Content-Type: application/json' \
-     -H 'api-key: hnZ7Z8cRsoxRadrVdhih2jRjBlH0lIYWl' \
+     -H 'api-key: <API_KEY>' \
      --data-raw '{
        "sqlQuery": {
-         "sql": "YOUR_QUERY_HERE"
+         "sql": "select count(blockNumber) from `GasSpent`"
        }
      }'
   ```
-- **Data Summary**: Approximately 294,278 records in the transfers collection
-- **Block Range**: Block 20016816 to Block 22199998
+- **Data Summary**: 1,696,641 gas records
 
 ### Envio
-- **Dashboard URL**: https://envio.dev/app/0xdatapunk/case_1_lbtc_event_only
-- **GraphQL Endpoint**: https://indexer.dev.hyperindex.xyz/6c63ec1/v1/graphql
 - **Data Summary**: 
-  - Block Range: 20016816 to 22199998
-  - Total Records: Approximately 294,278
+  - Total blocks processed: 9,996
+  - Gas records collected: 1,696,423 transactions (approximately 170 transactions per block)
+  - Unique senders: 493,181
+  - Unique recipients: 315,861
+  - Total gas value: 10,161,297,133,770,000,000,000 wei
+  - Average gas value per transaction: 5,989,836,929,686,758 wei (approximately 0.00599 ETH)
 
 ### Ponder
 - **Database Connection**:
   ```
-  postgresql://postgres:IaYFUoJeDdJXgiTXXXOZmaNkjjXjkBZJ@shinkansen.proxy.rlwy.net:29835/railway
-  --schema fc56df99-dd01-4846-9d2e-67fbaf93c52d
+  postgresql://postgres:YyWuPpZNatmmOXvczRYqKRYzMkkPTaVD@interchange.proxy.rlwy.net:28331/railway
   ```
-- **Data Summary**:
-  - Total Transfer Records: 293,682 in the "lbtc_transfer" table
-  - Block Range: Block 20016816 to Block 22199998
+- **Data Summary**: Approximately 1.7M gas records
 
 ### Subsquid
-- **Dashboard URL**: https://app.subsquid.io/squids/case-1-lbtc-event-only/v1
-- **Database Connection**:
-  ```
-  PGPASSWORD="kbr06QnqfXX66cb7Bm9Qdovvx6TvU8C~" psql -h pg.squid.subsquid.io -d 16177_ku9u1f -U 16177_ku9u1f
-  ```
-- **Data Summary**:
-  - Transfer Records: 294,278 records in the transfer table
-  - Block Range: Block 20016816 to Block 22199998
-
-### Subgraph
-- **Dashboard URL**: https://thegraph.com/studio/subgraph/case_1_lbtc_event_only/endpoints
-- **GraphQL Endpoint**: https://api.studio.thegraph.com/query/108520/case_1_lbtc_event_only/version/latest
-
-### Sentio Subgraph
-- **Dashboard URL**: https://app.sentio.xyz/yufei/case_1_lbtc_event_only_subgraph/data-explorer/sql
-- **API Access**:
-  ```
-  READ_ONLY KEY: hnZ7Z8cRsoxRadrVdhih2jRjBlH0lIYWl
-  curl -L -X POST 'https://app.sentio.xyz/api/v1/analytics/yufei/case_1_lbtc_event_only_subgraph/sql/execute' \
-     -H 'Content-Type: application/json' \
-     -H 'api-key: hnZ7Z8cRsoxRadrVdhih2jRjBlH0lIYWl' \
-     --data-raw '{
-       "sqlQuery": {
-         "sql": "YOUR_QUERY_HERE"
-       }
-     }'
-  ```
+- **GraphQL Endpoint**: https://pine-quench.squids.live/case-4-on-transaction@v1/api/graphql
+- **Data Summary**: Approximately 1.7M gas records within 10,000 block range
 
 ## Note on Envio Implementation
 
