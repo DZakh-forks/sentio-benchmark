@@ -1,0 +1,16 @@
+{
+  "name": "downloads",
+  "version": "1.0.0",
+  "main": "fetch-data.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "parquetjs": "^0.11.2",
+    "pg": "^8.14.1"
+  }
+}

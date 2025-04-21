@@ -1,0 +1,317 @@
+{
+  "timestamp": "2025-04-17T16:06:20.178Z",
+  "data_type": "accounts",
+  "data_counts": {
+    "sentio": {
+      "count": 2684,
+      "success": true
+    },
+    "envio": {
+      "count": 2663,
+      "success": true
+    },
+    "ponder": {
+      "count": 2684,
+      "success": true
+    },
+    "subsquid": {
+      "count": 2684,
+      "success": true
+    },
+    "subgraph": {
+      "count": 2685,
+      "success": true
+    }
+  },
+  "unique_counts": {
+    "sentio": {
+      "entities": 2684
+    },
+    "envio": {
+      "entities": 2663
+    },
+    "ponder": {
+      "entities": 2684
+    },
+    "subsquid": {
+      "entities": 2684
+    },
+    "subgraph": {
+      "entities": 2685
+    }
+  },
+  "content_comparison": {
+    "sentio_vs_envio": {
+      "common_records": 2178,
+      "unique_to_1": 506,
+      "unique_to_2": 485,
+      "jaccard_similarity": 0.6872830545913537,
+      "examples": {
+        "unique_to_1": [
+          {
+            "id": "0x000000000004444c5dc75cb358380d2e3de08a90",
+            "balance": "46566"
+          },
+          {
+            "id": "0x0000000000a92eedc4d1ff952ed1cf49df8672ea",
+            "balance": "407963"
+          },
+          {
+            "id": "0x000000fee13a103a10d593b9ae06b3e05f2e7e1c",
+            "balance": "106811"
+          },
+          {
+            "id": "0x00000688768803bbd44095770895ad27ad6b0d95",
+            "balance": "3077"
+          },
+          {
+            "id": "0x00c600b30fb0400701010f4b080409018b9006e0",
+            "balance": "1"
+          }
+        ],
+        "unique_to_2": [
+          {
+            "id": "0x000000000004444c5dc75cb358380d2e3de08a90",
+            "balance": "67848"
+          },
+          {
+            "id": "0x0000000000a92eedc4d1ff952ed1cf49df8672ea",
+            "balance": "0"
+          },
+          {
+            "id": "0x000000fee13a103a10d593b9ae06b3e05f2e7e1c",
+            "balance": "4731"
+          },
+          {
+            "id": "0x00000688768803bbd44095770895ad27ad6b0d95",
+            "balance": "4215"
+          },
+          {
+            "id": "0x00c600b30fb0400701010f4b080409018b9006e0",
+            "balance": "8"
+          }
+        ]
+      }
+    },
+    "sentio_vs_ponder": {
+      "common_records": 2684,
+      "unique_to_1": 0,
+      "unique_to_2": 0,
+      "jaccard_similarity": 1
+    },
+    "sentio_vs_subsquid": {
+      "common_records": 2684,
+      "unique_to_1": 0,
+      "unique_to_2": 0,
+      "jaccard_similarity": 1
+    },
+    "sentio_vs_subgraph": {
+      "common_records": 2684,
+      "unique_to_1": 0,
+      "unique_to_2": 1,
+      "jaccard_similarity": 0.9996275605214152,
+      "examples": {
+        "unique_to_1": [],
+        "unique_to_2": [
+          {
+            "id": "0x0000000000000000000000000000000000000000",
+            "balance": "0"
+          }
+        ]
+      }
+    },
+    "envio_vs_ponder": {
+      "common_records": 2178,
+      "unique_to_1": 485,
+      "unique_to_2": 506,
+      "jaccard_similarity": 0.6872830545913537,
+      "examples": {
+        "unique_to_1": [
+          {
+            "id": "0x000000000004444c5dc75cb358380d2e3de08a90",
+            "balance": "67848"
+          },
+          {
+            "id": "0x0000000000a92eedc4d1ff952ed1cf49df8672ea",
+            "balance": "0"
+          },
+          {
+            "id": "0x000000fee13a103a10d593b9ae06b3e05f2e7e1c",
+            "balance": "4731"
+          },
+          {
+            "id": "0x00000688768803bbd44095770895ad27ad6b0d95",
+            "balance": "4215"
+          },
+          {
+            "id": "0x00c600b30fb0400701010f4b080409018b9006e0",
+            "balance": "8"
+          }
+        ],
+        "unique_to_2": [
+          {
+            "id": "0x000000000004444c5dc75cb358380d2e3de08a90",
+            "balance": "46566"
+          },
+          {
+            "id": "0x0000000000a92eedc4d1ff952ed1cf49df8672ea",
+            "balance": "407963"
+          },
+          {
+            "id": "0x000000fee13a103a10d593b9ae06b3e05f2e7e1c",
+            "balance": "106811"
+          },
+          {
+            "id": "0x00000688768803bbd44095770895ad27ad6b0d95",
+            "balance": "3077"
+          },
+          {
+            "id": "0x00c600b30fb0400701010f4b080409018b9006e0",
+            "balance": "1"
+          }
+        ]
+      }
+    },
+    "envio_vs_subsquid": {
+      "common_records": 2178,
+      "unique_to_1": 485,
+      "unique_to_2": 506,
+      "jaccard_similarity": 0.6872830545913537,
+      "examples": {
+        "unique_to_1": [
+          {
+            "id": "0x000000000004444c5dc75cb358380d2e3de08a90",
+            "balance": "67848"
+          },
+          {
+            "id": "0x0000000000a92eedc4d1ff952ed1cf49df8672ea",
+            "balance": "0"
+          },
+          {
+            "id": "0x000000fee13a103a10d593b9ae06b3e05f2e7e1c",
+            "balance": "4731"
+          },
+          {
+            "id": "0x00000688768803bbd44095770895ad27ad6b0d95",
+            "balance": "4215"
+          },
+          {
+            "id": "0x00c600b30fb0400701010f4b080409018b9006e0",
+            "balance": "8"
+          }
+        ],
+        "unique_to_2": [
+          {
+            "id": "0x000000000004444c5dc75cb358380d2e3de08a90",
+            "balance": "46566"
+          },
+          {
+            "id": "0x0000000000a92eedc4d1ff952ed1cf49df8672ea",
+            "balance": "407963"
+          },
+          {
+            "id": "0x000000fee13a103a10d593b9ae06b3e05f2e7e1c",
+            "balance": "106811"
+          },
+          {
+            "id": "0x00000688768803bbd44095770895ad27ad6b0d95",
+            "balance": "3077"
+          },
+          {
+            "id": "0x00c600b30fb0400701010f4b080409018b9006e0",
+            "balance": "1"
+          }
+        ]
+      }
+    },
+    "envio_vs_subgraph": {
+      "common_records": 2178,
+      "unique_to_1": 485,
+      "unique_to_2": 507,
+      "jaccard_similarity": 0.6870662460567823,
+      "examples": {
+        "unique_to_1": [
+          {
+            "id": "0x000000000004444c5dc75cb358380d2e3de08a90",
+            "balance": "67848"
+          },
+          {
+            "id": "0x0000000000a92eedc4d1ff952ed1cf49df8672ea",
+            "balance": "0"
+          },
+          {
+            "id": "0x000000fee13a103a10d593b9ae06b3e05f2e7e1c",
+            "balance": "4731"
+          },
+          {
+            "id": "0x00000688768803bbd44095770895ad27ad6b0d95",
+            "balance": "4215"
+          },
+          {
+            "id": "0x00c600b30fb0400701010f4b080409018b9006e0",
+            "balance": "8"
+          }
+        ],
+        "unique_to_2": [
+          {
+            "id": "0x0000000000000000000000000000000000000000",
+            "balance": "0"
+          },
+          {
+            "id": "0x000000000004444c5dc75cb358380d2e3de08a90",
+            "balance": "46566"
+          },
+          {
+            "id": "0x0000000000a92eedc4d1ff952ed1cf49df8672ea",
+            "balance": "407963"
+          },
+          {
+            "id": "0x000000fee13a103a10d593b9ae06b3e05f2e7e1c",
+            "balance": "106811"
+          },
+          {
+            "id": "0x00000688768803bbd44095770895ad27ad6b0d95",
+            "balance": "3077"
+          }
+        ]
+      }
+    },
+    "ponder_vs_subsquid": {
+      "common_records": 2684,
+      "unique_to_1": 0,
+      "unique_to_2": 0,
+      "jaccard_similarity": 1
+    },
+    "ponder_vs_subgraph": {
+      "common_records": 2684,
+      "unique_to_1": 0,
+      "unique_to_2": 1,
+      "jaccard_similarity": 0.9996275605214152,
+      "examples": {
+        "unique_to_1": [],
+        "unique_to_2": [
+          {
+            "id": "0x0000000000000000000000000000000000000000",
+            "balance": "0"
+          }
+        ]
+      }
+    },
+    "subsquid_vs_subgraph": {
+      "common_records": 2684,
+      "unique_to_1": 0,
+      "unique_to_2": 1,
+      "jaccard_similarity": 0.9996275605214152,
+      "examples": {
+        "unique_to_1": [],
+        "unique_to_2": [
+          {
+            "id": "0x0000000000000000000000000000000000000000",
+            "balance": "0"
+          }
+        ]
+      }
+    }
+  },
+  "field_comparisons": {}
+}

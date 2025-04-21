@@ -1,0 +1,1528 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Indexer Benchmark Comparison</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      color: #333;
+      line-height: 1.6;
+    }
+    h1, h2, h3 {
+      margin-top: 20px;
+      margin-bottom: 10px;
+      color: #1a73e8;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .card {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 15px 0;
+    }
+    th, td {
+      padding: 12px 15px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+    th {
+      background-color: #f7f7f7;
+    }
+    tr:hover {
+      background-color: #f5f5f5;
+    }
+    .success {
+      color: #28a745;
+    }
+    .failure {
+      color: #dc3545;
+    }
+    .platform-comparison {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+    }
+    .heat-table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+    .heat-table td {
+      height: 50px;
+      text-align: center;
+      vertical-align: middle;
+      font-weight: bold;
+      color: white;
+    }
+    .timestamp {
+      font-size: 0.9em;
+      color: #666;
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Indexer Benchmark Comparison Report</h1>
+    <p class="timestamp">Generated on: 4/16/2025, 11:13:16 PM</p>
+    
+    <div class="card">
+      <h2>Record Counts</h2>
+      <table>
+        <tr>
+          <th>Platform</th>
+          <th>Record Count</th>
+          <th>Status</th>
+        </tr>
+        
+          <tr>
+            <td>sentio</td>
+            <td>294278</td>
+            <td class="success">Success</td>
+          </tr>
+        
+          <tr>
+            <td>envio</td>
+            <td>294278</td>
+            <td class="success">Success</td>
+          </tr>
+        
+          <tr>
+            <td>ponder</td>
+            <td>293682</td>
+            <td class="success">Success</td>
+          </tr>
+        
+          <tr>
+            <td>subsquid</td>
+            <td>294278</td>
+            <td class="success">Success</td>
+          </tr>
+        
+          <tr>
+            <td>subgraph</td>
+            <td>294278</td>
+            <td class="success">Success</td>
+          </tr>
+        
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>Platform Statistics</h2>
+      <table>
+        <tr>
+          <th>Platform</th>
+          <th>Unique Blocks</th>
+          <th>Unique Transactions</th>
+          <th>Min Block</th>
+          <th>Max Block</th>
+          <th>Block Range</th>
+        </tr>
+        
+          <tr>
+            <td>sentio</td>
+            <td>0</td>
+            <td>294278</td>
+            <td>N/A</td>
+            <td>N/A</td>
+            <td>0</td>
+          </tr>
+        
+          <tr>
+            <td>envio</td>
+            <td>149671</td>
+            <td>183643</td>
+            <td>20016816</td>
+            <td>22199998</td>
+            <td>294278</td>
+          </tr>
+        
+          <tr>
+            <td>ponder</td>
+            <td>149347</td>
+            <td>183278</td>
+            <td>20016816</td>
+            <td>22199998</td>
+            <td>293682</td>
+          </tr>
+        
+          <tr>
+            <td>subsquid</td>
+            <td>149671</td>
+            <td>1</td>
+            <td>20016816</td>
+            <td>22199998</td>
+            <td>294278</td>
+          </tr>
+        
+          <tr>
+            <td>subgraph</td>
+            <td>149671</td>
+            <td>183643</td>
+            <td>20016816</td>
+            <td>22199998</td>
+            <td>294278</td>
+          </tr>
+        
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>Consistency Analysis</h2>
+      <p>The heatmap below shows the Jaccard similarity between platforms (0 = no overlap, 1 = perfect match)</p>
+      
+      <table class="heat-table">
+        <tr>
+          <th></th>
+          <th>sentio</th><th>envio</th><th>ponder</th><th>subsquid</th><th>subgraph</th>
+        </tr>
+        
+          <tr>
+            <th>sentio</th>
+            <td style="background-color: rgb(0, 128, 0);">1.00</td><td style="background-color: rgb(255, 0, 0);">0.00</td><td style="background-color: rgb(255, 0, 0);">0.00</td><td style="background-color: rgb(255, 0, 0);">0.00</td><td style="background-color: rgb(255, 0, 0);">0.00</td>
+          </tr>
+        
+          <tr>
+            <th>envio</th>
+            <td style="background-color: rgb(255, 0, 0);">0.00</td><td style="background-color: rgb(0, 128, 0);">1.00</td><td style="background-color: rgb(0, 254, 0);">1.00</td><td style="background-color: rgb(255, 0, 0);">0.00</td><td style="background-color: rgb(0, 255, 0);">1.00</td>
+          </tr>
+        
+          <tr>
+            <th>ponder</th>
+            <td style="background-color: rgb(255, 0, 0);">0.00</td><td style="background-color: rgb(0, 254, 0);">1.00</td><td style="background-color: rgb(0, 128, 0);">1.00</td><td style="background-color: rgb(255, 0, 0);">0.00</td><td style="background-color: rgb(0, 254, 0);">1.00</td>
+          </tr>
+        
+          <tr>
+            <th>subsquid</th>
+            <td style="background-color: rgb(255, 0, 0);">0.00</td><td style="background-color: rgb(255, 0, 0);">0.00</td><td style="background-color: rgb(255, 0, 0);">0.00</td><td style="background-color: rgb(0, 128, 0);">1.00</td><td style="background-color: rgb(255, 0, 0);">0.00</td>
+          </tr>
+        
+          <tr>
+            <th>subgraph</th>
+            <td style="background-color: rgb(255, 0, 0);">0.00</td><td style="background-color: rgb(0, 255, 0);">1.00</td><td style="background-color: rgb(0, 254, 0);">1.00</td><td style="background-color: rgb(255, 0, 0);">0.00</td><td style="background-color: rgb(0, 128, 0);">1.00</td>
+          </tr>
+        
+      </table>
+    </div>
+
+    
+    <div class="card">
+      <h2>Content-Based Comparison</h2>
+      <p>This analysis compares platforms based on the actual transfer content (from, to, value) without relying on transaction hashes or block numbers.</p>
+      
+      <table class="heat-table">
+        <tr>
+          <th></th>
+          <th>sentio</th><th>envio</th><th>ponder</th><th>subsquid</th><th>subgraph</th>
+        </tr>
+        
+          <tr>
+            <th>sentio</th>
+            <td style="background-color: rgb(0, 128, 0);">1.00</td><td style="background-color: rgb(0, 254, 0);">1.00</td><td style="background-color: rgb(0, 254, 0);">1.00</td><td style="background-color: rgb(0, 254, 0);">1.00</td><td style="background-color: rgb(0, 254, 0);">1.00</td>
+          </tr>
+        
+          <tr>
+            <th>envio</th>
+            <td style="background-color: rgb(0, 254, 0);">1.00</td><td style="background-color: rgb(0, 128, 0);">1.00</td><td style="background-color: rgb(0, 254, 0);">1.00</td><td style="background-color: rgb(0, 255, 0);">1.00</td><td style="background-color: rgb(0, 255, 0);">1.00</td>
+          </tr>
+        
+          <tr>
+            <th>ponder</th>
+            <td style="background-color: rgb(0, 254, 0);">1.00</td><td style="background-color: rgb(0, 254, 0);">1.00</td><td style="background-color: rgb(0, 128, 0);">1.00</td><td style="background-color: rgb(0, 254, 0);">1.00</td><td style="background-color: rgb(0, 254, 0);">1.00</td>
+          </tr>
+        
+          <tr>
+            <th>subsquid</th>
+            <td style="background-color: rgb(0, 254, 0);">1.00</td><td style="background-color: rgb(0, 255, 0);">1.00</td><td style="background-color: rgb(0, 254, 0);">1.00</td><td style="background-color: rgb(0, 128, 0);">1.00</td><td style="background-color: rgb(0, 255, 0);">1.00</td>
+          </tr>
+        
+          <tr>
+            <th>subgraph</th>
+            <td style="background-color: rgb(0, 254, 0);">1.00</td><td style="background-color: rgb(0, 255, 0);">1.00</td><td style="background-color: rgb(0, 254, 0);">1.00</td><td style="background-color: rgb(0, 255, 0);">1.00</td><td style="background-color: rgb(0, 128, 0);">1.00</td>
+          </tr>
+        
+      </table>
+      
+      <h3>Detailed Content Comparison</h3>
+      <div class="platform-comparison">
+        
+            <div class="card">
+              <h3>sentio vs envio</h3>
+              <table>
+                <tr><td>Common Transfers (matching from/to/value):</td><td>275542</td></tr>
+                <tr><td>Unique to sentio:</td><td>0</td></tr>
+                <tr><td>Unique to envio:</td><td>438</td></tr>
+                <tr><td>Content Similarity:</td><td>0.9984</td></tr>
+              </table>
+              
+              
+                <h4>Sample of Unique Transfers</h4>
+                
+                
+                
+                  <h5>Unique to envio</h5>
+                  <table>
+                    <tr>
+                      <th>From</th>
+                      <th>To</th>
+                      <th>Value</th>
+                    </tr>
+                    
+                      <tr>
+                        <td>0x3fc91a3a...</td>
+                        <td>0x000000fe...</td>
+                        <td>0</td>
+                      </tr>
+                    
+                      <tr>
+                        <td>0xa000ad12...</td>
+                        <td>0xa16eeca3...</td>
+                        <td>0</td>
+                      </tr>
+                    
+                      <tr>
+                        <td>0xcfbe2f50...</td>
+                        <td>0xb6cafe7e...</td>
+                        <td>0</td>
+                      </tr>
+                    
+                      <tr>
+                        <td>0x32d85060...</td>
+                        <td>0x601a5646...</td>
+                        <td>0</td>
+                      </tr>
+                    
+                      <tr>
+                        <td>0xae150da9...</td>
+                        <td>0xae150da9...</td>
+                        <td>0</td>
+                      </tr>
+                    
+                  </table>
+                
+              
+            </div>
+          
+            <div class="card">
+              <h3>sentio vs ponder</h3>
+              <table>
+                <tr><td>Common Transfers (matching from/to/value):</td><td>274960</td></tr>
+                <tr><td>Unique to sentio:</td><td>582</td></tr>
+                <tr><td>Unique to ponder:</td><td>438</td></tr>
+                <tr><td>Content Similarity:</td><td>0.9963</td></tr>
+              </table>
+              
+              
+                <h4>Sample of Unique Transfers</h4>
+                
+                  <h5>Unique to sentio</h5>
+                  <table>
+                    <tr>
+                      <th>From</th>
+                      <th>To</th>
+                      <th>Value</th>
+                    </tr>
+                    
+                      <tr>
+                        <td>0x87428a53...</td>
+                        <td>0xf081470f...</td>
+                        <td>257696</td>
+                      </tr>
+                    
+                      <tr>
+                        <td>0xf081470f...</td>
+                        <td>0x88888888...</td>
+                        <td>257696</td>
+                      </tr>
+                    
+                      <tr>
+                        <td>0x88888888...</td>
+                        <td>0xc781c0cc...</td>
+                        <td>257696</td>
+                      </tr>
+                    
+                      <tr>
+                        <td>0x5f5704bb...</td>
+                        <td>0x74de5d4f...</td>
+                        <td>238558</td>
+                      </tr>
+                    
+                      <tr>
+                        <td>0x74de5d4f...</td>
+                        <td>0x87428a53...</td>
+                        <td>238558</td>
+                      </tr>
+                    
+                  </table>
+                
+                
+                
+                  <h5>Unique to ponder</h5>
+                  <table>
+                    <tr>
+                      <th>From</th>
+                      <th>To</th>
+                      <th>Value</th>
+                    </tr>
+                    
+                      <tr>
+                        <td>0x3fc91a3a...</td>
+                        <td>0x000000fe...</td>
+                        <td>0</td>
+                      </tr>
+                    
+                      <tr>
+                        <td>0xa000ad12...</td>
+                        <td>0xa16eeca3...</td>
+                        <td>0</td>
+                      </tr>
+                    
+                      <tr>
+                        <td>0xcfbe2f50...</td>
+                        <td>0xb6cafe7e...</td>
+                        <td>0</td>
+                      </tr>
+                    
+                      <tr>
+                        <td>0x32d85060...</td>
+                        <td>0x601a5646...</td>
+                        <td>0</td>
+                      </tr>
+                    
+                      <tr>
+                        <td>0xae150da9...</td>
+                        <td>0xae150da9...</td>
+                        <td>0</td>
+                      </tr>
+                    
+                  </table>
+                
+              
+            </div>
+          
+            <div class="card">
+              <h3>sentio vs subsquid</h3>
+              <table>
+                <tr><td>Common Transfers (matching from/to/value):</td><td>275542</td></tr>
+                <tr><td>Unique to sentio:</td><td>0</td></tr>
+                <tr><td>Unique to subsquid:</td><td>438</td></tr>
+                <tr><td>Content Similarity:</td><td>0.9984</td></tr>
+              </table>
+              
+              
+                <h4>Sample of Unique Transfers</h4>
+                
+                
+                
+                  <h5>Unique to subsquid</h5>
+                  <table>
+                    <tr>
+                      <th>From</th>
+                      <th>To</th>
+                      <th>Value</th>
+                    </tr>
+                    
+                      <tr>
+                        <td>0x3fc91a3a...</td>
+                        <td>0x000000fe...</td>
+                        <td>0</td>
+                      </tr>
+                    
+                      <tr>
+                        <td>0xa000ad12...</td>
+                        <td>0xa16eeca3...</td>
+                        <td>0</td>
+                      </tr>
+                    
+                      <tr>
+                        <td>0xcfbe2f50...</td>
+                        <td>0xb6cafe7e...</td>
+                        <td>0</td>
+                      </tr>
+                    
+                      <tr>
+                        <td>0x32d85060...</td>
+                        <td>0x601a5646...</td>
+                        <td>0</td>
+                      </tr>
+                    
+                      <tr>
+                        <td>0xae150da9...</td>
+                        <td>0xae150da9...</td>
+                        <td>0</td>
+                      </tr>
+                    
+                  </table>
+                
+              
+            </div>
+          
+            <div class="card">
+              <h3>sentio vs subgraph</h3>
+              <table>
+                <tr><td>Common Transfers (matching from/to/value):</td><td>275542</td></tr>
+                <tr><td>Unique to sentio:</td><td>0</td></tr>
+                <tr><td>Unique to subgraph:</td><td>438</td></tr>
+                <tr><td>Content Similarity:</td><td>0.9984</td></tr>
+              </table>
+              
+              
+                <h4>Sample of Unique Transfers</h4>
+                
+                
+                
+                  <h5>Unique to subgraph</h5>
+                  <table>
+                    <tr>
+                      <th>From</th>
+                      <th>To</th>
+                      <th>Value</th>
+                    </tr>
+                    
+                      <tr>
+                        <td>0xa58627a2...</td>
+                        <td>0x251a604e...</td>
+                        <td>0</td>
+                      </tr>
+                    
+                      <tr>
+                        <td>0x140d1fec...</td>
+                        <td>0x251a604e...</td>
+                        <td>0</td>
+                      </tr>
+                    
+                      <tr>
+                        <td>0x530d10ae...</td>
+                        <td>0x251a604e...</td>
+                        <td>0</td>
+                      </tr>
+                    
+                      <tr>
+                        <td>0xe8ac89b0...</td>
+                        <td>0x5ffd6bc9...</td>
+                        <td>0</td>
+                      </tr>
+                    
+                      <tr>
+                        <td>0xe9786097...</td>
+                        <td>0x251a604e...</td>
+                        <td>0</td>
+                      </tr>
+                    
+                  </table>
+                
+              
+            </div>
+          
+            <div class="card">
+              <h3>envio vs ponder</h3>
+              <table>
+                <tr><td>Common Transfers (matching from/to/value):</td><td>275398</td></tr>
+                <tr><td>Unique to envio:</td><td>582</td></tr>
+                <tr><td>Unique to ponder:</td><td>0</td></tr>
+                <tr><td>Content Similarity:</td><td>0.9979</td></tr>
+              </table>
+              
+              
+                <h4>Sample of Unique Transfers</h4>
+                
+                  <h5>Unique to envio</h5>
+                  <table>
+                    <tr>
+                      <th>From</th>
+                      <th>To</th>
+                      <th>Value</th>
+                    </tr>
+                    
+                      <tr>
+                        <td>0x87428a53...</td>
+                        <td>0xf081470f...</td>
+                        <td>257696</td>
+                      </tr>
+                    
+                      <tr>
+                        <td>0xf081470f...</td>
+                        <td>0x88888888...</td>
+                        <td>257696</td>
+                      </tr>
+                    
+                      <tr>
+                        <td>0x88888888...</td>
+                        <td>0xc781c0cc...</td>
+                        <td>257696</td>
+                      </tr>
+                    
+                      <tr>
+                        <td>0x5f5704bb...</td>
+                        <td>0x74de5d4f...</td>
+                        <td>238558</td>
+                      </tr>
+                    
+                      <tr>
+                        <td>0x74de5d4f...</td>
+                        <td>0x87428a53...</td>
+                        <td>238558</td>
+                      </tr>
+                    
+                  </table>
+                
+                
+                
+              
+            </div>
+          
+            <div class="card">
+              <h3>envio vs subsquid</h3>
+              <table>
+                <tr><td>Common Transfers (matching from/to/value):</td><td>275980</td></tr>
+                <tr><td>Unique to envio:</td><td>0</td></tr>
+                <tr><td>Unique to subsquid:</td><td>0</td></tr>
+                <tr><td>Content Similarity:</td><td>1.0000</td></tr>
+              </table>
+              
+              
+            </div>
+          
+            <div class="card">
+              <h3>envio vs subgraph</h3>
+              <table>
+                <tr><td>Common Transfers (matching from/to/value):</td><td>275980</td></tr>
+                <tr><td>Unique to envio:</td><td>0</td></tr>
+                <tr><td>Unique to subgraph:</td><td>0</td></tr>
+                <tr><td>Content Similarity:</td><td>1.0000</td></tr>
+              </table>
+              
+              
+            </div>
+          
+            <div class="card">
+              <h3>ponder vs subsquid</h3>
+              <table>
+                <tr><td>Common Transfers (matching from/to/value):</td><td>275398</td></tr>
+                <tr><td>Unique to ponder:</td><td>0</td></tr>
+                <tr><td>Unique to subsquid:</td><td>582</td></tr>
+                <tr><td>Content Similarity:</td><td>0.9979</td></tr>
+              </table>
+              
+              
+                <h4>Sample of Unique Transfers</h4>
+                
+                
+                
+                  <h5>Unique to subsquid</h5>
+                  <table>
+                    <tr>
+                      <th>From</th>
+                      <th>To</th>
+                      <th>Value</th>
+                    </tr>
+                    
+                      <tr>
+                        <td>0x87428a53...</td>
+                        <td>0xf081470f...</td>
+                        <td>257696</td>
+                      </tr>
+                    
+                      <tr>
+                        <td>0xf081470f...</td>
+                        <td>0x88888888...</td>
+                        <td>257696</td>
+                      </tr>
+                    
+                      <tr>
+                        <td>0x88888888...</td>
+                        <td>0xc781c0cc...</td>
+                        <td>257696</td>
+                      </tr>
+                    
+                      <tr>
+                        <td>0x5f5704bb...</td>
+                        <td>0x74de5d4f...</td>
+                        <td>238558</td>
+                      </tr>
+                    
+                      <tr>
+                        <td>0x74de5d4f...</td>
+                        <td>0x87428a53...</td>
+                        <td>238558</td>
+                      </tr>
+                    
+                  </table>
+                
+              
+            </div>
+          
+            <div class="card">
+              <h3>ponder vs subgraph</h3>
+              <table>
+                <tr><td>Common Transfers (matching from/to/value):</td><td>275398</td></tr>
+                <tr><td>Unique to ponder:</td><td>0</td></tr>
+                <tr><td>Unique to subgraph:</td><td>582</td></tr>
+                <tr><td>Content Similarity:</td><td>0.9979</td></tr>
+              </table>
+              
+              
+                <h4>Sample of Unique Transfers</h4>
+                
+                
+                
+                  <h5>Unique to subgraph</h5>
+                  <table>
+                    <tr>
+                      <th>From</th>
+                      <th>To</th>
+                      <th>Value</th>
+                    </tr>
+                    
+                      <tr>
+                        <td>0x00000000...</td>
+                        <td>0xcb91255b...</td>
+                        <td>135700</td>
+                      </tr>
+                    
+                      <tr>
+                        <td>0x5bbd2cce...</td>
+                        <td>0x4095f064...</td>
+                        <td>98896592</td>
+                      </tr>
+                    
+                      <tr>
+                        <td>0x4095f064...</td>
+                        <td>0xbbbbbbbb...</td>
+                        <td>98896592</td>
+                      </tr>
+                    
+                      <tr>
+                        <td>0x2c48d0c3...</td>
+                        <td>0xab873faa...</td>
+                        <td>30000</td>
+                      </tr>
+                    
+                      <tr>
+                        <td>0x70416ab6...</td>
+                        <td>0x251a604e...</td>
+                        <td>10000</td>
+                      </tr>
+                    
+                  </table>
+                
+              
+            </div>
+          
+            <div class="card">
+              <h3>subsquid vs subgraph</h3>
+              <table>
+                <tr><td>Common Transfers (matching from/to/value):</td><td>275980</td></tr>
+                <tr><td>Unique to subsquid:</td><td>0</td></tr>
+                <tr><td>Unique to subgraph:</td><td>0</td></tr>
+                <tr><td>Content Similarity:</td><td>1.0000</td></tr>
+              </table>
+              
+              
+            </div>
+          
+      </div>
+    </div>
+    
+
+    <div class="card">
+      <h2>Detailed Comparisons</h2>
+      <div class="platform-comparison">
+        
+            <div class="card">
+              <h3>sentio vs envio</h3>
+              <table>
+                <tr><td>Common Transactions:</td><td>0</td></tr>
+                <tr><td>Unique to sentio:</td><td>294278</td></tr>
+                <tr><td>Unique to envio:</td><td>183643</td></tr>
+                <tr><td>Jaccard Similarity:</td><td>0.0000</td></tr>
+              </table>
+            </div>
+          
+            <div class="card">
+              <h3>sentio vs ponder</h3>
+              <table>
+                <tr><td>Common Transactions:</td><td>0</td></tr>
+                <tr><td>Unique to sentio:</td><td>294278</td></tr>
+                <tr><td>Unique to ponder:</td><td>183278</td></tr>
+                <tr><td>Jaccard Similarity:</td><td>0.0000</td></tr>
+              </table>
+            </div>
+          
+            <div class="card">
+              <h3>sentio vs subsquid</h3>
+              <table>
+                <tr><td>Common Transactions:</td><td>0</td></tr>
+                <tr><td>Unique to sentio:</td><td>294278</td></tr>
+                <tr><td>Unique to subsquid:</td><td>1</td></tr>
+                <tr><td>Jaccard Similarity:</td><td>0.0000</td></tr>
+              </table>
+            </div>
+          
+            <div class="card">
+              <h3>sentio vs subgraph</h3>
+              <table>
+                <tr><td>Common Transactions:</td><td>0</td></tr>
+                <tr><td>Unique to sentio:</td><td>294278</td></tr>
+                <tr><td>Unique to subgraph:</td><td>183643</td></tr>
+                <tr><td>Jaccard Similarity:</td><td>0.0000</td></tr>
+              </table>
+            </div>
+          
+            <div class="card">
+              <h3>envio vs ponder</h3>
+              <table>
+                <tr><td>Common Transactions:</td><td>183278</td></tr>
+                <tr><td>Unique to envio:</td><td>365</td></tr>
+                <tr><td>Unique to ponder:</td><td>0</td></tr>
+                <tr><td>Jaccard Similarity:</td><td>0.9980</td></tr>
+              </table>
+            </div>
+          
+            <div class="card">
+              <h3>envio vs subsquid</h3>
+              <table>
+                <tr><td>Common Transactions:</td><td>0</td></tr>
+                <tr><td>Unique to envio:</td><td>183643</td></tr>
+                <tr><td>Unique to subsquid:</td><td>1</td></tr>
+                <tr><td>Jaccard Similarity:</td><td>0.0000</td></tr>
+              </table>
+            </div>
+          
+            <div class="card">
+              <h3>envio vs subgraph</h3>
+              <table>
+                <tr><td>Common Transactions:</td><td>183643</td></tr>
+                <tr><td>Unique to envio:</td><td>0</td></tr>
+                <tr><td>Unique to subgraph:</td><td>0</td></tr>
+                <tr><td>Jaccard Similarity:</td><td>1.0000</td></tr>
+              </table>
+            </div>
+          
+            <div class="card">
+              <h3>ponder vs subsquid</h3>
+              <table>
+                <tr><td>Common Transactions:</td><td>0</td></tr>
+                <tr><td>Unique to ponder:</td><td>183278</td></tr>
+                <tr><td>Unique to subsquid:</td><td>1</td></tr>
+                <tr><td>Jaccard Similarity:</td><td>0.0000</td></tr>
+              </table>
+            </div>
+          
+            <div class="card">
+              <h3>ponder vs subgraph</h3>
+              <table>
+                <tr><td>Common Transactions:</td><td>183278</td></tr>
+                <tr><td>Unique to ponder:</td><td>0</td></tr>
+                <tr><td>Unique to subgraph:</td><td>365</td></tr>
+                <tr><td>Jaccard Similarity:</td><td>0.9980</td></tr>
+              </table>
+            </div>
+          
+            <div class="card">
+              <h3>subsquid vs subgraph</h3>
+              <table>
+                <tr><td>Common Transactions:</td><td>0</td></tr>
+                <tr><td>Unique to subsquid:</td><td>1</td></tr>
+                <tr><td>Unique to subgraph:</td><td>183643</td></tr>
+                <tr><td>Jaccard Similarity:</td><td>0.0000</td></tr>
+              </table>
+            </div>
+          
+      </div>
+    </div>
+
+    
+    <div class="card">
+      <h2>Field-by-Field Comparisons</h2>
+      <p>This section shows detailed comparisons of individual fields across records with matching transaction hashes.</p>
+      
+      <table>
+        <tr>
+          <th>Comparison</th>
+          <th>blockNumber Match</th>
+          <th>from Match</th>
+          <th>to Match</th>
+          <th>value Match</th>
+        </tr>
+        
+            <tr>
+              <td><strong>sentio vs envio</strong></td>
+              <td>0% (0/0)</td>
+              <td>0% (0/0)</td>
+              <td>0% (0/0)</td>
+              <td>0% (0/0)</td>
+            </tr>
+          
+            <tr>
+              <td><strong>sentio vs ponder</strong></td>
+              <td>0% (0/0)</td>
+              <td>0% (0/0)</td>
+              <td>0% (0/0)</td>
+              <td>0% (0/0)</td>
+            </tr>
+          
+            <tr>
+              <td><strong>sentio vs subsquid</strong></td>
+              <td>0% (0/0)</td>
+              <td>0% (0/0)</td>
+              <td>0% (0/0)</td>
+              <td>0% (0/0)</td>
+            </tr>
+          
+            <tr>
+              <td><strong>sentio vs subgraph</strong></td>
+              <td>0% (0/0)</td>
+              <td>0% (0/0)</td>
+              <td>0% (0/0)</td>
+              <td>0% (0/0)</td>
+            </tr>
+          
+            <tr>
+              <td><strong>envio vs ponder</strong></td>
+              <td>100.00% (183278/183278)</td>
+              <td>99.67% (182671/183278)</td>
+              <td>99.64% (182612/183278)</td>
+              <td>99.83% (182968/183278)</td>
+            </tr>
+          
+            <tr>
+              <td><strong>envio vs subsquid</strong></td>
+              <td>0% (0/0)</td>
+              <td>0% (0/0)</td>
+              <td>0% (0/0)</td>
+              <td>0% (0/0)</td>
+            </tr>
+          
+            <tr>
+              <td><strong>envio vs subgraph</strong></td>
+              <td>100.00% (183643/183643)</td>
+              <td>99.20% (182180/183643)</td>
+              <td>99.09% (181978/183643)</td>
+              <td>99.60% (182900/183643)</td>
+            </tr>
+          
+            <tr>
+              <td><strong>ponder vs subsquid</strong></td>
+              <td>0% (0/0)</td>
+              <td>0% (0/0)</td>
+              <td>0% (0/0)</td>
+              <td>0% (0/0)</td>
+            </tr>
+          
+            <tr>
+              <td><strong>ponder vs subgraph</strong></td>
+              <td>100.00% (183278/183278)</td>
+              <td>99.53% (182425/183278)</td>
+              <td>99.46% (182280/183278)</td>
+              <td>99.76% (182843/183278)</td>
+            </tr>
+          
+            <tr>
+              <td><strong>subsquid vs subgraph</strong></td>
+              <td>0% (0/0)</td>
+              <td>0% (0/0)</td>
+              <td>0% (0/0)</td>
+              <td>0% (0/0)</td>
+            </tr>
+          
+      </table>
+      
+      <h3>Mismatch Examples</h3>
+      <div class="card">
+            <h4>sentio vs envio</h4>
+            <p>No mismatches found in sample.</p>
+          </div><div class="card">
+            <h4>sentio vs ponder</h4>
+            <p>No mismatches found in sample.</p>
+          </div><div class="card">
+            <h4>sentio vs subsquid</h4>
+            <p>No mismatches found in sample.</p>
+          </div><div class="card">
+            <h4>sentio vs subgraph</h4>
+            <p>No mismatches found in sample.</p>
+          </div>
+          <div class="card">
+            <h4>envio vs ponder</h4>
+            
+              <div style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #eee;">
+                <p><strong>Example 1:</strong> Transaction Hash: 0x50b21cda...</p>
+                <table>
+                  <tr>
+                    <th>Field</th>
+                    <th>envio</th>
+                    <th>ponder</th>
+                    <th>Match</th>
+                  </tr>
+                  <tr>
+                    <td>blockNumber</td>
+                    <td>20592381</td>
+                    <td>20592381</td>
+                    <td>✓</td>
+                  </tr>
+                  <tr>
+                    <td>from</td>
+                    <td>0x5401b8620e5fb570064ca9114fd1e135fd77d57c</td>
+                    <td>0x5401b8620e5fb570064ca9114fd1e135fd77d57c</td>
+                    <td>✓</td>
+                  </tr>
+                  <tr>
+                    <td>to</td>
+                    <td>0x87428a53e14d24ab19c6ca4939b4df93b8996ca9</td>
+                    <td>0x87428a53e14d24ab19c6ca4939b4df93b8996ca9</td>
+                    <td>✓</td>
+                  </tr>
+                  <tr>
+                    <td>value</td>
+                    <td>150000000</td>
+                    <td>631719716</td>
+                    <td>✗</td>
+                  </tr>
+                </table>
+              </div>
+            
+              <div style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #eee;">
+                <p><strong>Example 2:</strong> Transaction Hash: 0x66082128...</p>
+                <table>
+                  <tr>
+                    <th>Field</th>
+                    <th>envio</th>
+                    <th>ponder</th>
+                    <th>Match</th>
+                  </tr>
+                  <tr>
+                    <td>blockNumber</td>
+                    <td>20619011</td>
+                    <td>20619011</td>
+                    <td>✓</td>
+                  </tr>
+                  <tr>
+                    <td>from</td>
+                    <td>0x87428a53e14d24ab19c6ca4939b4df93b8996ca9</td>
+                    <td>0x1231deb6f5749ef6ce6943a275a1d3e7486f4eae</td>
+                    <td>✗</td>
+                  </tr>
+                  <tr>
+                    <td>to</td>
+                    <td>0x1231deb6f5749ef6ce6943a275a1d3e7486f4eae</td>
+                    <td>0x4c30ae8533aeab84f460eae3d6a750f01e38e310</td>
+                    <td>✗</td>
+                  </tr>
+                  <tr>
+                    <td>value</td>
+                    <td>491441</td>
+                    <td>491441</td>
+                    <td>✓</td>
+                  </tr>
+                </table>
+              </div>
+            
+              <div style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #eee;">
+                <p><strong>Example 3:</strong> Transaction Hash: 0x0cc45eaa...</p>
+                <table>
+                  <tr>
+                    <th>Field</th>
+                    <th>envio</th>
+                    <th>ponder</th>
+                    <th>Match</th>
+                  </tr>
+                  <tr>
+                    <td>blockNumber</td>
+                    <td>20621849</td>
+                    <td>20621849</td>
+                    <td>✓</td>
+                  </tr>
+                  <tr>
+                    <td>from</td>
+                    <td>0x5401b8620e5fb570064ca9114fd1e135fd77d57c</td>
+                    <td>0x5401b8620e5fb570064ca9114fd1e135fd77d57c</td>
+                    <td>✓</td>
+                  </tr>
+                  <tr>
+                    <td>to</td>
+                    <td>0x87428a53e14d24ab19c6ca4939b4df93b8996ca9</td>
+                    <td>0x87428a53e14d24ab19c6ca4939b4df93b8996ca9</td>
+                    <td>✓</td>
+                  </tr>
+                  <tr>
+                    <td>value</td>
+                    <td>50000000</td>
+                    <td>7500000000</td>
+                    <td>✗</td>
+                  </tr>
+                </table>
+              </div>
+            
+              <div style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #eee;">
+                <p><strong>Example 4:</strong> Transaction Hash: 0x997d1070...</p>
+                <table>
+                  <tr>
+                    <th>Field</th>
+                    <th>envio</th>
+                    <th>ponder</th>
+                    <th>Match</th>
+                  </tr>
+                  <tr>
+                    <td>blockNumber</td>
+                    <td>20666967</td>
+                    <td>20666967</td>
+                    <td>✓</td>
+                  </tr>
+                  <tr>
+                    <td>from</td>
+                    <td>0x3fc91a3afd70395cd496c647d5a6cc9d4b2b7fad</td>
+                    <td>0x3fc91a3afd70395cd496c647d5a6cc9d4b2b7fad</td>
+                    <td>✓</td>
+                  </tr>
+                  <tr>
+                    <td>to</td>
+                    <td>0x000000fee13a103a10d593b9ae06b3e05f2e7e1c</td>
+                    <td>0x383880850c591378af8c613e294af4fc284491c4</td>
+                    <td>✗</td>
+                  </tr>
+                  <tr>
+                    <td>value</td>
+                    <td>74</td>
+                    <td>29812</td>
+                    <td>✗</td>
+                  </tr>
+                </table>
+              </div>
+            
+              <div style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #eee;">
+                <p><strong>Example 5:</strong> Transaction Hash: 0xd9a56adf...</p>
+                <table>
+                  <tr>
+                    <th>Field</th>
+                    <th>envio</th>
+                    <th>ponder</th>
+                    <th>Match</th>
+                  </tr>
+                  <tr>
+                    <td>blockNumber</td>
+                    <td>20667276</td>
+                    <td>20667276</td>
+                    <td>✓</td>
+                  </tr>
+                  <tr>
+                    <td>from</td>
+                    <td>0x87428a53e14d24ab19c6ca4939b4df93b8996ca9</td>
+                    <td>0x3fc91a3afd70395cd496c647d5a6cc9d4b2b7fad</td>
+                    <td>✗</td>
+                  </tr>
+                  <tr>
+                    <td>to</td>
+                    <td>0x3fc91a3afd70395cd496c647d5a6cc9d4b2b7fad</td>
+                    <td>0x5c45532cfa53a0cc8f569a37a28b2c717c5a7d70</td>
+                    <td>✗</td>
+                  </tr>
+                  <tr>
+                    <td>value</td>
+                    <td>2980</td>
+                    <td>2973</td>
+                    <td>✗</td>
+                  </tr>
+                </table>
+              </div>
+            
+          </div>
+        <div class="card">
+            <h4>envio vs subsquid</h4>
+            <p>No mismatches found in sample.</p>
+          </div>
+          <div class="card">
+            <h4>envio vs subgraph</h4>
+            
+              <div style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #eee;">
+                <p><strong>Example 1:</strong> Transaction Hash: 0x41ae328a...</p>
+                <table>
+                  <tr>
+                    <th>Field</th>
+                    <th>envio</th>
+                    <th>subgraph</th>
+                    <th>Match</th>
+                  </tr>
+                  <tr>
+                    <td>blockNumber</td>
+                    <td>20569138</td>
+                    <td>20569138</td>
+                    <td>✓</td>
+                  </tr>
+                  <tr>
+                    <td>from</td>
+                    <td>0x111111125421ca6dc452d289314280a0f8842a65</td>
+                    <td>0x87428a53e14d24ab19c6ca4939b4df93b8996ca9</td>
+                    <td>✗</td>
+                  </tr>
+                  <tr>
+                    <td>to</td>
+                    <td>0x11a45c2c38598c6bccef635d0f9711c6bb3fc02d</td>
+                    <td>0x111111125421ca6dc452d289314280a0f8842a65</td>
+                    <td>✗</td>
+                  </tr>
+                  <tr>
+                    <td>value</td>
+                    <td>40</td>
+                    <td>40</td>
+                    <td>✓</td>
+                  </tr>
+                </table>
+              </div>
+            
+              <div style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #eee;">
+                <p><strong>Example 2:</strong> Transaction Hash: 0xe3b9a65c...</p>
+                <table>
+                  <tr>
+                    <th>Field</th>
+                    <th>envio</th>
+                    <th>subgraph</th>
+                    <th>Match</th>
+                  </tr>
+                  <tr>
+                    <td>blockNumber</td>
+                    <td>20579971</td>
+                    <td>20579971</td>
+                    <td>✓</td>
+                  </tr>
+                  <tr>
+                    <td>from</td>
+                    <td>0x9008d19f58aabd9ed0d60971565aa8510560ab41</td>
+                    <td>0x87428a53e14d24ab19c6ca4939b4df93b8996ca9</td>
+                    <td>✗</td>
+                  </tr>
+                  <tr>
+                    <td>to</td>
+                    <td>0x0f7c548c3c100e1ad6a1f092d95884cc4dcef4bb</td>
+                    <td>0x9008d19f58aabd9ed0d60971565aa8510560ab41</td>
+                    <td>✗</td>
+                  </tr>
+                  <tr>
+                    <td>value</td>
+                    <td>107919</td>
+                    <td>107918</td>
+                    <td>✗</td>
+                  </tr>
+                </table>
+              </div>
+            
+              <div style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #eee;">
+                <p><strong>Example 3:</strong> Transaction Hash: 0x50b21cda...</p>
+                <table>
+                  <tr>
+                    <th>Field</th>
+                    <th>envio</th>
+                    <th>subgraph</th>
+                    <th>Match</th>
+                  </tr>
+                  <tr>
+                    <td>blockNumber</td>
+                    <td>20592381</td>
+                    <td>20592381</td>
+                    <td>✓</td>
+                  </tr>
+                  <tr>
+                    <td>from</td>
+                    <td>0x5401b8620e5fb570064ca9114fd1e135fd77d57c</td>
+                    <td>0x5401b8620e5fb570064ca9114fd1e135fd77d57c</td>
+                    <td>✓</td>
+                  </tr>
+                  <tr>
+                    <td>to</td>
+                    <td>0x87428a53e14d24ab19c6ca4939b4df93b8996ca9</td>
+                    <td>0x87428a53e14d24ab19c6ca4939b4df93b8996ca9</td>
+                    <td>✓</td>
+                  </tr>
+                  <tr>
+                    <td>value</td>
+                    <td>150000000</td>
+                    <td>631719716</td>
+                    <td>✗</td>
+                  </tr>
+                </table>
+              </div>
+            
+              <div style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #eee;">
+                <p><strong>Example 4:</strong> Transaction Hash: 0x42690595...</p>
+                <table>
+                  <tr>
+                    <th>Field</th>
+                    <th>envio</th>
+                    <th>subgraph</th>
+                    <th>Match</th>
+                  </tr>
+                  <tr>
+                    <td>blockNumber</td>
+                    <td>20593567</td>
+                    <td>20593567</td>
+                    <td>✓</td>
+                  </tr>
+                  <tr>
+                    <td>from</td>
+                    <td>0x370d253f2e3d1d23c6f900928920a470eed8f876</td>
+                    <td>0x370d253f2e3d1d23c6f900928920a470eed8f876</td>
+                    <td>✓</td>
+                  </tr>
+                  <tr>
+                    <td>to</td>
+                    <td>0x2f39dd7c1e982fc7bee442010944c3e5b4675aa2</td>
+                    <td>0x2322ba43eff1542b6a7baed35e66099ea0d12bd1</td>
+                    <td>✗</td>
+                  </tr>
+                  <tr>
+                    <td>value</td>
+                    <td>519948</td>
+                    <td>19998</td>
+                    <td>✗</td>
+                  </tr>
+                </table>
+              </div>
+            
+              <div style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #eee;">
+                <p><strong>Example 5:</strong> Transaction Hash: 0x66082128...</p>
+                <table>
+                  <tr>
+                    <th>Field</th>
+                    <th>envio</th>
+                    <th>subgraph</th>
+                    <th>Match</th>
+                  </tr>
+                  <tr>
+                    <td>blockNumber</td>
+                    <td>20619011</td>
+                    <td>20619011</td>
+                    <td>✓</td>
+                  </tr>
+                  <tr>
+                    <td>from</td>
+                    <td>0x87428a53e14d24ab19c6ca4939b4df93b8996ca9</td>
+                    <td>0x1231deb6f5749ef6ce6943a275a1d3e7486f4eae</td>
+                    <td>✗</td>
+                  </tr>
+                  <tr>
+                    <td>to</td>
+                    <td>0x1231deb6f5749ef6ce6943a275a1d3e7486f4eae</td>
+                    <td>0x4c30ae8533aeab84f460eae3d6a750f01e38e310</td>
+                    <td>✗</td>
+                  </tr>
+                  <tr>
+                    <td>value</td>
+                    <td>491441</td>
+                    <td>491441</td>
+                    <td>✓</td>
+                  </tr>
+                </table>
+              </div>
+            
+          </div>
+        <div class="card">
+            <h4>ponder vs subsquid</h4>
+            <p>No mismatches found in sample.</p>
+          </div>
+          <div class="card">
+            <h4>ponder vs subgraph</h4>
+            
+              <div style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #eee;">
+                <p><strong>Example 1:</strong> Transaction Hash: 0x41ae328a...</p>
+                <table>
+                  <tr>
+                    <th>Field</th>
+                    <th>ponder</th>
+                    <th>subgraph</th>
+                    <th>Match</th>
+                  </tr>
+                  <tr>
+                    <td>blockNumber</td>
+                    <td>20569138</td>
+                    <td>20569138</td>
+                    <td>✓</td>
+                  </tr>
+                  <tr>
+                    <td>from</td>
+                    <td>0x111111125421ca6dc452d289314280a0f8842a65</td>
+                    <td>0x87428a53e14d24ab19c6ca4939b4df93b8996ca9</td>
+                    <td>✗</td>
+                  </tr>
+                  <tr>
+                    <td>to</td>
+                    <td>0x11a45c2c38598c6bccef635d0f9711c6bb3fc02d</td>
+                    <td>0x111111125421ca6dc452d289314280a0f8842a65</td>
+                    <td>✗</td>
+                  </tr>
+                  <tr>
+                    <td>value</td>
+                    <td>40</td>
+                    <td>40</td>
+                    <td>✓</td>
+                  </tr>
+                </table>
+              </div>
+            
+              <div style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #eee;">
+                <p><strong>Example 2:</strong> Transaction Hash: 0xe3b9a65c...</p>
+                <table>
+                  <tr>
+                    <th>Field</th>
+                    <th>ponder</th>
+                    <th>subgraph</th>
+                    <th>Match</th>
+                  </tr>
+                  <tr>
+                    <td>blockNumber</td>
+                    <td>20579971</td>
+                    <td>20579971</td>
+                    <td>✓</td>
+                  </tr>
+                  <tr>
+                    <td>from</td>
+                    <td>0x9008d19f58aabd9ed0d60971565aa8510560ab41</td>
+                    <td>0x87428a53e14d24ab19c6ca4939b4df93b8996ca9</td>
+                    <td>✗</td>
+                  </tr>
+                  <tr>
+                    <td>to</td>
+                    <td>0x0f7c548c3c100e1ad6a1f092d95884cc4dcef4bb</td>
+                    <td>0x9008d19f58aabd9ed0d60971565aa8510560ab41</td>
+                    <td>✗</td>
+                  </tr>
+                  <tr>
+                    <td>value</td>
+                    <td>107919</td>
+                    <td>107918</td>
+                    <td>✗</td>
+                  </tr>
+                </table>
+              </div>
+            
+              <div style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #eee;">
+                <p><strong>Example 3:</strong> Transaction Hash: 0x42690595...</p>
+                <table>
+                  <tr>
+                    <th>Field</th>
+                    <th>ponder</th>
+                    <th>subgraph</th>
+                    <th>Match</th>
+                  </tr>
+                  <tr>
+                    <td>blockNumber</td>
+                    <td>20593567</td>
+                    <td>20593567</td>
+                    <td>✓</td>
+                  </tr>
+                  <tr>
+                    <td>from</td>
+                    <td>0x370d253f2e3d1d23c6f900928920a470eed8f876</td>
+                    <td>0x370d253f2e3d1d23c6f900928920a470eed8f876</td>
+                    <td>✓</td>
+                  </tr>
+                  <tr>
+                    <td>to</td>
+                    <td>0x2f39dd7c1e982fc7bee442010944c3e5b4675aa2</td>
+                    <td>0x2322ba43eff1542b6a7baed35e66099ea0d12bd1</td>
+                    <td>✗</td>
+                  </tr>
+                  <tr>
+                    <td>value</td>
+                    <td>519948</td>
+                    <td>19998</td>
+                    <td>✗</td>
+                  </tr>
+                </table>
+              </div>
+            
+              <div style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #eee;">
+                <p><strong>Example 4:</strong> Transaction Hash: 0x35fd2cf8...</p>
+                <table>
+                  <tr>
+                    <th>Field</th>
+                    <th>ponder</th>
+                    <th>subgraph</th>
+                    <th>Match</th>
+                  </tr>
+                  <tr>
+                    <td>blockNumber</td>
+                    <td>20619075</td>
+                    <td>20619075</td>
+                    <td>✓</td>
+                  </tr>
+                  <tr>
+                    <td>from</td>
+                    <td>0xf081470f5c6fbccf48cc4e5b82dd926409dcdd67</td>
+                    <td>0x87428a53e14d24ab19c6ca4939b4df93b8996ca9</td>
+                    <td>✗</td>
+                  </tr>
+                  <tr>
+                    <td>to</td>
+                    <td>0x95ed72f116edb1a97203cc2e8a6ee1c51df822d8</td>
+                    <td>0xf081470f5c6fbccf48cc4e5b82dd926409dcdd67</td>
+                    <td>✗</td>
+                  </tr>
+                  <tr>
+                    <td>value</td>
+                    <td>1662</td>
+                    <td>1662</td>
+                    <td>✓</td>
+                  </tr>
+                </table>
+              </div>
+            
+              <div style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #eee;">
+                <p><strong>Example 5:</strong> Transaction Hash: 0xb1541b2c...</p>
+                <table>
+                  <tr>
+                    <th>Field</th>
+                    <th>ponder</th>
+                    <th>subgraph</th>
+                    <th>Match</th>
+                  </tr>
+                  <tr>
+                    <td>blockNumber</td>
+                    <td>20631602</td>
+                    <td>20631602</td>
+                    <td>✓</td>
+                  </tr>
+                  <tr>
+                    <td>from</td>
+                    <td>0x3fc91a3afd70395cd496c647d5a6cc9d4b2b7fad</td>
+                    <td>0x87428a53e14d24ab19c6ca4939b4df93b8996ca9</td>
+                    <td>✗</td>
+                  </tr>
+                  <tr>
+                    <td>to</td>
+                    <td>0x34afff30b5c10f28f730b73b0c87217600ffa6e5</td>
+                    <td>0x3fc91a3afd70395cd496c647d5a6cc9d4b2b7fad</td>
+                    <td>✗</td>
+                  </tr>
+                  <tr>
+                    <td>value</td>
+                    <td>3141383</td>
+                    <td>3149256</td>
+                    <td>✗</td>
+                  </tr>
+                </table>
+              </div>
+            
+          </div>
+        <div class="card">
+            <h4>subsquid vs subgraph</h4>
+            <p>No mismatches found in sample.</p>
+          </div>
+    </div>
+    
+  </div>
+</body>
+</html>
+    

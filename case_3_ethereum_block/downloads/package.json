@@ -1,0 +1,18 @@
+{
+  "name": "case_3_ethereum_block_downloads",
+  "version": "1.0.0",
+  "description": "Scripts to download data from case 3 Ethereum block indexers",
+  "main": "index.js",
+  "scripts": {
+    "sentio": "node fetch-sentio-to-parquet.js",
+    "ponder": "node fetch-ponder-to-parquet.js",
+    "subsquid": "node fetch-subsquid-to-parquet.js",
+    "subgraph": "node fetch-subgraph-to-parquet.js",
+    "all": "npm run sentio && npm run ponder && npm run subsquid && npm run subgraph"
+  },
+  "dependencies": {
+    "axios": "^1.6.2",
+    "parquetjs": "^0.11.2",
+    "pg": "^8.11.3"
+  }
+} 

@@ -1,0 +1,814 @@
+{
+  "timestamp": "2025-04-17T03:13:16.639Z",
+  "data_counts": {
+    "sentio": {
+      "count": 294278,
+      "success": true
+    },
+    "envio": {
+      "count": 294278,
+      "success": true
+    },
+    "ponder": {
+      "count": 293682,
+      "success": true
+    },
+    "subsquid": {
+      "count": 294278,
+      "success": true
+    },
+    "subgraph": {
+      "count": 294278,
+      "success": true
+    }
+  },
+  "unique_counts": {
+    "sentio": {
+      "blocks": 0,
+      "transactions": 294278
+    },
+    "envio": {
+      "blocks": 149671,
+      "transactions": 183643
+    },
+    "ponder": {
+      "blocks": 149347,
+      "transactions": 183278
+    },
+    "subsquid": {
+      "blocks": 149671,
+      "transactions": 1
+    },
+    "subgraph": {
+      "blocks": 149671,
+      "transactions": 183643
+    }
+  },
+  "block_ranges": {
+    "sentio": {
+      "min": null,
+      "max": null,
+      "count": 0
+    },
+    "envio": {
+      "min": 20016816,
+      "max": 22199998,
+      "count": 294278
+    },
+    "ponder": {
+      "min": 20016816,
+      "max": 22199998,
+      "count": 293682
+    },
+    "subsquid": {
+      "min": 20016816,
+      "max": 22199998,
+      "count": 294278
+    },
+    "subgraph": {
+      "min": 20016816,
+      "max": 22199998,
+      "count": 294278
+    }
+  },
+  "consistency": {
+    "sentio_vs_envio": {
+      "common_transactions": 0,
+      "unique_to_1": 294278,
+      "unique_to_2": 183643,
+      "jaccard_similarity": 0
+    },
+    "sentio_vs_ponder": {
+      "common_transactions": 0,
+      "unique_to_1": 294278,
+      "unique_to_2": 183278,
+      "jaccard_similarity": 0
+    },
+    "sentio_vs_subsquid": {
+      "common_transactions": 0,
+      "unique_to_1": 294278,
+      "unique_to_2": 1,
+      "jaccard_similarity": 0
+    },
+    "sentio_vs_subgraph": {
+      "common_transactions": 0,
+      "unique_to_1": 294278,
+      "unique_to_2": 183643,
+      "jaccard_similarity": 0
+    },
+    "envio_vs_ponder": {
+      "common_transactions": 183278,
+      "unique_to_1": 365,
+      "unique_to_2": 0,
+      "jaccard_similarity": 0.9980124480649957
+    },
+    "envio_vs_subsquid": {
+      "common_transactions": 0,
+      "unique_to_1": 183643,
+      "unique_to_2": 1,
+      "jaccard_similarity": 0
+    },
+    "envio_vs_subgraph": {
+      "common_transactions": 183643,
+      "unique_to_1": 0,
+      "unique_to_2": 0,
+      "jaccard_similarity": 1
+    },
+    "ponder_vs_subsquid": {
+      "common_transactions": 0,
+      "unique_to_1": 183278,
+      "unique_to_2": 1,
+      "jaccard_similarity": 0
+    },
+    "ponder_vs_subgraph": {
+      "common_transactions": 183278,
+      "unique_to_1": 0,
+      "unique_to_2": 365,
+      "jaccard_similarity": 0.9980124480649957
+    },
+    "subsquid_vs_subgraph": {
+      "common_transactions": 0,
+      "unique_to_1": 1,
+      "unique_to_2": 183643,
+      "jaccard_similarity": 0
+    }
+  },
+  "content_comparison": {
+    "sentio_vs_envio": {
+      "common_transfers": 275542,
+      "unique_to_1": 0,
+      "unique_to_2": 438,
+      "jaccard_similarity": 0.9984129284730777,
+      "examples": {
+        "unique_to_1": [],
+        "unique_to_2": [
+          {
+            "from": "0x3fc91a3afd70395cd496c647d5a6cc9d4b2b7fad",
+            "to": "0x000000fee13a103a10d593b9ae06b3e05f2e7e1c",
+            "value": "0"
+          },
+          {
+            "from": "0xa000ad1221c525037504452819116941338e70b2",
+            "to": "0xa16eeca3e9e03ebafe08f1151b36a59cd3bcc7bd",
+            "value": "0"
+          },
+          {
+            "from": "0xcfbe2f50c83efaa4826ec9d1d8c9043358732c50",
+            "to": "0xb6cafe7e9c64a579ddcc12616150bc8a07791678",
+            "value": "0"
+          },
+          {
+            "from": "0x32d850609fdc950bf6e23640d1eb0bbd60a5149c",
+            "to": "0x601a564628f9467ea76945fddc6f9c7604ee1c1e",
+            "value": "0"
+          },
+          {
+            "from": "0xae150da901320564024f3564d0c2a19ca2904a14",
+            "to": "0xae150da901320564024f3564d0c2a19ca2904a14",
+            "value": "0"
+          }
+        ]
+      }
+    },
+    "sentio_vs_ponder": {
+      "common_transfers": 274960,
+      "unique_to_1": 582,
+      "unique_to_2": 438,
+      "jaccard_similarity": 0.9963040800057975,
+      "examples": {
+        "unique_to_1": [
+          {
+            "from": "0x87428a53e14d24ab19c6ca4939b4df93b8996ca9",
+            "to": "0xf081470f5c6fbccf48cc4e5b82dd926409dcdd67",
+            "value": "257696"
+          },
+          {
+            "from": "0xf081470f5c6fbccf48cc4e5b82dd926409dcdd67",
+            "to": "0x888888888889758f76e7103c6cbf23abbf58f946",
+            "value": "257696"
+          },
+          {
+            "from": "0x888888888889758f76e7103c6cbf23abbf58f946",
+            "to": "0xc781c0cc527cb8c351be3a64c690216c535c6f36",
+            "value": "257696"
+          },
+          {
+            "from": "0x5f5704bb08f9b1331638cf5aff83ead3e123fa27",
+            "to": "0x74de5d4fcbf63e00296fd95d33236b9794016631",
+            "value": "238558"
+          },
+          {
+            "from": "0x74de5d4fcbf63e00296fd95d33236b9794016631",
+            "to": "0x87428a53e14d24ab19c6ca4939b4df93b8996ca9",
+            "value": "238558"
+          }
+        ],
+        "unique_to_2": [
+          {
+            "from": "0x3fc91a3afd70395cd496c647d5a6cc9d4b2b7fad",
+            "to": "0x000000fee13a103a10d593b9ae06b3e05f2e7e1c",
+            "value": "0"
+          },
+          {
+            "from": "0xa000ad1221c525037504452819116941338e70b2",
+            "to": "0xa16eeca3e9e03ebafe08f1151b36a59cd3bcc7bd",
+            "value": "0"
+          },
+          {
+            "from": "0xcfbe2f50c83efaa4826ec9d1d8c9043358732c50",
+            "to": "0xb6cafe7e9c64a579ddcc12616150bc8a07791678",
+            "value": "0"
+          },
+          {
+            "from": "0x32d850609fdc950bf6e23640d1eb0bbd60a5149c",
+            "to": "0x601a564628f9467ea76945fddc6f9c7604ee1c1e",
+            "value": "0"
+          },
+          {
+            "from": "0xae150da901320564024f3564d0c2a19ca2904a14",
+            "to": "0xae150da901320564024f3564d0c2a19ca2904a14",
+            "value": "0"
+          }
+        ]
+      }
+    },
+    "sentio_vs_subsquid": {
+      "common_transfers": 275542,
+      "unique_to_1": 0,
+      "unique_to_2": 438,
+      "jaccard_similarity": 0.9984129284730777,
+      "examples": {
+        "unique_to_1": [],
+        "unique_to_2": [
+          {
+            "from": "0x3fc91a3afd70395cd496c647d5a6cc9d4b2b7fad",
+            "to": "0x000000fee13a103a10d593b9ae06b3e05f2e7e1c",
+            "value": "0"
+          },
+          {
+            "from": "0xa000ad1221c525037504452819116941338e70b2",
+            "to": "0xa16eeca3e9e03ebafe08f1151b36a59cd3bcc7bd",
+            "value": "0"
+          },
+          {
+            "from": "0xcfbe2f50c83efaa4826ec9d1d8c9043358732c50",
+            "to": "0xb6cafe7e9c64a579ddcc12616150bc8a07791678",
+            "value": "0"
+          },
+          {
+            "from": "0x32d850609fdc950bf6e23640d1eb0bbd60a5149c",
+            "to": "0x601a564628f9467ea76945fddc6f9c7604ee1c1e",
+            "value": "0"
+          },
+          {
+            "from": "0xae150da901320564024f3564d0c2a19ca2904a14",
+            "to": "0xae150da901320564024f3564d0c2a19ca2904a14",
+            "value": "0"
+          }
+        ]
+      }
+    },
+    "sentio_vs_subgraph": {
+      "common_transfers": 275542,
+      "unique_to_1": 0,
+      "unique_to_2": 438,
+      "jaccard_similarity": 0.9984129284730777,
+      "examples": {
+        "unique_to_1": [],
+        "unique_to_2": [
+          {
+            "from": "0xa58627a29bb59743ce1d781b1072c59bb1dda86d",
+            "to": "0x251a604e8e8f6906d60f8dedc5aaeb8cd38f4892",
+            "value": "0"
+          },
+          {
+            "from": "0x140d1fec40166d35da7d0204d56781076e4f6c51",
+            "to": "0x251a604e8e8f6906d60f8dedc5aaeb8cd38f4892",
+            "value": "0"
+          },
+          {
+            "from": "0x530d10aec84fc3df7d5fd96e11357689352f69d6",
+            "to": "0x251a604e8e8f6906d60f8dedc5aaeb8cd38f4892",
+            "value": "0"
+          },
+          {
+            "from": "0xe8ac89b010cfcfe4e3ffa203b8114e9fae127e6e",
+            "to": "0x5ffd6bc93cdfe006efcf0fa0fd39e84768ed1a34",
+            "value": "0"
+          },
+          {
+            "from": "0xe9786097e74bd084333996be509df9197d4bffbb",
+            "to": "0x251a604e8e8f6906d60f8dedc5aaeb8cd38f4892",
+            "value": "0"
+          }
+        ]
+      }
+    },
+    "envio_vs_ponder": {
+      "common_transfers": 275398,
+      "unique_to_1": 582,
+      "unique_to_2": 0,
+      "jaccard_similarity": 0.9978911515327198,
+      "examples": {
+        "unique_to_1": [
+          {
+            "from": "0x87428a53e14d24ab19c6ca4939b4df93b8996ca9",
+            "to": "0xf081470f5c6fbccf48cc4e5b82dd926409dcdd67",
+            "value": "257696"
+          },
+          {
+            "from": "0xf081470f5c6fbccf48cc4e5b82dd926409dcdd67",
+            "to": "0x888888888889758f76e7103c6cbf23abbf58f946",
+            "value": "257696"
+          },
+          {
+            "from": "0x888888888889758f76e7103c6cbf23abbf58f946",
+            "to": "0xc781c0cc527cb8c351be3a64c690216c535c6f36",
+            "value": "257696"
+          },
+          {
+            "from": "0x5f5704bb08f9b1331638cf5aff83ead3e123fa27",
+            "to": "0x74de5d4fcbf63e00296fd95d33236b9794016631",
+            "value": "238558"
+          },
+          {
+            "from": "0x74de5d4fcbf63e00296fd95d33236b9794016631",
+            "to": "0x87428a53e14d24ab19c6ca4939b4df93b8996ca9",
+            "value": "238558"
+          }
+        ],
+        "unique_to_2": []
+      }
+    },
+    "envio_vs_subsquid": {
+      "common_transfers": 275980,
+      "unique_to_1": 0,
+      "unique_to_2": 0,
+      "jaccard_similarity": 1
+    },
+    "envio_vs_subgraph": {
+      "common_transfers": 275980,
+      "unique_to_1": 0,
+      "unique_to_2": 0,
+      "jaccard_similarity": 1
+    },
+    "ponder_vs_subsquid": {
+      "common_transfers": 275398,
+      "unique_to_1": 0,
+      "unique_to_2": 582,
+      "jaccard_similarity": 0.9978911515327198,
+      "examples": {
+        "unique_to_1": [],
+        "unique_to_2": [
+          {
+            "from": "0x87428a53e14d24ab19c6ca4939b4df93b8996ca9",
+            "to": "0xf081470f5c6fbccf48cc4e5b82dd926409dcdd67",
+            "value": "257696"
+          },
+          {
+            "from": "0xf081470f5c6fbccf48cc4e5b82dd926409dcdd67",
+            "to": "0x888888888889758f76e7103c6cbf23abbf58f946",
+            "value": "257696"
+          },
+          {
+            "from": "0x888888888889758f76e7103c6cbf23abbf58f946",
+            "to": "0xc781c0cc527cb8c351be3a64c690216c535c6f36",
+            "value": "257696"
+          },
+          {
+            "from": "0x5f5704bb08f9b1331638cf5aff83ead3e123fa27",
+            "to": "0x74de5d4fcbf63e00296fd95d33236b9794016631",
+            "value": "238558"
+          },
+          {
+            "from": "0x74de5d4fcbf63e00296fd95d33236b9794016631",
+            "to": "0x87428a53e14d24ab19c6ca4939b4df93b8996ca9",
+            "value": "238558"
+          }
+        ]
+      }
+    },
+    "ponder_vs_subgraph": {
+      "common_transfers": 275398,
+      "unique_to_1": 0,
+      "unique_to_2": 582,
+      "jaccard_similarity": 0.9978911515327198,
+      "examples": {
+        "unique_to_1": [],
+        "unique_to_2": [
+          {
+            "from": "0x0000000000000000000000000000000000000000",
+            "to": "0xcb91255be3b464f2faad3c05d196b74331bd0eac",
+            "value": "135700"
+          },
+          {
+            "from": "0x5bbd2ccec0fb2686aafe040ef5d2ecd1d8c31ba8",
+            "to": "0x4095f064b8d3c3548a3bebfd0bbfd04750e30077",
+            "value": "98896592"
+          },
+          {
+            "from": "0x4095f064b8d3c3548a3bebfd0bbfd04750e30077",
+            "to": "0xbbbbbbbbbb9cc5e90e3b3af64bdaf62c37eeffcb",
+            "value": "98896592"
+          },
+          {
+            "from": "0x2c48d0c313dd1761a8c70cab9b68cb79eddf9f1f",
+            "to": "0xab873faabb1dcf515817d8defe6b39de7d965b9a",
+            "value": "30000"
+          },
+          {
+            "from": "0x70416ab64d415fcfabcd9bc426df57223b2b51f7",
+            "to": "0x251a604e8e8f6906d60f8dedc5aaeb8cd38f4892",
+            "value": "10000"
+          }
+        ]
+      }
+    },
+    "subsquid_vs_subgraph": {
+      "common_transfers": 275980,
+      "unique_to_1": 0,
+      "unique_to_2": 0,
+      "jaccard_similarity": 1
+    }
+  },
+  "field_comparisons": {
+    "sentio_vs_envio": {
+      "blockNumber_matches": 0,
+      "blockNumber_mismatches": 0,
+      "from_matches": 0,
+      "from_mismatches": 0,
+      "to_matches": 0,
+      "to_mismatches": 0,
+      "value_matches": 0,
+      "value_mismatches": 0,
+      "examples": [],
+      "blockNumber_match_percent": "0%",
+      "from_match_percent": "0%",
+      "to_match_percent": "0%",
+      "value_match_percent": "0%"
+    },
+    "sentio_vs_ponder": {
+      "blockNumber_matches": 0,
+      "blockNumber_mismatches": 0,
+      "from_matches": 0,
+      "from_mismatches": 0,
+      "to_matches": 0,
+      "to_mismatches": 0,
+      "value_matches": 0,
+      "value_mismatches": 0,
+      "examples": [],
+      "blockNumber_match_percent": "0%",
+      "from_match_percent": "0%",
+      "to_match_percent": "0%",
+      "value_match_percent": "0%"
+    },
+    "sentio_vs_subsquid": {
+      "blockNumber_matches": 0,
+      "blockNumber_mismatches": 0,
+      "from_matches": 0,
+      "from_mismatches": 0,
+      "to_matches": 0,
+      "to_mismatches": 0,
+      "value_matches": 0,
+      "value_mismatches": 0,
+      "examples": [],
+      "blockNumber_match_percent": "0%",
+      "from_match_percent": "0%",
+      "to_match_percent": "0%",
+      "value_match_percent": "0%"
+    },
+    "sentio_vs_subgraph": {
+      "blockNumber_matches": 0,
+      "blockNumber_mismatches": 0,
+      "from_matches": 0,
+      "from_mismatches": 0,
+      "to_matches": 0,
+      "to_mismatches": 0,
+      "value_matches": 0,
+      "value_mismatches": 0,
+      "examples": [],
+      "blockNumber_match_percent": "0%",
+      "from_match_percent": "0%",
+      "to_match_percent": "0%",
+      "value_match_percent": "0%"
+    },
+    "envio_vs_ponder": {
+      "blockNumber_matches": 183278,
+      "blockNumber_mismatches": 0,
+      "from_matches": 182671,
+      "from_mismatches": 607,
+      "to_matches": 182612,
+      "to_mismatches": 666,
+      "value_matches": 182968,
+      "value_mismatches": 310,
+      "examples": [
+        {
+          "txHash": "0x50b21cdab55fb74a1b08a3f6d9658a5e034554f079e9e0475e118e25ad2647fd",
+          "envio": {
+            "blockNumber": "20592381",
+            "from": "0x5401b8620e5fb570064ca9114fd1e135fd77d57c",
+            "to": "0x87428a53e14d24ab19c6ca4939b4df93b8996ca9",
+            "value": "150000000"
+          },
+          "ponder": {
+            "blockNumber": "20592381",
+            "from": "0x5401b8620e5fb570064ca9114fd1e135fd77d57c",
+            "to": "0x87428a53e14d24ab19c6ca4939b4df93b8996ca9",
+            "value": "631719716"
+          }
+        },
+        {
+          "txHash": "0x66082128955c68485aa9b35223fc833c7f52a0fbd02774ca40d4e41062030aff",
+          "envio": {
+            "blockNumber": "20619011",
+            "from": "0x87428a53e14d24ab19c6ca4939b4df93b8996ca9",
+            "to": "0x1231deb6f5749ef6ce6943a275a1d3e7486f4eae",
+            "value": "491441"
+          },
+          "ponder": {
+            "blockNumber": "20619011",
+            "from": "0x1231deb6f5749ef6ce6943a275a1d3e7486f4eae",
+            "to": "0x4c30ae8533aeab84f460eae3d6a750f01e38e310",
+            "value": "491441"
+          }
+        },
+        {
+          "txHash": "0x0cc45eaae6a0a2556813c35f62f5ef3325349db0f92d32299e767ca158f305dd",
+          "envio": {
+            "blockNumber": "20621849",
+            "from": "0x5401b8620e5fb570064ca9114fd1e135fd77d57c",
+            "to": "0x87428a53e14d24ab19c6ca4939b4df93b8996ca9",
+            "value": "50000000"
+          },
+          "ponder": {
+            "blockNumber": "20621849",
+            "from": "0x5401b8620e5fb570064ca9114fd1e135fd77d57c",
+            "to": "0x87428a53e14d24ab19c6ca4939b4df93b8996ca9",
+            "value": "7500000000"
+          }
+        },
+        {
+          "txHash": "0x997d1070c708293630c780fe289f7843cae351a31283e0f5fc2fd495c514a7f4",
+          "envio": {
+            "blockNumber": "20666967",
+            "from": "0x3fc91a3afd70395cd496c647d5a6cc9d4b2b7fad",
+            "to": "0x000000fee13a103a10d593b9ae06b3e05f2e7e1c",
+            "value": "74"
+          },
+          "ponder": {
+            "blockNumber": "20666967",
+            "from": "0x3fc91a3afd70395cd496c647d5a6cc9d4b2b7fad",
+            "to": "0x383880850c591378af8c613e294af4fc284491c4",
+            "value": "29812"
+          }
+        },
+        {
+          "txHash": "0xd9a56adfbfbd1d97c053d3ec0e53511cca8794d92a19a8936fb5512506db04df",
+          "envio": {
+            "blockNumber": "20667276",
+            "from": "0x87428a53e14d24ab19c6ca4939b4df93b8996ca9",
+            "to": "0x3fc91a3afd70395cd496c647d5a6cc9d4b2b7fad",
+            "value": "2980"
+          },
+          "ponder": {
+            "blockNumber": "20667276",
+            "from": "0x3fc91a3afd70395cd496c647d5a6cc9d4b2b7fad",
+            "to": "0x5c45532cfa53a0cc8f569a37a28b2c717c5a7d70",
+            "value": "2973"
+          }
+        }
+      ],
+      "blockNumber_match_percent": "100.00%",
+      "from_match_percent": "99.67%",
+      "to_match_percent": "99.64%",
+      "value_match_percent": "99.83%"
+    },
+    "envio_vs_subsquid": {
+      "blockNumber_matches": 0,
+      "blockNumber_mismatches": 0,
+      "from_matches": 0,
+      "from_mismatches": 0,
+      "to_matches": 0,
+      "to_mismatches": 0,
+      "value_matches": 0,
+      "value_mismatches": 0,
+      "examples": [],
+      "blockNumber_match_percent": "0%",
+      "from_match_percent": "0%",
+      "to_match_percent": "0%",
+      "value_match_percent": "0%"
+    },
+    "envio_vs_subgraph": {
+      "blockNumber_matches": 183643,
+      "blockNumber_mismatches": 0,
+      "from_matches": 182180,
+      "from_mismatches": 1463,
+      "to_matches": 181978,
+      "to_mismatches": 1665,
+      "value_matches": 182900,
+      "value_mismatches": 743,
+      "examples": [
+        {
+          "txHash": "0x41ae328aad277caec7cf9e3e6ce127d19b0eeae3abe4bba77ac694b18e2a73db",
+          "envio": {
+            "blockNumber": "20569138",
+            "from": "0x111111125421ca6dc452d289314280a0f8842a65",
+            "to": "0x11a45c2c38598c6bccef635d0f9711c6bb3fc02d",
+            "value": "40"
+          },
+          "subgraph": {
+            "blockNumber": "20569138",
+            "from": "0x87428a53e14d24ab19c6ca4939b4df93b8996ca9",
+            "to": "0x111111125421ca6dc452d289314280a0f8842a65",
+            "value": "40"
+          }
+        },
+        {
+          "txHash": "0xe3b9a65cfa7a1bfe6d311533be5217c3186fa52f2d30a3fa3f95b7488b71ae09",
+          "envio": {
+            "blockNumber": "20579971",
+            "from": "0x9008d19f58aabd9ed0d60971565aa8510560ab41",
+            "to": "0x0f7c548c3c100e1ad6a1f092d95884cc4dcef4bb",
+            "value": "107919"
+          },
+          "subgraph": {
+            "blockNumber": "20579971",
+            "from": "0x87428a53e14d24ab19c6ca4939b4df93b8996ca9",
+            "to": "0x9008d19f58aabd9ed0d60971565aa8510560ab41",
+            "value": "107918"
+          }
+        },
+        {
+          "txHash": "0x50b21cdab55fb74a1b08a3f6d9658a5e034554f079e9e0475e118e25ad2647fd",
+          "envio": {
+            "blockNumber": "20592381",
+            "from": "0x5401b8620e5fb570064ca9114fd1e135fd77d57c",
+            "to": "0x87428a53e14d24ab19c6ca4939b4df93b8996ca9",
+            "value": "150000000"
+          },
+          "subgraph": {
+            "blockNumber": "20592381",
+            "from": "0x5401b8620e5fb570064ca9114fd1e135fd77d57c",
+            "to": "0x87428a53e14d24ab19c6ca4939b4df93b8996ca9",
+            "value": "631719716"
+          }
+        },
+        {
+          "txHash": "0x426905956f1855948ce35d74ab26c486ed9b960068ecb111cc599c70e9af02b4",
+          "envio": {
+            "blockNumber": "20593567",
+            "from": "0x370d253f2e3d1d23c6f900928920a470eed8f876",
+            "to": "0x2f39dd7c1e982fc7bee442010944c3e5b4675aa2",
+            "value": "519948"
+          },
+          "subgraph": {
+            "blockNumber": "20593567",
+            "from": "0x370d253f2e3d1d23c6f900928920a470eed8f876",
+            "to": "0x2322ba43eff1542b6a7baed35e66099ea0d12bd1",
+            "value": "19998"
+          }
+        },
+        {
+          "txHash": "0x66082128955c68485aa9b35223fc833c7f52a0fbd02774ca40d4e41062030aff",
+          "envio": {
+            "blockNumber": "20619011",
+            "from": "0x87428a53e14d24ab19c6ca4939b4df93b8996ca9",
+            "to": "0x1231deb6f5749ef6ce6943a275a1d3e7486f4eae",
+            "value": "491441"
+          },
+          "subgraph": {
+            "blockNumber": "20619011",
+            "from": "0x1231deb6f5749ef6ce6943a275a1d3e7486f4eae",
+            "to": "0x4c30ae8533aeab84f460eae3d6a750f01e38e310",
+            "value": "491441"
+          }
+        }
+      ],
+      "blockNumber_match_percent": "100.00%",
+      "from_match_percent": "99.20%",
+      "to_match_percent": "99.09%",
+      "value_match_percent": "99.60%"
+    },
+    "ponder_vs_subsquid": {
+      "blockNumber_matches": 0,
+      "blockNumber_mismatches": 0,
+      "from_matches": 0,
+      "from_mismatches": 0,
+      "to_matches": 0,
+      "to_mismatches": 0,
+      "value_matches": 0,
+      "value_mismatches": 0,
+      "examples": [],
+      "blockNumber_match_percent": "0%",
+      "from_match_percent": "0%",
+      "to_match_percent": "0%",
+      "value_match_percent": "0%"
+    },
+    "ponder_vs_subgraph": {
+      "blockNumber_matches": 183278,
+      "blockNumber_mismatches": 0,
+      "from_matches": 182425,
+      "from_mismatches": 853,
+      "to_matches": 182280,
+      "to_mismatches": 998,
+      "value_matches": 182843,
+      "value_mismatches": 435,
+      "examples": [
+        {
+          "txHash": "0x41ae328aad277caec7cf9e3e6ce127d19b0eeae3abe4bba77ac694b18e2a73db",
+          "ponder": {
+            "blockNumber": "20569138",
+            "from": "0x111111125421ca6dc452d289314280a0f8842a65",
+            "to": "0x11a45c2c38598c6bccef635d0f9711c6bb3fc02d",
+            "value": "40"
+          },
+          "subgraph": {
+            "blockNumber": "20569138",
+            "from": "0x87428a53e14d24ab19c6ca4939b4df93b8996ca9",
+            "to": "0x111111125421ca6dc452d289314280a0f8842a65",
+            "value": "40"
+          }
+        },
+        {
+          "txHash": "0xe3b9a65cfa7a1bfe6d311533be5217c3186fa52f2d30a3fa3f95b7488b71ae09",
+          "ponder": {
+            "blockNumber": "20579971",
+            "from": "0x9008d19f58aabd9ed0d60971565aa8510560ab41",
+            "to": "0x0f7c548c3c100e1ad6a1f092d95884cc4dcef4bb",
+            "value": "107919"
+          },
+          "subgraph": {
+            "blockNumber": "20579971",
+            "from": "0x87428a53e14d24ab19c6ca4939b4df93b8996ca9",
+            "to": "0x9008d19f58aabd9ed0d60971565aa8510560ab41",
+            "value": "107918"
+          }
+        },
+        {
+          "txHash": "0x426905956f1855948ce35d74ab26c486ed9b960068ecb111cc599c70e9af02b4",
+          "ponder": {
+            "blockNumber": "20593567",
+            "from": "0x370d253f2e3d1d23c6f900928920a470eed8f876",
+            "to": "0x2f39dd7c1e982fc7bee442010944c3e5b4675aa2",
+            "value": "519948"
+          },
+          "subgraph": {
+            "blockNumber": "20593567",
+            "from": "0x370d253f2e3d1d23c6f900928920a470eed8f876",
+            "to": "0x2322ba43eff1542b6a7baed35e66099ea0d12bd1",
+            "value": "19998"
+          }
+        },
+        {
+          "txHash": "0x35fd2cf8cbf514237fd67f24ede0726d7e64d92ea414d918bea8f60452f2bcb6",
+          "ponder": {
+            "blockNumber": "20619075",
+            "from": "0xf081470f5c6fbccf48cc4e5b82dd926409dcdd67",
+            "to": "0x95ed72f116edb1a97203cc2e8a6ee1c51df822d8",
+            "value": "1662"
+          },
+          "subgraph": {
+            "blockNumber": "20619075",
+            "from": "0x87428a53e14d24ab19c6ca4939b4df93b8996ca9",
+            "to": "0xf081470f5c6fbccf48cc4e5b82dd926409dcdd67",
+            "value": "1662"
+          }
+        },
+        {
+          "txHash": "0xb1541b2cf4633856803b5a3393639761241c1212c1587eaf7e7ea6aeec3e5ddb",
+          "ponder": {
+            "blockNumber": "20631602",
+            "from": "0x3fc91a3afd70395cd496c647d5a6cc9d4b2b7fad",
+            "to": "0x34afff30b5c10f28f730b73b0c87217600ffa6e5",
+            "value": "3141383"
+          },
+          "subgraph": {
+            "blockNumber": "20631602",
+            "from": "0x87428a53e14d24ab19c6ca4939b4df93b8996ca9",
+            "to": "0x3fc91a3afd70395cd496c647d5a6cc9d4b2b7fad",
+            "value": "3149256"
+          }
+        }
+      ],
+      "blockNumber_match_percent": "100.00%",
+      "from_match_percent": "99.53%",
+      "to_match_percent": "99.46%",
+      "value_match_percent": "99.76%"
+    },
+    "subsquid_vs_subgraph": {
+      "blockNumber_matches": 0,
+      "blockNumber_mismatches": 0,
+      "from_matches": 0,
+      "from_mismatches": 0,
+      "to_matches": 0,
+      "to_mismatches": 0,
+      "value_matches": 0,
+      "value_mismatches": 0,
+      "examples": [],
+      "blockNumber_match_percent": "0%",
+      "from_match_percent": "0%",
+      "to_match_percent": "0%",
+      "value_match_percent": "0%"
+    }
+  }
+}

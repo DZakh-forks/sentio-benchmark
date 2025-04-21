@@ -1,0 +1,607 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Case 2 Transfers Comparison</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      color: #333;
+      line-height: 1.6;
+    }
+    h1, h2, h3 {
+      margin-top: 20px;
+      margin-bottom: 10px;
+      color: #1a73e8;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .card {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 15px 0;
+    }
+    th, td {
+      padding: 12px 15px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+    th {
+      background-color: #f7f7f7;
+    }
+    tr:hover {
+      background-color: #f5f5f5;
+    }
+    .success {
+      color: #28a745;
+    }
+    .failure {
+      color: #dc3545;
+    }
+    .platform-comparison {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+    }
+    .heat-table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+    .heat-table td {
+      height: 50px;
+      text-align: center;
+      vertical-align: middle;
+      font-weight: bold;
+      color: white;
+    }
+    .timestamp {
+      font-size: 0.9em;
+      color: #666;
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Case 2 Transfers Comparison Report</h1>
+    <p class="timestamp">Generated on: 4/17/2025, 12:06:19 PM</p>
+    
+    <div class="card">
+      <h2>Record Counts</h2>
+      <table>
+        <tr>
+          <th>Platform</th>
+          <th>Record Count</th>
+          <th>Status</th>
+        </tr>
+        
+          <tr>
+            <td>sentio</td>
+            <td>12165</td>
+            <td class="success">Success</td>
+          </tr>
+        
+          <tr>
+            <td>envio</td>
+            <td>12165</td>
+            <td class="success">Success</td>
+          </tr>
+        
+          <tr>
+            <td>ponder</td>
+            <td>12165</td>
+            <td class="success">Success</td>
+          </tr>
+        
+          <tr>
+            <td>subsquid</td>
+            <td>12165</td>
+            <td class="success">Success</td>
+          </tr>
+        
+          <tr>
+            <td>subgraph</td>
+            <td>1</td>
+            <td class="success">Success</td>
+          </tr>
+        
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>Platform Statistics</h2>
+      <table>
+        <tr>
+          <th>Platform</th>
+          <th>Unique Entities</th>
+        </tr>
+        
+          <tr>
+            <td>sentio</td>
+            <td>12165</td>
+          </tr>
+        
+          <tr>
+            <td>envio</td>
+            <td>12165</td>
+          </tr>
+        
+          <tr>
+            <td>ponder</td>
+            <td>12165</td>
+          </tr>
+        
+          <tr>
+            <td>subsquid</td>
+            <td>12165</td>
+          </tr>
+        
+          <tr>
+            <td>subgraph</td>
+            <td>1</td>
+          </tr>
+        
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>Content-Based Comparison</h2>
+      <p>This analysis compares platforms based on the actual transfers content without relying on record IDs.</p>
+      
+      <table class="heat-table">
+        <tr>
+          <th></th>
+          <th>sentio</th><th>envio</th><th>ponder</th><th>subsquid</th><th>subgraph</th>
+        </tr>
+        
+          <tr>
+            <th>sentio</th>
+            <td style="background-color: rgb(0, 128, 0);">1.00</td><td style="background-color: rgb(0, 255, 0);">1.00</td><td style="background-color: rgb(255, 0, 0);">0.00</td><td style="background-color: rgb(0, 255, 0);">1.00</td><td style="background-color: rgb(255, 0, 0);">0.00</td>
+          </tr>
+        
+          <tr>
+            <th>envio</th>
+            <td style="background-color: rgb(0, 255, 0);">1.00</td><td style="background-color: rgb(0, 128, 0);">1.00</td><td style="background-color: rgb(255, 0, 0);">0.00</td><td style="background-color: rgb(0, 255, 0);">1.00</td><td style="background-color: rgb(255, 0, 0);">0.00</td>
+          </tr>
+        
+          <tr>
+            <th>ponder</th>
+            <td style="background-color: rgb(255, 0, 0);">0.00</td><td style="background-color: rgb(255, 0, 0);">0.00</td><td style="background-color: rgb(0, 128, 0);">1.00</td><td style="background-color: rgb(255, 0, 0);">0.00</td><td style="background-color: rgb(255, 0, 0);">0.00</td>
+          </tr>
+        
+          <tr>
+            <th>subsquid</th>
+            <td style="background-color: rgb(0, 255, 0);">1.00</td><td style="background-color: rgb(0, 255, 0);">1.00</td><td style="background-color: rgb(255, 0, 0);">0.00</td><td style="background-color: rgb(0, 128, 0);">1.00</td><td style="background-color: rgb(255, 0, 0);">0.00</td>
+          </tr>
+        
+          <tr>
+            <th>subgraph</th>
+            <td style="background-color: rgb(255, 0, 0);">0.00</td><td style="background-color: rgb(255, 0, 0);">0.00</td><td style="background-color: rgb(255, 0, 0);">0.00</td><td style="background-color: rgb(255, 0, 0);">0.00</td><td style="background-color: rgb(0, 128, 0);">1.00</td>
+          </tr>
+        
+      </table>
+      
+      <h3>Detailed Content Comparison</h3>
+      <div class="platform-comparison">
+        
+            <div class="card">
+              <h3>sentio vs envio</h3>
+              <table>
+                <tr><td>Common Records (matching content):</td><td>11389</td></tr>
+                <tr><td>Unique to sentio:</td><td>0</td></tr>
+                <tr><td>Unique to envio:</td><td>0</td></tr>
+                <tr><td>Content Similarity:</td><td>1.0000</td></tr>
+              </table>
+              
+              
+            </div>
+          
+            <div class="card">
+              <h3>sentio vs ponder</h3>
+              <table>
+                <tr><td>Common Records (matching content):</td><td>0</td></tr>
+                <tr><td>Unique to sentio:</td><td>11389</td></tr>
+                <tr><td>Unique to ponder:</td><td>0</td></tr>
+                <tr><td>Content Similarity:</td><td>0.0000</td></tr>
+              </table>
+              
+              
+                <h4>Sample of Unique Records</h4>
+                
+                  <h5>Unique to sentio</h5>
+                  <table>
+                    <tr>
+                      
+                        <th>From</th>
+                        <th>To</th>
+                        <th>Value</th>
+                      
+                    </tr>
+                    
+                          <tr>
+                            <td>0x00000000...</td>
+                            <td>0x44b9d51b...</td>
+                            <td>16809761</td>
+                          </tr>
+                        
+                          <tr>
+                            <td>0x00000000...</td>
+                            <td>0x251a604e...</td>
+                            <td>239</td>
+                          </tr>
+                        
+                          <tr>
+                            <td>0x44b9d51b...</td>
+                            <td>0xcfeac622...</td>
+                            <td>16809700</td>
+                          </tr>
+                        
+                          <tr>
+                            <td>0xabaf7659...</td>
+                            <td>0xcf5540ff...</td>
+                            <td>11774</td>
+                          </tr>
+                        
+                          <tr>
+                            <td>0xcf5540ff...</td>
+                            <td>0x88888888...</td>
+                            <td>11774</td>
+                          </tr>
+                        
+                  </table>
+                
+                
+                
+              
+            </div>
+          
+            <div class="card">
+              <h3>sentio vs subsquid</h3>
+              <table>
+                <tr><td>Common Records (matching content):</td><td>11389</td></tr>
+                <tr><td>Unique to sentio:</td><td>0</td></tr>
+                <tr><td>Unique to subsquid:</td><td>0</td></tr>
+                <tr><td>Content Similarity:</td><td>1.0000</td></tr>
+              </table>
+              
+              
+            </div>
+          
+            <div class="card">
+              <h3>sentio vs subgraph</h3>
+              <table>
+                <tr><td>Common Records (matching content):</td><td>0</td></tr>
+                <tr><td>Unique to sentio:</td><td>11389</td></tr>
+                <tr><td>Unique to subgraph:</td><td>0</td></tr>
+                <tr><td>Content Similarity:</td><td>0.0000</td></tr>
+              </table>
+              
+              
+                <h4>Sample of Unique Records</h4>
+                
+                  <h5>Unique to sentio</h5>
+                  <table>
+                    <tr>
+                      
+                        <th>From</th>
+                        <th>To</th>
+                        <th>Value</th>
+                      
+                    </tr>
+                    
+                          <tr>
+                            <td>0x00000000...</td>
+                            <td>0x44b9d51b...</td>
+                            <td>16809761</td>
+                          </tr>
+                        
+                          <tr>
+                            <td>0x00000000...</td>
+                            <td>0x251a604e...</td>
+                            <td>239</td>
+                          </tr>
+                        
+                          <tr>
+                            <td>0x44b9d51b...</td>
+                            <td>0xcfeac622...</td>
+                            <td>16809700</td>
+                          </tr>
+                        
+                          <tr>
+                            <td>0xabaf7659...</td>
+                            <td>0xcf5540ff...</td>
+                            <td>11774</td>
+                          </tr>
+                        
+                          <tr>
+                            <td>0xcf5540ff...</td>
+                            <td>0x88888888...</td>
+                            <td>11774</td>
+                          </tr>
+                        
+                  </table>
+                
+                
+                
+              
+            </div>
+          
+            <div class="card">
+              <h3>envio vs ponder</h3>
+              <table>
+                <tr><td>Common Records (matching content):</td><td>0</td></tr>
+                <tr><td>Unique to envio:</td><td>11389</td></tr>
+                <tr><td>Unique to ponder:</td><td>0</td></tr>
+                <tr><td>Content Similarity:</td><td>0.0000</td></tr>
+              </table>
+              
+              
+                <h4>Sample of Unique Records</h4>
+                
+                  <h5>Unique to envio</h5>
+                  <table>
+                    <tr>
+                      
+                        <th>From</th>
+                        <th>To</th>
+                        <th>Value</th>
+                      
+                    </tr>
+                    
+                          <tr>
+                            <td>0x00000000...</td>
+                            <td>0x44b9d51b...</td>
+                            <td>16809761</td>
+                          </tr>
+                        
+                          <tr>
+                            <td>0x00000000...</td>
+                            <td>0x251a604e...</td>
+                            <td>239</td>
+                          </tr>
+                        
+                          <tr>
+                            <td>0x44b9d51b...</td>
+                            <td>0xcfeac622...</td>
+                            <td>16809700</td>
+                          </tr>
+                        
+                          <tr>
+                            <td>0xabaf7659...</td>
+                            <td>0xcf5540ff...</td>
+                            <td>11774</td>
+                          </tr>
+                        
+                          <tr>
+                            <td>0xcf5540ff...</td>
+                            <td>0x88888888...</td>
+                            <td>11774</td>
+                          </tr>
+                        
+                  </table>
+                
+                
+                
+              
+            </div>
+          
+            <div class="card">
+              <h3>envio vs subsquid</h3>
+              <table>
+                <tr><td>Common Records (matching content):</td><td>11389</td></tr>
+                <tr><td>Unique to envio:</td><td>0</td></tr>
+                <tr><td>Unique to subsquid:</td><td>0</td></tr>
+                <tr><td>Content Similarity:</td><td>1.0000</td></tr>
+              </table>
+              
+              
+            </div>
+          
+            <div class="card">
+              <h3>envio vs subgraph</h3>
+              <table>
+                <tr><td>Common Records (matching content):</td><td>0</td></tr>
+                <tr><td>Unique to envio:</td><td>11389</td></tr>
+                <tr><td>Unique to subgraph:</td><td>0</td></tr>
+                <tr><td>Content Similarity:</td><td>0.0000</td></tr>
+              </table>
+              
+              
+                <h4>Sample of Unique Records</h4>
+                
+                  <h5>Unique to envio</h5>
+                  <table>
+                    <tr>
+                      
+                        <th>From</th>
+                        <th>To</th>
+                        <th>Value</th>
+                      
+                    </tr>
+                    
+                          <tr>
+                            <td>0x00000000...</td>
+                            <td>0x44b9d51b...</td>
+                            <td>16809761</td>
+                          </tr>
+                        
+                          <tr>
+                            <td>0x00000000...</td>
+                            <td>0x251a604e...</td>
+                            <td>239</td>
+                          </tr>
+                        
+                          <tr>
+                            <td>0x44b9d51b...</td>
+                            <td>0xcfeac622...</td>
+                            <td>16809700</td>
+                          </tr>
+                        
+                          <tr>
+                            <td>0xabaf7659...</td>
+                            <td>0xcf5540ff...</td>
+                            <td>11774</td>
+                          </tr>
+                        
+                          <tr>
+                            <td>0xcf5540ff...</td>
+                            <td>0x88888888...</td>
+                            <td>11774</td>
+                          </tr>
+                        
+                  </table>
+                
+                
+                
+              
+            </div>
+          
+            <div class="card">
+              <h3>ponder vs subsquid</h3>
+              <table>
+                <tr><td>Common Records (matching content):</td><td>0</td></tr>
+                <tr><td>Unique to ponder:</td><td>0</td></tr>
+                <tr><td>Unique to subsquid:</td><td>11389</td></tr>
+                <tr><td>Content Similarity:</td><td>0.0000</td></tr>
+              </table>
+              
+              
+                <h4>Sample of Unique Records</h4>
+                
+                
+                
+                  <h5>Unique to subsquid</h5>
+                  <table>
+                    <tr>
+                      
+                        <th>From</th>
+                        <th>To</th>
+                        <th>Value</th>
+                      
+                    </tr>
+                    
+                          <tr>
+                            <td>0x00000000...</td>
+                            <td>0x44b9d51b...</td>
+                            <td>16809761</td>
+                          </tr>
+                        
+                          <tr>
+                            <td>0x00000000...</td>
+                            <td>0x251a604e...</td>
+                            <td>239</td>
+                          </tr>
+                        
+                          <tr>
+                            <td>0x44b9d51b...</td>
+                            <td>0xcfeac622...</td>
+                            <td>16809700</td>
+                          </tr>
+                        
+                          <tr>
+                            <td>0xabaf7659...</td>
+                            <td>0xcf5540ff...</td>
+                            <td>11774</td>
+                          </tr>
+                        
+                          <tr>
+                            <td>0xcf5540ff...</td>
+                            <td>0x88888888...</td>
+                            <td>11774</td>
+                          </tr>
+                        
+                  </table>
+                
+              
+            </div>
+          
+            <div class="card">
+              <h3>ponder vs subgraph</h3>
+              <table>
+                <tr><td>Common Records (matching content):</td><td>0</td></tr>
+                <tr><td>Unique to ponder:</td><td>0</td></tr>
+                <tr><td>Unique to subgraph:</td><td>0</td></tr>
+                <tr><td>Content Similarity:</td><td>0.0000</td></tr>
+              </table>
+              
+              
+            </div>
+          
+            <div class="card">
+              <h3>subsquid vs subgraph</h3>
+              <table>
+                <tr><td>Common Records (matching content):</td><td>0</td></tr>
+                <tr><td>Unique to subsquid:</td><td>11389</td></tr>
+                <tr><td>Unique to subgraph:</td><td>0</td></tr>
+                <tr><td>Content Similarity:</td><td>0.0000</td></tr>
+              </table>
+              
+              
+                <h4>Sample of Unique Records</h4>
+                
+                  <h5>Unique to subsquid</h5>
+                  <table>
+                    <tr>
+                      
+                        <th>From</th>
+                        <th>To</th>
+                        <th>Value</th>
+                      
+                    </tr>
+                    
+                          <tr>
+                            <td>0x00000000...</td>
+                            <td>0x44b9d51b...</td>
+                            <td>16809761</td>
+                          </tr>
+                        
+                          <tr>
+                            <td>0x00000000...</td>
+                            <td>0x251a604e...</td>
+                            <td>239</td>
+                          </tr>
+                        
+                          <tr>
+                            <td>0x44b9d51b...</td>
+                            <td>0xcfeac622...</td>
+                            <td>16809700</td>
+                          </tr>
+                        
+                          <tr>
+                            <td>0xabaf7659...</td>
+                            <td>0xcf5540ff...</td>
+                            <td>11774</td>
+                          </tr>
+                        
+                          <tr>
+                            <td>0xcf5540ff...</td>
+                            <td>0x88888888...</td>
+                            <td>11774</td>
+                          </tr>
+                        
+                  </table>
+                
+                
+                
+              
+            </div>
+          
+      </div>
+    </div>
+  </div>
+</body>
+</html>
+    

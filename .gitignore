@@ -73,7 +73,9 @@ yarn-error.log*
 # Data folders - large files should be stored elsewhere
 **/data/*.parquet
 **/data/*.json
-downloads/
+**/downloads/*.json
+**/downloads/*.parquet
+**/downloads/node_modules/
 
 # But keep the directory structure
 !**/data/.gitkeep
