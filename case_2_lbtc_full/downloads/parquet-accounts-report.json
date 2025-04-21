@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-04-21T16:31:36.910Z",
+  "timestamp": "2025-04-21T19:10:12.905Z",
   "data_type": "accounts",
   "data_counts": {
     "sentio": {
@@ -7,7 +7,7 @@
       "success": true
     },
     "envio": {
-      "count": 2663,
+      "count": 2685,
       "success": true
     },
     "ponder": {
@@ -28,7 +28,7 @@
       "entities": 2684
     },
     "envio": {
-      "entities": 2663
+      "entities": 2685
     },
     "ponder": {
       "entities": 2684
@@ -42,10 +42,16 @@
   },
   "content_comparison": {
     "sentio_vs_envio": {
-      "common_records": 1720,
-      "unique_to_1": 964,
-      "unique_to_2": 943,
-      "jaccard_similarity": 0.4742211193824097,
+      "common_records": 2147,
+      "unique_to_1": 537,
+      "unique_to_2": 538,
+      "jaccard_similarity": 0.6663563004345128,
+      "point_comparison": {
+        "common_points": 1440,
+        "points_unique_to_1": 1244,
+        "points_unique_to_2": 1245,
+        "points_jaccard_similarity": 0.36650547213031304
+      },
       "examples": {
         "unique_to_1": [
           {
@@ -71,8 +77,12 @@
         ],
         "unique_to_2": [
           {
+            "id": "0x0000000000000000000000000000000000000000",
+            "balance": "0"
+          },
+          {
             "id": "0x000000000004444c5dc75cb358380d2e3de08a90",
-            "balance": "67848"
+            "balance": "66949"
           },
           {
             "id": "0x0000000000a92eedc4d1ff952ed1cf49df8672ea",
@@ -80,15 +90,11 @@
           },
           {
             "id": "0x000000fee13a103a10d593b9ae06b3e05f2e7e1c",
-            "balance": "4731"
+            "balance": "6369"
           },
           {
             "id": "0x00000688768803bbd44095770895ad27ad6b0d95",
             "balance": "4215"
-          },
-          {
-            "id": "0x00c600b30fb0400701010f4b080409018b9006e0",
-            "balance": "8"
           }
         ]
       }
@@ -97,19 +103,37 @@
       "common_records": 2684,
       "unique_to_1": 0,
       "unique_to_2": 0,
-      "jaccard_similarity": 1
+      "jaccard_similarity": 1,
+      "point_comparison": {
+        "common_points": 592,
+        "points_unique_to_1": 2092,
+        "points_unique_to_2": 2092,
+        "points_jaccard_similarity": 0.12395309882747069
+      }
     },
     "sentio_vs_subsquid": {
       "common_records": 2684,
       "unique_to_1": 0,
       "unique_to_2": 0,
-      "jaccard_similarity": 1
+      "jaccard_similarity": 1,
+      "point_comparison": {
+        "common_points": 1352,
+        "points_unique_to_1": 1332,
+        "points_unique_to_2": 1332,
+        "points_jaccard_similarity": 0.33665338645418325
+      }
     },
     "sentio_vs_subgraph": {
       "common_records": 2684,
       "unique_to_1": 0,
       "unique_to_2": 1,
       "jaccard_similarity": 0.9996275605214152,
+      "point_comparison": {
+        "common_points": 592,
+        "points_unique_to_1": 2092,
+        "points_unique_to_2": 2093,
+        "points_jaccard_similarity": 0.12392715093154699
+      },
       "examples": {
         "unique_to_1": [],
         "unique_to_2": [
@@ -121,15 +145,25 @@
       }
     },
     "envio_vs_ponder": {
-      "common_records": 1720,
-      "unique_to_1": 943,
-      "unique_to_2": 964,
-      "jaccard_similarity": 0.4742211193824097,
+      "common_records": 2147,
+      "unique_to_1": 538,
+      "unique_to_2": 537,
+      "jaccard_similarity": 0.6663563004345128,
+      "point_comparison": {
+        "common_points": 592,
+        "points_unique_to_1": 2093,
+        "points_unique_to_2": 2092,
+        "points_jaccard_similarity": 0.12392715093154699
+      },
       "examples": {
         "unique_to_1": [
           {
+            "id": "0x0000000000000000000000000000000000000000",
+            "balance": "0"
+          },
+          {
             "id": "0x000000000004444c5dc75cb358380d2e3de08a90",
-            "balance": "67848"
+            "balance": "66949"
           },
           {
             "id": "0x0000000000a92eedc4d1ff952ed1cf49df8672ea",
@@ -137,15 +171,11 @@
           },
           {
             "id": "0x000000fee13a103a10d593b9ae06b3e05f2e7e1c",
-            "balance": "4731"
+            "balance": "6369"
           },
           {
             "id": "0x00000688768803bbd44095770895ad27ad6b0d95",
             "balance": "4215"
-          },
-          {
-            "id": "0x00c600b30fb0400701010f4b080409018b9006e0",
-            "balance": "8"
           }
         ],
         "unique_to_2": [
@@ -173,15 +203,25 @@
       }
     },
     "envio_vs_subsquid": {
-      "common_records": 1720,
-      "unique_to_1": 943,
-      "unique_to_2": 964,
-      "jaccard_similarity": 0.4742211193824097,
+      "common_records": 2147,
+      "unique_to_1": 538,
+      "unique_to_2": 537,
+      "jaccard_similarity": 0.6663563004345128,
+      "point_comparison": {
+        "common_points": 1386,
+        "points_unique_to_1": 1299,
+        "points_unique_to_2": 1298,
+        "points_jaccard_similarity": 0.34797891036906853
+      },
       "examples": {
         "unique_to_1": [
           {
+            "id": "0x0000000000000000000000000000000000000000",
+            "balance": "0"
+          },
+          {
             "id": "0x000000000004444c5dc75cb358380d2e3de08a90",
-            "balance": "67848"
+            "balance": "66949"
           },
           {
             "id": "0x0000000000a92eedc4d1ff952ed1cf49df8672ea",
@@ -189,7 +229,61 @@
           },
           {
             "id": "0x000000fee13a103a10d593b9ae06b3e05f2e7e1c",
-            "balance": "4731"
+            "balance": "6369"
+          },
+          {
+            "id": "0x00000688768803bbd44095770895ad27ad6b0d95",
+            "balance": "4215"
+          }
+        ],
+        "unique_to_2": [
+          {
+            "id": "0x000000000004444c5dc75cb358380d2e3de08a90",
+            "balance": "46566"
+          },
+          {
+            "id": "0x0000000000a92eedc4d1ff952ed1cf49df8672ea",
+            "balance": "407963"
+          },
+          {
+            "id": "0x000000fee13a103a10d593b9ae06b3e05f2e7e1c",
+            "balance": "106811"
+          },
+          {
+            "id": "0x00000688768803bbd44095770895ad27ad6b0d95",
+            "balance": "3077"
+          },
+          {
+            "id": "0x00c600b30fb0400701010f4b080409018b9006e0",
+            "balance": "1"
+          }
+        ]
+      }
+    },
+    "envio_vs_subgraph": {
+      "common_records": 2148,
+      "unique_to_1": 537,
+      "unique_to_2": 537,
+      "jaccard_similarity": 0.6666666666666666,
+      "point_comparison": {
+        "common_points": 593,
+        "points_unique_to_1": 2092,
+        "points_unique_to_2": 2092,
+        "points_jaccard_similarity": 0.12413648733514758
+      },
+      "examples": {
+        "unique_to_1": [
+          {
+            "id": "0x000000000004444c5dc75cb358380d2e3de08a90",
+            "balance": "66949"
+          },
+          {
+            "id": "0x0000000000a92eedc4d1ff952ed1cf49df8672ea",
+            "balance": "0"
+          },
+          {
+            "id": "0x000000fee13a103a10d593b9ae06b3e05f2e7e1c",
+            "balance": "6369"
           },
           {
             "id": "0x00000688768803bbd44095770895ad27ad6b0d95",
@@ -224,69 +318,29 @@
         ]
       }
     },
-    "envio_vs_subgraph": {
-      "common_records": 1720,
-      "unique_to_1": 943,
-      "unique_to_2": 965,
-      "jaccard_similarity": 0.474090407938258,
-      "examples": {
-        "unique_to_1": [
-          {
-            "id": "0x000000000004444c5dc75cb358380d2e3de08a90",
-            "balance": "67848"
-          },
-          {
-            "id": "0x0000000000a92eedc4d1ff952ed1cf49df8672ea",
-            "balance": "0"
-          },
-          {
-            "id": "0x000000fee13a103a10d593b9ae06b3e05f2e7e1c",
-            "balance": "4731"
-          },
-          {
-            "id": "0x00000688768803bbd44095770895ad27ad6b0d95",
-            "balance": "4215"
-          },
-          {
-            "id": "0x00c600b30fb0400701010f4b080409018b9006e0",
-            "balance": "8"
-          }
-        ],
-        "unique_to_2": [
-          {
-            "id": "0x0000000000000000000000000000000000000000",
-            "balance": "0"
-          },
-          {
-            "id": "0x000000000004444c5dc75cb358380d2e3de08a90",
-            "balance": "46566"
-          },
-          {
-            "id": "0x0000000000a92eedc4d1ff952ed1cf49df8672ea",
-            "balance": "407963"
-          },
-          {
-            "id": "0x000000fee13a103a10d593b9ae06b3e05f2e7e1c",
-            "balance": "106811"
-          },
-          {
-            "id": "0x00000688768803bbd44095770895ad27ad6b0d95",
-            "balance": "3077"
-          }
-        ]
-      }
-    },
     "ponder_vs_subsquid": {
       "common_records": 2684,
       "unique_to_1": 0,
       "unique_to_2": 0,
-      "jaccard_similarity": 1
+      "jaccard_similarity": 1,
+      "point_comparison": {
+        "common_points": 592,
+        "points_unique_to_1": 2092,
+        "points_unique_to_2": 2092,
+        "points_jaccard_similarity": 0.12395309882747069
+      }
     },
     "ponder_vs_subgraph": {
       "common_records": 2684,
       "unique_to_1": 0,
       "unique_to_2": 1,
       "jaccard_similarity": 0.9996275605214152,
+      "point_comparison": {
+        "common_points": 592,
+        "points_unique_to_1": 2092,
+        "points_unique_to_2": 2093,
+        "points_jaccard_similarity": 0.12392715093154699
+      },
       "examples": {
         "unique_to_1": [],
         "unique_to_2": [
@@ -302,6 +356,12 @@
       "unique_to_1": 0,
       "unique_to_2": 1,
       "jaccard_similarity": 0.9996275605214152,
+      "point_comparison": {
+        "common_points": 592,
+        "points_unique_to_1": 2092,
+        "points_unique_to_2": 2093,
+        "points_jaccard_similarity": 0.12392715093154699
+      },
       "examples": {
         "unique_to_1": [],
         "unique_to_2": [

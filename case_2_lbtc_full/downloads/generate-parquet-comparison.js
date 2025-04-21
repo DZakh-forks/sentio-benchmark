@@ -164,10 +164,16 @@ async function generateReportForType(dataType, platformFiles) {
   // Create fingerprints of data for each platform
   const dataFingerprints = {};
   
+  // For point comparison
+  const pointFingerprints = {};
+  
   for (const platform of platformFiles) {
     if (dataMap[platform.name] && dataMap[platform.name].length > 0) {
       // Create a set of unique data fingerprints
       const fingerprints = new Set();
+      
+      // For point comparison
+      const pointFPs = new Set();
       
       for (const record of dataMap[platform.name]) {
         // Extract fields from record based on data type
@@ -190,6 +196,11 @@ async function generateReportForType(dataType, platformFiles) {
           if (id && balance) {
             fingerprint = `${id}:${balance}`;
           }
+          
+          // For point comparison
+          if (id && record.point) {
+            pointFPs.add(`${id}:${record.point}`);
+          }
         }
         
         if (fingerprint) {
@@ -199,6 +210,12 @@ async function generateReportForType(dataType, platformFiles) {
       
       dataFingerprints[platform.name] = fingerprints;
       console.log(`Created ${fingerprints.size} unique ${dataType} fingerprints for ${platform.name}`);
+      
+      // For point comparison
+      if (dataType === 'accounts') {
+        pointFingerprints[platform.name] = pointFPs;
+        console.log(`Created ${pointFPs.size} unique point fingerprints for ${platform.name}`);
+      }
     }
   }
   
@@ -229,6 +246,33 @@ async function generateReportForType(dataType, platformFiles) {
         };
         
         console.log(`${platform1} vs ${platform2} ${dataType} comparison: ${common.size} common records, similarity: ${jaccardSimilarity.toFixed(4)}`);
+        
+        // Compare points if this is accounts data
+        if (dataType === 'accounts' && 
+            pointFingerprints[platform1] && 
+            pointFingerprints[platform2]) {
+          
+          const points1 = pointFingerprints[platform1];
+          const points2 = pointFingerprints[platform2];
+          
+          // Find common point fingerprints
+          const commonPoints = new Set([...points1].filter(x => points2.has(x)));
+          const pointsUniqueToFirst = new Set([...points1].filter(x => !points2.has(x)));
+          const pointsUniqueToSecond = new Set([...points2].filter(x => !points1.has(x)));
+          
+          // Calculate Jaccard similarity for point fingerprints
+          const pointsUnion = new Set([...points1, ...points2]);
+          const pointsJaccardSimilarity = pointsUnion.size > 0 ? commonPoints.size / pointsUnion.size : 0;
+          
+          report.content_comparison[`${platform1}_vs_${platform2}`].point_comparison = {
+            common_points: commonPoints.size,
+            points_unique_to_1: pointsUniqueToFirst.size,
+            points_unique_to_2: pointsUniqueToSecond.size,
+            points_jaccard_similarity: pointsJaccardSimilarity
+          };
+          
+          console.log(`${platform1} vs ${platform2} points comparison: ${commonPoints.size} common points, similarity: ${pointsJaccardSimilarity.toFixed(4)}`);
+        }
         
         // Add sample of unique records
         if (uniqueToFirst.size > 0 || uniqueToSecond.size > 0) {
