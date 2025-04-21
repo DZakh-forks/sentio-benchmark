@@ -1,0 +1,24 @@
+{
+  "name": "uniswap-v2-trace-subgraph",
+  "version": "0.1.0",
+  "description": "Subgraph for monitoring Uniswap V2 Router traces",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/uniswap-v2-trace-subgraph"
+  },
+  "scripts": {
+    "codegen": "graph codegen",
+    "build": "graph build",
+    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ --ipfs https://api.thegraph.com/ipfs/ uniswap-v2-trace-subgraph",
+    "create-local": "graph create --node http://localhost:8020/ uniswap-v2-trace-subgraph",
+    "remove-local": "graph remove --node http://localhost:8020/ uniswap-v2-trace-subgraph",
+    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 uniswap-v2-trace-subgraph"
+  },
+  "dependencies": {
+    "@graphprotocol/graph-cli": "^0.48.0",
+    "@graphprotocol/graph-ts": "^0.29.3"
+  },
+  "devDependencies": {
+    "matchstick-as": "^0.5.2"
+  }
+} 

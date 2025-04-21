@@ -26,7 +26,7 @@ The benchmark requires each indexer to:
 
 | Indexer  | Time to Complete | Records Indexed | Notes |
 |----------|------------------|----------------|-------|
-| Sentio   | 6m               | 296,734        | |
+| Sentio   | 8m               | 296,734        | |
 | Envio    | 2m               | 296,734        | Fastest processing time |
 | Ponder   | 1h40m            | 296,138        | Missing ~5% of events |
 | Subsquid | 10m              | 296,734        | |

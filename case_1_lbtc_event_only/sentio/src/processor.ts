@@ -9,6 +9,8 @@ const transferEventHandler = async function (event: TransferEvent, ctx: LBTCCont
     from: event.args.from,
     to: event.args.to,
     value: event.args.value,
+    blockNumber: BigInt(event.blockNumber),
+    transactionHash: Buffer.from(event.transactionHash.slice(2), 'hex'),
   });
   await ctx.store.upsert(transfer);
 }

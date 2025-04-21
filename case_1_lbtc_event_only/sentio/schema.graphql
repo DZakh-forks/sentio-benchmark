@@ -3,5 +3,6 @@ type Transfer @entity {
   from: String!
   to: String!
   value: BigInt!
+  blockNumber: BigInt!
+  transactionHash: Bytes 
 }
-

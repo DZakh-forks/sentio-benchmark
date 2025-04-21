@@ -1,0 +1,16 @@
+{
+  "name": "envio-case5-processor",
+  "version": "1.0.0",
+  "description": "Uniswap V2 Router Transaction Processor",
+  "type": "module",
+  "main": "fetch-data.js",
+  "scripts": {
+    "start": "node fetch-data.js"
+  },
+  "dependencies": {
+    "@envio-dev/hypersync-client": "^0.6.3",
+    "bignumber.js": "^9.1.1",
+    "parquetjs": "^0.11.2",
+    "viem": "^1.10.9"
+  }
+} 

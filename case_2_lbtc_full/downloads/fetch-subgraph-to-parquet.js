@@ -25,7 +25,8 @@ const transferSchema = new parquet.ParquetSchema({
 const accountSchema = new parquet.ParquetSchema({
   id: { type: 'UTF8' },
   balance: { type: 'UTF8' }, // Using UTF8 for large numbers
-  point: { type: 'UTF8' }    // Add point field for accounts
+  point: { type: 'UTF8' },   // Add point field for accounts
+  timestamp: { type: 'INT64' } // Add timestamp field
 });
 
 // Fetch and save transfer data
@@ -173,7 +174,8 @@ async function fetchSubgraphAccounts() {
         await writer.appendRow({
           id: 'dummy',
           balance: '0',
-          point: '0'
+          point: '0',
+          timestamp: 0
         });
         totalRows = 1;
         console.log("Added a dummy record since no snapshots were found.");
@@ -211,7 +213,8 @@ async function fetchSubgraphAccounts() {
     const record = {
       id: account.id || '',
       balance: account.balance || '0',
-      point: account.point || '0'
+      point: account.point || '0',
+      timestamp: account.timestampMilli || 0
     };
     
     await writer.appendRow(record);

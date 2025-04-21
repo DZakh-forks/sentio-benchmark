@@ -130,8 +130,12 @@ async function generateComparisonReport() {
         
         if (platform.name === 'sentio') {
           // Sentio format has different field names
-          // Try to extract block number from __genBlockChain__ field
-          if (record.__genBlockChain__ && typeof record.__genBlockChain__ === 'string') {
+          // First try the direct blockNumber field if available
+          if (record.blockNumber !== undefined) {
+            blockField = record.blockNumber;
+          }
+          // If not available, try to extract from __genBlockChain__
+          else if (record.__genBlockChain__ && typeof record.__genBlockChain__ === 'string') {
             const parts = record.__genBlockChain__.split(':');
             blockField = parts.length > 1 ? parts[1] : null;
           } else if (record.__genBlockChain__ && typeof record.__genBlockChain__ === 'object') {
@@ -140,7 +144,7 @@ async function generateComparisonReport() {
           } else {
             blockField = null;
           }
-          txField = record.id;
+          txField = record.transactionHash || record.id;
         } else if (platform.name === 'subsquid') {
           blockField = record.block_number;
           // Handle Uint8Array transaction hash by converting to hex string
@@ -186,8 +190,12 @@ async function generateComparisonReport() {
         
         if (platform.name === 'sentio') {
           // Sentio format has different field names
-          // Try to extract block number from __genBlockChain__ field
-          if (record.__genBlockChain__ && typeof record.__genBlockChain__ === 'string') {
+          // First try the direct blockNumber field if available
+          if (record.blockNumber !== undefined) {
+            blockField = record.blockNumber;
+          }
+          // If not available, try to extract from __genBlockChain__
+          else if (record.__genBlockChain__ && typeof record.__genBlockChain__ === 'string') {
             const parts = record.__genBlockChain__.split(':');
             blockField = parts.length > 1 ? parts[1] : null;
           } else if (record.__genBlockChain__ && typeof record.__genBlockChain__ === 'object') {
@@ -328,7 +336,7 @@ async function generateComparisonReport() {
         for (const record of dataMap[platform1]) {
           let txField;
           if (platform1 === 'sentio') {
-            txField = record.id;
+            txField = record.transactionHash || record.id;
           } else if (platform1 === 'subsquid') {
             // Handle Uint8Array transaction hash for subsquid
             if (record.transaction_hash && record.transaction_hash instanceof Buffer) {
@@ -348,7 +356,7 @@ async function generateComparisonReport() {
         for (const record of dataMap[platform2]) {
           let txField;
           if (platform2 === 'sentio') {
-            txField = record.id;
+            txField = record.transactionHash || record.id;
           } else if (platform2 === 'subsquid') {
             // Handle Uint8Array transaction hash for subsquid
             if (record.transaction_hash && record.transaction_hash instanceof Buffer) {
@@ -405,7 +413,7 @@ async function generateComparisonReport() {
         let txField;
         
         if (platform.name === 'sentio') {
-          txField = record.id;
+          txField = record.transactionHash || record.id;
         } else if (platform.name === 'subsquid') {
           if (record.transaction_hash && record.transaction_hash instanceof Buffer) {
             txField = record.transaction_hash.toString('hex');

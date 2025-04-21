@@ -1,0 +1,9 @@
+type GasSpent @entity {
+  id: ID!                   # Transaction hash
+  from: String! @index      # Sender address
+  to: String! @index        # Recipient address
+  gasValue: BigInt!         # Gas cost (gasUsed * gasPrice)
+  blockNumber: BigInt!      # Block where transaction was executed
+  transactionHash: Bytes    # Transaction hash as binary
+}
+

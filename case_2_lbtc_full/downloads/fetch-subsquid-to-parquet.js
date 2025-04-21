@@ -34,7 +34,8 @@ const transferSchema = new parquet.ParquetSchema({
 const accountSchema = new parquet.ParquetSchema({
   id: { type: 'UTF8' },
   balance: { type: 'UTF8' }, // Using UTF8 for large numbers
-  point: { type: 'UTF8' }    // Add point field
+  point: { type: 'UTF8' },   // Add point field
+  timestamp: { type: 'INT64' } // Add timestamp field
 });
 
 async function fetchSubsquidData() {
@@ -135,7 +136,8 @@ async function fetchAccounts(client) {
       SELECT DISTINCT ON (account_id) 
         account_id AS id, 
         balance::text AS balance,
-        point::text AS point
+        point::text AS point,
+        timestamp_milli
       FROM snapshot
       ORDER BY account_id, timestamp_milli DESC
     )
@@ -150,7 +152,8 @@ async function fetchAccounts(client) {
     const record = {
       id: row.id || '',
       balance: row.balance || '0',
-      point: row.point || '0'
+      point: row.point || '0',
+      timestamp: row.timestamp_milli ? Number(row.timestamp_milli) : 0
     };
     
     await writer.appendRow(record);

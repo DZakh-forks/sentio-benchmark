@@ -1,0 +1,11 @@
+type Swap @entity(immutable: true) {
+  id: ID!
+  distinctId: String!
+  amountIn: BigInt!
+  amountOutMin: BigInt!
+  deadline: BigInt!
+  path: [String!]!
+  to: String!
+  transaction: String!
+  blockNumber: BigInt!
+} 

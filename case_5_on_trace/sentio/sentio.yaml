@@ -1,0 +1,7 @@
+project: case_5_on_trace
+contracts:
+  - chain: "1"
+    address: "0x7a250d5630b4cf539739df2c5dacb4c659f2488d"
+    name: UniswapV2Router02
+    startBlock: 22280000
+    endBlock: 22290000

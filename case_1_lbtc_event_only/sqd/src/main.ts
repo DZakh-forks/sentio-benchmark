@@ -20,7 +20,7 @@ processor.run(new TypeormDatabase({supportHotBlocks: true}), async (ctx) => {
                         to: to,
                         value: value,
                         blockNumber: BigInt(block.header.height),
-                        transactionHash: log.transaction?.hash ? Buffer.from(log.transaction.hash, 'hex') : null
+                        transactionHash: Buffer.from(log.getTransaction().hash, 'hex')
                     })
                 )
             }

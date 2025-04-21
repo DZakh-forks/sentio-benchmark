@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-04-17T03:13:16.639Z",
+  "timestamp": "2025-04-21T16:01:39.603Z",
   "data_counts": {
     "sentio": {
       "count": 294278,
@@ -24,8 +24,8 @@
   },
   "unique_counts": {
     "sentio": {
-      "blocks": 0,
-      "transactions": 294278
+      "blocks": 149671,
+      "transactions": 183643
     },
     "envio": {
       "blocks": 149671,
@@ -46,9 +46,9 @@
   },
   "block_ranges": {
     "sentio": {
-      "min": null,
-      "max": null,
-      "count": 0
+      "min": 20016816,
+      "max": 22199998,
+      "count": 294278
     },
     "envio": {
       "min": 20016816,
@@ -73,28 +73,28 @@
   },
   "consistency": {
     "sentio_vs_envio": {
-      "common_transactions": 0,
-      "unique_to_1": 294278,
-      "unique_to_2": 183643,
-      "jaccard_similarity": 0
+      "common_transactions": 183643,
+      "unique_to_1": 0,
+      "unique_to_2": 0,
+      "jaccard_similarity": 1
     },
     "sentio_vs_ponder": {
-      "common_transactions": 0,
-      "unique_to_1": 294278,
-      "unique_to_2": 183278,
-      "jaccard_similarity": 0
+      "common_transactions": 183278,
+      "unique_to_1": 365,
+      "unique_to_2": 0,
+      "jaccard_similarity": 0.9980124480649957
     },
     "sentio_vs_subsquid": {
       "common_transactions": 0,
-      "unique_to_1": 294278,
+      "unique_to_1": 183643,
       "unique_to_2": 1,
       "jaccard_similarity": 0
     },
     "sentio_vs_subgraph": {
-      "common_transactions": 0,
-      "unique_to_1": 294278,
-      "unique_to_2": 183643,
-      "jaccard_similarity": 0
+      "common_transactions": 183643,
+      "unique_to_1": 0,
+      "unique_to_2": 0,
+      "jaccard_similarity": 1
     },
     "envio_vs_ponder": {
       "common_transactions": 183278,
@@ -434,33 +434,185 @@
   "field_comparisons": {
     "sentio_vs_envio": {
       "blockNumber_matches": 0,
-      "blockNumber_mismatches": 0,
-      "from_matches": 0,
+      "blockNumber_mismatches": 183643,
+      "from_matches": 183643,
       "from_mismatches": 0,
-      "to_matches": 0,
+      "to_matches": 183643,
       "to_mismatches": 0,
-      "value_matches": 0,
-      "value_mismatches": 0,
-      "examples": [],
-      "blockNumber_match_percent": "0%",
-      "from_match_percent": "0%",
-      "to_match_percent": "0%",
-      "value_match_percent": "0%"
+      "value_matches": 183565,
+      "value_mismatches": 78,
+      "examples": [
+        {
+          "txHash": "0x3d851ca705dce08095a36b7e02834e8daa2f862730975bca15c30e8663e2e6c8",
+          "sentio": {
+            "blockNumber": null,
+            "from": "0x0000000000000000000000000000000000000000",
+            "to": "0x3f6bf1c36ccbb59eaf8415301a0cec73c344a079",
+            "value": "100000"
+          },
+          "envio": {
+            "blockNumber": "20016816",
+            "from": "0x0000000000000000000000000000000000000000",
+            "to": "0x3f6bf1c36ccbb59eaf8415301a0cec73c344a079",
+            "value": "100000"
+          }
+        },
+        {
+          "txHash": "0xc1cc35c82743cc6c621212016cb437cdf49367ca18c12b93f0d83287ec3edafb",
+          "sentio": {
+            "blockNumber": null,
+            "from": "0x0000000000000000000000000000000000000000",
+            "to": "0x11a45c2c38598c6bccef635d0f9711c6bb3fc02d",
+            "value": "2000"
+          },
+          "envio": {
+            "blockNumber": "20025757",
+            "from": "0x0000000000000000000000000000000000000000",
+            "to": "0x11a45c2c38598c6bccef635d0f9711c6bb3fc02d",
+            "value": "2000"
+          }
+        },
+        {
+          "txHash": "0x96d6c331612fcd79ff43142cc31c8902f59eb1e024dde5e75df909270196e07a",
+          "sentio": {
+            "blockNumber": null,
+            "from": "0x0000000000000000000000000000000000000000",
+            "to": "0x11a45c2c38598c6bccef635d0f9711c6bb3fc02d",
+            "value": "2000"
+          },
+          "envio": {
+            "blockNumber": "20025777",
+            "from": "0x0000000000000000000000000000000000000000",
+            "to": "0x11a45c2c38598c6bccef635d0f9711c6bb3fc02d",
+            "value": "2000"
+          }
+        },
+        {
+          "txHash": "0xce7530d330ea8785a9a8c7d28beeb57cac8f8def9e530eaf5721c38442e0ed89",
+          "sentio": {
+            "blockNumber": null,
+            "from": "0x0000000000000000000000000000000000000000",
+            "to": "0x659579f1460c38c3ce3288b47b074646cef855fc",
+            "value": "2000"
+          },
+          "envio": {
+            "blockNumber": "20026488",
+            "from": "0x0000000000000000000000000000000000000000",
+            "to": "0x659579f1460c38c3ce3288b47b074646cef855fc",
+            "value": "2000"
+          }
+        },
+        {
+          "txHash": "0xb2190dacb0d5956c6ccabb5651365f71bc65b7cbdb326be7b8790a0f25133b24",
+          "sentio": {
+            "blockNumber": null,
+            "from": "0x0000000000000000000000000000000000000000",
+            "to": "0x659579f1460c38c3ce3288b47b074646cef855fc",
+            "value": "2000"
+          },
+          "envio": {
+            "blockNumber": "20026689",
+            "from": "0x0000000000000000000000000000000000000000",
+            "to": "0x659579f1460c38c3ce3288b47b074646cef855fc",
+            "value": "2000"
+          }
+        }
+      ],
+      "blockNumber_match_percent": "0.00%",
+      "from_match_percent": "100.00%",
+      "to_match_percent": "100.00%",
+      "value_match_percent": "99.96%"
     },
     "sentio_vs_ponder": {
       "blockNumber_matches": 0,
-      "blockNumber_mismatches": 0,
-      "from_matches": 0,
-      "from_mismatches": 0,
-      "to_matches": 0,
-      "to_mismatches": 0,
-      "value_matches": 0,
-      "value_mismatches": 0,
-      "examples": [],
-      "blockNumber_match_percent": "0%",
-      "from_match_percent": "0%",
-      "to_match_percent": "0%",
-      "value_match_percent": "0%"
+      "blockNumber_mismatches": 183278,
+      "from_matches": 182671,
+      "from_mismatches": 607,
+      "to_matches": 182612,
+      "to_mismatches": 666,
+      "value_matches": 182890,
+      "value_mismatches": 388,
+      "examples": [
+        {
+          "txHash": "0x3d851ca705dce08095a36b7e02834e8daa2f862730975bca15c30e8663e2e6c8",
+          "sentio": {
+            "blockNumber": null,
+            "from": "0x0000000000000000000000000000000000000000",
+            "to": "0x3f6bf1c36ccbb59eaf8415301a0cec73c344a079",
+            "value": "100000"
+          },
+          "ponder": {
+            "blockNumber": "20016816",
+            "from": "0x0000000000000000000000000000000000000000",
+            "to": "0x3f6bf1c36ccbb59eaf8415301a0cec73c344a079",
+            "value": "100000"
+          }
+        },
+        {
+          "txHash": "0xc1cc35c82743cc6c621212016cb437cdf49367ca18c12b93f0d83287ec3edafb",
+          "sentio": {
+            "blockNumber": null,
+            "from": "0x0000000000000000000000000000000000000000",
+            "to": "0x11a45c2c38598c6bccef635d0f9711c6bb3fc02d",
+            "value": "2000"
+          },
+          "ponder": {
+            "blockNumber": "20025757",
+            "from": "0x0000000000000000000000000000000000000000",
+            "to": "0x11a45c2c38598c6bccef635d0f9711c6bb3fc02d",
+            "value": "2000"
+          }
+        },
+        {
+          "txHash": "0x96d6c331612fcd79ff43142cc31c8902f59eb1e024dde5e75df909270196e07a",
+          "sentio": {
+            "blockNumber": null,
+            "from": "0x0000000000000000000000000000000000000000",
+            "to": "0x11a45c2c38598c6bccef635d0f9711c6bb3fc02d",
+            "value": "2000"
+          },
+          "ponder": {
+            "blockNumber": "20025777",
+            "from": "0x0000000000000000000000000000000000000000",
+            "to": "0x11a45c2c38598c6bccef635d0f9711c6bb3fc02d",
+            "value": "2000"
+          }
+        },
+        {
+          "txHash": "0xce7530d330ea8785a9a8c7d28beeb57cac8f8def9e530eaf5721c38442e0ed89",
+          "sentio": {
+            "blockNumber": null,
+            "from": "0x0000000000000000000000000000000000000000",
+            "to": "0x659579f1460c38c3ce3288b47b074646cef855fc",
+            "value": "2000"
+          },
+          "ponder": {
+            "blockNumber": "20026488",
+            "from": "0x0000000000000000000000000000000000000000",
+            "to": "0x659579f1460c38c3ce3288b47b074646cef855fc",
+            "value": "2000"
+          }
+        },
+        {
+          "txHash": "0xb2190dacb0d5956c6ccabb5651365f71bc65b7cbdb326be7b8790a0f25133b24",
+          "sentio": {
+            "blockNumber": null,
+            "from": "0x0000000000000000000000000000000000000000",
+            "to": "0x659579f1460c38c3ce3288b47b074646cef855fc",
+            "value": "2000"
+          },
+          "ponder": {
+            "blockNumber": "20026689",
+            "from": "0x0000000000000000000000000000000000000000",
+            "to": "0x659579f1460c38c3ce3288b47b074646cef855fc",
+            "value": "2000"
+          }
+        }
+      ],
+      "blockNumber_match_percent": "0.00%",
+      "from_match_percent": "99.67%",
+      "to_match_percent": "99.64%",
+      "value_match_percent": "99.79%"
     },
     "sentio_vs_subsquid": {
       "blockNumber_matches": 0,
@@ -479,18 +631,94 @@
     },
     "sentio_vs_subgraph": {
       "blockNumber_matches": 0,
-      "blockNumber_mismatches": 0,
-      "from_matches": 0,
-      "from_mismatches": 0,
-      "to_matches": 0,
-      "to_mismatches": 0,
-      "value_matches": 0,
-      "value_mismatches": 0,
-      "examples": [],
-      "blockNumber_match_percent": "0%",
-      "from_match_percent": "0%",
-      "to_match_percent": "0%",
-      "value_match_percent": "0%"
+      "blockNumber_mismatches": 183643,
+      "from_matches": 182180,
+      "from_mismatches": 1463,
+      "to_matches": 181978,
+      "to_mismatches": 1665,
+      "value_matches": 182823,
+      "value_mismatches": 820,
+      "examples": [
+        {
+          "txHash": "0x3d851ca705dce08095a36b7e02834e8daa2f862730975bca15c30e8663e2e6c8",
+          "sentio": {
+            "blockNumber": null,
+            "from": "0x0000000000000000000000000000000000000000",
+            "to": "0x3f6bf1c36ccbb59eaf8415301a0cec73c344a079",
+            "value": "100000"
+          },
+          "subgraph": {
+            "blockNumber": "20016816",
+            "from": "0x0000000000000000000000000000000000000000",
+            "to": "0x3f6bf1c36ccbb59eaf8415301a0cec73c344a079",
+            "value": "100000"
+          }
+        },
+        {
+          "txHash": "0xc1cc35c82743cc6c621212016cb437cdf49367ca18c12b93f0d83287ec3edafb",
+          "sentio": {
+            "blockNumber": null,
+            "from": "0x0000000000000000000000000000000000000000",
+            "to": "0x11a45c2c38598c6bccef635d0f9711c6bb3fc02d",
+            "value": "2000"
+          },
+          "subgraph": {
+            "blockNumber": "20025757",
+            "from": "0x0000000000000000000000000000000000000000",
+            "to": "0x11a45c2c38598c6bccef635d0f9711c6bb3fc02d",
+            "value": "2000"
+          }
+        },
+        {
+          "txHash": "0x96d6c331612fcd79ff43142cc31c8902f59eb1e024dde5e75df909270196e07a",
+          "sentio": {
+            "blockNumber": null,
+            "from": "0x0000000000000000000000000000000000000000",
+            "to": "0x11a45c2c38598c6bccef635d0f9711c6bb3fc02d",
+            "value": "2000"
+          },
+          "subgraph": {
+            "blockNumber": "20025777",
+            "from": "0x0000000000000000000000000000000000000000",
+            "to": "0x11a45c2c38598c6bccef635d0f9711c6bb3fc02d",
+            "value": "2000"
+          }
+        },
+        {
+          "txHash": "0xce7530d330ea8785a9a8c7d28beeb57cac8f8def9e530eaf5721c38442e0ed89",
+          "sentio": {
+            "blockNumber": null,
+            "from": "0x0000000000000000000000000000000000000000",
+            "to": "0x659579f1460c38c3ce3288b47b074646cef855fc",
+            "value": "2000"
+          },
+          "subgraph": {
+            "blockNumber": "20026488",
+            "from": "0x0000000000000000000000000000000000000000",
+            "to": "0x659579f1460c38c3ce3288b47b074646cef855fc",
+            "value": "2000"
+          }
+        },
+        {
+          "txHash": "0xb2190dacb0d5956c6ccabb5651365f71bc65b7cbdb326be7b8790a0f25133b24",
+          "sentio": {
+            "blockNumber": null,
+            "from": "0x0000000000000000000000000000000000000000",
+            "to": "0x659579f1460c38c3ce3288b47b074646cef855fc",
+            "value": "2000"
+          },
+          "subgraph": {
+            "blockNumber": "20026689",
+            "from": "0x0000000000000000000000000000000000000000",
+            "to": "0x659579f1460c38c3ce3288b47b074646cef855fc",
+            "value": "2000"
+          }
+        }
+      ],
+      "blockNumber_match_percent": "0.00%",
+      "from_match_percent": "99.20%",
+      "to_match_percent": "99.09%",
+      "value_match_percent": "99.55%"
     },
     "envio_vs_ponder": {
       "blockNumber_matches": 183278,

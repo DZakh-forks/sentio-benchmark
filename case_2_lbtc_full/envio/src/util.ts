@@ -19,9 +19,19 @@ const lbtcContract = getContract({
   client: client,
 });
 
-// Function to get the balance of a specific address
-export async function getBalance(address: string) {
-  const balance = await lbtcContract.read.balanceOf([address as `0x${string}`]);
-  console.log(`Balance of ${address}: ${balance}`);
-  return balance;
+// Function to get the balance of a specific address at a specific block
+export async function getBalance(address: string, blockNumber?: bigint) {
+  try {
+    // If blockNumber is provided, use it to get balance at that specific block
+    const options = blockNumber ? { blockNumber } : undefined;
+    const balance = await lbtcContract.read.balanceOf([address as `0x${string}`], options);
+    
+    // Only log on successful retrieval to reduce noise
+    console.log(`Balance of ${address}${blockNumber ? ` at block ${blockNumber}` : ''}: ${balance}`);
+    return balance;
+  } catch (error) {
+    console.error(`Error getting balance for ${address}: ${error}`);
+    // Return 0 on error to prevent processing failures
+    return BigInt(0);
+  }
 }

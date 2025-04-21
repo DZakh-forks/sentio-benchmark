@@ -15,6 +15,7 @@ import {getBalance} from "./util"
 LBTC.Transfer.handler(async ({ event, context }) => {
   const HOUR_IN_MS = 60n * 60n * 1000n
   const blockTimestamp = BigInt(event.block.timestamp)
+  const blockNumber = BigInt(event.block.number)
 
   let {from, to, value} = {from: event.params.from, to: event.params.to, value: event.params.value}
 
@@ -32,7 +33,7 @@ LBTC.Transfer.handler(async ({ event, context }) => {
   if (from !== '0x0000000000000000000000000000000000000000') {
       const fromAccount = await getOrCreateAccount(context,from)
       const fromLastData = await getLastSnapshotData(context, from)
-      const fromBalance = BigDecimal((await getBalance(from)).toString())
+      const fromBalance = BigDecimal((await getBalance(from, blockNumber)).toString())
       
       await createAndSaveSnapshot(
           context,
@@ -44,27 +45,27 @@ LBTC.Transfer.handler(async ({ event, context }) => {
           fromLastData.timestamp,
           fromLastData.mintAmount
       )
-
-      // Process receiver account
-      const toAccount = await getOrCreateAccount(context,from)
-      const toLastData = await getLastSnapshotData(context, to)
-      const toBalance = BigDecimal((await getBalance(to)).toString())
-      
-      const isMint = from === '0x0000000000000000000000000000000000000000'
-      
-      createAndSaveSnapshot(
-          context,
-          to,
-          blockTimestamp,
-          toBalance,
-          toLastData.point,
-          toLastData.balance,
-          toLastData.timestamp,
-          toLastData.mintAmount,
-          isMint,
-          value
-      )
   }
+
+  // Process receiver account
+  const toAccount = await getOrCreateAccount(context, to)
+  const toLastData = await getLastSnapshotData(context, to)
+  const toBalance = BigDecimal((await getBalance(to, blockNumber)).toString())
+  
+  const isMint = from === '0x0000000000000000000000000000000000000000'
+  
+  await createAndSaveSnapshot(
+      context,
+      to,
+      blockTimestamp,
+      toBalance,
+      toLastData.point,
+      toLastData.balance,
+      toLastData.timestamp,
+      toLastData.mintAmount,
+      isMint,
+      value
+  )
 
   const registry = await context.AccountRegistry.get("main")
   if (registry) {
@@ -84,7 +85,7 @@ LBTC.Transfer.handler(async ({ event, context }) => {
               // Check if it's time for an hourly update for this specific account
               if (await shouldUpdateHourly(context, accountId, blockTimestamp)) {
                   const lastData = await getLastSnapshotData(context, accountId)
-                  const balance = BigDecimal((await getBalance(accountId)).toString())
+                  const balance = BigDecimal((await getBalance(accountId, blockNumber)).toString())
                   
                   await createAndSaveSnapshot(
                       context,

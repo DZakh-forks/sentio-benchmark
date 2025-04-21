@@ -18,7 +18,7 @@ processor_1.processor.run(new typeorm_store_1.TypeormDatabase({ supportHotBlocks
                     to: to,
                     value: value,
                     blockNumber: BigInt(block.header.height),
-                    transactionHash: log.transaction?.hash ? Buffer.from(log.transaction.hash, 'hex') : null
+                    transactionHash: Buffer.from(log.getTransaction().hash, 'hex')
                 }));
             }
         }

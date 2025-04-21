@@ -18,6 +18,8 @@ interface TransferConstructorInput {
   from: String;
   to: String;
   value: BigInt;
+  blockNumber: BigInt;
+  transactionHash?: Bytes;
 }
 @Entity("Transfer")
 export class Transfer extends AbstractEntity  {
@@ -37,6 +39,13 @@ export class Transfer extends AbstractEntity  {
 	@Required
 	@Column("BigInt")
 	value: BigInt
+
+	@Required
+	@Column("BigInt")
+	blockNumber: BigInt
+
+	@Column("Bytes")
+	transactionHash?: Bytes
   constructor(data: TransferConstructorInput) {super()}
   
 }
@@ -47,9 +56,9 @@ const source = `type Transfer @entity {
   from: String!
   to: String!
   value: BigInt!
-}
-
-`
+  blockNumber: BigInt!
+  transactionHash: Bytes 
+}`
 DatabaseSchema.register({
   source,
   entities: {
