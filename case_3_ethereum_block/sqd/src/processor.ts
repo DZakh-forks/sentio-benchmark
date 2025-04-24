@@ -7,6 +7,13 @@ import {
     Log as _Log,
     Transaction as _Transaction,
 } from '@subsquid/evm-processor'
+import * as dotenv from 'dotenv'
+
+// Load environment variables from .env file
+dotenv.config()
+
+// Get RPC endpoint from environment variable
+const rpcEndpoint = process.env.RPC_ENDPOINT
 
 export const processor = new EvmBatchProcessor()
     // Lookup archive by the network name in Subsquid registry
@@ -16,11 +23,8 @@ export const processor = new EvmBatchProcessor()
     //  - indexing unfinalized blocks https://docs.subsquid.io/basics/unfinalized-blocks/
     //  - querying the contract state https://docs.subsquid.io/evm-indexing/query-state/
     .setRpcEndpoint({
-        // Set the URL via .env for local runs or via secrets when deploying to Subsquid Cloud
-        // https://docs.subsquid.io/deploy-squid/env-variables/
-        url: assertNotNull(process.env.RPC_ETH_HTTP, 'No RPC endpoint supplied'),
-        // More RPC connection options at https://docs.subsquid.io/evm-indexing/configuration/initialization/#set-data-source
-        rateLimit: 10
+        // Use RPC endpoint from environment variable
+        url: assertNotNull(rpcEndpoint, 'No RPC endpoint supplied - set RPC_ENDPOINT environment variable'),
     })
     .setFinalityConfirmation(75)
     .setFields({
@@ -33,7 +37,7 @@ export const processor = new EvmBatchProcessor()
     })
     .setBlockRange({
         from: 0,
-        to:   10000000,
+        to:   100000
     })
     .addTransaction({
     })

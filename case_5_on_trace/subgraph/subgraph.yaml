@@ -1,4 +1,4 @@
-specVersion: 0.0.5
+specVersion: 0.0.9
 schema:
   file: ./schema.graphql
 dataSources:
@@ -8,11 +8,11 @@ dataSources:
     source:
       address: "0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D"
       abi: UniswapV2Router02
-      startBlock: 22280000
-      endBlock: 22281000
+      startBlock: 22200000
+      endBlock: 22290000
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.7
+      apiVersion: 0.0.9
       language: wasm/assemblyscript
       entities:
         - Swap
@@ -23,3 +23,4 @@ dataSources:
         - function: swapExactTokensForTokens(uint256,uint256,address[],address,uint256)
           handler: handleSwapExactTokensForTokens
       file: ./src/mapping.ts 
+      

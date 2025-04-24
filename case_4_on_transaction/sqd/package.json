@@ -18,7 +18,7 @@
   },
   "devDependencies": {
     "@subsquid/evm-typegen": "^4.2.0",
-    "@subsquid/typeorm-codegen": "^2.0.1",
+    "@subsquid/typeorm-codegen": "^2.0.2",
     "@types/node": "^20.17.30",
     "typescript": "~5.5.2"
   }

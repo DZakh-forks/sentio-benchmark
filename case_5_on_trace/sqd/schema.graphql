@@ -1,0 +1,12 @@
+type Swap @entity {
+  id: ID!
+  blockNumber: BigInt!
+  transactionHash: String!
+  from: String! @index
+  to: String! @index
+  amountIn: BigInt!
+  amountOutMin: BigInt!
+  deadline: BigInt!
+  path: String!
+  pathLength: Int!
+} 

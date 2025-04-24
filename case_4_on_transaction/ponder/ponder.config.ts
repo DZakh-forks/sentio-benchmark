@@ -8,16 +8,19 @@ export default createConfig({
       transport: http(process.env.PONDER_RPC_URL_1),
     },
   },
+  contracts: {
+    // No specific contract needed as we're tracking all transactions
+  },
   blocks: {
-    EveryBlock: {
+    ethereum: {
       network: "mainnet",
       interval: 1, // Process every block
       startBlock: 22280000,
-      endBlock: 22290000,
+      endBlock: 22290000, // Full case 4 block range
     }
   },
   database: {
-    kind: "pglite",
-    directory: "./.ponder/db",
+    kind: "postgres",
+    url: process.env.DATABASE_URL,
   },
-});
+}); 

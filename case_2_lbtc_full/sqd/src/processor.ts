@@ -9,6 +9,13 @@ import {
 } from '@subsquid/evm-processor'
 import { LBTC_PROXY, } from "./constant"
 import * as lbtcAbi from "./abi/LBTC.js"
+import * as dotenv from 'dotenv'
+
+// Load environment variables from .env file
+dotenv.config()
+
+// Get RPC endpoint from environment variable 
+const rpcEndpoint = process.env.RPC_ENDPOINT
 
 export const processor = new EvmBatchProcessor()
     // Lookup archive by the network name in Subsquid registry
@@ -20,14 +27,18 @@ export const processor = new EvmBatchProcessor()
     .setRpcEndpoint({
         // Set the URL via .env for local runs or via secrets when deploying to Subsquid Cloud
         // https://docs.subsquid.io/deploy-squid/env-variables/
-        url: assertNotNull("https://eth-mainnet.g.alchemy.com/v2/L4amjfJQdlC3eIzgAR0AyJvlhJb3Ulos", 'No RPC endpoint supplied')
+        url: assertNotNull(rpcEndpoint, 'No RPC endpoint supplied - set RPC_ENDPOINT environment variable')
     })
     .setFinalityConfirmation(75)
     .setFields({
+        block: {
+            height: true,
+            timestamp: true,
+        },
         transaction: {
+            hash: true,
             from: true,
             value: true,
-            hash: true,
         },
     })
     .setBlockRange({
@@ -37,7 +48,7 @@ export const processor = new EvmBatchProcessor()
 	.addLog({
 		address: [LBTC_PROXY],
 		topic0: [lbtcAbi.events.Transfer.topic],
-		transaction: false,
+		transaction: true,
 		transactionLogs: false,
 	})
 

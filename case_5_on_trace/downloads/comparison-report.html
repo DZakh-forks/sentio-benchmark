@@ -4,304 +4,1417 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Uniswap V2 Swap Trace Indexing Comparison</title>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <title>Uniswap V2 Swaps Comparison Report - Case 5</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      line-height: 1.6;
-      color: #333;
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 20px;
-    }
-    h1, h2, h3 {
-      color: #2c3e50;
-    }
-    table {
-      border-collapse: collapse;
-      width: 100%;
-      margin-bottom: 20px;
-    }
-    th, td {
-      border: 1px solid #ddd;
-      padding: 8px;
-      text-align: left;
-    }
-    th {
-      background-color: #f2f2f2;
-    }
-    tr:nth-child(even) {
-      background-color: #f9f9f9;
-    }
-    .chart-container {
-      display: flex;
-      gap: 20px;
-      margin-bottom: 30px;
-    }
-    .chart {
-      flex: 1;
-      max-width: 500px;
-      height: 400px;
-    }
-    .status-success {
-      color: green;
-    }
-    .status-error {
-      color: red;
-    }
-    .summary {
-      background-color: #f8f9fa;
-      padding: 15px;
-      border-radius: 5px;
-      margin-bottom: 20px;
-    }
-    .timestamp {
-      font-style: italic;
-      color: #666;
-      margin-bottom: 20px;
-    }
+    body { font-family: Arial, sans-serif; line-height: 1.6; padding: 20px; max-width: 1200px; margin: 0 auto; }
+    h1, h2, h3 { color: #333; }
+    table { border-collapse: collapse; width: 100%; margin-bottom: 20px; }
+    th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+    th { background-color: #f2f2f2; }
+    tr:nth-child(even) { background-color: #f9f9f9; }
+    .chart-container { height: 400px; margin: 20px 0; }
+    .success { color: green; }
+    .failure { color: red; }
+    .transaction-hash { font-family: monospace; word-break: break-all; }
+    .not-present { color: #999; font-style: italic; }
+    details { margin: 20px 0; }
+    summary { cursor: pointer; font-weight: bold; }
+    .info-box { background-color: #e7f3fe; border-left: 6px solid #2196F3; padding: 10px; margin: 15px 0; }
   </style>
 </head>
 <body>
-  <h1>Uniswap V2 Swap Trace Indexing Comparison</h1>
-  <p class="timestamp">Report generated on: 4/16/2025, 5:40:06 PM</p>
+  <h1>Uniswap V2 Swaps Comparison Report - Case 5</h1>
+  <p>Generated at: 2025-04-24T00:55:05.370Z</p>
   
-  <div class="summary">
-    <h2>Overview</h2>
-    <p>This report compares the performance and consistency of different indexing platforms for Uniswap V2 swap trace data.</p>
+  <div class="info-box">
+    <p><strong>Transaction Amount Analysis</strong>: Similar to gas usage metrics in Case 4, this report analyzes the economic values (amounts) involved in Uniswap V2 swaps across different indexing platforms. The comparison includes total amounts, average amounts, and transaction counts to provide insights into the economic activity captured by each platform.</p>
   </div>
   
-  <h2>Data Load Status</h2>
+  <h2>1. Record Counts</h2>
   <table>
     <tr>
       <th>Platform</th>
+      <th>Record Count</th>
       <th>Status</th>
-      <th>Data Count</th>
-      <th>Error (if any)</th>
     </tr>
     
-    <tr>
-      <td>sentio</td>
-      <td class="status-success">Success</td>
-      <td>100</td>
-      <td>None</td>
-    </tr>
+      <tr>
+        <td>sentio</td>
+        <td>45,895</td>
+        <td class="success">Success</td>
+      </tr>
     
-    <tr>
-      <td>envio</td>
-      <td class="status-success">Success</td>
-      <td>100</td>
-      <td>None</td>
-    </tr>
+      <tr>
+        <td>subsquid</td>
+        <td>50,191</td>
+        <td class="success">Success</td>
+      </tr>
     
-    <tr>
-      <td>subgraph</td>
-      <td class="status-success">Success</td>
-      <td>90</td>
-      <td>None</td>
-    </tr>
+      <tr>
+        <td>envio</td>
+        <td>50,191</td>
+        <td class="success">Success</td>
+      </tr>
     
-  </table>
-  
-  <h2>Unique Counts</h2>
-  <table>
-    <tr>
-      <th>Platform</th>
-      <th>Unique Blocks</th>
-      <th>Unique Transactions</th>
-    </tr>
+      <tr>
+        <td>ponder</td>
+        <td>0</td>
+        <td class="failure">Failed</td>
+      </tr>
     
-    <tr>
-      <td>sentio</td>
-      <td>0</td>
-      <td>0</td>
-    </tr>
-    
-    <tr>
-      <td>envio</td>
-      <td>97</td>
-      <td>100</td>
-    </tr>
-    
-    <tr>
-      <td>subgraph</td>
-      <td>88</td>
-      <td>90</td>
-    </tr>
+      <tr>
+        <td>subgraph</td>
+        <td>29,058</td>
+        <td class="success">Success</td>
+      </tr>
     
   </table>
   
-  <h2>Block Range Analysis</h2>
+  <h2>2. Block Ranges</h2>
   <table>
     <tr>
       <th>Platform</th>
       <th>Min Block</th>
       <th>Max Block</th>
-      <th>Block Range</th>
+      <th>Block Count</th>
     </tr>
     
-    <tr>
-      <td>sentio</td>
-      <td>N/A</td>
-      <td>N/A</td>
-      <td>N/A</td>
-    </tr>
+      <tr>
+        <td>sentio</td>
+        <td>22,200,006</td>
+        <td>22,289,998</td>
+        <td>89,993</td>
+      </tr>
     
-    <tr>
-      <td>envio</td>
-      <td>22280004</td>
-      <td>22280991</td>
-      <td>988</td>
-    </tr>
+      <tr>
+        <td>subsquid</td>
+        <td>22,200,006</td>
+        <td>22,289,998</td>
+        <td>89,993</td>
+      </tr>
     
-    <tr>
-      <td>subgraph</td>
-      <td>22280002</td>
-      <td>22281000</td>
-      <td>999</td>
-    </tr>
+      <tr>
+        <td>envio</td>
+        <td>22,200,006</td>
+        <td>22,289,998</td>
+        <td>89,993</td>
+      </tr>
+    
+      <tr>
+        <td>ponder</td>
+        <td>N/A</td>
+        <td>N/A</td>
+        <td>0</td>
+      </tr>
+    
+      <tr>
+        <td>subgraph</td>
+        <td>22,200,006</td>
+        <td>22,289,998</td>
+        <td>89,993</td>
+      </tr>
     
   </table>
   
-  <h2>Data Consistency Comparison</h2>
+  <h2>3. Address Statistics</h2>
+  <table>
+    <tr>
+      <th>Platform</th>
+      <th>Unique Senders</th>
+      <th>Unique Recipients</th>
+    </tr>
+    
+      <tr>
+        <td>sentio</td>
+        <td>1,171</td>
+        <td>1,283</td>
+      </tr>
+    
+      <tr>
+        <td>subsquid</td>
+        <td>1,238</td>
+        <td>1,343</td>
+      </tr>
+    
+      <tr>
+        <td>envio</td>
+        <td>474</td>
+        <td>1</td>
+      </tr>
+    
+      <tr>
+        <td>ponder</td>
+        <td>0</td>
+        <td>0</td>
+      </tr>
+    
+      <tr>
+        <td>subgraph</td>
+        <td>427</td>
+        <td>1,272</td>
+      </tr>
+    
+  </table>
+  
+  <h2>4. Amount Statistics</h2>
+  <table>
+    <tr>
+      <th>Platform</th>
+      <th>Total Amount In</th>
+      <th>Avg Amount In</th>
+      <th>Total Amount Out Min</th>
+      <th>Avg Amount Out Min</th>
+    </tr>
+    
+      <tr>
+        <td>sentio</td>
+        <td>501991777910022212811911</td>
+        <td>13,861,432,497,860,616,000</td>
+        <td>429438896974686354217672</td>
+        <td>11,436,759,886,406,732,000</td>
+      </tr>
+    
+      <tr>
+        <td>subsquid</td>
+        <td>4000827389278954379198121595012958</td>
+        <td>79,712,047,763,123,950,000,000,000,000</td>
+        <td>8120219851980099452489983973236619061</td>
+        <td>161,786,373,094,381,450,000,000,000,000,000</td>
+      </tr>
+    
+      <tr>
+        <td>envio</td>
+        <td>4000827389278954379198121595012958</td>
+        <td>79,712,047,763,123,950,000,000,000,000</td>
+        <td>8120219851980099452489983973236619061</td>
+        <td>161,786,373,094,381,450,000,000,000,000,000</td>
+      </tr>
+    
+      <tr>
+        <td>ponder</td>
+        <td>0</td>
+        <td>0</td>
+        <td>0</td>
+        <td>0</td>
+      </tr>
+    
+      <tr>
+        <td>subgraph</td>
+        <td>3991802339466982604656158995324985</td>
+        <td>137,373,609,314,714,800,000,000,000,000</td>
+        <td>1233212802880827148443428766313144</td>
+        <td>42,439,700,009,664,370,000,000,000,000</td>
+      </tr>
+    
+  </table>
+  
+  <h2>5. Path Statistics</h2>
+  <table>
+    <tr>
+      <th>Platform</th>
+      <th>Avg Path Length</th>
+      <th>Unique Tokens</th>
+      <th>Most Common Tokens</th>
+    </tr>
+    
+      <tr>
+        <td>sentio</td>
+        <td>2.06</td>
+        <td>1,356</td>
+        <td>0xc02aaa... (41892), 0x7ef790... (16277), 0xdac17f... (3882), 0xa0b869... (2259), 0x560363... (1383)</td>
+      </tr>
+    
+      <tr>
+        <td>subsquid</td>
+        <td>2.07</td>
+        <td>1,463</td>
+        <td>0xc02aaa... (45875), 0x7ef790... (16281), 0xdac17f... (4751), 0xa0b869... (2452), 0x560363... (1452)</td>
+      </tr>
+    
+      <tr>
+        <td>envio</td>
+        <td>7.00</td>
+        <td>7,316</td>
+        <td>0x000000... (51147), 0x00c02a... (45875), 0x007ef7... (16281), 0x00dac1... (4751), 0x00a0b8... (2452)</td>
+      </tr>
+    
+      <tr>
+        <td>ponder</td>
+        <td>0.00</td>
+        <td>0</td>
+        <td>N/A</td>
+      </tr>
+    
+      <tr>
+        <td>subgraph</td>
+        <td>2.09</td>
+        <td>1,335</td>
+        <td>0xc02aaa... (25184), 0xdac17f... (3832), 0xa0b869... (2173), 0x560363... (1383), 0x26e550... (1247)</td>
+      </tr>
+    
+  </table>
+  
+  <h2>6. Content Similarity</h2>
+  <div class="info-box">
+    <p><strong>New Similarity Metrics:</strong> We've enhanced our comparison to evaluate all fields (except the ID field) for more comprehensive analysis:</p>
+    <ul>
+      <li><strong>Jaccard Similarity:</strong> Measures the intersection over union of transaction sets, showing what percentage of all transactions are common to both platforms.</li>
+      <li><strong>Content Similarity:</strong> Of the transactions found in both platforms, what percentage have identical values across all fields (excluding ID).</li>
+    </ul>
+    <p>Higher percentages indicate greater similarity between the datasets.</p>
+  </div>
   <table>
     <tr>
       <th>Comparison</th>
-      <th>Platform 1 Count</th>
-      <th>Platform 2 Count</th>
       <th>Common Transactions</th>
-      <th>Unique to Platform 1</th>
-      <th>Unique to Platform 2</th>
+      <th>Identical Records</th>
+      <th>Different Records</th>
+      <th>Unique to First</th>
+      <th>Unique to Second</th>
       <th>Jaccard Similarity</th>
+      <th>Content Similarity</th>
     </tr>
     
-    <tr>
-      <td>sentio vs vs_envio</td>
-      <td>0</td>
-      <td>100</td>
-      <td>0</td>
-      <td>0</td>
-      <td>100</td>
-      <td>0.0000</td>
-    </tr>
-    
-    <tr>
-      <td>sentio vs vs_subgraph</td>
-      <td>0</td>
-      <td>90</td>
-      <td>0</td>
-      <td>0</td>
-      <td>90</td>
-      <td>0.0000</td>
-    </tr>
-    
-    <tr>
-      <td>envio vs vs_subgraph</td>
-      <td>100</td>
-      <td>90</td>
-      <td>0</td>
-      <td>100</td>
-      <td>90</td>
-      <td>0.0000</td>
-    </tr>
-    
+        <tr>
+          <td>sentio_vs_subsquid</td>
+          <td>29,202</td>
+          <td>28,996</td>
+          <td>206</td>
+          <td>0</td>
+          <td>4,289</td>
+          <td>87.19%</td>
+          <td>99.29%</td>
+        </tr>
+      
+        <tr>
+          <td>sentio_vs_envio</td>
+          <td>29,202</td>
+          <td>0</td>
+          <td>29,202</td>
+          <td>0</td>
+          <td>4,289</td>
+          <td>87.19%</td>
+          <td>0.00%</td>
+        </tr>
+      
+        <tr>
+          <td>sentio_vs_ponder</td>
+          <td>0</td>
+          <td>N/A</td>
+          <td>N/A</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0.00%</td>
+          <td>N/A%</td>
+        </tr>
+      
+        <tr>
+          <td>sentio_vs_subgraph</td>
+          <td>29,058</td>
+          <td>22,341</td>
+          <td>6,717</td>
+          <td>144</td>
+          <td>0</td>
+          <td>99.51%</td>
+          <td>76.88%</td>
+        </tr>
+      
+        <tr>
+          <td>subsquid_vs_envio</td>
+          <td>33,491</td>
+          <td>0</td>
+          <td>33,491</td>
+          <td>0</td>
+          <td>0</td>
+          <td>100.00%</td>
+          <td>0.00%</td>
+        </tr>
+      
+        <tr>
+          <td>subsquid_vs_ponder</td>
+          <td>0</td>
+          <td>N/A</td>
+          <td>N/A</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0.00%</td>
+          <td>N/A%</td>
+        </tr>
+      
+        <tr>
+          <td>subsquid_vs_subgraph</td>
+          <td>29,058</td>
+          <td>22,341</td>
+          <td>6,717</td>
+          <td>4,433</td>
+          <td>0</td>
+          <td>86.76%</td>
+          <td>76.88%</td>
+        </tr>
+      
+        <tr>
+          <td>envio_vs_ponder</td>
+          <td>0</td>
+          <td>N/A</td>
+          <td>N/A</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0.00%</td>
+          <td>N/A%</td>
+        </tr>
+      
+        <tr>
+          <td>envio_vs_subgraph</td>
+          <td>29,058</td>
+          <td>0</td>
+          <td>29,058</td>
+          <td>4,433</td>
+          <td>0</td>
+          <td>86.76%</td>
+          <td>0.00%</td>
+        </tr>
+      
+        <tr>
+          <td>ponder_vs_subgraph</td>
+          <td>0</td>
+          <td>N/A</td>
+          <td>N/A</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0.00%</td>
+          <td>N/A%</td>
+        </tr>
+      
   </table>
   
-  <h2>Visualizations</h2>
+  <h2>7. Example Differing Records</h2>
   
-  <div class="chart-container">
-    <div class="chart">
-      <canvas id="countChart"></canvas>
-    </div>
-    <div class="chart">
-      <canvas id="similarityChart"></canvas>
-    </div>
+    <details>
+      <summary>sentio_vs_subsquid (5 examples)</summary>
+      <table>
+        <tr>
+          <th>Transaction Hash</th>
+          <th>sentio</th>
+          <th>subsquid</th>
+          <th>Fields with Differences</th>
+        </tr>
+        
+          <tr>
+            <td class="transaction-hash">0x006624059f274c177922a690d862b8959547ee69892855698cb4b9be8409cc29</td>
+            <td>
+              
+                  <strong>Amount In:</strong> 4.634025107068963e+21<br>
+                  <strong>Block:</strong> 22213646<br>
+                  <strong>From:</strong> 0x00806daa2cfe49715ea05243ff259deb195760fc<br>
+                  <strong>To:</strong> 0x9008d19f58aabd9ed0d60971565aa8510560ab41<br>
+                  <strong>Path Length:</strong> 2
+                
+            </td>
+            <td>
+              
+                  <strong>Amount In:</strong> 99133817858914133902<br>
+                  <strong>Block:</strong> 22213646<br>
+                  <strong>From:</strong> 0x00806daa2cfe49715ea05243ff259deb195760fc<br>
+                  <strong>To:</strong> 0x9008d19f58aabd9ed0d60971565aa8510560ab41<br>
+                  <strong>Path Length:</strong> 2
+                
+            </td>
+            <td>
+              
+                  <strong>amountIn:</strong> 4.634025107068963e+21 vs 99133817858914133902
+                <br>
+                  <strong>amountOutMin:</strong> 506694822670818300 vs 31664205498685258
+                <br>
+                  <strong>path:</strong> 0x967da4048cd07ab37855c090aaf366e4ce1b9f48,0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2 vs 0x2e44f3f609ff5aa4819b323fd74690f07c3607c4,0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2
+                
+            </td>
+          </tr>
+        
+          <tr>
+            <td class="transaction-hash">0x022ad7f6281ad7b2b259fe87de5805cf8d767fadcc50d83240ac70384e8834b6</td>
+            <td>
+              
+                  <strong>Amount In:</strong> 2.2271826903221225e+21<br>
+                  <strong>Block:</strong> 22282686<br>
+                  <strong>From:</strong> 0x00806daa2cfe49715ea05243ff259deb195760fc<br>
+                  <strong>To:</strong> 0x9008d19f58aabd9ed0d60971565aa8510560ab41<br>
+                  <strong>Path Length:</strong> 2
+                
+            </td>
+            <td>
+              
+                  <strong>Amount In:</strong> 627799204424350332<br>
+                  <strong>Block:</strong> 22282686<br>
+                  <strong>From:</strong> 0x00806daa2cfe49715ea05243ff259deb195760fc<br>
+                  <strong>To:</strong> 0x9008d19f58aabd9ed0d60971565aa8510560ab41<br>
+                  <strong>Path Length:</strong> 2
+                
+            </td>
+            <td>
+              
+                  <strong>amountIn:</strong> 2.2271826903221225e+21 vs 627799204424350332
+                <br>
+                  <strong>amountOutMin:</strong> 179564897748326880 vs 10968697761662119109760
+                <br>
+                  <strong>path:</strong> 0x1e4746dc744503b53b4a082cb3607b169a289090,0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2 vs 0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2,0x289ff00235d2b98b0145ff5d4435d3e92f9540a6
+                
+            </td>
+          </tr>
+        
+          <tr>
+            <td class="transaction-hash">0x025548f74c92e14aa3ed824a584b13844dff18f3b296a8b7ed25cbf66cdc8497</td>
+            <td>
+              
+                  <strong>Amount In:</strong> 49973562450619<br>
+                  <strong>Block:</strong> 22259959<br>
+                  <strong>From:</strong> 0x00806daa2cfe49715ea05243ff259deb195760fc<br>
+                  <strong>To:</strong> 0x9008d19f58aabd9ed0d60971565aa8510560ab41<br>
+                  <strong>Path Length:</strong> 2
+                
+            </td>
+            <td>
+              
+                  <strong>Amount In:</strong> 564335330125253387<br>
+                  <strong>Block:</strong> 22259959<br>
+                  <strong>From:</strong> 0x00806daa2cfe49715ea05243ff259deb195760fc<br>
+                  <strong>To:</strong> 0x9008d19f58aabd9ed0d60971565aa8510560ab41<br>
+                  <strong>Path Length:</strong> 2
+                
+            </td>
+            <td>
+              
+                  <strong>amountIn:</strong> 49973562450619 vs 564335330125253387
+                <br>
+                  <strong>amountOutMin:</strong> 900847178 vs 144857770937917961207752272514
+                <br>
+                  <strong>path:</strong> 0x9e18d5bab2fa94a6a95f509ecb38f8f68322abd3,0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48 vs 0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2,0xca530408c3e552b020a2300debc7bd18820fb42f
+                
+            </td>
+          </tr>
+        
+          <tr>
+            <td class="transaction-hash">0x02b4491124e94d2911d6f510d594c3182b3e782dbbbcb867d41a779aab6f365f</td>
+            <td>
+              
+                  <strong>Amount In:</strong> 7707048539857456000<br>
+                  <strong>Block:</strong> 22287944<br>
+                  <strong>From:</strong> 0x00806daa2cfe49715ea05243ff259deb195760fc<br>
+                  <strong>To:</strong> 0x9008d19f58aabd9ed0d60971565aa8510560ab41<br>
+                  <strong>Path Length:</strong> 2
+                
+            </td>
+            <td>
+              
+                  <strong>Amount In:</strong> 927122658697282511618<br>
+                  <strong>Block:</strong> 22287944<br>
+                  <strong>From:</strong> 0x00806daa2cfe49715ea05243ff259deb195760fc<br>
+                  <strong>To:</strong> 0x9008d19f58aabd9ed0d60971565aa8510560ab41<br>
+                  <strong>Path Length:</strong> 2
+                
+            </td>
+            <td>
+              
+                  <strong>amountIn:</strong> 7707048539857456000 vs 927122658697282511618
+                <br>
+                  <strong>amountOutMin:</strong> 34864449512761980 vs 71373613264376553
+                <br>
+                  <strong>path:</strong> 0x74232704659ef37c08995e386a2e26cc27a8d7b1,0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2 vs 0x037a54aab062628c9bbae1fdb1583c195585fe41,0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2
+                
+            </td>
+          </tr>
+        
+          <tr>
+            <td class="transaction-hash">0x02e1b42cf11c8bb3c488324164323b901dc5c492dc61cfc3076648508ddb9a5f</td>
+            <td>
+              
+                  <strong>Amount In:</strong> 11871509105220852<br>
+                  <strong>Block:</strong> 22246732<br>
+                  <strong>From:</strong> 0x00806daa2cfe49715ea05243ff259deb195760fc<br>
+                  <strong>To:</strong> 0x9008d19f58aabd9ed0d60971565aa8510560ab41<br>
+                  <strong>Path Length:</strong> 2
+                
+            </td>
+            <td>
+              
+                  <strong>Amount In:</strong> 67705601245264271<br>
+                  <strong>Block:</strong> 22246732<br>
+                  <strong>From:</strong> 0x00806daa2cfe49715ea05243ff259deb195760fc<br>
+                  <strong>To:</strong> 0x9008d19f58aabd9ed0d60971565aa8510560ab41<br>
+                  <strong>Path Length:</strong> 2
+                
+            </td>
+            <td>
+              
+                  <strong>amountIn:</strong> 11871509105220852 vs 67705601245264271
+                <br>
+                  <strong>amountOutMin:</strong> 60993074585154260 vs 4843276022706960
+                <br>
+                  <strong>path:</strong> 0xa93d86af16fe83f064e3c0e2f3d129f7b7b002b0,0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2 vs 0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2,0xb2f095cc24d91d97d00afc1f8bde2c6cdf7e345f
+                
+            </td>
+          </tr>
+        
+      </table>
+    </details>
+  
+    <details>
+      <summary>sentio_vs_envio (5 examples)</summary>
+      <table>
+        <tr>
+          <th>Transaction Hash</th>
+          <th>sentio</th>
+          <th>envio</th>
+          <th>Fields with Differences</th>
+        </tr>
+        
+          <tr>
+            <td class="transaction-hash">0x00008478af4829959286faeb90d76d38640be45ae36d8c6e67d3949ad906d87f</td>
+            <td>
+              
+                  <strong>Amount In:</strong> 738753<br>
+                  <strong>Block:</strong> 22223014<br>
+                  <strong>From:</strong> 0xe93685f3bba03016f02bd1828badd6195988d950<br>
+                  <strong>To:</strong> 0x5434ed2d9f5737986858de127545e8a2fb6eb6ae<br>
+                  <strong>Path Length:</strong> 2
+                
+            </td>
+            <td>
+              
+                  <strong>Amount In:</strong> 738753<br>
+                  <strong>Block:</strong> 22223014<br>
+                  <strong>From:</strong> 0x5434ed2d9f5737986858de127545e8a2fb6eb6ae<br>
+                  <strong>To:</strong> 0x0000000000000000000000000000000000000000<br>
+                  <strong>Path Length:</strong> 7
+                
+            </td>
+            <td>
+              
+                  <strong>from:</strong> 0xe93685f3bba03016f02bd1828badd6195988d950 vs 0x5434ed2d9f5737986858de127545e8a2fb6eb6ae
+                <br>
+                  <strong>to:</strong> 0x5434ed2d9f5737986858de127545e8a2fb6eb6ae vs 0x0000000000000000000000000000000000000000
+                <br>
+                  <strong>deadline:</strong> 1744137109 vs 160
+                <br>
+                  <strong>path:</strong> 0xdac17f958d2ee523a2206206994597c13d831ec7,0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2 vs 0x000000000000000000000000000000000067f56b,0x0000000000000000000000000000000000000000,0x00dac17f958d2ee523a2206206994597c13d831e,0x00c02aaa39b223fe8d0a0e5c4f27ead9083c756c
+                <br>
+                  <strong>pathLength:</strong> 2 vs 7
+                
+            </td>
+          </tr>
+        
+          <tr>
+            <td class="transaction-hash">0x0000897f6aa40e3c3524b241ca44822678d5c7009e9c1432b7ef4fdc9804f542</td>
+            <td>
+              
+                  <strong>Amount In:</strong> 562512020077249340<br>
+                  <strong>Block:</strong> 22271397<br>
+                  <strong>From:</strong> 0x00806daa2cfe49715ea05243ff259deb195760fc<br>
+                  <strong>To:</strong> 0x9008d19f58aabd9ed0d60971565aa8510560ab41<br>
+                  <strong>Path Length:</strong> 2
+                
+            </td>
+            <td>
+              
+                  <strong>Amount In:</strong> 562512020077249320<br>
+                  <strong>Block:</strong> 22271397<br>
+                  <strong>From:</strong> 0x9008d19f58aabd9ed0d60971565aa8510560ab41<br>
+                  <strong>To:</strong> 0x0000000000000000000000000000000000000000<br>
+                  <strong>Path Length:</strong> 7
+                
+            </td>
+            <td>
+              
+                  <strong>from:</strong> 0x00806daa2cfe49715ea05243ff259deb195760fc vs 0x9008d19f58aabd9ed0d60971565aa8510560ab41
+                <br>
+                  <strong>to:</strong> 0x9008d19f58aabd9ed0d60971565aa8510560ab41 vs 0x0000000000000000000000000000000000000000
+                <br>
+                  <strong>deadline:</strong> 5.78960446186581e+76 vs 160
+                <br>
+                  <strong>path:</strong> 0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2,0x3593d125a4f7849a1b059e64f4517a86dd60c95d vs 0x0000000000000000000000000000000000000000,0x0000000000000000000000000000000000000000,0x00c02aaa39b223fe8d0a0e5c4f27ead9083c756c,0x003593d125a4f7849a1b059e64f4517a86dd60c9
+                <br>
+                  <strong>pathLength:</strong> 2 vs 7
+                
+            </td>
+          </tr>
+        
+          <tr>
+            <td class="transaction-hash">0x0006b6438e3c8685fa6572671cae06ecc631c317d17e3954331ccf62778973e4</td>
+            <td>
+              
+                  <strong>Amount In:</strong> 155071696975504260<br>
+                  <strong>Block:</strong> 22216775<br>
+                  <strong>From:</strong> 0x3d53c172c5fa064fdaa5d7fb661fb4281fe05cf1<br>
+                  <strong>To:</strong> 0x40e61a9db0791913d9de02ae633f583e15d6649b<br>
+                  <strong>Path Length:</strong> 2
+                
+            </td>
+            <td>
+              
+                  <strong>Amount In:</strong> 155071696975504244<br>
+                  <strong>Block:</strong> 22216775<br>
+                  <strong>From:</strong> 0x767af52d988d1241a346851a1b39ccd11357376e<br>
+                  <strong>To:</strong> 0x0000000000000000000000000000000000000000<br>
+                  <strong>Path Length:</strong> 7
+                
+            </td>
+            <td>
+              
+                  <strong>from:</strong> 0x3d53c172c5fa064fdaa5d7fb661fb4281fe05cf1 vs 0x767af52d988d1241a346851a1b39ccd11357376e
+                <br>
+                  <strong>to:</strong> 0x40e61a9db0791913d9de02ae633f583e15d6649b vs 0x0000000000000000000000000000000000000000
+                <br>
+                  <strong>deadline:</strong> 1744026069 vs 160
+                <br>
+                  <strong>path:</strong> 0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2,0x2fb652314c3d850e9049057bbe9813f1eee882d3 vs 0x000000000000000000000000000000000067f3b9,0x0000000000000000000000000000000000000000,0x00c02aaa39b223fe8d0a0e5c4f27ead9083c756c,0x002fb652314c3d850e9049057bbe9813f1eee882
+                <br>
+                  <strong>pathLength:</strong> 2 vs 7
+                
+            </td>
+          </tr>
+        
+          <tr>
+            <td class="transaction-hash">0x00086e14a6f0f4e54eab4c5dde41c17f4e4082eab888e3cd2e5c2868d69b67bd</td>
+            <td>
+              
+                  <strong>Amount In:</strong> 1000000000000000000<br>
+                  <strong>Block:</strong> 22249171<br>
+                  <strong>From:</strong> 0x6bf97afe2d2c790999cded2a8523009eb8a0823f<br>
+                  <strong>To:</strong> 0x9008d19f58aabd9ed0d60971565aa8510560ab41<br>
+                  <strong>Path Length:</strong> 2
+                
+            </td>
+            <td>
+              
+                  <strong>Amount In:</strong> 1000000000000000000<br>
+                  <strong>Block:</strong> 22249171<br>
+                  <strong>From:</strong> 0x9008d19f58aabd9ed0d60971565aa8510560ab41<br>
+                  <strong>To:</strong> 0x0000000000000000000000000000000000000000<br>
+                  <strong>Path Length:</strong> 7
+                
+            </td>
+            <td>
+              
+                  <strong>from:</strong> 0x6bf97afe2d2c790999cded2a8523009eb8a0823f vs 0x9008d19f58aabd9ed0d60971565aa8510560ab41
+                <br>
+                  <strong>to:</strong> 0x9008d19f58aabd9ed0d60971565aa8510560ab41 vs 0x0000000000000000000000000000000000000000
+                <br>
+                  <strong>deadline:</strong> 1.157920892373162e+77 vs 160
+                <br>
+                  <strong>path:</strong> 0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2,0xc06caead870d3a8af2504637b6c5b7248bed6116 vs 0xffffffffffffffffffffffffffffffffffffffff,0x0000000000000000000000000000000000000000,0x00c02aaa39b223fe8d0a0e5c4f27ead9083c756c,0x00c06caead870d3a8af2504637b6c5b7248bed61
+                <br>
+                  <strong>pathLength:</strong> 2 vs 7
+                
+            </td>
+          </tr>
+        
+          <tr>
+            <td class="transaction-hash">0x000b33b027c06173fddb7cd7ddcf109fae93980f2ceadb8a187630a38fc1bcae</td>
+            <td>
+              
+                  <strong>Amount In:</strong> 52621856746<br>
+                  <strong>Block:</strong> 22263560<br>
+                  <strong>From:</strong> 0x4c5f6ad6628d205259443ebcf6cc4cdd7d6cbf81<br>
+                  <strong>To:</strong> 0x4c5f6ad6628d205259443ebcf6cc4cdd7d6cbf81<br>
+                  <strong>Path Length:</strong> 2
+                
+            </td>
+            <td>
+              
+                  <strong>Amount In:</strong> 52621856746<br>
+                  <strong>Block:</strong> 22263560<br>
+                  <strong>From:</strong> 0x4c5f6ad6628d205259443ebcf6cc4cdd7d6cbf81<br>
+                  <strong>To:</strong> 0x0000000000000000000000000000000000000000<br>
+                  <strong>Path Length:</strong> 7
+                
+            </td>
+            <td>
+              
+                  <strong>to:</strong> 0x4c5f6ad6628d205259443ebcf6cc4cdd7d6cbf81 vs 0x0000000000000000000000000000000000000000
+                <br>
+                  <strong>deadline:</strong> 1744593131 vs 160
+                <br>
+                  <strong>path:</strong> 0xa3d4bee77b05d4a0c943877558ce21a763c4fa29,0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2 vs 0x000000000000000000000000000000000067fc60,0x0000000000000000000000000000000000000000,0x00a3d4bee77b05d4a0c943877558ce21a763c4fa,0x00c02aaa39b223fe8d0a0e5c4f27ead9083c756c
+                <br>
+                  <strong>pathLength:</strong> 2 vs 7
+                
+            </td>
+          </tr>
+        
+      </table>
+    </details>
+  
+    <details>
+      <summary>sentio_vs_subgraph (5 examples)</summary>
+      <table>
+        <tr>
+          <th>Transaction Hash</th>
+          <th>sentio</th>
+          <th>subgraph</th>
+          <th>Fields with Differences</th>
+        </tr>
+        
+          <tr>
+            <td class="transaction-hash">0x00008478af4829959286faeb90d76d38640be45ae36d8c6e67d3949ad906d87f</td>
+            <td>
+              
+                  <strong>Amount In:</strong> 738753<br>
+                  <strong>Block:</strong> 22223014<br>
+                  <strong>From:</strong> 0xe93685f3bba03016f02bd1828badd6195988d950<br>
+                  <strong>To:</strong> 0x5434ed2d9f5737986858de127545e8a2fb6eb6ae<br>
+                  <strong>Path Length:</strong> 2
+                
+            </td>
+            <td>
+              
+                  <strong>Amount In:</strong> 738753<br>
+                  <strong>Block:</strong> 22223014<br>
+                  <strong>From:</strong> 0x5434ed2d9f5737986858de127545e8a2fb6eb6ae<br>
+                  <strong>To:</strong> 0x5434ed2d9f5737986858de127545e8a2fb6eb6ae<br>
+                  <strong>Path Length:</strong> 2
+                
+            </td>
+            <td>
+              
+                  <strong>from:</strong> 0xe93685f3bba03016f02bd1828badd6195988d950 vs 0x5434ed2d9f5737986858de127545e8a2fb6eb6ae
+                
+            </td>
+          </tr>
+        
+          <tr>
+            <td class="transaction-hash">0x0000897f6aa40e3c3524b241ca44822678d5c7009e9c1432b7ef4fdc9804f542</td>
+            <td>
+              
+                  <strong>Amount In:</strong> 562512020077249340<br>
+                  <strong>Block:</strong> 22271397<br>
+                  <strong>From:</strong> 0x00806daa2cfe49715ea05243ff259deb195760fc<br>
+                  <strong>To:</strong> 0x9008d19f58aabd9ed0d60971565aa8510560ab41<br>
+                  <strong>Path Length:</strong> 2
+                
+            </td>
+            <td>
+              
+                  <strong>Amount In:</strong> 562512020077249320<br>
+                  <strong>Block:</strong> 22271397<br>
+                  <strong>From:</strong> 0x9008d19f58aabd9ed0d60971565aa8510560ab41<br>
+                  <strong>To:</strong> 0x9008d19f58aabd9ed0d60971565aa8510560ab41<br>
+                  <strong>Path Length:</strong> 2
+                
+            </td>
+            <td>
+              
+                  <strong>from:</strong> 0x00806daa2cfe49715ea05243ff259deb195760fc vs 0x9008d19f58aabd9ed0d60971565aa8510560ab41
+                
+            </td>
+          </tr>
+        
+          <tr>
+            <td class="transaction-hash">0x0006b6438e3c8685fa6572671cae06ecc631c317d17e3954331ccf62778973e4</td>
+            <td>
+              
+                  <strong>Amount In:</strong> 155071696975504260<br>
+                  <strong>Block:</strong> 22216775<br>
+                  <strong>From:</strong> 0x3d53c172c5fa064fdaa5d7fb661fb4281fe05cf1<br>
+                  <strong>To:</strong> 0x40e61a9db0791913d9de02ae633f583e15d6649b<br>
+                  <strong>Path Length:</strong> 2
+                
+            </td>
+            <td>
+              
+                  <strong>Amount In:</strong> 155071696975504244<br>
+                  <strong>Block:</strong> 22216775<br>
+                  <strong>From:</strong> 0x767af52d988d1241a346851a1b39ccd11357376e<br>
+                  <strong>To:</strong> 0x40e61a9db0791913d9de02ae633f583e15d6649b<br>
+                  <strong>Path Length:</strong> 2
+                
+            </td>
+            <td>
+              
+                  <strong>from:</strong> 0x3d53c172c5fa064fdaa5d7fb661fb4281fe05cf1 vs 0x767af52d988d1241a346851a1b39ccd11357376e
+                
+            </td>
+          </tr>
+        
+          <tr>
+            <td class="transaction-hash">0x00086e14a6f0f4e54eab4c5dde41c17f4e4082eab888e3cd2e5c2868d69b67bd</td>
+            <td>
+              
+                  <strong>Amount In:</strong> 1000000000000000000<br>
+                  <strong>Block:</strong> 22249171<br>
+                  <strong>From:</strong> 0x6bf97afe2d2c790999cded2a8523009eb8a0823f<br>
+                  <strong>To:</strong> 0x9008d19f58aabd9ed0d60971565aa8510560ab41<br>
+                  <strong>Path Length:</strong> 2
+                
+            </td>
+            <td>
+              
+                  <strong>Amount In:</strong> 1000000000000000000<br>
+                  <strong>Block:</strong> 22249171<br>
+                  <strong>From:</strong> 0x9008d19f58aabd9ed0d60971565aa8510560ab41<br>
+                  <strong>To:</strong> 0x9008d19f58aabd9ed0d60971565aa8510560ab41<br>
+                  <strong>Path Length:</strong> 2
+                
+            </td>
+            <td>
+              
+                  <strong>from:</strong> 0x6bf97afe2d2c790999cded2a8523009eb8a0823f vs 0x9008d19f58aabd9ed0d60971565aa8510560ab41
+                
+            </td>
+          </tr>
+        
+          <tr>
+            <td class="transaction-hash">0x001b6cf870442d570d04962dd0d753c063f12de88778201fd12a7cb2284a10c7</td>
+            <td>
+              
+                  <strong>Amount In:</strong> 418759819948713660<br>
+                  <strong>Block:</strong> 22244255<br>
+                  <strong>From:</strong> 0xd99ac0681b904991169a4f398b9043781adbe0c3<br>
+                  <strong>To:</strong> 0xe9bc5f855682aca47def4a09fab4de5fa8b0fabe<br>
+                  <strong>Path Length:</strong> 2
+                
+            </td>
+            <td>
+              
+                  <strong>Amount In:</strong> 418759819948713679<br>
+                  <strong>Block:</strong> 22244255<br>
+                  <strong>From:</strong> 0xf621fb08bbe51af70e7e0f4ea63496894166ff7f<br>
+                  <strong>To:</strong> 0xe9bc5f855682aca47def4a09fab4de5fa8b0fabe<br>
+                  <strong>Path Length:</strong> 2
+                
+            </td>
+            <td>
+              
+                  <strong>from:</strong> 0xd99ac0681b904991169a4f398b9043781adbe0c3 vs 0xf621fb08bbe51af70e7e0f4ea63496894166ff7f
+                
+            </td>
+          </tr>
+        
+      </table>
+    </details>
+  
+    <details>
+      <summary>subsquid_vs_envio (5 examples)</summary>
+      <table>
+        <tr>
+          <th>Transaction Hash</th>
+          <th>subsquid</th>
+          <th>envio</th>
+          <th>Fields with Differences</th>
+        </tr>
+        
+          <tr>
+            <td class="transaction-hash">0x7fb908680f0afb70cb6cdc03be735880e4cee6bcb9777531010c919550ea0257</td>
+            <td>
+              
+                  <strong>Amount In:</strong> 31034570960831440622<br>
+                  <strong>Block:</strong> 22200006<br>
+                  <strong>From:</strong> 0xe93ff418ba1ae4ecef34189b56a8ac436e242d64<br>
+                  <strong>To:</strong> 0xe93ff418ba1ae4ecef34189b56a8ac436e242d64<br>
+                  <strong>Path Length:</strong> 2
+                
+            </td>
+            <td>
+              
+                  <strong>Amount In:</strong> 31034570960831440622<br>
+                  <strong>Block:</strong> 22200006<br>
+                  <strong>From:</strong> 0xe93ff418ba1ae4ecef34189b56a8ac436e242d64<br>
+                  <strong>To:</strong> 0x0000000000000000000000000000000000000000<br>
+                  <strong>Path Length:</strong> 7
+                
+            </td>
+            <td>
+              
+                  <strong>to:</strong> 0xe93ff418ba1ae4ecef34189b56a8ac436e242d64 vs 0x0000000000000000000000000000000000000000
+                <br>
+                  <strong>deadline:</strong> 1743823711 vs 160
+                <br>
+                  <strong>path:</strong> 0x560363bda52bc6a44ca6c8c9b4a5fadbda32fa60,0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2 vs 0x000000000000000000000000000000000067f0a3,0x0000000000000000000000000000000000000000,0x00560363bda52bc6a44ca6c8c9b4a5fadbda32fa,0x00c02aaa39b223fe8d0a0e5c4f27ead9083c756c
+                <br>
+                  <strong>pathLength:</strong> 2 vs 7
+                
+            </td>
+          </tr>
+        
+          <tr>
+            <td class="transaction-hash">0xb6eb45ac2602729c6ee1908a272cfc7e31754c1f68c3e9dc6fb523ad919f55fd</td>
+            <td>
+              
+                  <strong>Amount In:</strong> 3976944263464095<br>
+                  <strong>Block:</strong> 22200011<br>
+                  <strong>From:</strong> 0xd99ac0681b904991169a4f398b9043781adbe0c3<br>
+                  <strong>To:</strong> 0x9f493c6621a661f03cdf3686cd589416fe4a772d<br>
+                  <strong>Path Length:</strong> 2
+                
+            </td>
+            <td>
+              
+                  <strong>Amount In:</strong> 3976944263464095<br>
+                  <strong>Block:</strong> 22200011<br>
+                  <strong>From:</strong> 0xf621fb08bbe51af70e7e0f4ea63496894166ff7f<br>
+                  <strong>To:</strong> 0x0000000000000000000000000000000000000000<br>
+                  <strong>Path Length:</strong> 7
+                
+            </td>
+            <td>
+              
+                  <strong>from:</strong> 0xd99ac0681b904991169a4f398b9043781adbe0c3 vs 0xf621fb08bbe51af70e7e0f4ea63496894166ff7f
+                <br>
+                  <strong>to:</strong> 0x9f493c6621a661f03cdf3686cd589416fe4a772d vs 0x0000000000000000000000000000000000000000
+                <br>
+                  <strong>deadline:</strong> 3488251691 vs 160
+                <br>
+                  <strong>path:</strong> 0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2,0xa93d86af16fe83f064e3c0e2f3d129f7b7b002b0 vs 0x0000000000000000000000000000000000cfea7f,0x0000000000000000000000000000000000000000,0x00c02aaa39b223fe8d0a0e5c4f27ead9083c756c,0x00a93d86af16fe83f064e3c0e2f3d129f7b7b002
+                <br>
+                  <strong>pathLength:</strong> 2 vs 7
+                
+            </td>
+          </tr>
+        
+          <tr>
+            <td class="transaction-hash">0xc0acc528a7325dd0b3cbe9540834fbb3c08dd09f3994f2919ca5d2693bb65f33</td>
+            <td>
+              
+                  <strong>Amount In:</strong> 70400130000000000<br>
+                  <strong>Block:</strong> 22200023<br>
+                  <strong>From:</strong> 0x4c5f6ad6628d205259443ebcf6cc4cdd7d6cbf81<br>
+                  <strong>To:</strong> 0x4c5f6ad6628d205259443ebcf6cc4cdd7d6cbf81<br>
+                  <strong>Path Length:</strong> 2
+                
+            </td>
+            <td>
+              
+                  <strong>Amount In:</strong> 70400130000000000<br>
+                  <strong>Block:</strong> 22200023<br>
+                  <strong>From:</strong> 0x4c5f6ad6628d205259443ebcf6cc4cdd7d6cbf81<br>
+                  <strong>To:</strong> 0x0000000000000000000000000000000000000000<br>
+                  <strong>Path Length:</strong> 7
+                
+            </td>
+            <td>
+              
+                  <strong>to:</strong> 0x4c5f6ad6628d205259443ebcf6cc4cdd7d6cbf81 vs 0x0000000000000000000000000000000000000000
+                <br>
+                  <strong>deadline:</strong> 1743827207 vs 160
+                <br>
+                  <strong>path:</strong> 0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2,0x39b46b212bdf15b42b166779b9d1787a68b9d0c3 vs 0x000000000000000000000000000000000067f0b1,0x0000000000000000000000000000000000000000,0x00c02aaa39b223fe8d0a0e5c4f27ead9083c756c,0x0039b46b212bdf15b42b166779b9d1787a68b9d0
+                <br>
+                  <strong>pathLength:</strong> 2 vs 7
+                
+            </td>
+          </tr>
+        
+          <tr>
+            <td class="transaction-hash">0x378e7acb4bf72bd3fd35da649b0f5b8eb8e1e28e1391054f78b82cc208734f61</td>
+            <td>
+              
+                  <strong>Amount In:</strong> 13200000000<br>
+                  <strong>Block:</strong> 22200026<br>
+                  <strong>From:</strong> 0xc5a654f32532d71729637fca0d61248c6d4b5d9c<br>
+                  <strong>To:</strong> 0xc5a654f32532d71729637fca0d61248c6d4b5d9c<br>
+                  <strong>Path Length:</strong> 2
+                
+            </td>
+            <td>
+              
+                  <strong>Amount In:</strong> 13200000000<br>
+                  <strong>Block:</strong> 22200026<br>
+                  <strong>From:</strong> 0xc5a654f32532d71729637fca0d61248c6d4b5d9c<br>
+                  <strong>To:</strong> 0x0000000000000000000000000000000000000000<br>
+                  <strong>Path Length:</strong> 7
+                
+            </td>
+            <td>
+              
+                  <strong>to:</strong> 0xc5a654f32532d71729637fca0d61248c6d4b5d9c vs 0x0000000000000000000000000000000000000000
+                <br>
+                  <strong>deadline:</strong> 1743823799 vs 160
+                <br>
+                  <strong>path:</strong> 0x68a47fe1cf42eba4a030a10cd4d6a1031ca3ca0a,0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2 vs 0x000000000000000000000000000000000067f0a3,0x0000000000000000000000000000000000000000,0x0068a47fe1cf42eba4a030a10cd4d6a1031ca3ca,0x00c02aaa39b223fe8d0a0e5c4f27ead9083c756c
+                <br>
+                  <strong>pathLength:</strong> 2 vs 7
+                
+            </td>
+          </tr>
+        
+          <tr>
+            <td class="transaction-hash">0xfa74d4b975189529ed1e2d501cdc6f30449f9bf2f6f0fd1c6a78ce935dae8a00</td>
+            <td>
+              
+                  <strong>Amount In:</strong> 302779640000000000<br>
+                  <strong>Block:</strong> 22200036<br>
+                  <strong>From:</strong> 0x4c5f6ad6628d205259443ebcf6cc4cdd7d6cbf81<br>
+                  <strong>To:</strong> 0x4c5f6ad6628d205259443ebcf6cc4cdd7d6cbf81<br>
+                  <strong>Path Length:</strong> 2
+                
+            </td>
+            <td>
+              
+                  <strong>Amount In:</strong> 302779640000000000<br>
+                  <strong>Block:</strong> 22200036<br>
+                  <strong>From:</strong> 0x4c5f6ad6628d205259443ebcf6cc4cdd7d6cbf81<br>
+                  <strong>To:</strong> 0x0000000000000000000000000000000000000000<br>
+                  <strong>Path Length:</strong> 7
+                
+            </td>
+            <td>
+              
+                  <strong>to:</strong> 0x4c5f6ad6628d205259443ebcf6cc4cdd7d6cbf81 vs 0x0000000000000000000000000000000000000000
+                <br>
+                  <strong>deadline:</strong> 1743827363 vs 160
+                <br>
+                  <strong>path:</strong> 0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2,0xd4f4d0a10bcae123bb6655e8fe93a30d01eebd04 vs 0x000000000000000000000000000000000067f0b1,0x0000000000000000000000000000000000000000,0x00c02aaa39b223fe8d0a0e5c4f27ead9083c756c,0x00d4f4d0a10bcae123bb6655e8fe93a30d01eebd
+                <br>
+                  <strong>pathLength:</strong> 2 vs 7
+                
+            </td>
+          </tr>
+        
+      </table>
+    </details>
+  
+    <details>
+      <summary>subsquid_vs_subgraph (5 examples)</summary>
+      <table>
+        <tr>
+          <th>Transaction Hash</th>
+          <th>subsquid</th>
+          <th>subgraph</th>
+          <th>Fields with Differences</th>
+        </tr>
+        
+          <tr>
+            <td class="transaction-hash">0xb6eb45ac2602729c6ee1908a272cfc7e31754c1f68c3e9dc6fb523ad919f55fd</td>
+            <td>
+              
+                  <strong>Amount In:</strong> 3976944263464095<br>
+                  <strong>Block:</strong> 22200011<br>
+                  <strong>From:</strong> 0xd99ac0681b904991169a4f398b9043781adbe0c3<br>
+                  <strong>To:</strong> 0x9f493c6621a661f03cdf3686cd589416fe4a772d<br>
+                  <strong>Path Length:</strong> 2
+                
+            </td>
+            <td>
+              
+                  <strong>Amount In:</strong> 3976944263464095<br>
+                  <strong>Block:</strong> 22200011<br>
+                  <strong>From:</strong> 0xf621fb08bbe51af70e7e0f4ea63496894166ff7f<br>
+                  <strong>To:</strong> 0x9f493c6621a661f03cdf3686cd589416fe4a772d<br>
+                  <strong>Path Length:</strong> 2
+                
+            </td>
+            <td>
+              
+                  <strong>from:</strong> 0xd99ac0681b904991169a4f398b9043781adbe0c3 vs 0xf621fb08bbe51af70e7e0f4ea63496894166ff7f
+                
+            </td>
+          </tr>
+        
+          <tr>
+            <td class="transaction-hash">0x677d10448af874e1fdc982ccdd98a184a468d31ff6cbf4c82450fd3e633ca638</td>
+            <td>
+              
+                  <strong>Amount In:</strong> 345466769602565956149354<br>
+                  <strong>Block:</strong> 22200042<br>
+                  <strong>From:</strong> 0x6bf97afe2d2c790999cded2a8523009eb8a0823f<br>
+                  <strong>To:</strong> 0x9008d19f58aabd9ed0d60971565aa8510560ab41<br>
+                  <strong>Path Length:</strong> 2
+                
+            </td>
+            <td>
+              
+                  <strong>Amount In:</strong> 345466769602565956149354<br>
+                  <strong>Block:</strong> 22200042<br>
+                  <strong>From:</strong> 0x9008d19f58aabd9ed0d60971565aa8510560ab41<br>
+                  <strong>To:</strong> 0x9008d19f58aabd9ed0d60971565aa8510560ab41<br>
+                  <strong>Path Length:</strong> 2
+                
+            </td>
+            <td>
+              
+                  <strong>from:</strong> 0x6bf97afe2d2c790999cded2a8523009eb8a0823f vs 0x9008d19f58aabd9ed0d60971565aa8510560ab41
+                
+            </td>
+          </tr>
+        
+          <tr>
+            <td class="transaction-hash">0xf34cf10ce82a4b906e5b0d3e36f883c5e8eb93bf9948e5113fa164d99c8c1fb1</td>
+            <td>
+              
+                  <strong>Amount In:</strong> 188122715539982555<br>
+                  <strong>Block:</strong> 22200061<br>
+                  <strong>From:</strong> 0x00806daa2cfe49715ea05243ff259deb195760fc<br>
+                  <strong>To:</strong> 0x9008d19f58aabd9ed0d60971565aa8510560ab41<br>
+                  <strong>Path Length:</strong> 2
+                
+            </td>
+            <td>
+              
+                  <strong>Amount In:</strong> 188122715539982555<br>
+                  <strong>Block:</strong> 22200061<br>
+                  <strong>From:</strong> 0x9008d19f58aabd9ed0d60971565aa8510560ab41<br>
+                  <strong>To:</strong> 0x9008d19f58aabd9ed0d60971565aa8510560ab41<br>
+                  <strong>Path Length:</strong> 2
+                
+            </td>
+            <td>
+              
+                  <strong>from:</strong> 0x00806daa2cfe49715ea05243ff259deb195760fc vs 0x9008d19f58aabd9ed0d60971565aa8510560ab41
+                
+            </td>
+          </tr>
+        
+          <tr>
+            <td class="transaction-hash">0x6bb4f635fa897ede78c5a73e53dac2e4ab45975b787bb66e2472220ef43e3153</td>
+            <td>
+              
+                  <strong>Amount In:</strong> 18925083<br>
+                  <strong>Block:</strong> 22200076<br>
+                  <strong>From:</strong> 0x5ec6375d447a8a4181a97907efe6349f7c6ae595<br>
+                  <strong>To:</strong> 0x5ec6375d447a8a4181a97907efe6349f7c6ae595<br>
+                  <strong>Path Length:</strong> 3
+                
+            </td>
+            <td>
+              
+                  <strong>Amount In:</strong> 18925083<br>
+                  <strong>Block:</strong> 22200076<br>
+                  <strong>From:</strong> 0xb048ed71007ade3b3172bc6d95781833ffa3aac5<br>
+                  <strong>To:</strong> 0x5ec6375d447a8a4181a97907efe6349f7c6ae595<br>
+                  <strong>Path Length:</strong> 3
+                
+            </td>
+            <td>
+              
+                  <strong>from:</strong> 0x5ec6375d447a8a4181a97907efe6349f7c6ae595 vs 0xb048ed71007ade3b3172bc6d95781833ffa3aac5
+                
+            </td>
+          </tr>
+        
+          <tr>
+            <td class="transaction-hash">0x0e69b83446854cd47c131ed64d425f3636a0c7096c3bd6ac84efab5aa848e277</td>
+            <td>
+              
+                  <strong>Amount In:</strong> 136863952260434890<br>
+                  <strong>Block:</strong> 22200083<br>
+                  <strong>From:</strong> 0x1a5918dd41efcc34aba03c40b86242d10bc398fa<br>
+                  <strong>To:</strong> 0x40e61a9db0791913d9de02ae633f583e15d6649b<br>
+                  <strong>Path Length:</strong> 2
+                
+            </td>
+            <td>
+              
+                  <strong>Amount In:</strong> 136863952260434890<br>
+                  <strong>Block:</strong> 22200083<br>
+                  <strong>From:</strong> 0x767af52d988d1241a346851a1b39ccd11357376e<br>
+                  <strong>To:</strong> 0x40e61a9db0791913d9de02ae633f583e15d6649b<br>
+                  <strong>Path Length:</strong> 2
+                
+            </td>
+            <td>
+              
+                  <strong>from:</strong> 0x1a5918dd41efcc34aba03c40b86242d10bc398fa vs 0x767af52d988d1241a346851a1b39ccd11357376e
+                
+            </td>
+          </tr>
+        
+      </table>
+    </details>
+  
+    <details>
+      <summary>envio_vs_subgraph (5 examples)</summary>
+      <table>
+        <tr>
+          <th>Transaction Hash</th>
+          <th>envio</th>
+          <th>subgraph</th>
+          <th>Fields with Differences</th>
+        </tr>
+        
+          <tr>
+            <td class="transaction-hash">0x7fb908680f0afb70cb6cdc03be735880e4cee6bcb9777531010c919550ea0257</td>
+            <td>
+              
+                  <strong>Amount In:</strong> 31034570960831440622<br>
+                  <strong>Block:</strong> 22200006<br>
+                  <strong>From:</strong> 0xe93ff418ba1ae4ecef34189b56a8ac436e242d64<br>
+                  <strong>To:</strong> 0x0000000000000000000000000000000000000000<br>
+                  <strong>Path Length:</strong> 7
+                
+            </td>
+            <td>
+              
+                  <strong>Amount In:</strong> 31034570960831440622<br>
+                  <strong>Block:</strong> 22200006<br>
+                  <strong>From:</strong> 0xe93ff418ba1ae4ecef34189b56a8ac436e242d64<br>
+                  <strong>To:</strong> 0xe93ff418ba1ae4ecef34189b56a8ac436e242d64<br>
+                  <strong>Path Length:</strong> 2
+                
+            </td>
+            <td>
+              
+                  <strong>to:</strong> 0x0000000000000000000000000000000000000000 vs 0xe93ff418ba1ae4ecef34189b56a8ac436e242d64
+                <br>
+                  <strong>deadline:</strong> 160 vs 1743823711
+                <br>
+                  <strong>path:</strong> 0x000000000000000000000000000000000067f0a3,0x0000000000000000000000000000000000000000,0x00560363bda52bc6a44ca6c8c9b4a5fadbda32fa,0x00c02aaa39b223fe8d0a0e5c4f27ead9083c756c vs 0x560363bda52bc6a44ca6c8c9b4a5fadbda32fa60,0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2
+                <br>
+                  <strong>pathLength:</strong> 7 vs 2
+                
+            </td>
+          </tr>
+        
+          <tr>
+            <td class="transaction-hash">0xb6eb45ac2602729c6ee1908a272cfc7e31754c1f68c3e9dc6fb523ad919f55fd</td>
+            <td>
+              
+                  <strong>Amount In:</strong> 3976944263464095<br>
+                  <strong>Block:</strong> 22200011<br>
+                  <strong>From:</strong> 0xf621fb08bbe51af70e7e0f4ea63496894166ff7f<br>
+                  <strong>To:</strong> 0x0000000000000000000000000000000000000000<br>
+                  <strong>Path Length:</strong> 7
+                
+            </td>
+            <td>
+              
+                  <strong>Amount In:</strong> 3976944263464095<br>
+                  <strong>Block:</strong> 22200011<br>
+                  <strong>From:</strong> 0xf621fb08bbe51af70e7e0f4ea63496894166ff7f<br>
+                  <strong>To:</strong> 0x9f493c6621a661f03cdf3686cd589416fe4a772d<br>
+                  <strong>Path Length:</strong> 2
+                
+            </td>
+            <td>
+              
+                  <strong>to:</strong> 0x0000000000000000000000000000000000000000 vs 0x9f493c6621a661f03cdf3686cd589416fe4a772d
+                <br>
+                  <strong>deadline:</strong> 160 vs 3488251691
+                <br>
+                  <strong>path:</strong> 0x0000000000000000000000000000000000cfea7f,0x0000000000000000000000000000000000000000,0x00c02aaa39b223fe8d0a0e5c4f27ead9083c756c,0x00a93d86af16fe83f064e3c0e2f3d129f7b7b002 vs 0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2,0xa93d86af16fe83f064e3c0e2f3d129f7b7b002b0
+                <br>
+                  <strong>pathLength:</strong> 7 vs 2
+                
+            </td>
+          </tr>
+        
+          <tr>
+            <td class="transaction-hash">0xc0acc528a7325dd0b3cbe9540834fbb3c08dd09f3994f2919ca5d2693bb65f33</td>
+            <td>
+              
+                  <strong>Amount In:</strong> 70400130000000000<br>
+                  <strong>Block:</strong> 22200023<br>
+                  <strong>From:</strong> 0x4c5f6ad6628d205259443ebcf6cc4cdd7d6cbf81<br>
+                  <strong>To:</strong> 0x0000000000000000000000000000000000000000<br>
+                  <strong>Path Length:</strong> 7
+                
+            </td>
+            <td>
+              
+                  <strong>Amount In:</strong> 70400130000000000<br>
+                  <strong>Block:</strong> 22200023<br>
+                  <strong>From:</strong> 0x4c5f6ad6628d205259443ebcf6cc4cdd7d6cbf81<br>
+                  <strong>To:</strong> 0x4c5f6ad6628d205259443ebcf6cc4cdd7d6cbf81<br>
+                  <strong>Path Length:</strong> 2
+                
+            </td>
+            <td>
+              
+                  <strong>to:</strong> 0x0000000000000000000000000000000000000000 vs 0x4c5f6ad6628d205259443ebcf6cc4cdd7d6cbf81
+                <br>
+                  <strong>deadline:</strong> 160 vs 1743827207
+                <br>
+                  <strong>path:</strong> 0x000000000000000000000000000000000067f0b1,0x0000000000000000000000000000000000000000,0x00c02aaa39b223fe8d0a0e5c4f27ead9083c756c,0x0039b46b212bdf15b42b166779b9d1787a68b9d0 vs 0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2,0x39b46b212bdf15b42b166779b9d1787a68b9d0c3
+                <br>
+                  <strong>pathLength:</strong> 7 vs 2
+                
+            </td>
+          </tr>
+        
+          <tr>
+            <td class="transaction-hash">0x378e7acb4bf72bd3fd35da649b0f5b8eb8e1e28e1391054f78b82cc208734f61</td>
+            <td>
+              
+                  <strong>Amount In:</strong> 13200000000<br>
+                  <strong>Block:</strong> 22200026<br>
+                  <strong>From:</strong> 0xc5a654f32532d71729637fca0d61248c6d4b5d9c<br>
+                  <strong>To:</strong> 0x0000000000000000000000000000000000000000<br>
+                  <strong>Path Length:</strong> 7
+                
+            </td>
+            <td>
+              
+                  <strong>Amount In:</strong> 13200000000<br>
+                  <strong>Block:</strong> 22200026<br>
+                  <strong>From:</strong> 0xc5a654f32532d71729637fca0d61248c6d4b5d9c<br>
+                  <strong>To:</strong> 0xc5a654f32532d71729637fca0d61248c6d4b5d9c<br>
+                  <strong>Path Length:</strong> 2
+                
+            </td>
+            <td>
+              
+                  <strong>to:</strong> 0x0000000000000000000000000000000000000000 vs 0xc5a654f32532d71729637fca0d61248c6d4b5d9c
+                <br>
+                  <strong>deadline:</strong> 160 vs 1743823799
+                <br>
+                  <strong>path:</strong> 0x000000000000000000000000000000000067f0a3,0x0000000000000000000000000000000000000000,0x0068a47fe1cf42eba4a030a10cd4d6a1031ca3ca,0x00c02aaa39b223fe8d0a0e5c4f27ead9083c756c vs 0x68a47fe1cf42eba4a030a10cd4d6a1031ca3ca0a,0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2
+                <br>
+                  <strong>pathLength:</strong> 7 vs 2
+                
+            </td>
+          </tr>
+        
+          <tr>
+            <td class="transaction-hash">0xfa74d4b975189529ed1e2d501cdc6f30449f9bf2f6f0fd1c6a78ce935dae8a00</td>
+            <td>
+              
+                  <strong>Amount In:</strong> 302779640000000000<br>
+                  <strong>Block:</strong> 22200036<br>
+                  <strong>From:</strong> 0x4c5f6ad6628d205259443ebcf6cc4cdd7d6cbf81<br>
+                  <strong>To:</strong> 0x0000000000000000000000000000000000000000<br>
+                  <strong>Path Length:</strong> 7
+                
+            </td>
+            <td>
+              
+                  <strong>Amount In:</strong> 302779640000000000<br>
+                  <strong>Block:</strong> 22200036<br>
+                  <strong>From:</strong> 0x4c5f6ad6628d205259443ebcf6cc4cdd7d6cbf81<br>
+                  <strong>To:</strong> 0x4c5f6ad6628d205259443ebcf6cc4cdd7d6cbf81<br>
+                  <strong>Path Length:</strong> 2
+                
+            </td>
+            <td>
+              
+                  <strong>to:</strong> 0x0000000000000000000000000000000000000000 vs 0x4c5f6ad6628d205259443ebcf6cc4cdd7d6cbf81
+                <br>
+                  <strong>deadline:</strong> 160 vs 1743827363
+                <br>
+                  <strong>path:</strong> 0x000000000000000000000000000000000067f0b1,0x0000000000000000000000000000000000000000,0x00c02aaa39b223fe8d0a0e5c4f27ead9083c756c,0x00d4f4d0a10bcae123bb6655e8fe93a30d01eebd vs 0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2,0xd4f4d0a10bcae123bb6655e8fe93a30d01eebd04
+                <br>
+                  <strong>pathLength:</strong> 7 vs 2
+                
+            </td>
+          </tr>
+        
+      </table>
+    </details>
+  
+  
+  <h2>8. Summary</h2>
+  <p>
+    This report compares Uniswap V2 swap data from 5 different platforms.
+    The most complete dataset came from subsquid with 50,191 records.
+  </p>
+  
+  <h2>9. Subsquid Data Fix</h2>
+  <div class="info-box">
+    <p><strong>Issue:</strong> The original Subsquid implementation had problems with the <code>to</code> address and <code>path</code> fields being set to zero addresses instead of properly extracting them from the transaction call data.</p>
+    <p><strong>Fix Applied:</strong> The Subsquid indexer implementation was updated to properly decode the transaction calldata. Specifically:</p>
+    <ul>
+      <li>The <code>to</code> address is now extracted from bytes 192-256 of the calldata (taking the last 20 bytes)</li>
+      <li>The <code>path</code> array is extracted by calculating the offset in the calldata based on the path pointer, then reading each address</li>
+      <li>The <code>deadline</code> parameter is now properly read from the calldata</li>
+    </ul>
+    <p>These changes ensure that Subsquid correctly captures all the necessary fields for Uniswap V2 swaps, with proper addresses for <code>to</code> and token <code>path</code> entries.</p>
   </div>
-  
-  <script>
-    // Data from the report
-    const reportData = {"timestamp":"2025-04-16T21:40:06.399Z","dataCount":{"sentio":{"count":100,"loadSuccess":true,"error":null},"envio":{"count":100,"loadSuccess":true,"error":null},"subgraph":{"count":90,"loadSuccess":true,"error":null}},"uniqueCounts":{"sentio":{"uniqueBlocks":0,"uniqueTxs":0},"envio":{"uniqueBlocks":97,"uniqueTxs":100},"subgraph":{"uniqueBlocks":88,"uniqueTxs":90}},"blockRanges":{"sentio":{"min":null,"max":null,"count":null},"envio":{"min":22280004,"max":22280991,"count":988},"subgraph":{"min":22280002,"max":22281000,"count":999}},"consistencyResults":{"sentio_vs_envio":{"platform1Count":0,"platform2Count":100,"commonTxs":0,"uniqueToPlat1":0,"uniqueToPlat2":100,"jaccardSimilarity":0},"sentio_vs_subgraph":{"platform1Count":0,"platform2Count":90,"commonTxs":0,"uniqueToPlat1":0,"uniqueToPlat2":90,"jaccardSimilarity":0},"envio_vs_subgraph":{"platform1Count":100,"platform2Count":90,"commonTxs":0,"uniqueToPlat1":100,"uniqueToPlat2":90,"jaccardSimilarity":0}}};
-    
-    // Event Count Chart
-    const countCtx = document.getElementById('countChart').getContext('2d');
-    const platforms = Object.keys(reportData.dataCount);
-    const counts = platforms.map(platform => reportData.dataCount[platform].count);
-    
-    new Chart(countCtx, {
-      type: 'bar',
-      data: {
-        labels: platforms,
-        datasets: [{
-          label: 'Number of Swap Events Indexed',
-          data: counts,
-          backgroundColor: [
-            'rgba(54, 162, 235, 0.6)',
-            'rgba(255, 99, 132, 0.6)',
-            'rgba(75, 192, 192, 0.6)',
-            'rgba(255, 206, 86, 0.6)',
-            'rgba(153, 102, 255, 0.6)'
-          ],
-          borderColor: [
-            'rgba(54, 162, 235, 1)',
-            'rgba(255, 99, 132, 1)',
-            'rgba(75, 192, 192, 1)',
-            'rgba(255, 206, 86, 1)',
-            'rgba(153, 102, 255, 1)'
-          ],
-          borderWidth: 1
-        }]
-      },
-      options: {
-        responsive: true,
-        plugins: {
-          title: {
-            display: true,
-            text: 'Number of Uniswap V2 Swap Events by Platform'
-          },
-        },
-        scales: {
-          y: {
-            beginAtZero: true
-          }
-        }
-      }
-    });
-    
-    // Jaccard Similarity Chart
-    const similarityCtx = document.getElementById('similarityChart').getContext('2d');
-    const comparisons = Object.keys(reportData.consistencyResults).map(key => key.replace('_', ' vs '));
-    const similarities = Object.values(reportData.consistencyResults).map(value => value.jaccardSimilarity);
-    
-    new Chart(similarityCtx, {
-      type: 'bar',
-      data: {
-        labels: comparisons,
-        datasets: [{
-          label: 'Jaccard Similarity',
-          data: similarities,
-          backgroundColor: 'rgba(75, 192, 192, 0.6)',
-          borderColor: 'rgba(75, 192, 192, 1)',
-          borderWidth: 1
-        }]
-      },
-      options: {
-        responsive: true,
-        plugins: {
-          title: {
-            display: true,
-            text: 'Data Consistency (Jaccard Similarity) Between Platforms'
-          },
-        },
-        scales: {
-          y: {
-            beginAtZero: true,
-            max: 1
-          }
-        }
-      }
-    });
-  </script>
 </body>
 </html>
-    
+  

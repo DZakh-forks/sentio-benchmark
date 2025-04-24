@@ -13,11 +13,15 @@
       .chart-container { height: 400px; margin: 20px 0; }
       .success { color: green; }
       .failure { color: red; }
+      .transaction-hash { font-family: monospace; word-break: break-all; }
+      .not-present { color: #999; font-style: italic; }
+      details { margin: 20px 0; }
+      summary { cursor: pointer; font-weight: bold; }
     </style>
   </head>
   <body>
     <h1>Gas Usage Comparison Report - Case 4</h1>
-    <p>Generated at: 2025-04-21T20:37:02.526Z</p>
+    <p>Generated at: 2025-04-22T12:32:58.420Z</p>
     
     <h2>1. Record Counts</h2>
     <table>
@@ -34,33 +38,21 @@
         </tr>
       
         <tr>
-          <td>envio-json</td>
-          <td>1,696,423</td>
+          <td>sentio</td>
+          <td>1,696,641</td>
           <td class="success">Success</td>
         </tr>
       
         <tr>
-          <td>sentio</td>
-          <td>0</td>
-          <td class="failure">Failed</td>
-        </tr>
-      
-        <tr>
           <td>subsquid</td>
-          <td>0</td>
-          <td class="failure">Failed</td>
+          <td>1,696,641</td>
+          <td class="success">Success</td>
         </tr>
       
         <tr>
           <td>ponder</td>
-          <td>0</td>
-          <td class="failure">Failed</td>
-        </tr>
-      
-        <tr>
-          <td>prisma</td>
-          <td>0</td>
-          <td class="failure">Failed</td>
+          <td>1,696,423</td>
+          <td class="success">Success</td>
         </tr>
       
     </table>
@@ -82,10 +74,24 @@
         </tr>
       
         <tr>
-          <td>envio-json</td>
+          <td>sentio</td>
           <td>22,280,000</td>
-          <td>22,289,954</td>
-          <td>9,955</td>
+          <td>22,290,000</td>
+          <td>10,001</td>
+        </tr>
+      
+        <tr>
+          <td>subsquid</td>
+          <td>22,280,000</td>
+          <td>22,290,000</td>
+          <td>10,001</td>
+        </tr>
+      
+        <tr>
+          <td>ponder</td>
+          <td>22,280,000</td>
+          <td>22,289,999</td>
+          <td>10,000</td>
         </tr>
       
     </table>
@@ -105,9 +111,21 @@
         </tr>
       
         <tr>
-          <td>envio-json</td>
-          <td>493,181</td>
-          <td>315,861</td>
+          <td>sentio</td>
+          <td>493,240</td>
+          <td>315,902</td>
+        </tr>
+      
+        <tr>
+          <td>subsquid</td>
+          <td>490,935</td>
+          <td>314,393</td>
+        </tr>
+      
+        <tr>
+          <td>ponder</td>
+          <td>493,014</td>
+          <td>315,766</td>
         </tr>
       
     </table>
@@ -127,9 +145,21 @@
         </tr>
       
         <tr>
-          <td>envio-json</td>
-          <td>10,161,297,133,770,000,000,000</td>
-          <td>5,989,836,929,686,758</td>
+          <td>sentio</td>
+          <td>950,198,130,648,474,275,649</td>
+          <td>560,046,663,170,626.1</td>
+        </tr>
+      
+        <tr>
+          <td>subsquid</td>
+          <td>382,090,011,037,647,441,983</td>
+          <td>225,203,806,248,727.6</td>
+        </tr>
+      
+        <tr>
+          <td>ponder</td>
+          <td>949,955,746,232,246,716,706</td>
+          <td>559,975,752,646,743.6</td>
         </tr>
       
     </table>
@@ -145,19 +175,1094 @@
       </tr>
       
           <tr>
-            <td>envio_vs_envio-json</td>
+            <td>envio_vs_sentio</td>
             <td>1,696,423</td>
             <td>0</td>
+            <td>218</td>
+            <td>99.99%</td>
+          </tr>
+        
+          <tr>
+            <td>envio_vs_subsquid</td>
+            <td>1,685,848</td>
+            <td>10,575</td>
+            <td>218</td>
+            <td>99.36%</td>
+          </tr>
+        
+          <tr>
+            <td>envio_vs_ponder</td>
+            <td>1,695,727</td>
+            <td>696</td>
             <td>0</td>
-            <td>100.00%</td>
+            <td>99.96%</td>
+          </tr>
+        
+          <tr>
+            <td>sentio_vs_subsquid</td>
+            <td>1,686,066</td>
+            <td>10,575</td>
+            <td>0</td>
+            <td>99.38%</td>
+          </tr>
+        
+          <tr>
+            <td>sentio_vs_ponder</td>
+            <td>1,695,727</td>
+            <td>914</td>
+            <td>0</td>
+            <td>99.95%</td>
+          </tr>
+        
+          <tr>
+            <td>subsquid_vs_ponder</td>
+            <td>1,685,284</td>
+            <td>782</td>
+            <td>10,443</td>
+            <td>99.34%</td>
           </tr>
         
     </table>
     
-    <h2>6. Summary</h2>
+    <h2>6. Example Differing Records</h2>
+    
+      <details>
+        <summary>envio_vs_sentio (8 examples)</summary>
+        <table>
+          <tr>
+            <th>Transaction Hash</th>
+            <th>envio</th>
+            <th>sentio</th>
+          </tr>
+          
+            <tr>
+              <td class="transaction-hash">0xc364c8149e40b8f4a16c797e0f23fff3946bc133e3e390fa89e1ffc293241405</td>
+              <td>
+                
+                    <strong>Gas Value:</strong> 630000000000000<br>
+                    <strong>Block:</strong> 22280000<br>
+                    <strong>From:</strong> 0xeb6c4be4b92a52e969f4bf405025d997703d5383<br>
+                    <strong>To:</strong> 0x2b3abac09033a4841eeff6cf1edefe1a8b5661f2
+                  
+              </td>
+              <td>
+                
+                    <strong>Gas Value:</strong> 900000000000000<br>
+                    <strong>Block:</strong> 22280000<br>
+                    <strong>From:</strong> 0xeb6c4be4b92a52e969f4bf405025d997703d5383<br>
+                    <strong>To:</strong> 0x2b3abac09033a4841eeff6cf1edefe1a8b5661f2
+                  
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="transaction-hash">0xbcf47c8bf4be3a9c651d99c7d24556daa6c3868bf464dce0ee97f8597ba85d58</td>
+              <td>
+                
+                    <strong>Gas Value:</strong> 630000000000000<br>
+                    <strong>Block:</strong> 22280000<br>
+                    <strong>From:</strong> 0x896e5865c674557285af95763c8c95737d055e25<br>
+                    <strong>To:</strong> 0xb27daba294dcfd2fa8e2a16fb667eb787409bc86
+                  
+              </td>
+              <td>
+                
+                    <strong>Gas Value:</strong> 50292752601000<br>
+                    <strong>Block:</strong> 22280000<br>
+                    <strong>From:</strong> 0x896e5865c674557285af95763c8c95737d055e25<br>
+                    <strong>To:</strong> 0xb27daba294dcfd2fa8e2a16fb667eb787409bc86
+                  
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="transaction-hash">0xff3b770147e7513b340bb74df0804ba85bf0a37a2272c15be5ae96ab487bfcec</td>
+              <td>
+                
+                    <strong>Gas Value:</strong> 630000000000000<br>
+                    <strong>Block:</strong> 22280000<br>
+                    <strong>From:</strong> 0xb27daba294dcfd2fa8e2a16fb667eb787409bc86<br>
+                    <strong>To:</strong> 0xc5b9a29b9d3e60cc527bfd7ecc5e0985cee26d2f
+                  
+              </td>
+              <td>
+                
+                    <strong>Gas Value:</strong> 381334926462000<br>
+                    <strong>Block:</strong> 22280000<br>
+                    <strong>From:</strong> 0xb27daba294dcfd2fa8e2a16fb667eb787409bc86<br>
+                    <strong>To:</strong> 0xc5b9a29b9d3e60cc527bfd7ecc5e0985cee26d2f
+                  
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="transaction-hash">0xd2e4232f9f4a887f3bdf3845bb3fba39e77eff7e113fff0ab75ed6e25a749a9c</td>
+              <td>
+                
+                    <strong>Gas Value:</strong> 4281510000000000<br>
+                    <strong>Block:</strong> 22280000<br>
+                    <strong>From:</strong> 0xbbb5008da7ef90a416a4389fdad3872d6896cff9<br>
+                    <strong>To:</strong> 0x68b3465833fb72a70ecdf485e0e4c7bd8665fc45
+                  
+              </td>
+              <td>
+                
+                    <strong>Gas Value:</strong> 1025782750000000<br>
+                    <strong>Block:</strong> 22280000<br>
+                    <strong>From:</strong> 0xbbb5008da7ef90a416a4389fdad3872d6896cff9<br>
+                    <strong>To:</strong> 0x68b3465833fb72a70ecdf485e0e4c7bd8665fc45
+                  
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="transaction-hash">0x68ffe8bc7192c5dea38c59173c7c1612da4471f7e37db8be171e1f631167dbe8</td>
+              <td>
+                
+                    <strong>Gas Value:</strong> 10826940000000000<br>
+                    <strong>Block:</strong> 22280000<br>
+                    <strong>From:</strong> 0x5b43453fce04b92e190f391a83136bfbecedefd1<br>
+                    <strong>To:</strong> 0xfbd4cdb413e45a52e2c8312f670e9ce67e794c37
+                  
+              </td>
+              <td>
+                
+                    <strong>Gas Value:</strong> 2499404783003457<br>
+                    <strong>Block:</strong> 22280000<br>
+                    <strong>From:</strong> 0x5b43453fce04b92e190f391a83136bfbecedefd1<br>
+                    <strong>To:</strong> 0xfbd4cdb413e45a52e2c8312f670e9ce67e794c37
+                  
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="transaction-hash">0x11d4c58ba77116e1269f214fe6cb652c25537ac78b7073ce92863e4d917e6033</td>
+              <td>
+                <span class="not-present">Not present</span>
+              </td>
+              <td>
+                
+                    <strong>Gas Value:</strong> 210518283520000<br>
+                    <strong>Block:</strong> 22290000<br>
+                    <strong>From:</strong> 0x92a25adb043049a728af1b96164b23d57b8f3168<br>
+                    <strong>To:</strong> 0xdac17f958d2ee523a2206206994597c13d831ec7
+                  
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="transaction-hash">0x730317085329339711d283ce080436a797f40b1f55b47f00cc2e327dd8f514b2</td>
+              <td>
+                <span class="not-present">Not present</span>
+              </td>
+              <td>
+                
+                    <strong>Gas Value:</strong> 459763117800000<br>
+                    <strong>Block:</strong> 22290000<br>
+                    <strong>From:</strong> 0xc5267f13b9b4ba7bb73bdd53a2a3c944733a2961<br>
+                    <strong>To:</strong> 0xcdd7e0102e7c01319aad9ccde42918775d1e2008
+                  
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="transaction-hash">0x3ff3df0b7ef43d4e8bf20aa83909509de6f4b47edfa54344b73dea3e1cff1466</td>
+              <td>
+                <span class="not-present">Not present</span>
+              </td>
+              <td>
+                
+                    <strong>Gas Value:</strong> 100749083715000<br>
+                    <strong>Block:</strong> 22290000<br>
+                    <strong>From:</strong> 0xd5fbda4c79f38920159fe5f22df9655fde292d47<br>
+                    <strong>To:</strong> 0x6ad4a3f2f55ce5e322bc2f8461c7448bec38a8fb
+                  
+              </td>
+            </tr>
+          
+        </table>
+      </details>
+    
+      <details>
+        <summary>envio_vs_subsquid (11 examples)</summary>
+        <table>
+          <tr>
+            <th>Transaction Hash</th>
+            <th>envio</th>
+            <th>subsquid</th>
+          </tr>
+          
+            <tr>
+              <td class="transaction-hash">0xc364c8149e40b8f4a16c797e0f23fff3946bc133e3e390fa89e1ffc293241405</td>
+              <td>
+                
+                    <strong>Gas Value:</strong> 630000000000000<br>
+                    <strong>Block:</strong> 22280000<br>
+                    <strong>From:</strong> 0xeb6c4be4b92a52e969f4bf405025d997703d5383<br>
+                    <strong>To:</strong> 0x2b3abac09033a4841eeff6cf1edefe1a8b5661f2
+                  
+              </td>
+              <td>
+                
+                    <strong>Gas Value:</strong> 210000000000000<br>
+                    <strong>Block:</strong> 22280000<br>
+                    <strong>From:</strong> 0xeb6c4be4b92a52e969f4bf405025d997703d5383<br>
+                    <strong>To:</strong> 0x2b3abac09033a4841eeff6cf1edefe1a8b5661f2
+                  
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="transaction-hash">0xbcf47c8bf4be3a9c651d99c7d24556daa6c3868bf464dce0ee97f8597ba85d58</td>
+              <td>
+                
+                    <strong>Gas Value:</strong> 630000000000000<br>
+                    <strong>Block:</strong> 22280000<br>
+                    <strong>From:</strong> 0x896e5865c674557285af95763c8c95737d055e25<br>
+                    <strong>To:</strong> 0xb27daba294dcfd2fa8e2a16fb667eb787409bc86
+                  
+              </td>
+              <td>
+                
+                    <strong>Gas Value:</strong> 50292752601000<br>
+                    <strong>Block:</strong> 22280000<br>
+                    <strong>From:</strong> 0x896e5865c674557285af95763c8c95737d055e25<br>
+                    <strong>To:</strong> 0xb27daba294dcfd2fa8e2a16fb667eb787409bc86
+                  
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="transaction-hash">0xff3b770147e7513b340bb74df0804ba85bf0a37a2272c15be5ae96ab487bfcec</td>
+              <td>
+                
+                    <strong>Gas Value:</strong> 630000000000000<br>
+                    <strong>Block:</strong> 22280000<br>
+                    <strong>From:</strong> 0xb27daba294dcfd2fa8e2a16fb667eb787409bc86<br>
+                    <strong>To:</strong> 0xc5b9a29b9d3e60cc527bfd7ecc5e0985cee26d2f
+                  
+              </td>
+              <td>
+                
+                    <strong>Gas Value:</strong> 381334926462000<br>
+                    <strong>Block:</strong> 22280000<br>
+                    <strong>From:</strong> 0xb27daba294dcfd2fa8e2a16fb667eb787409bc86<br>
+                    <strong>To:</strong> 0xc5b9a29b9d3e60cc527bfd7ecc5e0985cee26d2f
+                  
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="transaction-hash">0xd2e4232f9f4a887f3bdf3845bb3fba39e77eff7e113fff0ab75ed6e25a749a9c</td>
+              <td>
+                
+                    <strong>Gas Value:</strong> 4281510000000000<br>
+                    <strong>Block:</strong> 22280000<br>
+                    <strong>From:</strong> 0xbbb5008da7ef90a416a4389fdad3872d6896cff9<br>
+                    <strong>To:</strong> 0x68b3465833fb72a70ecdf485e0e4c7bd8665fc45
+                  
+              </td>
+              <td>
+                
+                    <strong>Gas Value:</strong> 683853250000000<br>
+                    <strong>Block:</strong> 22280000<br>
+                    <strong>From:</strong> 0xbbb5008da7ef90a416a4389fdad3872d6896cff9<br>
+                    <strong>To:</strong> 0x68b3465833fb72a70ecdf485e0e4c7bd8665fc45
+                  
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="transaction-hash">0x68ffe8bc7192c5dea38c59173c7c1612da4471f7e37db8be171e1f631167dbe8</td>
+              <td>
+                
+                    <strong>Gas Value:</strong> 10826940000000000<br>
+                    <strong>Block:</strong> 22280000<br>
+                    <strong>From:</strong> 0x5b43453fce04b92e190f391a83136bfbecedefd1<br>
+                    <strong>To:</strong> 0xfbd4cdb413e45a52e2c8312f670e9ce67e794c37
+                  
+              </td>
+              <td>
+                
+                    <strong>Gas Value:</strong> 1391323491203457<br>
+                    <strong>Block:</strong> 22280000<br>
+                    <strong>From:</strong> 0x5b43453fce04b92e190f391a83136bfbecedefd1<br>
+                    <strong>To:</strong> 0xfbd4cdb413e45a52e2c8312f670e9ce67e794c37
+                  
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="transaction-hash">0x077b777278de42b75ec1d90367c544b7c4651c0a755dfa9b3a97eb61613319a9</td>
+              <td>
+                
+                    <strong>Gas Value:</strong> 3705840000000000<br>
+                    <strong>Block:</strong> 22280000<br>
+                    <strong>From:</strong> 0xa8c18057c5aaaaff6000d28a057a6994b2e09bfb<br>
+                    <strong>To:</strong> 0x3ef3d8ba38ebe18db133cec108f4d14ce00dd9ae
+                  
+              </td>
+              <td>
+                <span class="not-present">Not present</span>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="transaction-hash">0xee53eb16bafcc3aa784c262ba2811229ea5364b3e932777594132672394b0c42</td>
+              <td>
+                
+                    <strong>Gas Value:</strong> 808800000000000<br>
+                    <strong>Block:</strong> 22280000<br>
+                    <strong>From:</strong> 0x567eb69dd605dcdfc0a2e9ee19379005dbc453f4<br>
+                    <strong>To:</strong> 0xd776c26facf5999ca5f8abc268677d3885b45624
+                  
+              </td>
+              <td>
+                <span class="not-present">Not present</span>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="transaction-hash">0xb472064ce9f457c897285f7ca97b69716d44eef7591735a83cd3a63a0f84d45c</td>
+              <td>
+                
+                    <strong>Gas Value:</strong> 9060570000000000<br>
+                    <strong>Block:</strong> 22280000<br>
+                    <strong>From:</strong> 0xb8ff877ed78ba520ece21b1de7843a8a57ca47cb<br>
+                    <strong>To:</strong> 0xc9ca319f6da263910fd9b037ec3d817a814ef3d8
+                  
+              </td>
+              <td>
+                <span class="not-present">Not present</span>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="transaction-hash">0xdccefdbe29d331d83eb3bb3c26ff7ae415359abda9171cf2312042e66904f594</td>
+              <td>
+                <span class="not-present">Not present</span>
+              </td>
+              <td>
+                
+                    <strong>Gas Value:</strong> 24063150000000000<br>
+                    <strong>Block:</strong> 22290000<br>
+                    <strong>From:</strong> 0x2ded17791a9cecb49ba6ff4b5bb8eb3db7f33dd7<br>
+                    <strong>To:</strong> 0x85d31445af0b0ff26851bf3c5e27e90058df3270
+                  
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="transaction-hash">0xfc4233e4f22e58fabf39ce4df6aff4e7cfa7e4d7a445ff9b78aad74121a10c8d</td>
+              <td>
+                <span class="not-present">Not present</span>
+              </td>
+              <td>
+                
+                    <strong>Gas Value:</strong> 196281321533640<br>
+                    <strong>Block:</strong> 22290000<br>
+                    <strong>From:</strong> 0x32a53d9e32e4642d4e18b82d75d95d01afd8e1d3<br>
+                    <strong>To:</strong> 0x000000001bafd2f211978365022477dd0a719cfc
+                  
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="transaction-hash">0x2b533bb4560b944057c367d94586b2cec5558aa78383d324757b83c0e2e0f573</td>
+              <td>
+                <span class="not-present">Not present</span>
+              </td>
+              <td>
+                
+                    <strong>Gas Value:</strong> 329275206893880<br>
+                    <strong>Block:</strong> 22290000<br>
+                    <strong>From:</strong> 0x9d08df6910a2c203a3281a36a10cbddcfa1f5f45<br>
+                    <strong>To:</strong> 0x0000000000001ff3684f28c67538d4d072c22734
+                  
+              </td>
+            </tr>
+          
+        </table>
+      </details>
+    
+      <details>
+        <summary>envio_vs_ponder (8 examples)</summary>
+        <table>
+          <tr>
+            <th>Transaction Hash</th>
+            <th>envio</th>
+            <th>ponder</th>
+          </tr>
+          
+            <tr>
+              <td class="transaction-hash">0xc364c8149e40b8f4a16c797e0f23fff3946bc133e3e390fa89e1ffc293241405</td>
+              <td>
+                
+                    <strong>Gas Value:</strong> 630000000000000<br>
+                    <strong>Block:</strong> 22280000<br>
+                    <strong>From:</strong> 0xeb6c4be4b92a52e969f4bf405025d997703d5383<br>
+                    <strong>To:</strong> 0x2b3abac09033a4841eeff6cf1edefe1a8b5661f2
+                  
+              </td>
+              <td>
+                
+                    <strong>Gas Value:</strong> 900000000000000<br>
+                    <strong>Block:</strong> 22280000<br>
+                    <strong>From:</strong> 0xeb6c4be4b92a52e969f4bf405025d997703d5383<br>
+                    <strong>To:</strong> 0x2b3abac09033a4841eeff6cf1edefe1a8b5661f2
+                  
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="transaction-hash">0xbcf47c8bf4be3a9c651d99c7d24556daa6c3868bf464dce0ee97f8597ba85d58</td>
+              <td>
+                
+                    <strong>Gas Value:</strong> 630000000000000<br>
+                    <strong>Block:</strong> 22280000<br>
+                    <strong>From:</strong> 0x896e5865c674557285af95763c8c95737d055e25<br>
+                    <strong>To:</strong> 0xb27daba294dcfd2fa8e2a16fb667eb787409bc86
+                  
+              </td>
+              <td>
+                
+                    <strong>Gas Value:</strong> 50292752601000<br>
+                    <strong>Block:</strong> 22280000<br>
+                    <strong>From:</strong> 0x896e5865c674557285af95763c8c95737d055e25<br>
+                    <strong>To:</strong> 0xb27daba294dcfd2fa8e2a16fb667eb787409bc86
+                  
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="transaction-hash">0xff3b770147e7513b340bb74df0804ba85bf0a37a2272c15be5ae96ab487bfcec</td>
+              <td>
+                
+                    <strong>Gas Value:</strong> 630000000000000<br>
+                    <strong>Block:</strong> 22280000<br>
+                    <strong>From:</strong> 0xb27daba294dcfd2fa8e2a16fb667eb787409bc86<br>
+                    <strong>To:</strong> 0xc5b9a29b9d3e60cc527bfd7ecc5e0985cee26d2f
+                  
+              </td>
+              <td>
+                
+                    <strong>Gas Value:</strong> 381334926462000<br>
+                    <strong>Block:</strong> 22280000<br>
+                    <strong>From:</strong> 0xb27daba294dcfd2fa8e2a16fb667eb787409bc86<br>
+                    <strong>To:</strong> 0xc5b9a29b9d3e60cc527bfd7ecc5e0985cee26d2f
+                  
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="transaction-hash">0xd2e4232f9f4a887f3bdf3845bb3fba39e77eff7e113fff0ab75ed6e25a749a9c</td>
+              <td>
+                
+                    <strong>Gas Value:</strong> 4281510000000000<br>
+                    <strong>Block:</strong> 22280000<br>
+                    <strong>From:</strong> 0xbbb5008da7ef90a416a4389fdad3872d6896cff9<br>
+                    <strong>To:</strong> 0x68b3465833fb72a70ecdf485e0e4c7bd8665fc45
+                  
+              </td>
+              <td>
+                
+                    <strong>Gas Value:</strong> 1025782750000000<br>
+                    <strong>Block:</strong> 22280000<br>
+                    <strong>From:</strong> 0xbbb5008da7ef90a416a4389fdad3872d6896cff9<br>
+                    <strong>To:</strong> 0x68b3465833fb72a70ecdf485e0e4c7bd8665fc45
+                  
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="transaction-hash">0x68ffe8bc7192c5dea38c59173c7c1612da4471f7e37db8be171e1f631167dbe8</td>
+              <td>
+                
+                    <strong>Gas Value:</strong> 10826940000000000<br>
+                    <strong>Block:</strong> 22280000<br>
+                    <strong>From:</strong> 0x5b43453fce04b92e190f391a83136bfbecedefd1<br>
+                    <strong>To:</strong> 0xfbd4cdb413e45a52e2c8312f670e9ce67e794c37
+                  
+              </td>
+              <td>
+                
+                    <strong>Gas Value:</strong> 2499404783003457<br>
+                    <strong>Block:</strong> 22280000<br>
+                    <strong>From:</strong> 0x5b43453fce04b92e190f391a83136bfbecedefd1<br>
+                    <strong>To:</strong> 0xfbd4cdb413e45a52e2c8312f670e9ce67e794c37
+                  
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="transaction-hash">0x077b777278de42b75ec1d90367c544b7c4651c0a755dfa9b3a97eb61613319a9</td>
+              <td>
+                
+                    <strong>Gas Value:</strong> 3705840000000000<br>
+                    <strong>Block:</strong> 22280000<br>
+                    <strong>From:</strong> 0xa8c18057c5aaaaff6000d28a057a6994b2e09bfb<br>
+                    <strong>To:</strong> 0x3ef3d8ba38ebe18db133cec108f4d14ce00dd9ae
+                  
+              </td>
+              <td>
+                <span class="not-present">Not present</span>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="transaction-hash">0xee53eb16bafcc3aa784c262ba2811229ea5364b3e932777594132672394b0c42</td>
+              <td>
+                
+                    <strong>Gas Value:</strong> 808800000000000<br>
+                    <strong>Block:</strong> 22280000<br>
+                    <strong>From:</strong> 0x567eb69dd605dcdfc0a2e9ee19379005dbc453f4<br>
+                    <strong>To:</strong> 0xd776c26facf5999ca5f8abc268677d3885b45624
+                  
+              </td>
+              <td>
+                <span class="not-present">Not present</span>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="transaction-hash">0xb472064ce9f457c897285f7ca97b69716d44eef7591735a83cd3a63a0f84d45c</td>
+              <td>
+                
+                    <strong>Gas Value:</strong> 9060570000000000<br>
+                    <strong>Block:</strong> 22280000<br>
+                    <strong>From:</strong> 0xb8ff877ed78ba520ece21b1de7843a8a57ca47cb<br>
+                    <strong>To:</strong> 0xc9ca319f6da263910fd9b037ec3d817a814ef3d8
+                  
+              </td>
+              <td>
+                <span class="not-present">Not present</span>
+              </td>
+            </tr>
+          
+        </table>
+      </details>
+    
+      <details>
+        <summary>sentio_vs_subsquid (8 examples)</summary>
+        <table>
+          <tr>
+            <th>Transaction Hash</th>
+            <th>sentio</th>
+            <th>subsquid</th>
+          </tr>
+          
+            <tr>
+              <td class="transaction-hash">0x2794024cb6f6877e600665bf2d5d1c23d30c87dd49cee3f564bcc6913ef43f4d</td>
+              <td>
+                
+                    <strong>Gas Value:</strong> 106992403389976<br>
+                    <strong>Block:</strong> 22280000<br>
+                    <strong>From:</strong> 0x5e424d555ce197c5c7b4aa43eb92b6868b914908<br>
+                    <strong>To:</strong> 0x881d40237659c251811cec9c364ef91dc08d300c
+                  
+              </td>
+              <td>
+                
+                    <strong>Gas Value:</strong> 83720846153960<br>
+                    <strong>Block:</strong> 22280000<br>
+                    <strong>From:</strong> 0x5e424d555ce197c5c7b4aa43eb92b6868b914908<br>
+                    <strong>To:</strong> 0x881d40237659c251811cec9c364ef91dc08d300c
+                  
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="transaction-hash">0x148ea351a84b370ad1114935b92d2f9a3cfc1348b5e580e053f4f5e5e123e1c7</td>
+              <td>
+                
+                    <strong>Gas Value:</strong> 500000000000000<br>
+                    <strong>Block:</strong> 22280000<br>
+                    <strong>From:</strong> 0x264bd8291fae1d75db2c5f573b07faa6715997b5<br>
+                    <strong>To:</strong> 0xeee71654a695cd32e08110004181c984ac123b58
+                  
+              </td>
+              <td>
+                
+                    <strong>Gas Value:</strong> 21000000000000<br>
+                    <strong>Block:</strong> 22280000<br>
+                    <strong>From:</strong> 0x264bd8291fae1d75db2c5f573b07faa6715997b5<br>
+                    <strong>To:</strong> 0xeee71654a695cd32e08110004181c984ac123b58
+                  
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="transaction-hash">0x40db191715d5679da93a00096184063887a1197414378c536a9f1ed426dbfa7e</td>
+              <td>
+                
+                    <strong>Gas Value:</strong> 18525842777585<br>
+                    <strong>Block:</strong> 22280000<br>
+                    <strong>From:</strong> 0x4c459e246c84e6dabb8991bef953d5e631ea2275<br>
+                    <strong>To:</strong> 0x4d0528598f916fd1d8dc80e5f54a8feedcfd4b18
+                  
+              </td>
+              <td>
+                
+                    <strong>Gas Value:</strong> 16668177623526<br>
+                    <strong>Block:</strong> 22280000<br>
+                    <strong>From:</strong> 0x4c459e246c84e6dabb8991bef953d5e631ea2275<br>
+                    <strong>To:</strong> 0x4d0528598f916fd1d8dc80e5f54a8feedcfd4b18
+                  
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="transaction-hash">0x544da8f09c12f119730d20b74be56021b0014246c0fb2a590208381d9acad50d</td>
+              <td>
+                
+                    <strong>Gas Value:</strong> 91920927397959<br>
+                    <strong>Block:</strong> 22280000<br>
+                    <strong>From:</strong> 0x2793aef5c9fe5ad545742a44321e797232d96713<br>
+                    <strong>To:</strong> 0x1111111254eeb25477b68fb85ed929f73a960582
+                  
+              </td>
+              <td>
+                
+                    <strong>Gas Value:</strong> 74323522779561<br>
+                    <strong>Block:</strong> 22280000<br>
+                    <strong>From:</strong> 0x2793aef5c9fe5ad545742a44321e797232d96713<br>
+                    <strong>To:</strong> 0x1111111254eeb25477b68fb85ed929f73a960582
+                  
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="transaction-hash">0x24116f53326b0b1bc5a914cd6072b638b651149f43c9ecca347e3c5d44b7bada</td>
+              <td>
+                
+                    <strong>Gas Value:</strong> 327789702383760<br>
+                    <strong>Block:</strong> 22280000<br>
+                    <strong>From:</strong> 0xe93685f3bba03016f02bd1828badd6195988d950<br>
+                    <strong>To:</strong> 0x173272739bd7aa6e4e214714048a9fe699453059
+                  
+              </td>
+              <td>
+                
+                    <strong>Gas Value:</strong> 65669384022516<br>
+                    <strong>Block:</strong> 22280000<br>
+                    <strong>From:</strong> 0xe93685f3bba03016f02bd1828badd6195988d950<br>
+                    <strong>To:</strong> 0x173272739bd7aa6e4e214714048a9fe699453059
+                  
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="transaction-hash">0x5c040ac02a19961ccfa9083481084df62591e3fa9f31f4c9b9de8a71dbe60093</td>
+              <td>
+                
+                    <strong>Gas Value:</strong> 11758208973000<br>
+                    <strong>Block:</strong> 22280005<br>
+                    <strong>From:</strong> 0xafd99a1a7e2195a8e0fdb6e8bd45efdff15feadd<br>
+                    <strong>To:</strong> 0x73a117f0f2e9b96dc62923c5c11e678f18c9e242
+                  
+              </td>
+              <td>
+                <span class="not-present">Not present</span>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="transaction-hash">0x0d46c2ef6efefbb8a9e5edb9151d3d78182e8ed7a88ba4e93ce3c8c9d2c510dd</td>
+              <td>
+                
+                    <strong>Gas Value:</strong> 11283516153000<br>
+                    <strong>Block:</strong> 22280005<br>
+                    <strong>From:</strong> 0x6025d918640ac6ae649141d7f4bf75d55a2f0429<br>
+                    <strong>To:</strong> 0x6025d918640ac6ae649141d7f4bf75d55a2f0429
+                  
+              </td>
+              <td>
+                <span class="not-present">Not present</span>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="transaction-hash">0x4e495e40eeeffd72b115ca8f41b13699dacead2df0ee0881f063ba12c34c6565</td>
+              <td>
+                
+                    <strong>Gas Value:</strong> 46120740390000<br>
+                    <strong>Block:</strong> 22280005<br>
+                    <strong>From:</strong> 0xb8e1fb460d7092bd25f2134095f1115edcf8a35a<br>
+                    <strong>To:</strong> 0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48
+                  
+              </td>
+              <td>
+                <span class="not-present">Not present</span>
+              </td>
+            </tr>
+          
+        </table>
+      </details>
+    
+      <details>
+        <summary>sentio_vs_ponder (8 examples)</summary>
+        <table>
+          <tr>
+            <th>Transaction Hash</th>
+            <th>sentio</th>
+            <th>ponder</th>
+          </tr>
+          
+            <tr>
+              <td class="transaction-hash">0x2f612bc5cc14e0142376a90806459630dc8d717ef6fbcfc3629245ddd5e05122</td>
+              <td>
+                
+                    <strong>Gas Value:</strong> 21657504659816376<br>
+                    <strong>Block:</strong> 22280022<br>
+                    <strong>From:</strong> 0xd980bf20b072669f876e79728ceb9cbdf57c81c3<br>
+                    <strong>To:</strong> 0x3b55732f6d3997a7d44a041b8496e1a60712a35f
+                  
+              </td>
+              <td>
+                
+                    <strong>Gas Value:</strong> 21657504659816375<br>
+                    <strong>Block:</strong> 22280022<br>
+                    <strong>From:</strong> 0xd980bf20b072669f876e79728ceb9cbdf57c81c3<br>
+                    <strong>To:</strong> 0x3b55732f6d3997a7d44a041b8496e1a60712a35f
+                  
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="transaction-hash">0x52e51779999eaec2371f46a32a5dc0240d53820f8bbb9d494da14f3708f6f85e</td>
+              <td>
+                
+                    <strong>Gas Value:</strong> 59256833293859780<br>
+                    <strong>Block:</strong> 22280023<br>
+                    <strong>From:</strong> 0xd7e1236c08731c3632519dcd1a581bfe6876a3b2<br>
+                    <strong>To:</strong> 0x24902aa0cf0000a08c0ea0b003b0c0bf600000e0
+                  
+              </td>
+              <td>
+                
+                    <strong>Gas Value:</strong> 59256833293859776<br>
+                    <strong>Block:</strong> 22280023<br>
+                    <strong>From:</strong> 0xd7e1236c08731c3632519dcd1a581bfe6876a3b2<br>
+                    <strong>To:</strong> 0x24902aa0cf0000a08c0ea0b003b0c0bf600000e0
+                  
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="transaction-hash">0xe9d3c6b4122dde850387cd694ef6271aa1c92f1671855853353ff1bccc1141fd</td>
+              <td>
+                
+                    <strong>Gas Value:</strong> 10391828793910056<br>
+                    <strong>Block:</strong> 22280026<br>
+                    <strong>From:</strong> 0xff5910ab899d4d8ca4ff3b99f93a62bddbeda77e<br>
+                    <strong>To:</strong> 0x51c72848c68a965f66fa7a88855f9f7784502a7f
+                  
+              </td>
+              <td>
+                
+                    <strong>Gas Value:</strong> 10391828793910055<br>
+                    <strong>Block:</strong> 22280026<br>
+                    <strong>From:</strong> 0xff5910ab899d4d8ca4ff3b99f93a62bddbeda77e<br>
+                    <strong>To:</strong> 0x51c72848c68a965f66fa7a88855f9f7784502a7f
+                  
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="transaction-hash">0x15a1093d39c54b31aa236207b4c96d2374cb6b9e530aa4163892c671d617c9f2</td>
+              <td>
+                
+                    <strong>Gas Value:</strong> 293139266634570100<br>
+                    <strong>Block:</strong> 22280031<br>
+                    <strong>From:</strong> 0x5b43453fce04b92e190f391a83136bfbecedefd1<br>
+                    <strong>To:</strong> 0xfbd4cdb413e45a52e2c8312f670e9ce67e794c37
+                  
+              </td>
+              <td>
+                
+                    <strong>Gas Value:</strong> 293139266634570090<br>
+                    <strong>Block:</strong> 22280031<br>
+                    <strong>From:</strong> 0x5b43453fce04b92e190f391a83136bfbecedefd1<br>
+                    <strong>To:</strong> 0xfbd4cdb413e45a52e2c8312f670e9ce67e794c37
+                  
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="transaction-hash">0x8a39c5f4abf9db372364a2cce2a714f9bab70fca5d9650bdcc670993bbc73a48</td>
+              <td>
+                
+                    <strong>Gas Value:</strong> 20821586318326056<br>
+                    <strong>Block:</strong> 22280031<br>
+                    <strong>From:</strong> 0xfc9928f6590d853752824b0b403a6ae36785e535<br>
+                    <strong>To:</strong> 0x00000000009e50a7ddb7a7b0e2ee6604fd120e49
+                  
+              </td>
+              <td>
+                
+                    <strong>Gas Value:</strong> 20821586318326058<br>
+                    <strong>Block:</strong> 22280031<br>
+                    <strong>From:</strong> 0xfc9928f6590d853752824b0b403a6ae36785e535<br>
+                    <strong>To:</strong> 0x00000000009e50a7ddb7a7b0e2ee6604fd120e49
+                  
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="transaction-hash">0x5c040ac02a19961ccfa9083481084df62591e3fa9f31f4c9b9de8a71dbe60093</td>
+              <td>
+                
+                    <strong>Gas Value:</strong> 11758208973000<br>
+                    <strong>Block:</strong> 22280005<br>
+                    <strong>From:</strong> 0xafd99a1a7e2195a8e0fdb6e8bd45efdff15feadd<br>
+                    <strong>To:</strong> 0x73a117f0f2e9b96dc62923c5c11e678f18c9e242
+                  
+              </td>
+              <td>
+                <span class="not-present">Not present</span>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="transaction-hash">0x0d46c2ef6efefbb8a9e5edb9151d3d78182e8ed7a88ba4e93ce3c8c9d2c510dd</td>
+              <td>
+                
+                    <strong>Gas Value:</strong> 11283516153000<br>
+                    <strong>Block:</strong> 22280005<br>
+                    <strong>From:</strong> 0x6025d918640ac6ae649141d7f4bf75d55a2f0429<br>
+                    <strong>To:</strong> 0x6025d918640ac6ae649141d7f4bf75d55a2f0429
+                  
+              </td>
+              <td>
+                <span class="not-present">Not present</span>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="transaction-hash">0x4e495e40eeeffd72b115ca8f41b13699dacead2df0ee0881f063ba12c34c6565</td>
+              <td>
+                
+                    <strong>Gas Value:</strong> 46120740390000<br>
+                    <strong>Block:</strong> 22280005<br>
+                    <strong>From:</strong> 0xb8e1fb460d7092bd25f2134095f1115edcf8a35a<br>
+                    <strong>To:</strong> 0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48
+                  
+              </td>
+              <td>
+                <span class="not-present">Not present</span>
+              </td>
+            </tr>
+          
+        </table>
+      </details>
+    
+      <details>
+        <summary>subsquid_vs_ponder (11 examples)</summary>
+        <table>
+          <tr>
+            <th>Transaction Hash</th>
+            <th>subsquid</th>
+            <th>ponder</th>
+          </tr>
+          
+            <tr>
+              <td class="transaction-hash">0x9688a3fb93ba681fb2f5de07ad0e08aa553525de2f5535e8e61b39f52c644d19</td>
+              <td>
+                
+                    <strong>Gas Value:</strong> 71744043383457<br>
+                    <strong>Block:</strong> 22280000<br>
+                    <strong>From:</strong> 0x0d0707963952f2fba59dd06f2b425ace40b492fe<br>
+                    <strong>To:</strong> 0x3f80b1c54ae920be41a77f8b902259d48cf24ccf
+                  
+              </td>
+              <td>
+                
+                    <strong>Gas Value:</strong> 1395879981000000<br>
+                    <strong>Block:</strong> 22280000<br>
+                    <strong>From:</strong> 0x0d0707963952f2fba59dd06f2b425ace40b492fe<br>
+                    <strong>To:</strong> 0x3f80b1c54ae920be41a77f8b902259d48cf24ccf
+                  
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="transaction-hash">0xfd41660541adb919e85e6e4036fdc8ef97d1c62aa580786a7b7acfac6ac252ff</td>
+              <td>
+                
+                    <strong>Gas Value:</strong> 124280576356014<br>
+                    <strong>Block:</strong> 22280000<br>
+                    <strong>From:</strong> 0x91d40e4818f4d4c57b4578d9eca6afc92ac8debe<br>
+                    <strong>To:</strong> 0x3593d125a4f7849a1b059e64f4517a86dd60c95d
+                  
+              </td>
+              <td>
+                
+                    <strong>Gas Value:</strong> 502927526010000<br>
+                    <strong>Block:</strong> 22280000<br>
+                    <strong>From:</strong> 0x91d40e4818f4d4c57b4578d9eca6afc92ac8debe<br>
+                    <strong>To:</strong> 0x3593d125a4f7849a1b059e64f4517a86dd60c95d
+                  
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="transaction-hash">0x344925799481fca308fe4e5235c6b439227e9d9dd9c2d44da9612c27b0b31856</td>
+              <td>
+                
+                    <strong>Gas Value:</strong> 10413479601000<br>
+                    <strong>Block:</strong> 22280000<br>
+                    <strong>From:</strong> 0x1ab4973a48dc892cd9971ece8e01dcc7688f8f23<br>
+                    <strong>To:</strong> 0x91035bb3d5927f283132af0a2da1de61b4af4552
+                  
+              </td>
+              <td>
+                
+                    <strong>Gas Value:</strong> 49587998100000<br>
+                    <strong>Block:</strong> 22280000<br>
+                    <strong>From:</strong> 0x1ab4973a48dc892cd9971ece8e01dcc7688f8f23<br>
+                    <strong>To:</strong> 0x91035bb3d5927f283132af0a2da1de61b4af4552
+                  
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="transaction-hash">0x1cb0c157f0b8c6adb59a6ff8e6b2d671208d98815fac9e38de22bd13fdfa0fa9</td>
+              <td>
+                
+                    <strong>Gas Value:</strong> 378245595113952<br>
+                    <strong>Block:</strong> 22280000<br>
+                    <strong>From:</strong> 0x0800a132cdfe079bf87ab533f77e4e8df7c0a106<br>
+                    <strong>To:</strong> 0x06a9ab27c7e2255df1815e6cc0168d7755feb19a
+                  
+              </td>
+              <td>
+                
+                    <strong>Gas Value:</strong> 483937557720000<br>
+                    <strong>Block:</strong> 22280000<br>
+                    <strong>From:</strong> 0x0800a132cdfe079bf87ab533f77e4e8df7c0a106<br>
+                    <strong>To:</strong> 0x06a9ab27c7e2255df1815e6cc0168d7755feb19a
+                  
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="transaction-hash">0x637a26321b71ad2b2d0cef34a537ce34e1dcda6f38229f5193cff9174c73d6e7</td>
+              <td>
+                
+                    <strong>Gas Value:</strong> 41112335920400<br>
+                    <strong>Block:</strong> 22280000<br>
+                    <strong>From:</strong> 0xcff4cdfe5afe4da9635c2d61d12464855572a824<br>
+                    <strong>To:</strong> 0xa5f565650890fba1824ee0f21ebbbf660a179934
+                  
+              </td>
+              <td>
+                
+                    <strong>Gas Value:</strong> 54610781282320<br>
+                    <strong>Block:</strong> 22280000<br>
+                    <strong>From:</strong> 0xcff4cdfe5afe4da9635c2d61d12464855572a824<br>
+                    <strong>To:</strong> 0xa5f565650890fba1824ee0f21ebbbf660a179934
+                  
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="transaction-hash">0x66ca97f467a8f457f3ab5cb529932e9578066a595ec838d9a1163678d99593b9</td>
+              <td>
+                
+                    <strong>Gas Value:</strong> 9660000000000<br>
+                    <strong>Block:</strong> 22288944<br>
+                    <strong>From:</strong> 0x9fcd05c2782dfa1aa8ace486509157a38c27f9e8<br>
+                    <strong>To:</strong> 0x81fa89f40df744d81f0c59aa7b691ac3f7e1adb5
+                  
+              </td>
+              <td>
+                <span class="not-present">Not present</span>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="transaction-hash">0xc435de2cf73f592bb3eca5f6483e540bf1ec1bf12088dfe5b8dd01735d37ddcf</td>
+              <td>
+                
+                    <strong>Gas Value:</strong> 23544702231512<br>
+                    <strong>Block:</strong> 22288944<br>
+                    <strong>From:</strong> 0xa377aa6822603cc52e4e9ed6eaa045c46ef6b3e2<br>
+                    <strong>To:</strong> 0xb685760ebd368a891f27ae547391f4e2a289895b
+                  
+              </td>
+              <td>
+                <span class="not-present">Not present</span>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="transaction-hash">0xe699c87beb89f312c017ae19fd49e7d1bab0f0530e111b7bd4f18cda35e1c8d0</td>
+              <td>
+                
+                    <strong>Gas Value:</strong> 26304779246384<br>
+                    <strong>Block:</strong> 22288944<br>
+                    <strong>From:</strong> 0x22c6e59c90a58ad9d718ede3593ef3e86165f782<br>
+                    <strong>To:</strong> 0x33b41fe18d3a39046ad672f8a0c8c415454f629c
+                  
+              </td>
+              <td>
+                <span class="not-present">Not present</span>
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="transaction-hash">0xdd5606da6403e68848289f63a45ff162033a9b5959cf4185300bdcb097e577ae</td>
+              <td>
+                <span class="not-present">Not present</span>
+              </td>
+              <td>
+                
+                    <strong>Gas Value:</strong> 467985376950000<br>
+                    <strong>Block:</strong> 22280016<br>
+                    <strong>From:</strong> 0x974caa59e49682cda0ad2bbe82983419a2ecc400<br>
+                    <strong>To:</strong> 0xdac17f958d2ee523a2206206994597c13d831ec7
+                  
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="transaction-hash">0x651512ad984e9b96d333b5c510fbf8bed9d059641213ea25071a83d76efdfff4</td>
+              <td>
+                <span class="not-present">Not present</span>
+              </td>
+              <td>
+                
+                    <strong>Gas Value:</strong> 67358653410000<br>
+                    <strong>Block:</strong> 22280016<br>
+                    <strong>From:</strong> 0x17371177a360cd45e735f1e9325c39f3e2dbb39c<br>
+                    <strong>To:</strong> 0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48
+                  
+              </td>
+            </tr>
+          
+            <tr>
+              <td class="transaction-hash">0xcc4b501874486964d45c6cc5a8e5ed8a19c1baa97d3fa7492e8f529afec11e67</td>
+              <td>
+                <span class="not-present">Not present</span>
+              </td>
+              <td>
+                
+                    <strong>Gas Value:</strong> 11649084766200<br>
+                    <strong>Block:</strong> 22280016<br>
+                    <strong>From:</strong> 0x4b40045c5a5029399a4be4b61e3a8b9380d2f6ee<br>
+                    <strong>To:</strong> 0xa98216709d695915702d845634e286a5cf979851
+                  
+              </td>
+            </tr>
+          
+        </table>
+      </details>
+    
+    
+    <h2>7. Summary</h2>
     <p>
-      This report compares gas usage data from 6 different platforms.
-      The most complete dataset came from envio with 1,696,423 records.
+      This report compares gas usage data from 4 different platforms.
+      The most complete dataset came from sentio with 1,696,641 records.
     </p>
   </body>
   </html>

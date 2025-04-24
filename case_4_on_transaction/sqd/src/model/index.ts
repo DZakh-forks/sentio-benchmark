@@ -1,2 +1,2 @@
 export * from "./generated"
-export {GasSpent} from "./generated/gas-spent.model"
+export {GasSpent} from "./generated/gasSpent.model"

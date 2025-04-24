@@ -1,11 +1,10 @@
-const { Pool } = require('pg');
 const { writeFileSync } = require('fs');
 const { unlink } = require('fs/promises');
 const parquet = require('parquetjs');
+const fetch = require('node-fetch');
 
 // Configuration
-const PONDER_CONNECTION_STRING = 'postgresql://postgres:LhYOfYxqnQbQAXQJrKdznIkDDTmsZHGC@yamabiko.proxy.rlwy.net:34027/railway';
-const PONDER_SCHEMA = 'fb1dbd8f-487b-4ffe-be34-e440181efa32';
+const PONDER_GRAPHQL_ENDPOINT = 'http://localhost:42069';
 const OUTPUT_DIR = '/Users/yufeili/Desktop/sentio/indexer-benchmark/case_3_ethereum_block/data';
 const BLOCKS_FILE = `${OUTPUT_DIR}/ponder-case3-blocks.parquet`;
 
@@ -19,18 +18,13 @@ const blockSchema = new parquet.ParquetSchema({
   // Add more fields as needed
 });
 
-// Initialize PostgreSQL connection
-const pool = new Pool({
-  connectionString: PONDER_CONNECTION_STRING,
-});
-
 // Fetch blocks from Ponder with pagination for a specific range
 async function fetchPonderBlocksRange(startBlock, endBlock, writer) {
   console.log(`Fetching Ponder blocks from ${startBlock} to ${endBlock}...`);
   
   try {
     // Parameters for pagination
-    const pageSize = 5000;
+    const pageSize = 100;
     let offset = 0;
     let hasMore = true;
     let totalRecords = 0;
@@ -39,35 +33,55 @@ async function fetchPonderBlocksRange(startBlock, endBlock, writer) {
       try {
         console.log(`Fetching blocks from offset ${offset}...`);
         
-        // Query the database with schema, pagination, and block range filtering
+        // GraphQL query with pagination 
+        // Note: Removing the number filter since it might be causing issues
         const query = `
-          SELECT 
-            id, 
-            number, 
-            hash, 
-            parent_hash as "parentHash", 
-            timestamp
-          FROM 
-            "${PONDER_SCHEMA}"."block"
-          WHERE
-            number >= ${startBlock} AND number <= ${endBlock}
-          ORDER BY 
-            number ASC
-          LIMIT ${pageSize} OFFSET ${offset}
+          query {
+            blocks(
+              limit: ${pageSize}
+              offset: ${offset}
+              orderBy: { number: "asc" }
+            ) {
+              items {
+                id
+                number
+                hash
+                parentHash
+                timestamp
+              }
+              totalCount
+            }
+          }
         `;
         
-        const result = await pool.query(query);
+        const response = await fetch(PONDER_GRAPHQL_ENDPOINT, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ query }),
+        });
         
-        if (result.rows.length === 0) {
+        const result = await response.json();
+        
+        if (!result.data || !result.data.blocks || !result.data.blocks.items || result.data.blocks.items.length === 0) {
           hasMore = false;
           console.log('No more blocks to fetch.');
           break;
         }
         
+        const blocks = result.data.blocks.items;
+        
         // Process and write blocks to parquet
-        for (const block of result.rows) {
+        for (const block of blocks) {
           try {
             if (block.number === null || block.hash === null) {
+              continue;
+            }
+            
+            // Filter blocks by number range here instead of in the query
+            const blockNum = parseInt(block.number);
+            if (blockNum < startBlock || blockNum > endBlock) {
               continue;
             }
             
@@ -87,10 +101,10 @@ async function fetchPonderBlocksRange(startBlock, endBlock, writer) {
           }
         }
         
-        console.log(`Processed ${result.rows.length} blocks from offset ${offset}`);
-        offset += result.rows.length;
+        console.log(`Processed ${blocks.length} blocks from offset ${offset}`);
+        offset += blocks.length;
         
-        if (result.rows.length < pageSize) {
+        if (blocks.length < pageSize) {
           hasMore = false;
         }
       } catch (fetchErr) {
@@ -128,25 +142,141 @@ async function fetchPonderBlocks() {
     // Create a writer
     const writer = await parquet.ParquetWriter.openFile(blockSchema, BLOCKS_FILE);
     
-    // Get the maximum block number first
-    const maxBlockResult = await pool.query(`SELECT MAX(number) as "maxBlock" FROM "${PONDER_SCHEMA}"."block"`);
+    // Get total count first
+    const totalCountQuery = `
+      query {
+        blocks(limit: 1) {
+          totalCount
+        }
+      }
+    `;
     
-    let maxBlock = 10000000; // Default fallback
-    if (maxBlockResult.rows.length > 0 && maxBlockResult.rows[0].maxBlock) {
-      maxBlock = parseInt(maxBlockResult.rows[0].maxBlock);
-      console.log(`Maximum block number: ${maxBlock}`);
-    } else {
-      console.warn('Could not determine maximum block number, using default of 10,000,000');
-    }
+    const totalCountResponse = await fetch(PONDER_GRAPHQL_ENDPOINT, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ query: totalCountQuery }),
+    });
     
+    const totalCountResult = await totalCountResponse.json();
+    const totalCount = totalCountResult.data?.blocks?.totalCount || 0;
+    
+    console.log(`Total blocks available: ${totalCount}`);
+    
+    // Use pagination with cursor-based pagination
+    // Since the API doesn't support offset, we'll use limit and after parameters
+    const pageSize = 100;
+    let hasMore = true;
+    let cursor = null;
     let totalRecords = 0;
     
-    // Fetch first 150,000 blocks
-    totalRecords += await fetchPonderBlocksRange(0, 149999, writer);
-    
-    // Fetch last 150,000 blocks
-    const lastBlockStart = Math.max(150000, maxBlock - 149999);
-    totalRecords += await fetchPonderBlocksRange(lastBlockStart, maxBlock, writer);
+    while (hasMore) {
+      // Build the query
+      let queryString = `
+        query {
+          blocks(
+            limit: ${pageSize}
+            orderBy: "number"
+            orderDirection: "asc"
+      `;
+      
+      // Add the cursor if we have one
+      if (cursor) {
+        queryString += `
+            after: "${cursor}"
+        `;
+      }
+      
+      // Close the query
+      queryString += `
+          ) {
+            items {
+              id
+              number
+              hash
+              parentHash
+              timestamp
+            }
+            pageInfo {
+              endCursor
+              hasNextPage
+            }
+          }
+        }
+      `;
+      
+      try {
+        console.log(`Fetching batch of blocks...${cursor ? ` (after: ${cursor})` : ''}`);
+        
+        const response = await fetch(PONDER_GRAPHQL_ENDPOINT, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ query: queryString }),
+        });
+        
+        const result = await response.json();
+        
+        if (result.errors) {
+          console.error('GraphQL errors:', result.errors);
+          hasMore = false;
+          break;
+        }
+        
+        if (!result.data || !result.data.blocks || !result.data.blocks.items || result.data.blocks.items.length === 0) {
+          console.log('No more blocks to fetch.');
+          hasMore = false;
+          break;
+        }
+        
+        const blocks = result.data.blocks.items;
+        const pageInfo = result.data.blocks.pageInfo;
+        
+        let batchProcessed = 0;
+        
+        // Process and write blocks to parquet
+        for (const block of blocks) {
+          try {
+            if (block.number === null || block.hash === null) {
+              continue;
+            }
+            
+            // Create a record in the right format
+            const record = {
+              id: block.id,
+              number: BigInt(block.number),
+              hash: block.hash,
+              parentHash: block.parentHash || '',
+              timestamp: BigInt(block.timestamp || 0)
+            };
+            
+            await writer.appendRow(record);
+            totalRecords++;
+            batchProcessed++;
+          } catch (rowErr) {
+            console.error(`Error processing block: ${JSON.stringify(block)}`, rowErr);
+          }
+        }
+        
+        console.log(`Processed ${batchProcessed} blocks`);
+        
+        // Check if there are more pages
+        hasMore = pageInfo.hasNextPage;
+        
+        // Update the cursor for the next batch
+        if (hasMore && pageInfo.endCursor) {
+          cursor = pageInfo.endCursor;
+        } else {
+          hasMore = false;
+        }
+        
+      } catch (fetchErr) {
+        console.error('Error fetching blocks:', fetchErr.message);
+        hasMore = false;
+      }
+    }
     
     // If no blocks were processed, write a dummy record
     if (totalRecords === 0) {
@@ -166,9 +296,6 @@ async function fetchPonderBlocks() {
   } catch (error) {
     console.error('Error fetching blocks:', error);
     throw error;
-  } finally {
-    // Close the database connection pool
-    await pool.end();
   }
 }
 
@@ -182,13 +309,21 @@ async function main() {
       console.error('Error creating output directory:', err);
     }
     
-    // Test database connection
-    const client = await pool.connect();
-    try {
-      await client.query('SELECT 1');
-      console.log('Connection to Ponder database successful');
-    } finally {
-      client.release();
+    // Test GraphQL connection
+    const testQuery = '{ _meta { status } }';
+    const testResponse = await fetch(PONDER_GRAPHQL_ENDPOINT, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ query: testQuery }),
+    });
+    
+    const testResult = await testResponse.json();
+    if (testResult.data && testResult.data._meta) {
+      console.log('Connection to Ponder GraphQL successful');
+    } else {
+      throw new Error('Failed to connect to Ponder GraphQL endpoint');
     }
     
     // Fetch and save blocks

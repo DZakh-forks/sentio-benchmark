@@ -18,6 +18,9 @@ interface GasSpentConstructorInput {
   from: String;
   to: String;
   gasValue: BigInt;
+  gasUsed: BigInt;
+  gasPrice: BigInt;
+  effectiveGasPrice?: BigInt;
   blockNumber: BigInt;
   transactionHash?: Bytes;
 }
@@ -42,6 +45,17 @@ export class GasSpent extends AbstractEntity  {
 
 	@Required
 	@Column("BigInt")
+	gasUsed: BigInt
+
+	@Required
+	@Column("BigInt")
+	gasPrice: BigInt
+
+	@Column("BigInt")
+	effectiveGasPrice?: BigInt
+
+	@Required
+	@Column("BigInt")
 	blockNumber: BigInt
 
 	@Column("Bytes")
@@ -56,6 +70,9 @@ const source = `type GasSpent @entity {
   from: String!             # Sender address 
   to: String!               # Recipient address
   gasValue: BigInt!         # Gas cost (gasUsed * gasPrice)
+  gasUsed: BigInt!          # Gas used by the transaction
+  gasPrice: BigInt!         # Base gas price
+  effectiveGasPrice: BigInt # Effective gas price (for EIP-1559 transactions)
   blockNumber: BigInt!      # Block where transaction was executed
   transactionHash: Bytes    # Transaction hash as binary
 }

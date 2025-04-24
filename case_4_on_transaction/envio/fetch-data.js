@@ -5,10 +5,24 @@ import { fileURLToPath } from 'url';
 import { HypersyncClient } from '@envio-dev/hypersync-client';
 import { BigNumber } from 'bignumber.js';
 import parquet from 'parquetjs';
+import dotenv from 'dotenv';
+
+// Load environment variables from .env file
+dotenv.config();
 
 // Get the directory name
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+// Get HyperSync URL from environment variable
+const HYPERSYNC_URL = process.env.HYPERSYNC_URL;
+if (!HYPERSYNC_URL) {
+  console.error("ERROR: HYPERSYNC_URL environment variable is required");
+  process.exit(1);
+}
+
+// Get HyperSync API key from environment variable (optional)
+const HYPERSYNC_API_KEY = process.env.HYPERSYNC_API_KEY;
 
 // Configuration - using the specified block range for case_4
 const OUTPUT_PARQUET_FILE = path.join(__dirname, '../data/envio-case4-gas-data.parquet');
@@ -16,46 +30,52 @@ const START_BLOCK = 22280000;
 const END_BLOCK = 22290000;
 const BATCH_SIZE = 100; // Larger batch size
 
-// Estimated gas price for the time period (in wei)
-// Using 30 gwei as a reasonable estimate for the time period
-const ESTIMATED_GAS_PRICE = BigInt('30000000000'); 
-
 // Define the Parquet schema
 const gasDataSchema = new parquet.ParquetSchema({
   id: { type: 'UTF8' },
   from: { type: 'UTF8' },
   to: { type: 'UTF8' },
   gasValue: { type: 'UTF8' }, // Using STRING for big numbers to avoid overflow
+  gasUsed: { type: 'UTF8' }, // Gas used by the transaction
+  gasPrice: { type: 'UTF8' }, // Base gas price
+  effectiveGasPrice: { type: 'UTF8' }, // Effective gas price (for EIP-1559 transactions)
   blockNumber: { type: 'INT64' },
   timestamp: { type: 'INT64' }
 });
 
+// Helper function to convert hex values to decimal strings
+function hexToDecimalString(hexValue) {
+  if (typeof hexValue === 'string' && hexValue.startsWith('0x')) {
+    return BigInt(hexValue).toString();
+  }
+  return hexValue ? hexValue.toString() : '0';
+}
+
 async function fetchGasData() {
   try {
-    console.log(`Fetching gas data from blocks ${START_BLOCK} to ${END_BLOCK} using HyperSync...`);
+    console.log('=== HYPERSYNC GAS DATA COLLECTION ===');
+    console.log(`Starting gas data collection from block ${START_BLOCK} to ${END_BLOCK}`);
     
-    // Initialize the HyperSync client with the correct URL
+    // Make sure output directory exists
+    const outputDir = path.dirname(OUTPUT_PARQUET_FILE);
+    if (!fs.existsSync(outputDir)) {
+      fs.mkdirSync(outputDir, { recursive: true });
+    }
+    
+    // Create client - use the static method to initialize
     const client = await HypersyncClient.new({
-      url: "http://eth.hypersync.xyz"
+      url: HYPERSYNC_URL,
+      apiKey: HYPERSYNC_API_KEY || undefined // Only pass if defined
     });
     
-    console.log('HyperSync client initialized successfully.');
-    
-    // Store the processed transactions
-    const transactions = [];
+    // Initialize stats and timers
+    const startTime = Date.now();
+    let transactions = [];
     let processedBlocks = 0;
     let processedTxs = 0;
-    
-    // Track progress
-    const startTime = Date.now();
-    
-    console.log('Starting data collection...');
-    console.log(`Using estimated gas price: ${ESTIMATED_GAS_PRICE} wei`);
-    
-    // Process in batches until we reach the end block
+
     for (let currentBlock = START_BLOCK; currentBlock < END_BLOCK; currentBlock += BATCH_SIZE) {
       const batchEndBlock = Math.min(currentBlock + BATCH_SIZE, END_BLOCK);
-      console.log(`Processing blocks ${currentBlock} to ${batchEndBlock}...`);
       
       try {
         // Define query for this batch - explicitly request all relevant fields
@@ -64,7 +84,7 @@ async function fetchGasData() {
           toBlock: batchEndBlock,
           transactions: [{}], // Get all transactions
           fieldSelection: {
-            transaction: ["hash", "from", "to", "gas", "value", "input"],
+            transaction: ["hash", "from", "to", "gas", "gas_used", "gas_price", "effective_gas_price", "value", "input", "receipt"],
             block: ["number", "timestamp"]
           }
         };
@@ -121,6 +141,8 @@ async function fetchGasData() {
                 console.log("- From:", sampleTx.from);
                 console.log("- To:", sampleTx.to);
                 console.log("- Gas:", sampleTx.gas, typeof sampleTx.gas);
+                console.log("- GasUsed:", sampleTx.gasUsed, typeof sampleTx.gasUsed);
+                console.log("- GasPrice:", sampleTx.gasPrice, typeof sampleTx.gasPrice);
                 console.log("- Value:", sampleTx.value);
                 console.log("- Input length:", sampleTx.input ? sampleTx.input.length : 0);
               }
@@ -135,41 +157,39 @@ async function fetchGasData() {
                     continue;
                   }
                   
-                  // Since blockNumber is missing in the transaction data,
-                  // we need to find the block number from the context.
-                  // We'll use the current block range as a fallback.
+                  // Find the corresponding block for this transaction
                   let blockNumber = currentBlock;
                   let timestamp = 0;
                   
                   // Find the corresponding block for this transaction
-                  // If we can't find the exact block, use the first block in this batch
                   if (result.data.blocks && result.data.blocks.length > 0) {
                     const firstBlock = result.data.blocks[0];
                     blockNumber = firstBlock.number || currentBlock;
                     timestamp = firstBlock.timestamp || 0;
                   }
                   
-                  // Calculate estimated gas value
-                  // Convert gas to appropriate numeric values
-                  const gasAsBigInt = typeof tx.gas === 'string' && tx.gas.startsWith('0x')
-                    ? BigInt(tx.gas)
-                    : BigInt(typeof tx.gas === 'string' ? tx.gas : '21000');
-                    
-                  // Estimate actual gas used based on transaction type
-                  // Simple ETH transfer typically uses exactly 21000 gas
-                  // Contract interactions use variable gas, but usually 70-90% of the limit
-                  const isSimpleTransfer = !tx.input || tx.input === '0x' || tx.input.length <= 2;
+                  // Get actual gasUsed and gasPrice
+                  const gasUsedRaw = tx.gasUsed || '0';
+                  const gasPriceRaw = tx.gasPrice || '0';
+                  const effectiveGasPriceRaw = tx.effectiveGasPrice || tx.gasPrice || '0';
                   
-                  let gasEstimate;
-                  if (isSimpleTransfer) {
-                    gasEstimate = BigInt(21000);
-                  } else {
-                    // For contract interactions, estimate 80% of the limit
-                    gasEstimate = (gasAsBigInt * BigInt(80)) / BigInt(100);
+                  // Convert any hex values to decimal strings
+                  const gasUsed = hexToDecimalString(gasUsedRaw);
+                  const gasPrice = hexToDecimalString(gasPriceRaw);
+                  const effectiveGasPrice = hexToDecimalString(effectiveGasPriceRaw);
+                  
+                  // Calculate gas value as gasUsed * gasPrice
+                  const gasValueBigInt = BigInt(gasUsed) * BigInt(effectiveGasPrice);
+                  const gasValue = gasValueBigInt.toString();
+                  
+                  // Debug logging for gas calculation for the first few transactions
+                  if (processedTxs < 5) {
+                    console.log(`Gas Calculation Details for tx ${tx.hash}:`);
+                    console.log(`- gasUsed: ${gasUsedRaw} → ${gasUsed}`);
+                    console.log(`- gasPrice: ${gasPriceRaw} → ${gasPrice}`);
+                    console.log(`- effectiveGasPrice: ${effectiveGasPriceRaw} → ${effectiveGasPrice}`);
+                    console.log(`- gasValue (gasUsed * effectiveGasPrice): ${gasValue}`);
                   }
-                  
-                  // Calculate gas value as gasEstimate * gasPrice
-                  const gasValue = (gasEstimate * ESTIMATED_GAS_PRICE).toString();
                   
                   // Create the gas record
                   transactions.push({
@@ -177,6 +197,9 @@ async function fetchGasData() {
                     from: tx.from.toLowerCase(),
                     to: (tx.to || '0x0').toLowerCase(),
                     gasValue,
+                    gasUsed,
+                    gasPrice,
+                    effectiveGasPrice,
                     blockNumber: blockNumber,
                     timestamp: timestamp
                   });
@@ -195,6 +218,9 @@ async function fetchGasData() {
                       console.log(`  From: ${sample.from}`);
                       console.log(`  To: ${sample.to}`);
                       console.log(`  Gas Value: ${sample.gasValue}`);
+                      console.log(`  Gas Used: ${sample.gasUsed}`);
+                      console.log(`  Gas Price: ${sample.gasPrice}`);
+                      console.log(`  Effective Gas Price: ${sample.effectiveGasPrice || 'N/A'}`);
                       console.log(`  Block: ${sample.blockNumber}`);
                     }
                   }
@@ -250,7 +276,14 @@ async function fetchGasData() {
     
     if (transactions.length > 0) {
       console.log('\nSample record:');
-      console.log(JSON.stringify(transactions[0], null, 2));
+      console.log(`  Id: ${transactions[0].id}`);
+      console.log(`  From: ${transactions[0].from}`);
+      console.log(`  To: ${transactions[0].to}`);
+      console.log(`  Gas Value: ${transactions[0].gasValue}`);
+      console.log(`  Gas Used: ${transactions[0].gasUsed}`);
+      console.log(`  Gas Price: ${transactions[0].gasPrice}`);
+      console.log(`  Effective Gas Price: ${transactions[0].effectiveGasPrice || 'N/A'}`);
+      console.log(`  Block Number: ${transactions[0].blockNumber}`);
     } else {
       console.log('\nNo transactions found in the specified block range');
     }
@@ -277,7 +310,10 @@ async function saveToParquet(transactions) {
         id: tx.id,
         from: tx.from,
         to: tx.to,
-        gasValue: tx.gasValue.toString(), // Ensure it's a string
+        gasValue: tx.gasValue, // Already a string
+        gasUsed: tx.gasUsed,
+        gasPrice: tx.gasPrice,
+        effectiveGasPrice: tx.effectiveGasPrice || '0',
         blockNumber: tx.blockNumber,
         timestamp: tx.timestamp
       });

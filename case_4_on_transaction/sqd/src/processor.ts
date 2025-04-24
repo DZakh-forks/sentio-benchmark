@@ -7,6 +7,13 @@ import {
     Log as _Log,
     Transaction as _Transaction,
 } from '@subsquid/evm-processor'
+import * as dotenv from 'dotenv'
+
+// Load environment variables from .env file
+dotenv.config()
+
+// Get RPC endpoint from environment variable
+const rpcEndpoint = process.env.RPC_ENDPOINT
 
 export const processor = new EvmBatchProcessor()
     // Lookup archive by the network name in Subsquid registry
@@ -18,10 +25,10 @@ export const processor = new EvmBatchProcessor()
     .setRpcEndpoint({
         // Set the URL via .env for local runs or via secrets when deploying to Subsquid Cloud
         // https://docs.subsquid.io/deploy-squid/env-variables/
-        url: assertNotNull("https://rpc.sentio.xyz/Gq7RebwEu2BcPerSmdu8HzPMR4YXGMjq/ethereum", 'No RPC endpoint supplied')
+        url: assertNotNull(rpcEndpoint, 'No RPC endpoint supplied - set RPC_ENDPOINT environment variable')
     })
     // Reduce finality confirmation for faster processing
-    .setFinalityConfirmation(32)
+    .setFinalityConfirmation(75)
     // Update block range to match Sentio and Envio implementations
     .setBlockRange({
         from: 22280000,
@@ -38,6 +45,7 @@ export const processor = new EvmBatchProcessor()
             to: true,
             gasUsed: true,
             gasPrice: true,
+            effectiveGasPrice: true,
         }
     })
     // Track all transactions for gas usage

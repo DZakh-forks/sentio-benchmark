@@ -15,14 +15,15 @@ import { DatabaseSchema } from '@sentio/sdk'
 
 interface SwapConstructorInput {
   id: ID;
-  distinctId: String;
+  blockNumber: BigInt;
+  transactionHash: String;
+  from: String;
+  to: String;
   amountIn: BigInt;
   amountOutMin: BigInt;
   deadline: BigInt;
-  path: Array<String>;
-  to: String;
-  transaction: String;
-  blockNumber: BigInt;
+  path: String;
+  pathLength: Int;
 }
 @Entity("Swap")
 export class Swap extends AbstractEntity  {
@@ -32,8 +33,20 @@ export class Swap extends AbstractEntity  {
 	id: ID
 
 	@Required
+	@Column("BigInt")
+	blockNumber: BigInt
+
+	@Required
 	@Column("String")
-	distinctId: String
+	transactionHash: String
+
+	@Required
+	@Column("String")
+	from: String
+
+	@Required
+	@Column("String")
+	to: String
 
 	@Required
 	@Column("BigInt")
@@ -48,36 +61,28 @@ export class Swap extends AbstractEntity  {
 	deadline: BigInt
 
 	@Required
-	@ListColumn("String!")
-	path: Array<String>
-
-	@Required
 	@Column("String")
-	to: String
+	path: String
 
 	@Required
-	@Column("String")
-	transaction: String
-
-	@Required
-	@Column("BigInt")
-	blockNumber: BigInt
+	@Column("Int")
+	pathLength: Int
   constructor(data: SwapConstructorInput) {super()}
   
 }
 
 
-const source = `
-type Swap @entity {
+const source = `type Swap @entity {
   id: ID!
-  distinctId: String!
+  blockNumber: BigInt!
+  transactionHash: String!
+  from: String!
+  to: String!
   amountIn: BigInt!
   amountOutMin: BigInt!
   deadline: BigInt!
-  path: [String!]!
-  to: String!
-  transaction: String!
-  blockNumber: BigInt!
+  path: String!
+  pathLength: Int!
 }
 
 `

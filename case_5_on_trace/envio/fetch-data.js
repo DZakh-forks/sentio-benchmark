@@ -5,13 +5,27 @@ import * as fs from 'fs';
 import * as path from 'path';
 import parquet from 'parquetjs';
 import { fileURLToPath } from 'url';
+import dotenv from 'dotenv';
+
+// Load environment variables from .env file
+dotenv.config();
+
+// Get HyperSync URL from environment variable
+const HYPERSYNC_URL = process.env.HYPERSYNC_URL;
+if (!HYPERSYNC_URL) {
+  console.error("ERROR: HYPERSYNC_URL environment variable is required");
+  process.exit(1);
+}
+
+// Get HyperSync API key from environment variable (optional)
+const HYPERSYNC_API_KEY = process.env.HYPERSYNC_API_KEY;
 
 // Set up constants
 const UNISWAP_V2_ROUTER = '0x7a250d5630b4cf539739df2c5dacb4c659f2488d'.toLowerCase();
 const SWAP_METHOD_SIGNATURE = '0x38ed1739'; // swapExactTokensForTokens
-const START_BLOCK = 22280000;
+const START_BLOCK = 22200000;
 const END_BLOCK = 22290000;
-const PARQUET_OUTPUT_PATH = '../data/envio-case5-swap-data.parquet';
+const PARQUET_OUTPUT_PATH = '../data/envio-case5-swaps.parquet';
 
 // Get current file path for ES modules
 const __filename = fileURLToPath(import.meta.url);
@@ -23,18 +37,18 @@ if (!fs.existsSync(dataDir)) {
   fs.mkdirSync(dataDir, { recursive: true });
 }
 
-// Define schema for Parquet file
+// Define schema for Parquet file - Using standardized schema
 const swapSchema = new parquet.ParquetSchema({
-    traceHash: { type: 'UTF8' },
-    txHash: { type: 'UTF8' },
+    id: { type: 'UTF8' },
     blockNumber: { type: 'INT64' },
-    tokenIn: { type: 'UTF8' },
-    tokenOut: { type: 'UTF8' },
-    path: { type: 'UTF8' },
+    transactionHash: { type: 'UTF8' },
+    from: { type: 'UTF8' },
+    to: { type: 'UTF8' },
     amountIn: { type: 'UTF8' }, // Store as string to preserve precision
     amountOutMin: { type: 'UTF8' }, // Store as string to preserve precision
-    to: { type: 'UTF8' },
-    timestamp: { type: 'INT64' }
+    deadline: { type: 'UTF8' }, // Store as string to preserve precision
+    path: { type: 'UTF8' }, // Comma-separated path of token addresses
+    pathLength: { type: 'INT32' }
 });
 
 // Function to decode parameters from trace input
@@ -63,26 +77,37 @@ function decodeSwapParams(input) {
     for (let i = 0; i < pathLength && i < 10; i++) { // Limit to 10 tokens to prevent errors
       const tokenOffset = pathOffset + 64 + (i * 64);
       const tokenAddress = `0x${parametersHex.slice(tokenOffset + 24, tokenOffset + 64)}`;
-      pathTokens.push(tokenAddress);
+      // Validate and normalize address
+      if (tokenAddress && tokenAddress.length === 42) {
+        pathTokens.push(tokenAddress.toLowerCase()); // Normalize to lowercase
+      }
     }
-    
-    // Get first and last token from path
-    const tokenIn = pathTokens[0];
-    const tokenOut = pathTokens[pathTokens.length - 1];
     
     // Extract recipient address (after the path array)
     const toOffset = pathOffset + 64 + (pathLength * 64); // Position after path array
-    const to = `0x${parametersHex.slice(toOffset + 24, toOffset + 64)}`;
+    let to = '0x0000000000000000000000000000000000000000'; // Default to zero address
+    
+    // Validate that we have enough data to extract the recipient address
+    if (parametersHex.length >= toOffset + 64) {
+      const extractedTo = `0x${parametersHex.slice(toOffset + 24, toOffset + 64)}`;
+      // Ensure it's a valid address (0x + 40 hex chars)
+      if (extractedTo && extractedTo.length === 42 && extractedTo !== '0x0000000000000000000000000000000000000000') {
+        to = extractedTo.toLowerCase();
+      }
+    }
     
     // Convert hex values to BigNumber for safe handling of large numbers
     const amountIn = new BigNumber(`0x${amountInHex}`).toString(10);
     const amountOutMin = new BigNumber(`0x${amountOutMinHex}`).toString(10);
     const deadline = new BigNumber(`0x${deadlineHex}`).toString(10);
     
+    // Combine all tokens into a path string
+    const pathString = pathTokens.join(',');
+    
     return {
-      tokenIn,
-      tokenOut,
-      path: pathTokens.join(','),
+      pathTokens,
+      pathString,
+      pathLength,
       amountIn,
       amountOutMin,
       deadline,
@@ -112,7 +137,8 @@ async function main() {
   try {
     // Initialize HyperSync client
     const client = await HypersyncClient.new({
-      url: "http://eth.hypersync.xyz",
+      url: HYPERSYNC_URL,
+      apiKey: HYPERSYNC_API_KEY || undefined // Only pass if defined
     });
     console.log('HyperSync client initialized');
     
@@ -171,7 +197,6 @@ async function main() {
       // Process traces in this response
       const traces = res.data.traces;
       const blockNumber = res.data.block?.number || 0;
-      const timestamp = res.data.block?.timestamp || Math.floor(Date.now() / 1000);
       
       totalTraces += traces.length;
       
@@ -184,22 +209,35 @@ async function main() {
           if (swapParams) {
             successfulDecodes++;
             
+            const txHash = trace.transactionHash.toLowerCase();
+            const traceAddress = trace.traceAddress?.join('-') || '0';
+            
+            // Create a standardized ID format
+            const id = `${txHash}-${traceAddress}`;
+            
+            // Get transaction sender (from) address
+            const fromAddress = (trace.from || "").toLowerCase();
+            
+            // Create the swap record using standardized schema
             const swapRecord = {
-              traceHash: trace.transactionHash + '-' + (trace.traceAddress?.join('-') || '0'),
-              txHash: trace.transactionHash,
+              id: id,
               blockNumber: trace.blockNumber || blockNumber,
-              tokenIn: swapParams.tokenIn,
-              tokenOut: swapParams.tokenOut,
-              path: swapParams.path,
+              transactionHash: txHash,
+              from: fromAddress,
+              to: swapParams.to,
               amountIn: swapParams.amountIn,
               amountOutMin: swapParams.amountOutMin,
-              to: swapParams.to,
-              timestamp
+              deadline: swapParams.deadline,
+              path: swapParams.pathString,
+              pathLength: swapParams.pathLength
             };
             
             swapRecords.push(swapRecord);
-            uniqueInputTokens.add(swapParams.tokenIn);
-            uniqueOutputTokens.add(swapParams.tokenOut);
+            
+            if (swapParams.pathTokens.length > 0) {
+              uniqueInputTokens.add(swapParams.pathTokens[0]);
+              uniqueOutputTokens.add(swapParams.pathTokens[swapParams.pathTokens.length - 1]);
+            }
             uniqueRecipients.add(swapParams.to);
             inputAmounts.push(new BigNumber(swapParams.amountIn));
           }

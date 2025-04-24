@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Ethereum Block Coverage Analysis</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    h1, h2, h3 { color: #333; }
+    table { border-collapse: collapse; width: 100%; margin-bottom: 20px; }
+    th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+    th { background-color: #f2f2f2; }
+    tr:nth-child(even) { background-color: #f9f9f9; }
+    .chart-container { height: 400px; margin-bottom: 40px; }
+    .platform-summary { display: flex; flex-wrap: wrap; gap: 20px; margin-bottom: 20px; }
+    .platform-card { border: 1px solid #ddd; border-radius: 5px; padding: 15px; flex: 1; min-width: 200px; }
+    .coverage-bar { height: 20px; background-color: #4CAF50; margin-top: 5px; }
+    .similarity-matrix { margin-bottom: 30px; }
+    .block-summary { margin-bottom: 30px; }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <h1>Ethereum Block Coverage Analysis</h1>
+  
+  <h2>Platform Summary</h2>
+  <div class="platform-summary">
+    <div class="platform-card">
+      <h3>sentio</h3>
+      <p>Total Blocks: 100000</p>
+      <p>Min Block: 1</p>
+      <p>Max Block: 100000</p>
+      <p>Coverage: 100.00%</p>
+      <div class="coverage-bar" style="width: 100.00%"></div>
+    </div>
+    <div class="platform-card">
+      <h3>subsquid</h3>
+      <p>Total Blocks: 13156</p>
+      <p>Min Block: 0</p>
+      <p>Max Block: 100000</p>
+      <p>Coverage: 13.16%</p>
+      <div class="coverage-bar" style="width: 13.16%"></div>
+    </div>
+    <div class="platform-card">
+      <h3>envio</h3>
+      <p>Total Blocks: 100000</p>
+      <p>Min Block: 0</p>
+      <p>Max Block: 99999</p>
+      <p>Coverage: 100.00%</p>
+      <div class="coverage-bar" style="width: 100.00%"></div>
+    </div>
+    <div class="platform-card">
+      <h3>ponder</h3>
+      <p>Total Blocks: 100001</p>
+      <p>Min Block: 0</p>
+      <p>Max Block: 100000</p>
+      <p>Coverage: 100.00%</p>
+      <div class="coverage-bar" style="width: 100.00%"></div>
+    </div>
+    <div class="platform-card">
+      <h3>subgraph</h3>
+      <p>Total Blocks: 100001</p>
+      <p>Min Block: 0</p>
+      <p>Max Block: 100000</p>
+      <p>Coverage: 100.00%</p>
+      <div class="coverage-bar" style="width: 100.00%"></div>
+    </div>
+  </div>
+  
+  <h2>Block Distribution</h2>
+  <div class="chart-container">
+    <canvas id="distributionChart"></canvas>
+  </div>
+  
+  <h2>Block Range Comparison</h2>
+  <div class="block-summary">
+    <table>
+      <tr>
+        <th>Platform</th>
+        <th>Blocks</th>
+        <th>Block Range</th>
+        <th>Coverage Pattern</th>
+      </tr>
+      <tr>
+        <td>sentio</td>
+        <td>100000</td>
+        <td>1 to 100000</td>
+        <td>Complete coverage (100%)</td>
+      </tr>
+      <tr>
+        <td>subsquid</td>
+        <td>13156</td>
+        <td>0 to 100000</td>
+        <td>Sparse coverage (13.16%): Mostly blocks 45,000+ with gaps</td>
+      </tr>
+      <tr>
+        <td>envio</td>
+        <td>100000</td>
+        <td>0 to 99999</td>
+        <td>Complete coverage (100%)</td>
+      </tr>
+      <tr>
+        <td>ponder</td>
+        <td>100001</td>
+        <td>0 to 100000</td>
+        <td>Complete coverage (100%)</td>
+      </tr>
+      <tr>
+        <td>subgraph</td>
+        <td>100001</td>
+        <td>0 to 100000</td>
+        <td>Complete coverage (100%)</td>
+      </tr>
+    </table>
+  </div>
+  
+  <h2>Similarity Matrix</h2>
+  <div class="similarity-matrix">
+    <table>
+      <tr>
+        <th>Platform Pair</th>
+        <th>Common Blocks</th>
+        <th>Unique to First</th>
+        <th>Unique to Second</th>
+        <th>Similarity (%)</th>
+      </tr>
+      <tr>
+        <td>sentio vs subsquid</td>
+        <td>13155</td>
+        <td>86845</td>
+        <td>1</td>
+        <td>13.15%</td>
+      </tr>
+      <tr>
+        <td>sentio vs envio</td>
+        <td>99999</td>
+        <td>1</td>
+        <td>1</td>
+        <td>100.00%</td>
+      </tr>
+      <tr>
+        <td>sentio vs ponder</td>
+        <td>100000</td>
+        <td>0</td>
+        <td>1</td>
+        <td>100.00%</td>
+      </tr>
+      <tr>
+        <td>sentio vs subgraph</td>
+        <td>100000</td>
+        <td>0</td>
+        <td>1</td>
+        <td>100.00%</td>
+      </tr>
+      <tr>
+        <td>subsquid vs envio</td>
+        <td>13155</td>
+        <td>1</td>
+        <td>86845</td>
+        <td>13.15%</td>
+      </tr>
+      <tr>
+        <td>subsquid vs ponder</td>
+        <td>13156</td>
+        <td>0</td>
+        <td>86845</td>
+        <td>13.16%</td>
+      </tr>
+      <tr>
+        <td>subsquid vs subgraph</td>
+        <td>13156</td>
+        <td>0</td>
+        <td>86845</td>
+        <td>13.16%</td>
+      </tr>
+      <tr>
+        <td>envio vs ponder</td>
+        <td>100000</td>
+        <td>0</td>
+        <td>1</td>
+        <td>100.00%</td>
+      </tr>
+      <tr>
+        <td>envio vs subgraph</td>
+        <td>100000</td>
+        <td>0</td>
+        <td>1</td>
+        <td>100.00%</td>
+      </tr>
+      <tr>
+        <td>ponder vs subgraph</td>
+        <td>100001</td>
+        <td>0</td>
+        <td>0</td>
+        <td>100.00%</td>
+      </tr>
+    </table>
+  </div>
+  
+  <script>
+    // Distribution Chart
+    const ctx = document.getElementById('distributionChart').getContext('2d');
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['0-4999', '5000-9999', '10000-14999', '15000-19999', '20000-24999', '25000-29999', '30000-34999', '35000-39999', '40000-44999', '45000-49999', '50000-54999', '55000-59999', '60000-64999', '65000-69999', '70000-74999', '75000-79999', '80000-84999', '85000-89999', '90000-94999', '95000-99999', '100000-100000'],
+        datasets: [
+          {
+              label: 'sentio',
+              data: [4999, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, NaN],
+              backgroundColor: getColor(0),
+              borderColor: getDarkerColor(0),
+              borderWidth: 1
+            },
+          {
+              label: 'subsquid',
+              data: [1, 0, 0, 0, 0, 0, 0, 0, 0, 1455, 1212, 880, 1036, 1286, 1212, 1084, 1509, 1261, 1165, 1054, NaN],
+              backgroundColor: getColor(1),
+              borderColor: getDarkerColor(1),
+              borderWidth: 1
+            },
+          {
+              label: 'envio',
+              data: [5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000],
+              backgroundColor: getColor(2),
+              borderColor: getDarkerColor(2),
+              borderWidth: 1
+            },
+          {
+              label: 'ponder',
+              data: [5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, NaN],
+              backgroundColor: getColor(3),
+              borderColor: getDarkerColor(3),
+              borderWidth: 1
+            },
+          {
+              label: 'subgraph',
+              data: [5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, 5000, NaN],
+              backgroundColor: getColor(4),
+              borderColor: getDarkerColor(4),
+              borderWidth: 1
+            }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          x: {
+            title: {
+              display: true,
+              text: 'Block Range'
+            }
+          },
+          y: {
+            title: {
+              display: true,
+              text: 'Number of Blocks'
+            }
+          }
+        }
+      }
+    });
+    
+    // Helper functions for colors
+    function getColor(index) {
+      const colors = [
+        'rgba(54, 162, 235, 0.5)',
+        'rgba(255, 99, 132, 0.5)',
+        'rgba(75, 192, 192, 0.5)',
+        'rgba(255, 159, 64, 0.5)',
+        'rgba(153, 102, 255, 0.5)'
+      ];
+      return colors[index % colors.length];
+    }
+    
+    function getDarkerColor(index) {
+      const colors = [
+        'rgba(54, 162, 235, 1)',
+        'rgba(255, 99, 132, 1)',
+        'rgba(75, 192, 192, 1)',
+        'rgba(255, 159, 64, 1)',
+        'rgba(153, 102, 255, 1)'
+      ];
+      return colors[index % colors.length];
+    }
+  </script>
+</body>
+</html>

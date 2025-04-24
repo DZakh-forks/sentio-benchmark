@@ -113,7 +113,6 @@ async function generateGasComparisonReport() {
   // Define platforms and their corresponding data files
   const platformFiles = [
     { name: 'envio', file: 'envio-case4-gas-data.parquet' },
-    { name: 'envio-json', file: 'envio-case4-gas-data.json' },
     { name: 'sentio', file: 'sentio-case4-gas.parquet' },
     { name: 'subsquid', file: 'subsquid-case4-gas.parquet' },
     { name: 'ponder', file: 'ponder-case4-gas.parquet' },
@@ -154,7 +153,8 @@ async function generateGasComparisonReport() {
     block_ranges: {},
     gas_stats: {},
     address_stats: {},
-    content_comparison: {}
+    content_comparison: {},
+    differing_records_examples: {}
   };
   
   // Data counts
@@ -265,40 +265,114 @@ async function generateGasComparisonReport() {
         continue;
       }
       
-      // Create sets of transaction hashes for comparison
-      const txHashes1 = new Set();
-      const txHashes2 = new Set();
+      // Create maps of transaction hashes to records for comparison
+      const txHashMap1 = new Map();
+      const txHashMap2 = new Map();
       
       for (const record of dataMap[platform1]) {
         const txHash = record.id || record.transactionHash || '';
-        if (txHash) txHashes1.add(txHash.toLowerCase());
+        if (txHash) txHashMap1.set(txHash.toLowerCase(), record);
       }
       
       for (const record of dataMap[platform2]) {
         const txHash = record.id || record.transactionHash || '';
-        if (txHash) txHashes2.add(txHash.toLowerCase());
+        if (txHash) txHashMap2.set(txHash.toLowerCase(), record);
       }
       
       // Find common transactions
-      const commonTxs = new Set([...txHashes1].filter(tx => txHashes2.has(tx)));
+      const commonTxs = new Set([...txHashMap1.keys()].filter(tx => txHashMap2.has(tx)));
       
       // Calculate Jaccard similarity
-      const unionSize = new Set([...txHashes1, ...txHashes2]).size;
+      const unionSize = new Set([...txHashMap1.keys(), ...txHashMap2.keys()]).size;
       const jaccardSimilarity = unionSize > 0 ? commonTxs.size / unionSize : 0;
       
       report.content_comparison[`${platform1}_vs_${platform2}`] = {
         common_txs: commonTxs.size,
-        unique_to_1: txHashes1.size - commonTxs.size,
-        unique_to_2: txHashes2.size - commonTxs.size,
+        unique_to_1: txHashMap1.size - commonTxs.size,
+        unique_to_2: txHashMap2.size - commonTxs.size,
         jaccard_similarity: jaccardSimilarity
       };
       
       console.log(`Comparison ${platform1} vs ${platform2}:
         - Common transactions: ${commonTxs.size}
-        - Unique to ${platform1}: ${txHashes1.size - commonTxs.size}
-        - Unique to ${platform2}: ${txHashes2.size - commonTxs.size}
+        - Unique to ${platform1}: ${txHashMap1.size - commonTxs.size}
+        - Unique to ${platform2}: ${txHashMap2.size - commonTxs.size}
         - Jaccard similarity: ${jaccardSimilarity.toFixed(4)}
       `);
+      
+      // Find examples of differing gas values for the same transaction
+      const diffExamples = [];
+      let examplesFound = 0;
+      
+      // First, look for transactions in both platforms with different gas values
+      for (const txHash of commonTxs) {
+        if (examplesFound >= 5) break; // Limit to 5 examples
+        
+        const record1 = txHashMap1.get(txHash);
+        const record2 = txHashMap2.get(txHash);
+        
+        // Get gas values from both records
+        const gas1 = record1.gasValue || record1.gasUsed || '0';
+        const gas2 = record2.gasValue || record2.gasUsed || '0';
+        
+        // Compare gas values
+        if (gas1 !== gas2) {
+          diffExamples.push({
+            txHash,
+            [platform1]: {
+              gasValue: gas1,
+              blockNumber: record1.blockNumber,
+              from: record1.from || record1.sender,
+              to: record1.to || record1.recipient
+            },
+            [platform2]: {
+              gasValue: gas2,
+              blockNumber: record2.blockNumber,
+              from: record2.from || record2.sender,
+              to: record2.to || record2.recipient
+            }
+          });
+          examplesFound++;
+        }
+      }
+      
+      // Next, add examples of transactions only in platform1
+      const uniqueTo1 = [...txHashMap1.keys()].filter(tx => !txHashMap2.has(tx));
+      for (let k = 0; k < Math.min(3, uniqueTo1.length); k++) {
+        const txHash = uniqueTo1[k];
+        const record = txHashMap1.get(txHash);
+        diffExamples.push({
+          txHash,
+          [platform1]: {
+            gasValue: record.gasValue || record.gasUsed || '0',
+            blockNumber: record.blockNumber,
+            from: record.from || record.sender,
+            to: record.to || record.recipient
+          },
+          [platform2]: "Not present"
+        });
+      }
+      
+      // Next, add examples of transactions only in platform2
+      const uniqueTo2 = [...txHashMap2.keys()].filter(tx => !txHashMap1.has(tx));
+      for (let k = 0; k < Math.min(3, uniqueTo2.length); k++) {
+        const txHash = uniqueTo2[k];
+        const record = txHashMap2.get(txHash);
+        diffExamples.push({
+          txHash,
+          [platform1]: "Not present",
+          [platform2]: {
+            gasValue: record.gasValue || record.gasUsed || '0',
+            blockNumber: record.blockNumber,
+            from: record.from || record.sender,
+            to: record.to || record.recipient
+          }
+        });
+      }
+      
+      if (diffExamples.length > 0) {
+        report.differing_records_examples[`${platform1}_vs_${platform2}`] = diffExamples;
+      }
     }
   }
   
@@ -336,6 +410,10 @@ function generateHtmlReport(report) {
       .chart-container { height: 400px; margin: 20px 0; }
       .success { color: green; }
       .failure { color: red; }
+      .transaction-hash { font-family: monospace; word-break: break-all; }
+      .not-present { color: #999; font-style: italic; }
+      details { margin: 20px 0; }
+      summary { cursor: pointer; font-weight: bold; }
     </style>
   </head>
   <body>
@@ -430,7 +508,48 @@ function generateHtmlReport(report) {
         `).join('')}
     </table>
     
-    <h2>6. Summary</h2>
+    <h2>6. Example Differing Records</h2>
+    ${Object.entries(report.differing_records_examples || {}).map(([comparison, examples]) => `
+      <details>
+        <summary>${comparison} (${examples.length} examples)</summary>
+        <table>
+          <tr>
+            <th>Transaction Hash</th>
+            <th>${comparison.split('_vs_')[0]}</th>
+            <th>${comparison.split('_vs_')[1]}</th>
+          </tr>
+          ${examples.map(example => `
+            <tr>
+              <td class="transaction-hash">${example.txHash}</td>
+              <td>
+                ${example[comparison.split('_vs_')[0]] === "Not present" 
+                  ? '<span class="not-present">Not present</span>' 
+                  : `
+                    <strong>Gas Value:</strong> ${example[comparison.split('_vs_')[0]].gasValue}<br>
+                    <strong>Block:</strong> ${example[comparison.split('_vs_')[0]].blockNumber}<br>
+                    <strong>From:</strong> ${example[comparison.split('_vs_')[0]].from}<br>
+                    <strong>To:</strong> ${example[comparison.split('_vs_')[0]].to}
+                  `
+                }
+              </td>
+              <td>
+                ${example[comparison.split('_vs_')[1]] === "Not present" 
+                  ? '<span class="not-present">Not present</span>' 
+                  : `
+                    <strong>Gas Value:</strong> ${example[comparison.split('_vs_')[1]].gasValue}<br>
+                    <strong>Block:</strong> ${example[comparison.split('_vs_')[1]].blockNumber}<br>
+                    <strong>From:</strong> ${example[comparison.split('_vs_')[1]].from}<br>
+                    <strong>To:</strong> ${example[comparison.split('_vs_')[1]].to}
+                  `
+                }
+              </td>
+            </tr>
+          `).join('')}
+        </table>
+      </details>
+    `).join('')}
+    
+    <h2>7. Summary</h2>
     <p>
       This report compares gas usage data from ${Object.keys(report.data_counts).length} different platforms.
       The most complete dataset came from ${

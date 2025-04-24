@@ -7,6 +7,7 @@ const parquet = require('parquetjs');
 const SUBGRAPH_ENDPOINT = 'https://api.studio.thegraph.com/query/108520/case_3_ethereum_block/version/latest';
 const OUTPUT_DIR = '/Users/yufeili/Desktop/sentio/indexer-benchmark/case_3_ethereum_block/data';
 const BLOCKS_FILE = `${OUTPUT_DIR}/subgraph-case3-blocks.parquet`;
+const BATCH_SIZE = 1000; // The Graph has a limit of 1000 results per query
 
 // Define the schema for Ethereum blocks
 const blockSchema = new parquet.ParquetSchema({
@@ -14,8 +15,7 @@ const blockSchema = new parquet.ParquetSchema({
   number: { type: 'INT64' },
   hash: { type: 'UTF8' },
   parentHash: { type: 'UTF8' },
-  timestamp: { type: 'INT64' },
-  // Add more fields as needed
+  timestamp: { type: 'INT64' }
 });
 
 // Fetch blocks within a specific number range
@@ -24,7 +24,6 @@ async function fetchSubgraphBlocksRange(startBlock, endBlock, writer) {
   
   try {
     // Parameters for pagination
-    const pageSize = 1000; // The Graph has a limit of 1000 results per query
     let totalRecords = 0;
     let lastBlockNumber = null;
     let hasMore = true;
@@ -39,13 +38,13 @@ async function fetchSubgraphBlocksRange(startBlock, endBlock, writer) {
           whereClause += `, number_gt: ${lastBlockNumber}`;
         }
         
-        console.log(`Fetching ${pageSize} blocks${lastBlockNumber !== null ? ` after block ${lastBlockNumber}` : ' from the beginning'}...`);
+        console.log(`Fetching ${BATCH_SIZE} blocks${lastBlockNumber !== null ? ` after block ${lastBlockNumber}` : ' from the beginning'}...`);
         
         // GraphQL query with cursor-based pagination
         const query = `
           query {
             blocks(
-              first: ${pageSize}
+              first: ${BATCH_SIZE}
               where: { ${whereClause} }
               orderBy: number
               orderDirection: asc
@@ -59,13 +58,15 @@ async function fetchSubgraphBlocksRange(startBlock, endBlock, writer) {
           }
         `;
         
+        const headers = {
+          'Content-Type': 'application/json',
+        };
+        
         const response = await axios.post(
           SUBGRAPH_ENDPOINT,
           { query },
           {
-            headers: {
-              'Content-Type': 'application/json',
-            },
+            headers,
             timeout: 180000 // 3 minutes
           }
         );
@@ -107,7 +108,7 @@ async function fetchSubgraphBlocksRange(startBlock, endBlock, writer) {
           
           console.log(`Processed ${blocks.length} blocks (up to block ${lastBlockNumber})`);
           
-          if (blocks.length < pageSize) {
+          if (blocks.length < BATCH_SIZE) {
             hasMore = false;
           }
         } else if (response.data && response.data.errors) {
@@ -169,14 +170,16 @@ async function fetchSubgraphBlocks() {
     
     let maxBlock = 10000000; // Default fallback
     
+    const headers = {
+      'Content-Type': 'application/json',
+    };
+    
     try {
       const maxBlockResponse = await axios.post(
         SUBGRAPH_ENDPOINT,
         { query: getMaxBlockQuery },
         {
-          headers: {
-            'Content-Type': 'application/json',
-          },
+          headers,
           timeout: 60000 // 1 minute
         }
       );
@@ -197,14 +200,13 @@ async function fetchSubgraphBlocks() {
     
     let totalRecords = 0;
     
-    // Fetch first 150,000 blocks using block number range
-    console.log('Fetching first 150,000 blocks...');
-    totalRecords += await fetchSubgraphBlocksRange(0, 149999, writer);
-    
-    // Fetch last 150,000 blocks using block number range
-    const lastBlockStart = Math.max(150000, maxBlock - 149999);
-    console.log(`Fetching last 150,000 blocks (${lastBlockStart} to ${maxBlock})...`);
-    totalRecords += await fetchSubgraphBlocksRange(lastBlockStart, maxBlock, writer);
+    // Fetch all blocks in batches of 200,000 to avoid overwhelming memory
+    const batchSize = 200000;
+    for (let startBlock = 0; startBlock <= maxBlock; startBlock += batchSize) {
+      const endBlock = Math.min(startBlock + batchSize - 1, maxBlock);
+      console.log(`Fetching blocks batch from ${startBlock} to ${endBlock}...`);
+      totalRecords += await fetchSubgraphBlocksRange(startBlock, endBlock, writer);
+    }
     
     // If no blocks were processed, write a dummy record
     if (totalRecords === 0) {
@@ -238,26 +240,26 @@ async function main() {
     }
     
     // Test connection to Subgraph endpoint
+    const headers = {
+      'Content-Type': 'application/json',
+    };
+    
     try {
       const testResponse = await axios.post(
         SUBGRAPH_ENDPOINT,
         { query: '{ _meta { block { number } } }' },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-          }
-        }
+        { headers }
       );
       
       if (testResponse.data && testResponse.data.data && testResponse.data.data._meta) {
         console.log('Connection to Subgraph endpoint successful');
-        console.log(`Latest block in subgraph: ${testResponse.data.data._meta.block.number}`);
+        console.log('Current block in subgraph:', testResponse.data.data._meta.block.number);
       } else {
-        throw new Error('Invalid response format');
+        console.warn('Unexpected response from Subgraph:', testResponse.data);
       }
-    } catch (error) {
-      console.error('Error connecting to Subgraph endpoint:', error.message);
-      process.exit(1);
+    } catch (err) {
+      console.error('Error connecting to Subgraph endpoint:', err.message);
+      throw err;
     }
     
     // Fetch and save blocks

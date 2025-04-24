@@ -1,7 +1,5 @@
-import { createConfig, mergeAbis } from "ponder";
+import { createConfig } from "ponder";
 import { http } from "viem";
-
-import { LBTCAbi } from "./abis/LBTCAbi";
 
 export default createConfig({
   networks: {
@@ -13,9 +11,8 @@ export default createConfig({
   blocks: {
     EveryBlock: {
       network: "mainnet",
-      interval: 1,
       startBlock: 0,
-      endBlock: 10000000,
+      endBlock: 100000,
     }
   },
 });

@@ -26,7 +26,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Multicall = void 0;
 const p = __importStar(require("@subsquid/evm-codec"));
 const evm_abi_1 = require("@subsquid/evm-abi");
-const aggregate = (0, evm_abi_1.fun)('0x252dba42', "aggregate((address,bytes)[]", {
+const aggregate = (0, evm_abi_1.fun)('0x252dba42', "aggregate((address,bytes)[])", {
     calls: p.array(p.struct({
         target: p.address,
         callData: p.bytes

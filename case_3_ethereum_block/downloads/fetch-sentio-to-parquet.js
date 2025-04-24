@@ -15,8 +15,7 @@ const blockSchema = new parquet.ParquetSchema({
   number: { type: 'INT64' },
   hash: { type: 'UTF8' },
   parentHash: { type: 'UTF8' },
-  timestamp: { type: 'INT64' },
-  // Add more fields as needed
+  timestamp: { type: 'INT64' }
 });
 
 // Fetch blocks from Sentio with pagination
@@ -37,11 +36,41 @@ async function fetchSentioBlocks() {
     // Create a writer
     const writer = await parquet.ParquetWriter.openFile(blockSchema, BLOCKS_FILE);
     
+    // Get total number of blocks first
+    console.log('Getting total block count...');
+    const countQuery = `SELECT COUNT(*) as total FROM \`Block\``;
+    
+    try {
+      const countResponse = await axios.post(
+        SENTIO_BASE_URL,
+        {
+          sqlQuery: {
+            sql: countQuery
+          }
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'api-key': SENTIO_API_KEY
+          },
+          timeout: 60000 // 1 minute
+        }
+      );
+      
+      if (countResponse.data && countResponse.data.result && countResponse.data.result.rows && countResponse.data.result.rows.length > 0) {
+        const totalCount = countResponse.data.result.rows[0].total;
+        console.log(`Total blocks in Sentio: ${totalCount}`);
+      }
+    } catch (error) {
+      console.warn('Error fetching total block count:', error.message);
+    }
+    
     // Use pagination to fetch all blocks
-    const pageSize = 1000;
+    const pageSize = 5000; // Larger page size for faster fetching
     let offset = 0;
     let hasMore = true;
     let totalRecords = 0;
+    let lastNumber = -1;
     
     while (hasMore) {
       try {
@@ -104,12 +133,13 @@ async function fetchSentioBlocks() {
               
               await writer.appendRow(record);
               totalRecords++;
+              lastNumber = block.number;
             } catch (rowErr) {
               console.error(`Error processing block: ${JSON.stringify(block)}`, rowErr);
             }
           }
           
-          console.log(`Processed ${blocks.length} blocks from offset ${offset}`);
+          console.log(`Processed ${blocks.length} blocks from offset ${offset} (up to block ${lastNumber})`);
           offset += blocks.length;
           
           if (blocks.length < pageSize) {
@@ -163,26 +193,31 @@ async function main() {
     }
     
     // Test connection to Sentio
-    const testResponse = await axios.post(
-      SENTIO_BASE_URL,
-      {
-        sqlQuery: {
-          sql: 'SELECT 1'
+    try {
+      const testResponse = await axios.post(
+        SENTIO_BASE_URL,
+        {
+          sqlQuery: {
+            sql: 'SELECT 1'
+          }
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'api-key': SENTIO_API_KEY
+          }
         }
-      },
-      {
-        headers: {
-          'Content-Type': 'application/json',
-          'api-key': SENTIO_API_KEY
-        }
+      );
+      
+      if (testResponse.status !== 200) {
+        throw new Error(`Failed to connect to Sentio API: ${testResponse.status}`);
       }
-    );
-    
-    if (testResponse.status !== 200) {
-      throw new Error(`Failed to connect to Sentio API: ${testResponse.status}`);
+      
+      console.log('Connection to Sentio API successful');
+    } catch (error) {
+      console.error('Error connecting to Sentio API:', error.message);
+      process.exit(1);
     }
-    
-    console.log('Connection to Sentio API successful');
     
     // Fetch and save blocks
     const blockCount = await fetchSentioBlocks();

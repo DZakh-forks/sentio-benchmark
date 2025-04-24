@@ -1,0 +1,12 @@
+{
+  "name": "envio-test",
+  "version": "1.0.0",
+  "description": "Test for HyperSync API parent_hash field",
+  "type": "module",
+  "main": "test-hypersync.js",
+  "dependencies": {
+    "@envio-dev/hypersync-client": "^0.4.0",
+    "dotenv": "^16.4.5",
+    "parquetjs": "^0.11.2"
+  }
+} 

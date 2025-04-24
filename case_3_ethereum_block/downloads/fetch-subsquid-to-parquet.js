@@ -5,9 +5,9 @@ const parquet = require('parquetjs');
 
 // Configuration
 const SUBSQUID_DB_HOST = 'pg.squid.subsquid.io';
-const SUBSQUID_DB_NAME = '16180_8ocmrp';
-const SUBSQUID_DB_USER = '16180_8ocmrp';
-const SUBSQUID_DB_PASSWORD = '9nsMlK7fnUVlbpSgf1OEZjcPEK3eAeZ1';
+const SUBSQUID_DB_NAME = '16308_7o1pyf';
+const SUBSQUID_DB_USER = '16308_7o1pyf';
+const SUBSQUID_DB_PASSWORD = 'Zl8V~c1b3i.MPbFIeJoLsO3zRcu6T7g_';
 const OUTPUT_DIR = '/Users/yufeili/Desktop/sentio/indexer-benchmark/case_3_ethereum_block/data';
 const BLOCKS_FILE = `${OUTPUT_DIR}/subsquid-case3-blocks.parquet`;
 
@@ -193,14 +193,9 @@ async function fetchSubsquidBlocks() {
     
     let totalRecords = 0;
     
-    // Fetch first 150,000 blocks
-    console.log('Fetching first range (0-149999)...');
-    totalRecords += await fetchSubsquidBlocksRange(0, 149999, writer);
-    
-    // Fetch last 150,000 blocks
-    const lastBlockStart = Math.max(150000, maxBlock - 149999);
-    console.log(`Fetching last range (${lastBlockStart}-${maxBlock})...`);
-    totalRecords += await fetchSubsquidBlocksRange(lastBlockStart, maxBlock, writer);
+    // Fetch all blocks instead of just first and last ranges
+    console.log('Fetching all blocks (0 to max)...');
+    totalRecords += await fetchSubsquidBlocksRange(0, maxBlock, writer);
     
     // If no blocks were processed, write a dummy record
     if (totalRecords === 0) {

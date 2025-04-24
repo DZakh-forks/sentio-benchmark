@@ -11,7 +11,7 @@ dataSources:
       address: "0x0000000000000000000000000000000000000000"  # Dummy address for block indexing
       abi: BlockIndexer
       startBlock: 0
-      endBlock: 10000000
+      endBlock: 100000
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.9
@@ -23,8 +23,4 @@ dataSources:
           file: ./abis/BlockIndexer.json
       blockHandlers:
         - handler: handleBlock
-          filter:
-            kind: polling
-            # Ethereum blocks are ~12 seconds, so ~300 blocks ≈ 1 hour
-            every: 300
       file: ./src/subgraph.ts

@@ -5,62 +5,126 @@ This benchmark tests the performance of various indexers when processing Ethereu
 ## Benchmark Specification
 
 - **Target**: Ethereum blocks
-- **Block Range**: 0 to 10000000
+- **Block Range**: 0 to 100,000
 - **Data Operations**: Block-level indexing
 - **Handler Type**: Block handlers (not event handlers)
 - **Block Data**: Block number, hash, timestamp, parent hash, etc.
-
-## Implementation Details
-
-The benchmark requires each indexer to:
-1. Process each block in the specified range
-2. Extract block metadata (number, hash, timestamp, parent hash)
-3. Create a Block entity for each processed block
-4. Store all blocks in the database
-
-This benchmark tests the ability of indexers to process a large volume of blocks efficiently without focusing on specific events or contracts.
+- **Dataset**: [Google Drive](https://drive.google.com/drive/u/0/folders/1fqXsjO4CMkLJTxqOg2dKG8qPY8oM1x8E)
 
 ## Performance Results
 
-| Indexer  | Time to Complete | Notes |
-|----------|------------------|-------|
-| Sentio   | 4m               | Fastest processing time |
-| Envio    | N/A              | Does not support block handlers |
-| Ponder   | 55h37m           | Longest processing time |
-| Subsquid | 45h              | |
-| Subgraph | 24h              | |
+| Indexer  | Processing Time | Records | Block Range | Coverage |
+|----------|----------------|---------|-------------|----------|
+| Sentio   | 18m            | 100,000 | 1-100,000   | Complete (excluding block 0) |
+| Subsquid | 1m*            | 13,156  | 0-100,000   | Sparse (13.16%) |
+| Envio    | 7.9s           | 100,000 | 0-99,999    | Complete |
+| Ponder   | 33m            | 100,001 | 0-100,000   | Complete |
+| Subgraph | 10m            | 100,001 | 0-100,000   | Complete |
 
-## Implementation Examples
+\* *Subsquid used an archival node but has missing data, primarily indexing blocks in the 45,000-100,000 range*
+
+## Block Distribution Details
+
+- **Sentio**: Even distribution across the entire range (blocks 1-100,000)
+- **Subsquid**: Highly sparse distribution:
+  - 0-9,999: Just 1 block (0.01% coverage) - only block 0
+  - 10,000-39,999: No blocks at all (0% coverage)
+  - 40,000-49,999: 1,455 blocks (14.55% coverage)
+  - 50,000-59,999: 2,092 blocks (20.92% coverage) 
+  - 60,000-69,999: 2,322 blocks (23.22% coverage)
+  - 70,000-79,999: 2,296 blocks (22.96% coverage)
+  - 80,000-89,999: 2,770 blocks (27.70% coverage)
+  - 90,000-100,000: 2,220 blocks (22.20% coverage)
+  - Largest gap: Block 0 to block 46,147 (46,146 missing blocks)
+  - Overall, 86.84% of blocks in the range are missing
+- **Envio**: Complete coverage from 0-99,999
+- **Ponder**: Complete coverage from 0-100,000
+- **Subgraph**: Complete coverage from 0-100,000
+
+## Similarity Analysis
+
+We compared all platforms pairwise, focusing on three key fields:
+- Block hash
+- Parent hash
+- Timestamp
+
+### Similarity Table
+
+| Platform Pair      | Common Blocks | Matching Blocks | Similarity (%) |
+|--------------------|---------------|-----------------|----------------|
+| Sentio vs Subsquid | 13,155        | 13,155          | 100.00%        |
+| Sentio vs Envio    | 99,999        | 99,999          | 100.00%        |
+| Sentio vs Ponder   | 100,000       | 100,000         | 100.00%        |
+| Sentio vs Subgraph | 100,000       | 100,000         | 100.00%        |
+| Subsquid vs Envio  | 13,155        | 13,155          | 100.00%        |
+| Subsquid vs Ponder | 13,156        | 13,156          | 100.00%        |
+| Subsquid vs Subgraph | 13,156      | 13,156          | 100.00%        |
+| Envio vs Ponder    | 100,000       | 100,000         | 100.00%        |
+| Envio vs Subgraph  | 100,000       | 100,000         | 100.00%        |
+| Ponder vs Subgraph | 100,001       | 100,001         | 100.00%        |
+
+## Key Findings
+
+1. **Perfect Data Consistency**: All platforms show 100% similarity for the blocks they have in common. No differences were found in any of the key fields (hash, parentHash, timestamp) across any platform pair.
+
+2. **Coverage Variations**:
+   - **Complete Coverage**: Ponder and Subgraph have the most complete coverage with all 100,001 blocks (0-100,000).
+   - **Near Complete**: Sentio (missing only block 0) and Envio (complete 0-99,999) have essentially complete coverage.
+   - **Sparse Coverage**: Subsquid has significantly lower coverage with only 13,156 blocks, primarily in the 40,000-100,000 range.
+
+3. **Performance Differences**:
+   - **Envio** demonstrated the fastest processing with HyperSync (7.9 seconds), but does not support traditional block handlers
+   - **Sentio**, **Ponder**, and **Subgraph** all completed indexing in reasonable timeframes (18-33 minutes)
+   - **Subsquid** completed quickly (1 minute) but with significant data gaps
+
+## Implementation Details
 
 Each subdirectory contains the implementation for a specific indexing platform:
 - `/sentio`: Sentio implementation 
 - `/ponder`: Ponder implementation
 - `/sqd`: Subsquid implementation
 - `/subgraph`: The Graph subgraph implementation
+- `/envio`: Envio implementation using HyperSync (not traditional block handlers)
 
-Note: Envio does not support block handlers, so there is no implementation for this benchmark.
+## Platform Notes
 
-## Running the Benchmark
+### Sentio
+- Complete coverage of blocks 1-100,000
+- Completed in 18 minutes
 
-Each implementation includes its own setup and execution instructions. Generally, you will need to:
+### Subsquid
+- Sparse coverage (13.16%) with significant gaps, primarily indexing blocks in 45,000-100,000 range
+- Uses archival node but still has missing data
+- Total of 9,071 gaps identified with the largest being 46,146 consecutive missing blocks
+- Database connection: `PGPASSWORD="hcGgm1BIXTjbZ-lhkKeZ8vfBFQ3Xmkka" psql -h pg.squid.subsquid.io -d 16307_lf5mma -U 16307_lf5mma`
 
-1. Install the required dependencies
-2. Configure RPC endpoints
-3. Start the indexer
-4. Monitor progress
-5. Record completion time
+### Envio
+- Does not support traditional block handlers, but achieved complete coverage using HyperSync
+- Fastest processing time at 7.9 seconds for 100,000 blocks
+- Processes approximately 12,658 blocks per second
 
-## Key Observations
+### Ponder
+- Complete coverage of blocks 0-100,000
+- Completed in 33 minutes
+- Used PGlite database
 
-- Sentio demonstrates exceptional performance for block-level indexing
-- Block processing is significantly more resource-intensive than event processing for most platforms
-- Ponder shows the most substantial performance degradation with block-level indexing
-- Platform-specific optimizations for bulk block processing make a significant difference
-- Not all indexers support block-level handlers (Envio)
+### Subgraph
+- Complete coverage of blocks 0-100,000
+- Completed in 10 minutes
 
-This benchmark highlights the performance differences when handling large volumes of blockchain blocks, which is important for applications that need to analyze block-level data or track chain reorganizations.
+## Conclusion
+
+The analysis reveals exceptional consistency in Ethereum block data across all five indexing platforms. Despite the differences in coverage, where blocks are present in multiple platforms, the data shows 100% consistency across all examined fields.
+
+This benchmark highlights significant differences in processing approaches across platforms, with Envio's HyperSync demonstrating exceptional speed but through a different approach than traditional block-by-block indexing. Sentio, Ponder, and Subgraph all performed reliably with complete data, while Subsquid showed gaps in its coverage despite fast processing.
 
 ## Access Information
+
+### Exported Data
+All the block data collected from each platform has been exported and is available via Google Drive:
+- **Google Drive Folder**: [Case 3 - Ethereum Block Data](https://drive.google.com/drive/u/0/folders/1fqXsjO4CMkLJTxqOg2dKG8qPY8oM1x8E)
+- Contains Parquet files with block data from all platforms
+- Includes comparison reports and visualization data
 
 ### Sentio
 - **Dashboard URL**: https://app.sentio.xyz/yufei/case_3_ethereum_block/data-explorer/sql

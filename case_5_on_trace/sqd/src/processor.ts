@@ -8,8 +8,10 @@ import {
     Transaction as _Transaction,
     Trace as _Trace
 } from '@subsquid/evm-processor'
-import { UNISWAP_V2_ROUTER02 } from "./constant"
-import * as uniswapV2Router02 from "./abi/UniswapV2Router02.js"
+import { UNISWAP_V2_ROUTER02 } from "./constant.js"
+
+// Function signature for swapExactTokensForTokens (first 4 bytes of keccak256 hash)
+const SWAP_EXACT_TOKENS_FOR_TOKENS_SIG = '0x38ed1739'
 
 export const processor = new EvmBatchProcessor()
     // Lookup archive by the network name in Subsquid registry
@@ -21,7 +23,7 @@ export const processor = new EvmBatchProcessor()
     .setRpcEndpoint({
         // Set the URL via .env for local runs or via secrets when deploying to Subsquid Cloud
         // https://docs.subsquid.io/deploy-squid/env-variables/
-        url: assertNotNull("https://eth-mainnet.g.alchemy.com/v2/gcIt66S3FTL_up1cu59EMwZv1JGR7ySA", 'No RPC endpoint supplied')
+        url: assertNotNull(require("dotenv").config().parsed.RPC_ENDPOINT, 'No RPC endpoint supplied - set RPC_ENDPOINT environment variable')
     })
     .setFinalityConfirmation(75)
     .setFields({
@@ -31,26 +33,13 @@ export const processor = new EvmBatchProcessor()
         transaction: {
             hash: true,
             from: true,
-            value: true,
-            input: true,
             to: true,
         },
         trace: {
-            // Include all trace fields we might need
             callTo: true,
-            callFrom: true,
             callInput: true,
-            callValue: true,
-            callSighash: true,
             type: true,
             error: true,
-            
-            // We need these fields for creating call results
-            createTo: true,
-            createNewContractAddress: true,
-            createCreationMethod: true,
-            
-            // Transaction reference fields
             transactionHash: true,
             transactionIndex: true,
         }
@@ -63,7 +52,7 @@ export const processor = new EvmBatchProcessor()
     .addTrace({
         type: ['call'],
         callTo: [UNISWAP_V2_ROUTER02],
-        transaction: true,
+        transaction: true
     })
 
 export type Fields = EvmBatchProcessorFields<typeof processor>

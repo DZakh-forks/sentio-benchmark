@@ -6,10 +6,16 @@ const erc20Abi = parseAbi([
   "function balanceOf(address owner) view returns (uint256)"
 ]);
 
+// Get RPC URL from environment variable
+const rpcUrl = process.env.ENVIO_RPC_URL;
+if (!rpcUrl) {
+  throw new Error("ENVIO_RPC_URL environment variable is required");
+}
+
 // Create a public client to interact with the blockchain
 const client = createPublicClient({
   chain: mainnet,
-  transport: http("https://rpc.sentio.xyz/p2IDojGk5lF0glj6CNaCKtuW0NvuIv6n/ethereum"), // Changed from Ankr which requires API key
+  transport: http(rpcUrl),
 });
 
 // Get the contract instance for LBTC

@@ -1,143 +1,34 @@
-[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/subsquid/squid-evm-template)
+# Showcase squid 01: USDC transfers in real time
 
-# Subsquid Implementation - Ethereum Block Benchmark
+This squid captures all `Transfer(address,address,uint256)` events emitted by the [USDC token contract](https://etherscan.io/address/0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48) and keeps up with network updates [in real time](https://docs.subsquid.io/basics/unfinalized-blocks/). See more examples of requesting data with squids on the [showcase page](https://docs.subsquid.io/evm-indexing/configuration/showcase) of Subsquid documentation.
 
-This directory contains a Subsquid implementation for indexing Ethereum blocks and tracking block-level statistics, demonstrating Subsquid's capabilities for processing blockchain data at the block level.
+Dependencies: Node.js, Docker.
 
-## Prerequisites
-
-* **Node.js:** v18 or newer
-* **Git**
-* **Docker** (for running Postgres)
-* **Squid CLI:** `npm i -g @subsquid/cli`
-
-## Setup & Running Instructions
-
-### 1. Install Dependencies
+## Quickstart
 
 ```bash
-npm i
-```
+# 0. Install @subsquid/cli a.k.a. the sqd command globally
+npm i -g @subsquid/cli
 
-### 2. Start PostgreSQL Database
+# 1. Retrieve the template
+sqd init showcase01 -t https://github.com/subsquid-labs/showcase01-all-usdc-transfers
+cd showcase01
 
-```bash
+# 2. Install dependencies
+npm ci
+
+# 3. Start a Postgres database container and detach
 sqd up
-```
 
-This starts a local PostgreSQL database in a Docker container for storing indexed data.
-
-### 3. Build the Squid
-
-```bash
-sqd build
-```
-
-### 4. Apply Database Migrations
-
-```bash
-sqd migration generate
-sqd migration apply
-```
-
-### 5. Start the Squid
-
-Run both the processor and GraphQL server:
-
-```bash
-sqd run .
-```
-
-Alternatively, run services individually:
-
-```bash
-# Start processor only
+# 4. Build and start the processor
 sqd process
 
-# Start GraphQL server only
+# 5. The command above will block the terminal
+#    being busy with fetching the chain data, 
+#    transforming and storing it in the target database.
+#
+#    To start the graphql server open the separate terminal
+#    and run
 sqd serve
 ```
-
-### 6. Access the GraphQL API
-
-Once running, access the GraphQL playground at:
-```
-http://localhost:4350/graphql
-```
-
-## Project Structure
-
-- `src/` - Contains processor configuration and block handlers
-- `lib/` - Compiled JavaScript output
-- `schema.graphql` - GraphQL schema defining block statistics entities
-- `db/migrations/` - Database migration files
-- `squid.yaml` - Squid configuration
-
-## Implementation Details
-
-This implementation:
-1. Uses `EvmBatchProcessor` to fetch Ethereum blocks
-2. Processes blocks to extract and store statistics such as:
-   - Gas used
-   - Transaction count
-   - Block size
-   - Timestamp information
-3. Provides a GraphQL API for querying block statistics
-
-The main processor configuration is in `src/processor.ts`:
-
-```typescript
-const processor = new EvmBatchProcessor()
-  .setGateway('https://v2.archive.subsquid.io/network/ethereum-mainnet')
-  .setRpcEndpoint('https://rpc.ankr.com/eth')
-  .setFinalityConfirmation(75)
-  .setBlockRange({ from: 16_000_000, to: 16_050_000 })
-  .addBlock()
-```
-
-This configuration enables the processor to fetch Ethereum blocks within the specified range, utilizing Subsquid's Archive gateway for optimized blockchain data access.
-
-## Performance Results
-
-In the benchmark test, this Subsquid implementation indexed 50,000 Ethereum blocks in **15 minutes**, demonstrating its efficiency for block-level data processing.
-
-## Additional Commands
-
-### Reset Database
-
-```bash
-sqd down
-sqd up
-```
-
-### Get Logs
-
-```bash
-sqd logs
-```
-
-### Deploy to SQD Cloud
-
-```bash
-sqd deploy --org <org-name> .
-```
-
-## Database Access
-
-Connect to the PostgreSQL database directly:
-
-```bash
-PGPASSWORD="2lABMqtGktrOpcaZwKEVbwM2GAxXamat" psql -h pg.squid.subsquid.io -d 16175_0hotg1 -U 16175_0hotg1
-```
-
-Example queries:
-```sql
--- Get block statistics
-SELECT * FROM block_stats ORDER BY height DESC LIMIT 10;
-
--- Get average gas used
-SELECT AVG(gas_used) FROM block_stats;
-```
-
-For more details on Subsquid SDK, refer to the [official documentation](https://docs.sqd.ai/sdk/quickstart/).
-
+A GraphiQL playground will be available at [localhost:4350/graphql](http://localhost:4350/graphql).

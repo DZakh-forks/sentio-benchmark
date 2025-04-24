@@ -1,15 +1,37 @@
 const fs = require('fs');
 const { execSync } = require('child_process');
 const path = require('path');
-const parquet = require('parquetjs'); // You may need to run: npm install parquetjs
+const parquet = require('parquetjs');
 
-// Create a writer once and keep appending to it
-let writer = null;
-let parquetSchema = null;
+// Create output directory if it doesn't exist
+const dataDir = path.join(__dirname, '..', 'data');
+if (!fs.existsSync(dataDir)) {
+  fs.mkdirSync(dataDir, { recursive: true });
+}
+
+// Output file path
+const outputPath = path.join(dataDir, 'sentio-case5-swaps.parquet');
+
+// Define the standardized Parquet schema for swap records
+const swapSchema = new parquet.ParquetSchema({
+  id: { type: 'UTF8' },
+  blockNumber: { type: 'INT64' },
+  transactionHash: { type: 'UTF8' },
+  from: { type: 'UTF8' },
+  to: { type: 'UTF8' },
+  amountIn: { type: 'UTF8' },  // Store as strings to maintain precision
+  amountOutMin: { type: 'UTF8' },
+  deadline: { type: 'UTF8' },
+  path: { type: 'UTF8' },
+  pathLength: { type: 'INT32' }
+});
 
 async function fetchSentioDataWithPagination() {
   try {
     console.log('Fetching complete dataset from Sentio for case 5 (Uniswap V2 traces)...');
+    
+    // Create a Parquet writer
+    const writer = await parquet.ParquetWriter.openFile(swapSchema, outputPath);
     
     const pageSize = 5000;
     let totalRows = 0;
@@ -17,8 +39,8 @@ async function fetchSentioDataWithPagination() {
     let hasMoreData = true;
     
     // Block range
-    const startBlock = 0;
-    const endBlock = 22200000;
+    const startBlock = 22200000;
+    const endBlock = 22290000;
     
     // Fetch data in batches until we get everything
     while (hasMoreData) {
@@ -29,7 +51,7 @@ async function fetchSentioDataWithPagination() {
       const cmd = 'curl -L -X POST "https://app.sentio.xyz/api/v1/analytics/yufei/case_5_on_trace/sql/execute" ' +
         '-H "Content-Type: application/json" ' +
         '-H "api-key: hnZ7Z8cRsoxRadrVdhih2jRjBlH0lIYWl" ' +
-        `-d '{"sqlQuery":{"sql":"SELECT * FROM UniswapV2SwapEvent WHERE block_number >= ${startBlock} AND block_number <= ${endBlock} ORDER BY transaction_hash, log_index LIMIT ${pageSize} OFFSET ${offset}"}}' --silent`;
+        `-d '{"sqlQuery":{"sql":"SELECT * FROM \`Swap\` WHERE blockNumber >= ${startBlock} AND blockNumber <= ${endBlock} ORDER BY transactionHash LIMIT ${pageSize} OFFSET ${offset}"}}' --silent`;
       
       try {
         const result = execSync(cmd, { 
@@ -38,14 +60,55 @@ async function fetchSentioDataWithPagination() {
           timeout: 180000 // 3 minutes timeout
         });
         
+        console.log('Raw API Response:', result);
+        
         const data = JSON.parse(result);
+        console.log('Parsed data structure:', Object.keys(data));
+        
+        if (data.result) {
+          console.log('Result keys:', Object.keys(data.result));
+        }
         
         if (data.result && data.result.rows && data.result.rows.length > 0) {
           const rowsCount = data.result.rows.length;
           console.log(`Received ${rowsCount} rows on page ${page + 1}`);
           
           // Process the batch of data
-          await processDataBatch(data.result.rows, page === 0);
+          for (const row of data.result.rows) {
+            try {
+              // Convert path array to comma-separated string if needed
+              let pathStr = '';
+              let pathLength = 0;
+              
+              if (row.path && Array.isArray(row.path)) {
+                pathStr = row.path.join(',');
+                pathLength = row.path.length;
+              } else if (typeof row.path === 'string') {
+                pathStr = row.path;
+                // Count commas + 1 to determine path length
+                pathLength = (pathStr.match(/,/g) || []).length + 1;
+              }
+              
+              // Map fields to standardized schema
+              const standardizedRow = {
+                id: row.id || '',
+                blockNumber: BigInt(row.blockNumber || 0),
+                transactionHash: row.transactionHash || '',
+                from: (row.from__ || '').toLowerCase(),
+                to: (row.to__ || '').toLowerCase(),
+                amountIn: row.amountIn ? row.amountIn.toString() : '0',
+                amountOutMin: row.amountOutMin ? row.amountOutMin.toString() : '0',
+                deadline: row.deadline ? row.deadline.toString() : '0',
+                path: pathStr,
+                pathLength: pathLength
+              };
+              
+              await writer.appendRow(standardizedRow);
+            } catch (rowError) {
+              console.error('Error processing row:', rowError);
+            }
+          }
+          
           totalRows += rowsCount;
           console.log(`Total rows processed so far: ${totalRows}`);
           
@@ -65,73 +128,20 @@ async function fetchSentioDataWithPagination() {
       }
     }
     
+    // Close the writer
+    await writer.close();
+    console.log(`Complete dataset saved to Parquet file: ${outputPath}`);
+    
     if (totalRows === 0) {
       console.log('Failed to fetch any data.');
       return { success: false, error: 'no_data_fetched' };
-    }
-    
-    // Finish up and close the Parquet writer
-    if (writer) {
-      await writer.close();
-      console.log(`Complete dataset saved to Parquet file: sentio-case5-complete.parquet`);
     }
     
     console.log(`Successfully retrieved and processed ${totalRows} total rows of data`);
     return { success: true, count: totalRows };
   } catch (error) {
     console.error('Error in pagination process:', error.message);
-    // Try to close the writer if it exists
-    if (writer) {
-      try {
-        await writer.close();
-      } catch (closeError) {
-        console.error('Error closing Parquet writer:', closeError.message);
-      }
-    }
     return { success: false, error: 'pagination_error' };
-  }
-}
-
-async function processDataBatch(dataBatch, isFirstBatch) {
-  if (!dataBatch || dataBatch.length === 0) {
-    return;
-  }
-  
-  // Initialize the Parquet writer with the schema on the first batch
-  if (isFirstBatch) {
-    // Infer schema from the first row
-    const firstRow = dataBatch[0];
-    const schema = {};
-    
-    Object.keys(firstRow).forEach(key => {
-      const value = firstRow[key];
-      if (typeof value === 'number') {
-        schema[key] = { type: 'DOUBLE' };
-      } else if (typeof value === 'boolean') {
-        schema[key] = { type: 'BOOLEAN' };
-      } else {
-        // Default to STRING for other types
-        schema[key] = { type: 'UTF8' };
-      }
-    });
-    
-    console.log('Parquet schema:', JSON.stringify(schema, null, 2));
-    console.log('Sample row fields:', Object.keys(dataBatch[0]).join(', '));
-    
-    // Create parquet schema and writer
-    parquetSchema = new parquet.ParquetSchema(schema);
-    writer = await parquet.ParquetWriter.openFile(parquetSchema, 'sentio-case5-complete.parquet');
-    console.log('Parquet file initialized and ready for writing');
-  }
-  
-  // Write all rows from this batch to the Parquet file
-  if (writer) {
-    for (const row of dataBatch) {
-      await writer.appendRow(row);
-    }
-    console.log(`Wrote ${dataBatch.length} rows to Parquet file`);
-  } else {
-    console.error('Parquet writer not initialized');
   }
 }
 

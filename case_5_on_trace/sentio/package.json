@@ -11,7 +11,11 @@
     "postinstall": "sentio gen"
   },
   "dependencies": {
-    "@sentio/sdk": "^2.58.4"
+    "@envio-dev/hypersync-client": "^0.6.3",
+    "@sentio/sdk": "^2.58.4",
+    "bignumber.js": "^9.3.0",
+    "parquetjs": "^0.11.2",
+    "viem": "^2.28.0"
   },
   "devDependencies": {
     "@sentio/cli": "^2.26.1",

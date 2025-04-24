@@ -12,6 +12,8 @@ deploy:
     cmd:
       - sqd
       - process:prod
+    env:
+      NODE_OPTIONS: '--expose-gc --max-old-space-size=4096'
   api:
     cmd:
       - sqd
