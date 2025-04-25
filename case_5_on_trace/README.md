@@ -59,7 +59,7 @@ The benchmark requires each indexer to:
    - **Subsquid** showed excellent performance at 2 minutes.
    - **Subgraph** completed in 8 minutes with reliable performance.
    - **Sentio** processed all traces in 16 minutes.
-   - **Ponder** supports trace-level indexing in documentation but our implementation encountered configuration issues.
+   - **Ponder** supports trace-level indexing but our implementation encountered technical issues including database connection errors, ABI validation failures, and schema configuration problems.
 
 3. **Implementation Approaches**:
    - Envio's implementation leverages their HyperSync technology for optimized blockchain data access.
@@ -86,7 +86,11 @@ The benchmark requires each indexer to:
 - Officially supports trace-level indexing according to documentation
 - Our implementation encountered persistent configuration issues
 - Unable to capture trace data despite multiple setup and configuration attempts
-- Issues included database connection problems and trace event handling
+- Issues included:
+  - Database connection errors ("Connection terminated unexpectedly")
+  - Event validation failures ("Event name for event 'swapExactTokensForTokens' not found in the contract ABI")
+  - Database schema issues (swap table not being created despite successful startup)
+  - Monitoring revealed "No sample swaps found. Trace capture may not be working correctly"
 
 ### Subgraph
 - Complete coverage despite traceAddress not being directly accessible
@@ -99,6 +103,8 @@ The benchmark requires each indexer to:
 This benchmark demonstrates significant performance differences in transaction trace processing across indexing platforms. Envio's HyperSync technology demonstrates exceptional speed, followed by Subsquid's efficient processing. All platforms that support trace analysis show impressive consistency in the data captured.
 
 These results highlight the importance of choosing the right indexing solution based on specific use cases, especially for applications requiring trace-level analysis such as DeFi transaction monitoring, swap analysis, or complex transaction tracing.
+
+While Ponder documentation indicates support for trace-level indexing, our implementation faced multiple technical hurdles that prevented successful trace capture. This suggests that trace support in some platforms may require more specialized configuration or may be in an experimental state.
 
 ## Access Information
 
