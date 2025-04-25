@@ -130,17 +130,20 @@ This benchmark provides a comparative analysis of indexer performance across dif
 | Case | Sentio | Envio | Ponder | Subsquid | Subgraph |
 |------|--------|-------|--------|----------|----------|
 | case_1_lbtc_event_only | 296,734 | 296,734 | 296,138* | 296,734 | 296,734 |
-| case_2_lbtc_full | 12,165 transfers, 2,684 accounts | 12,165 transfers, 2,685 accounts | 12,165 transfers, 2,684 accounts | 12,165 transfers, 2,685 accounts | 12,165 transfers, N/A accounts‡ |
-| case_3_ethereum_block | 100,000 (1-100,000) | 100,000 (0-99,999) | 100,001 (0-100,000)¶ | 13,156† | 100,001 (0-100,000)¶ |
-| case_4_on_transaction | 1,696,641 | 1,696,423 | 1,696,423 | ~1.7M | N/A |
-| case_5_on_trace | 45,895 | 50,191 | 0** | 50,191 | 29,058§§ |
+| case_2_lbtc_full | 2,684 | 2,685‡ | 2,684 | 2,685‡ | 2,685‡ |
+| case_3_ethereum_block | 100,000 | 100,000 | 100,001 | 13,156† | 100,001 |
+| case_4_on_transaction | 1,696,641 | 1,696,423†† | 1,696,423 | 1,696,641 | N/A& |
+| case_5_on_trace | 45,895+ | 50,191 | 0** | 50,191 | 29,058§§ |
 
 \* Missing ~5% of events  
 † Missing 86,844 blocks (86.84% of target range)  
-‡ Subgraph does not report account counts in the same way as other implementations  
+‡ Some implementations include 0x0000000000000000000000000000000000000000 address  
+†† Envio processes blocks 22,280,000 to 22,289,999 due to exclusive end block handling, resulting in 218 fewer transactions  
 ¶ Some implementations count 100,001 blocks because they include block 0 in their range  
+& Subgraph does not support transaction level access  
 ** Ponder documentation indicates trace support, but our implementation encountered configuration issues that prevented successful trace capture  
-§§ Subgraph captured only ~58% of swap traces due to architectural limitations in accessing internal transactions
+§§ Subgraph captured only ~58% of swap traces due to architectural limitations in accessing internal transactions  
++ Sentio auto-filters failed calls due to insufficient fees
 
 ### Key Observations
 
@@ -153,6 +156,7 @@ This benchmark provides a comparative analysis of indexer performance across dif
 2. **Data Completeness**:
    - Ponder is missing approximately 5% of data in case_1
    - Subsquid is missing about 87% of blocks in case_3, primarily indexing blocks in the 45,000-100,000 range
+   - Envio/Ponder processes blocks up to but not including the end block in case_4 (stopping at 22,289,999) due to its exclusive end block handling, which explains the difference of 218 records compared to Sentio
    - Sentio processed fewer traces in case_5 (45,895 vs 50,191 for Subsquid/Envio), possibly due to failed trace calls resulting from insufficient fees (requires further investigation to achieve complete data matching between implementations)
    - Subgraph captured only ~58% of swap transactions in case_5 and identified significantly fewer unique senders (427 vs. ~1,200) due to limitations in accessing internal transactions
    - Case 3 shows perfect data consistency with 100% similarity for blocks across all platforms

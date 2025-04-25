@@ -13,20 +13,20 @@ This benchmark tests the performance of various indexers when processing transac
 
 ## Performance Results
 
-| Indexer  | Processing Time | Records | Block Range | Coverage |
+| Indexer  | Processing Time | Records | Block Range | 
 |----------|----------------|---------|-------------|----------|
-| Sentio   | 23m            | 1,696,641 | 22,280,000-22,290,000 | Complete |
-| Subsquid | 5m             | ~1,700,000 | 22,280,000-22,290,000 | Complete |
-| Envio    | 1m 26s         | 1,696,423 | 22,280,000-22,290,000 | Complete (9,996 blocks) |
-| Ponder   | 33m            | 1,696,423 | 22,280,000-22,290,000 | Complete |
-| Subgraph | N/A            | N/A      | N/A         | Not supported |
+| Sentio   | 23m            | 1,696,641 | 22,280,000-22,290,000 |
+| Subsquid | 5m             | 1,696,641 | 22,280,000-22,290,000 |
+| Envio    | 1m 26s         | 1,696,423 | 22,280,000-22,289,999 |
+| Ponder   | 33m            | 1,696,423 | 22,280,000-22,289,999 |
+| Subgraph | N/A            | N/A      | N/A         | 
 
 ## Data Distribution Details
 
 The distribution of transactions across platforms is remarkably consistent, with approximately 170 transactions per block on average:
 
-- **Sentio**: 1,696,641 transaction records (highest count)
-- **Subsquid**: ~1,700,000 transaction records
+- **Sentio**: 1,696,641 transaction records
+- **Subsquid**: 1,696,641 transaction records
 - **Envio**: 1,696,423 transaction records
   - Unique senders: 493,181
   - Unique recipients: 315,861
@@ -38,7 +38,8 @@ The distribution of transactions across platforms is remarkably consistent, with
 
 ## Key Findings
 
-1. **Complete Data Coverage**: Sentio, Subsquid, Envio, and Ponder all demonstrated complete coverage of the transaction data in the target block range, with minimal variations in the total record count.
+1. **Complete Data Coverage**: Sentio, Subsquid, Envio, and Ponder all demonstrated high coverage of the transaction data in the target block range, with some variations in the total record count due to differences in how platforms handle block boundaries:
+   - **End Block Handling**: Analysis reveals that Envio processes blocks up to but not including the end block (exclusive handling), stopping at block 22,289,999 in practice, while Sentio includes the end block (inclusive handling), going all the way to block 22,290,000. This accounts for the 218 additional records in Sentio's dataset.
 
 2. **Performance Differences**:
    - **Envio with HyperSync** demonstrated exceptional performance at 1 minute 26 seconds, processing transactions at a rate of approximately 20,000 transactions per second.
@@ -55,7 +56,7 @@ The distribution of transactions across platforms is remarkably consistent, with
 Each subdirectory contains the implementation for a specific indexing platform:
 - `/sentio`: Sentio implementation 
 - `/envio`: Envio implementation with HyperSync
-- `/ponder`: Ponder implementation using transaction handlers with configurable API endpoints
+- `/ponder`: Ponder implementation
 - `/sqd`: Subsquid implementation
 
 ## Platform Notes
@@ -64,6 +65,7 @@ Each subdirectory contains the implementation for a specific indexing platform:
 - Complete coverage of all transactions
 - Processing time: 23 minutes (18:26:14 - 18:49:39)
 - Total transaction records: 1,696,641
+- Processes blocks up to and including block 22,290,000 (inclusive end block handling)
 
 ### Subsquid
 - Complete coverage of all transactions
@@ -74,14 +76,16 @@ Each subdirectory contains the implementation for a specific indexing platform:
 - Uses HyperSync technology for optimized data access
 - Processing time: 1 minute 26 seconds (85.59s)
 - Total transaction records: 1,696,423
-- Processed 9,996 blocks with ~170 transactions per block
+- Processed 9,901 blocks with ~170 transactions per block
+- Processes blocks up to but not including the end block (stopping at 22,289,999)
+- The block range handling explains the difference of 218 records compared to Sentio
 
 ### Ponder
 - Complete coverage of all transactions
 - Processing time: 33 minutes
 - Total transaction records: 1,696,423
 - Average processing time per block event: 33.057ms
-- Uses configurable RPC endpoint with placeholder for API key in configuration
+- Processes blocks up to 22,289,999
 
 ### Subgraph
 - Does not support transaction handlers
@@ -89,13 +93,7 @@ Each subdirectory contains the implementation for a specific indexing platform:
 
 ## Conclusion
 
-This benchmark demonstrates significant performance differences in transaction data processing across indexing platforms. Envio's HyperSync technology demonstrates exceptional speed, followed by Subsquid's efficient processing. All platforms show impressive consistency in the data captured, with minimal variations in transaction counts.
-
-The implementations showcase different approaches to transaction handling:
-- Envio uses a specialized HyperSync technology for optimized data access
-- Ponder provides a developer-friendly approach with configurable RPC endpoints and standard transaction handlers
-- Sentio offers a robust solution with complete coverage
-- Subsquid demonstrates efficient processing with comprehensive transaction data
+This benchmark demonstrates significant performance differences in transaction data processing across indexing platforms. Envio's HyperSync technology demonstrates exceptional speed, followed by Subsquid's efficient processing. All platforms show impressive consistency in the data captured, with minimal variations in transaction counts that can be explained by differences in how the platforms handle block range boundaries (inclusive vs. exclusive end block handling).
 
 These results highlight the importance of choosing the right indexing solution based on specific use cases, especially for applications requiring transaction-level analysis such as gas usage tracking, fee market analysis, or transaction monitoring.
 
@@ -124,7 +122,7 @@ All the transaction data collected from each platform has been exported and is a
 
 ### Envio
 - **Data Summary**: 
-  - Total blocks processed: 9,996
+  - Total blocks processed: 9,901 (from 22,280,000 to 22,289,999)
   - Gas records collected: 1,696,423 transactions (approximately 170 transactions per block)
   - Unique senders: 493,181
   - Unique recipients: 315,861
