@@ -15,24 +15,43 @@ This benchmark tests the performance of various indexers when processing Uniswap
 
 | Indexer  | Processing Time | Records | Block Range | Coverage |
 |----------|----------------|---------|-------------|----------|
-| Sentio   | 16m            | N/A     | 22,200,000-22,290,000 | Complete |
-| Subsquid | 2m             | N/A     | 22,200,000-22,290,000 | Complete |
+| Sentio   | 16m            | 45,895  | 22,200,000-22,290,000 | Complete |
+| Subsquid | 2m             | 50,191  | 22,200,000-22,290,000 | Complete |
 | Envio    | 10.92s         | 50,191 swaps | 22,200,000-22,290,000 | Complete (90,000 blocks) |
 | Ponder   | N/A            | 0       | 22,200,000-22,290,000 | Configuration issues |
-| Subgraph | 8m             | 50,191 swaps | 22,200,000-22,290,000 | Complete |
+| Subgraph | 8m             | 29,058 swaps | 22,200,000-22,290,000 | Complete |
 
 ## Data Distribution Details
 
-The distribution of swap transactions across platforms shows consistent results:
+The distribution of swap transactions across platforms shows the following results:
+
+- **Sentio**: 45,895 swap records
+  - Unique senders: 1,171
+  - Unique recipients: 1,283
+  - Processed blocks: 22,967
+  - Total input amount: 501,991,777,910,022,212,811,911
+  - Average path length: 2.06
+
+- **Subsquid**: 50,191 swap records
+  - Unique senders: 1,238
+  - Unique recipients: 1,343
+  - Processed blocks: 24,858
+  - Total input amount: 4.0 × 10^33
+  - Average path length: 2.07
 
 - **Envio**: 50,191 swap records
-  - Unique input tokens: 5,853
-  - Unique output tokens: 1
+  - Unique senders: 474
   - Unique recipients: 1
-  - Total input amount: 4.000827389278954379198121595012958e+33
-  - Processing time: 12.74 seconds total (including data collection and processing)
+  - Processed blocks: 24,858
+  - Total input amount: 4.0 × 10^33
+  - Processing time: 10.92 seconds total
 
-- **Subgraph**: 50,191 swap records
+- **Subgraph**: 29,058 swap records
+  - Unique senders: 427
+  - Unique recipients: 1,272
+  - Processed blocks: 22,894
+  - Total input amount: 3.99 × 10^33
+  - Average path length: 2.09
   - Note: traceAddress is not directly accessible in Subgraph
 
 ## Implementation Details
