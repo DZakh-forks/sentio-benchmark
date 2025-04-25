@@ -112,7 +112,7 @@ async function generateGasComparisonReport() {
   
   // Define platforms and their corresponding data files
   const platformFiles = [
-    { name: 'envio', file: 'envio-case4-gas-data.parquet' },
+    { name: 'envio', file: 'envio-case4-gas.parquet' },
     { name: 'sentio', file: 'sentio-case4-gas.parquet' },
     { name: 'subsquid', file: 'subsquid-case4-gas.parquet' },
     { name: 'ponder', file: 'ponder-case4-gas.parquet' },

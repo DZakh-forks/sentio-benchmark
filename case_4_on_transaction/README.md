@@ -14,12 +14,12 @@ This benchmark tests the performance of various indexers when processing transac
 ## Performance Results
 
 | Indexer  | Processing Time | Records | Block Range | 
-|----------|----------------|---------|-------------|----------|
+|----------|----------------|---------|-------------|
 | Sentio   | 23m            | 1,696,641 | 22,280,000-22,290,000 |
 | Subsquid | 5m             | 1,696,641 | 22,280,000-22,290,000 |
 | Envio    | 1m 26s         | 1,696,423 | 22,280,000-22,289,999 |
 | Ponder   | 33m            | 1,696,423 | 22,280,000-22,289,999 |
-| Subgraph | N/A            | N/A      | N/A         | 
+| Subgraph | N/A            | N/A       | N/A                   | 
 
 ## Data Distribution Details
 
@@ -39,7 +39,7 @@ The distribution of transactions across platforms is remarkably consistent, with
 ## Key Findings
 
 1. **Complete Data Coverage**: Sentio, Subsquid, Envio, and Ponder all demonstrated high coverage of the transaction data in the target block range, with some variations in the total record count due to differences in how platforms handle block boundaries:
-   - **End Block Handling**: Analysis reveals that Envio processes blocks up to but not including the end block (exclusive handling), stopping at block 22,289,999 in practice, while Sentio includes the end block (inclusive handling), going all the way to block 22,290,000. This accounts for the 218 additional records in Sentio's dataset.
+   - **End Block Handling**: Analysis reveals that Envio/Ponder process blocks up to but not including the end block (exclusive handling), stopping at block 22,289,999 in practice, while Sentio/Subsquid include the end block (inclusive handling), going all the way to block 22,290,000. This accounts for the 218 additional records in Sentio's dataset.
 
 2. **Performance Differences**:
    - **Envio with HyperSync** demonstrated exceptional performance at 1 minute 26 seconds, processing transactions at a rate of approximately 20,000 transactions per second.

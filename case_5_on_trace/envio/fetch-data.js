@@ -1,8 +1,8 @@
-import { HypersyncClient, BlockField, TraceField } from "@envio-dev/hypersync-client";
+import { HypersyncClient, BlockField, TraceField, TransactionField } from "@envio-dev/hypersync-client";
 import { BigNumber } from 'bignumber.js';
 import { keccak256, toHex } from 'viem';
 import * as fs from 'fs';
-import * as path from 'path';
+import path from 'path';
 import parquet from 'parquetjs';
 import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
@@ -10,15 +10,8 @@ import dotenv from 'dotenv';
 // Load environment variables from .env file
 dotenv.config();
 
-// Get HyperSync URL from environment variable
-const HYPERSYNC_URL = process.env.HYPERSYNC_URL;
-if (!HYPERSYNC_URL) {
-  console.error("ERROR: HYPERSYNC_URL environment variable is required");
-  process.exit(1);
-}
-
-// Get HyperSync API key from environment variable (optional)
-const HYPERSYNC_API_KEY = process.env.HYPERSYNC_API_KEY;
+// Parse command line arguments
+const args = process.argv.slice(2);
 
 // Set up constants
 const UNISWAP_V2_ROUTER = '0x7a250d5630b4cf539739df2c5dacb4c659f2488d'.toLowerCase();
@@ -131,8 +124,6 @@ function decodeSwapParams(input) {
 }
 
 async function main() {
-  console.log(`Collecting Uniswap V2 swap trace data from blocks ${START_BLOCK} to ${END_BLOCK}`);
-  
   // Initialize data structures for collecting swap info
   const swapRecords = [];
   const uniqueInputTokens = new Set();
@@ -148,13 +139,15 @@ async function main() {
   try {
     // Initialize HyperSync client
     const client = await HypersyncClient.new({
-      url: HYPERSYNC_URL,
-      apiKey: HYPERSYNC_API_KEY || undefined // Only pass if defined
+      url: "https://eth.hypersync.xyz",
+      maxRetries: 3,
+      retryDelay: 1000,
     });
-    console.log('HyperSync client initialized');
+
+    console.log("HyperSync client initialized");
     
-    // Define query for Uniswap V2 Router traces
-    const query = {
+    // First, query to get the traces
+    const traceQuery = {
       fromBlock: START_BLOCK,
       toBlock: END_BLOCK,
       traces: [
@@ -173,31 +166,63 @@ async function main() {
           TraceField.CallType,
           TraceField.TraceAddress
         ],
+        transaction: [
+          TransactionField.Hash,
+          TransactionField.From,
+          TransactionField.To,
+          TransactionField.BlockNumber,
+          TransactionField.Status // Include status field
+        ],
         block: [
           BlockField.Number,
           BlockField.Timestamp,
-        ],
-      }
+        ]
+      },
+      // Ensure we get the associated transaction data with each trace
+      // 0 = Default, 1 = JoinAll, 2 = JoinNothing
+      joinMode: 1
     };
     
-    console.log('Starting to stream traces...');
+    // Add more debug logs for the query
+    console.log("Query details:", JSON.stringify({
+      blockRange: `${START_BLOCK}-${END_BLOCK}`,
+      filterTarget: UNISWAP_V2_ROUTER,
+      hasTransactionFilter: !!traceQuery.transactions
+    }));
     
-    // Use stream API
-    const stream = await client.stream(query, {});
+    // More logging before streaming
+    console.log('Starting to stream traces, this might take a while...');
     
+    // Add timeout handling for the stream operation
+    let streamTimeout = setTimeout(() => {
+      console.error("Stream operation timed out after 60 seconds. The HyperSync service might be experiencing issues.");
+      console.error("Check the status of the service or try again later.");
+      process.exit(1);
+    }, 60000); // 60 second timeout
+    
+    // Use stream API for traces
+    const traceStream = await client.stream(traceQuery, {});
+    clearTimeout(streamTimeout); // Clear timeout if stream initialized successfully
+    console.log('Stream connected successfully. Waiting for data...');
+    
+    // Add timeout handling for each recv operation
     while (true) {
-      const res = await stream.recv();
+      console.log('Waiting for next batch of data...');
+      let recvTimeout = setTimeout(() => {
+        console.error("Receive operation timed out after 30 seconds.");
+        console.error("This might indicate network issues or heavy load on the HyperSync service.");
+        // Don't exit here, just log the warning
+      }, 30000); // 30 second timeout
+
+      const res = await traceStream.recv();
+      clearTimeout(recvTimeout); // Clear timeout if received successfully
       
-      // Exit if we've reached the end of the data
+      // Log what we received
       if (res === null) {
-        console.log("End of data reached");
+        console.log("End of trace data reached (received null)");
         break;
-      }
-      
-      // Log progress
-      if (res.nextBlock && res.nextBlock % 1000 === 0) {
-        console.log(`Processing at block ${res.nextBlock}`);
-        console.log(`Found ${swapRecords.length} swap records so far`);
+      } else {
+        console.log(`Received data with nextBlock: ${res.nextBlock}, traces: ${res.data?.traces?.length || 0}`);
       }
       
       // Skip if no trace data
@@ -205,8 +230,9 @@ async function main() {
         continue;
       }
       
-      // Process traces in this response
+      // Process the results
       const traces = res.data.traces;
+      const transactions = res.data.transactions || [];
       const blockNumber = res.data.block?.number || 0;
       
       totalTraces += traces.length;
@@ -215,7 +241,7 @@ async function main() {
       for (const trace of traces) {
         if (trace.to && trace.to.toLowerCase() === UNISWAP_V2_ROUTER && 
             trace.input && trace.input.startsWith(SWAP_METHOD_SIGNATURE)) {
-            
+          
           const swapParams = decodeSwapParams(trace.input);
           if (swapParams) {
             successfulDecodes++;
@@ -226,11 +252,25 @@ async function main() {
             // Create a standardized ID format
             const id = `${txHash}-${traceAddress}`;
             
-            // Get transaction sender (from) address
-            const fromAddress = (trace.from || "").toLowerCase();
+            // Get the trace-level sender address
+            const traceFromAddress = (trace.from || "").toLowerCase();
             
-            // Create the swap record using standardized schema
-            const swapRecord = {
+            // Find the matching transaction directly
+            const tx = transactions.find(t => t.hash && t.hash.toLowerCase() === txHash);
+            const txFrom = tx && tx.from ? tx.from.toLowerCase() : "";
+            
+            // Log transaction status to verify it's being returned
+            if (tx) {
+              console.log(`Transaction ${txHash.substring(0, 10)}... status: ${tx.status}`);
+            } else {
+              console.log(`No transaction found for trace with hash ${txHash.substring(0, 10)}...`);
+            }
+            
+            // Use transaction-level sender if available, otherwise fall back to trace-level
+            const fromAddress = txFrom || traceFromAddress;
+            
+            // Store the record with the EOA sender address
+            swapRecords.push({
               id: id,
               blockNumber: trace.blockNumber || blockNumber,
               transactionHash: txHash,
@@ -241,10 +281,9 @@ async function main() {
               deadline: swapParams.deadline,
               path: swapParams.pathString,
               pathLength: swapParams.pathLength
-            };
+            });
             
-            swapRecords.push(swapRecord);
-            
+            // Track statistics
             if (swapParams.pathTokens.length > 0) {
               uniqueInputTokens.add(swapParams.pathTokens[0]);
               uniqueOutputTokens.add(swapParams.pathTokens[swapParams.pathTokens.length - 1]);
@@ -256,25 +295,11 @@ async function main() {
       }
     }
     
-    // Calculate execution time
-    const executionTime = (performance.now() - startTime) / 1000;
-    
     console.log(`\nData collection complete.`);
     console.log(`Processed ${END_BLOCK - START_BLOCK} blocks`);
     console.log(`Processed ${totalTraces} traces`);
-    console.log(`Found ${swapRecords.length} swap records`);
-    console.log(`Successful decodes: ${successfulDecodes}`);
-    console.log(`Unique input tokens: ${uniqueInputTokens.size}`);
-    console.log(`Unique output tokens: ${uniqueOutputTokens.size}`);
-    console.log(`Unique recipients: ${uniqueRecipients.size}`);
-    
-    // Calculate total input amount (if any swaps were found)
-    if (inputAmounts.length > 0) {
-      const totalInputAmount = inputAmounts.reduce((acc, val) => acc.plus(val), new BigNumber(0));
-      console.log(`Total input amount: ${totalInputAmount.toString()}`);
-    }
-    
-    console.log(`Total execution time: ${executionTime.toFixed(2)} seconds`);
+    console.log(`Collected ${swapRecords.length} swap records`);
+    console.log(`Total execution time: ${((performance.now() - startTime) / 1000).toFixed(2)} seconds`);
     
     // Save to Parquet format
     if (swapRecords.length > 0) {

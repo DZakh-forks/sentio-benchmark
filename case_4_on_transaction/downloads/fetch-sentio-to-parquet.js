@@ -129,11 +129,6 @@ async function fetchSentioDataWithPagination() {
             let gasValueFromRow = row.gasValue ? row.gasValue.toString() : '0';
             let effectiveGasPrice = row.effectiveGasPrice ? row.effectiveGasPrice.toString() : gasPrice; // Use gasPrice as fallback
             
-            // If we have gasValue but no gasUsed/gasPrice, use fallback values
-            if (gasValueFromRow !== '0' && (gasUsed === '0' || gasPrice === '0')) {
-              console.log(`Incomplete gas metrics for tx ${row.transactionHash}, using stored gasValue`);
-            }
-            
             // Write to Parquet with complete gas data
             try {
               await writer.appendRow({

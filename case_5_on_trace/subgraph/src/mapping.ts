@@ -37,8 +37,9 @@ export function handleSwapExactTokensForTokens(
   swap.blockNumber = call.block.number;
   swap.transactionHash = call.transaction.hash.toHexString();
   
-  // Set from address (transaction sender)
-  swap.from = call.from.toHexString().toLowerCase();
+  // FIXED: Use transaction.from to get the actual sender (EOA) 
+  // that initiated the transaction, not the immediate caller
+  swap.from = call.transaction.from.toHexString().toLowerCase();
   
   // Set to address (recipient)
   swap.to = call.inputs.to.toHexString().toLowerCase();
@@ -63,5 +64,9 @@ export function handleSwapExactTokensForTokens(
   // Save the entity
   swap.save();
   
-  log.info("Processed swap tx: {} with sequence number {}", [txHash, traceAddressPath]);
+  log.info("Processed swap tx: {} with sequence number {}, sender: {}", [
+    txHash, 
+    traceAddressPath,
+    call.transaction.from.toHexString()
+  ]);
 } 

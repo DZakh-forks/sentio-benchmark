@@ -1,50 +1,63 @@
 # Uniswap V2 Trace Subgraph
 
-This subgraph indexes traces from the Uniswap V2 Router, specifically capturing `swapExactTokensForTokens` function calls and storing detailed information about the swaps.
+This subgraph indexes calls to the Uniswap V2 Router, specifically capturing `swapExactTokensForTokens` function calls and storing detailed information about the swaps.
 
 ## Overview
 
-The trace monitoring approach allows the subgraph to capture *all* interactions with the Uniswap V2 Router, including those made through proxies and other contracts that might not emit events. This provides a more comprehensive view of Uniswap V2 activity compared to only monitoring events.
+The approach used in this subgraph is to monitor direct function calls to the Uniswap V2 Router. While this provides valuable data about swap activity, it's important to understand the architectural limitations of subgraphs when it comes to trace-level indexing.
 
 ## Features
 
-- Monitors transaction traces to Uniswap V2 Router
+- Monitors direct function calls to Uniswap V2 Router
 - Decodes `swapExactTokensForTokens` function calls
 - Extracts detailed swap information:
   - Input/output tokens
   - Amounts
   - Sender and recipient
   - Transaction metadata
-- Creates token entities to track tokens involved in swaps
 
 ## Technical Architecture
 
 ### Entities
 
-1. **SwapExactTokensForTokens**
+1. **Swap**
    - Stores information about each swap transaction
    - Includes transaction details, token addresses, amounts, timestamps
 
-2. **Token**
-   - Tracks tokens used in swaps
-   - Maintains relationships with swaps via virtual fields
+### Call Processing
 
-### Trace Processing
+The subgraph uses call handlers to process function calls:
 
-The subgraph uses transaction handlers to process transaction traces:
+1. Identifies direct calls to the Uniswap V2 Router
+2. Decodes function parameters to extract swap details
+3. Creates entities in the database
 
-1. Filters transactions with traces to the Uniswap V2 Router
-2. Identifies function calls by signature (function selector)
-3. Decodes input data to extract swap parameters
-4. Creates and links entities in the database
+## Important Limitations
 
-## Comparison with Event-Based Approaches
+Unlike trace-based indexers, subgraphs have fundamental limitations when it comes to capturing complete trace data:
 
-Traditional subgraphs typically rely on events emitted by contracts. This trace-based approach offers several advantages:
+1. **Limited to Direct Contract Calls**: Subgraphs can only monitor direct calls to the contracts they track. They cannot access internal transactions or calls made through intermediaries.
 
-- **Complete coverage**: Captures all function calls, even if they don't emit events
-- **Internal transaction visibility**: Sees through proxy patterns and internal contract interactions
-- **Function parameter access**: Direct access to all function parameters, not just those included in events
+2. **Missing Internal Transactions**: Approximately 40% of swap transactions occur as internal transactions (calls made from one contract to another), which are invisible to subgraphs.
+
+3. **Incorrect Sender Addresses**: The `call.from` field in subgraph call handlers returns the immediate contract caller, not the original EOA (Externally Owned Account) that initiated the transaction. This results in:
+   - Only ~427 unique senders captured (vs. ~1,200 in trace-based indexers)
+   - Contract addresses often being recorded as senders instead of actual user wallets
+   - Inaccurate sender analytics
+
+4. **No traceAddress Access**: Subgraphs have no direct access to the traceAddress of a function call, making it difficult to disambiguate multiple identical calls within a single transaction.
+
+5. **Function Variants**: Multiple function signature variants (e.g., `swapExactTokensForTokensSupportingFeeOnTransferTokens`) must be manually added, but even then, internal calls are missed.
+
+### Comparison with Trace-Based Indexers
+
+| Aspect | Subgraph | Trace-Based Indexers |
+|--------|----------|----------------------|
+| Records Captured | ~29,000 | ~50,000 |
+| Unique Senders | ~427 | ~1,200 |
+| Internal Transactions | Not visible | Fully accessible |
+| Sender Accuracy | Often returns contracts | Accurate EOA addresses |
+| Implementation | Easier, GraphQL support | More complex, better data |
 
 ## Installation & Setup
 
@@ -90,15 +103,41 @@ npm run deploy
 
 ## Implementation Notes
 
-### Trace Decoding
+### Improving Function Call Capture
 
-The Graph Protocol doesn't provide native ABI decoding for trace data. The mapping.ts file implements a manual decoding approach for extracting parameters from the raw transaction input data, following the Solidity ABI specification.
+To maximize the capture of direct function calls, you can add additional function signatures to the manifest:
 
-### Performance Considerations
+```yaml
+callHandlers:
+  - function: swapExactTokensForTokens(uint256,uint256,address[],address,uint256)
+    handler: handleSwapExactTokensForTokens
+  - function: swapExactTokensForTokensSupportingFeeOnTransferTokens(uint256,uint256,address[],address,uint256)
+    handler: handleSwapExactTokensForTokens
+  # Add other variants
+```
 
-- Transaction trace handling can be more resource-intensive than event handling
-- The subgraph focuses on a specific function signature to improve efficiency
-- Consider adjusting the startBlock in subgraph.yaml based on your needs
+However, this will still miss internal transactions and have incorrect sender addresses.
+
+### Sender Address Correction
+
+To get the correct transaction sender (EOA) in your handler, use `call.transaction.from` instead of `call.from`:
+
+```typescript
+// INCORRECT - Gets the immediate contract caller
+swap.from = call.from.toHexString().toLowerCase();
+
+// CORRECT - Gets the actual user wallet that initiated the transaction
+swap.from = call.transaction.from.toHexString().toLowerCase();
+```
+
+## Recommended Use Cases
+
+Given the limitations, subgraphs are well-suited for:
+- Basic monitoring of direct contract interactions
+- Simple analytics not requiring complete trace data
+- Use cases where sender identity is not critical
+
+For comprehensive trace analysis, consider using trace-based indexers like Subsquid, Sentio, or Envio.
 
 ## Query Examples
 
@@ -106,39 +145,15 @@ Query for recent swaps:
 
 ```graphql
 {
-  swapExactTokensForTokenses(first: 10, orderBy: blockNumber, orderDirection: desc) {
+  swaps(first: 10, orderBy: blockNumber, orderDirection: desc) {
     id
-    txHash
+    transactionHash
     from
-    tokenIn
-    tokenOut
+    to
     amountIn
     amountOutMin
-    recipient
+    path
     blockNumber
-    timestamp
-  }
-}
-```
-
-Query for a specific token's swaps:
-
-```graphql
-{
-  token(id: "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48") {
-    address
-    swapsIn {
-      id
-      txHash
-      amountIn
-      tokenOut
-    }
-    swapsOut {
-      id
-      txHash
-      amountOutMin
-      tokenIn
-    }
   }
 }
 ```

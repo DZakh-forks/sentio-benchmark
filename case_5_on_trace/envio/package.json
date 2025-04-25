@@ -1,17 +1,18 @@
 {
   "name": "envio-case5-processor",
   "version": "1.0.0",
-  "description": "Uniswap V2 Router Transaction Processor",
+  "description": "Collects Uniswap V2 swap data using Envio HyperSync",
   "type": "module",
-  "main": "fetch-data.js",
   "scripts": {
-    "start": "node fetch-data.js"
+    "fetch": "node fetch-data.js",
+    "fetch:partial": "node fetch-data.js --partial",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
     "@envio-dev/hypersync-client": "^0.6.3",
-    "bignumber.js": "^9.1.1",
-    "dotenv": "^16.4.5",
+    "bignumber.js": "^9.3.0",
+    "dotenv": "^16.5.0",
     "parquetjs": "^0.11.2",
-    "viem": "^1.10.9"
+    "viem": "^1.21.4"
   }
-} 
+}

@@ -25,7 +25,7 @@ if (!HYPERSYNC_URL) {
 const HYPERSYNC_API_KEY = process.env.HYPERSYNC_API_KEY;
 
 // Configuration - using the specified block range for case_4
-const OUTPUT_PARQUET_FILE = path.join(__dirname, '../data/envio-case4-gas-data.parquet');
+const OUTPUT_PARQUET_FILE = path.join(__dirname, '../data/envio-case4-gas.parquet');
 const START_BLOCK = 22280000;
 const END_BLOCK = 22290000;
 const BATCH_SIZE = 100; // Larger batch size
@@ -88,6 +88,7 @@ async function fetchGasData() {
             block: ["number", "timestamp"]
           }
         };
+        console.log(query);
         
         // Start streaming for this batch
         const stream = await client.stream(query, {});
