@@ -118,7 +118,7 @@ This benchmark provides a comparative analysis of indexer performance across dif
 | case_2_lbtc_full | 45m | 13m | 4h38m | 32m | 18h38m | |  |
 | case_3_ethereum_block | 18m | 7.9s† | 33m | 1m‡ | 10m | |  |
 | case_4_on_transaction | 23m | 1m 26s†† | 33m | 5m | N/A | |  |
-| case_5_on_trace | 16m | 30.75s‡‡ | N/A§ | 2m | 8m | |  |
+| case_5_on_trace | 16m | 40.67s‡‡ | N/A§ | 2m | 8m | |  |
 
 \* Ponder is missing about 5% of data in case_1  
 † Envio implementation uses HyperSync technology  

@@ -17,7 +17,7 @@ This benchmark tests the performance of various indexers when processing Uniswap
 |----------|----------------|---------|-------------|
 | Sentio   | 16m            | 45,895  | 22,200,000-22,290,000 |
 | Subsquid | 2m             | 50,191  | 22,200,000-22,290,000 |
-| Envio    | 30.75s         | 50,191  | 22,200,000-22,290,000 |
+| Envio    | 40.67s         | 50,191  | 22,200,000-22,290,000 |
 | Ponder   | N/A            | 0       | 22,200,000-22,290,000 |
 | Subgraph | 8m             | 29,058  | 22,200,000-22,290,000 |
 
@@ -45,7 +45,7 @@ The distribution of swap transactions across platforms shows the following resul
   - Processed blocks: 90,000
   - Processed traces: 4,039,431
   - Total input amount: 4.0 × 10^33
-  - Processing time: 30.75 seconds total
+  - Processing time: 40.67 seconds total
 
 - **Subgraph**: 29,058 swap records
   - Unique senders: 427
@@ -103,7 +103,7 @@ The benchmark requires each indexer to:
 
 ### Envio
 - Uses HyperSync technology for optimized data access
-- Processing time: 30.75 seconds
+- Processing time: 40.67 seconds
 - Total swap records: 50,191
 - Processed 90,000 blocks with 4,039,431 traces
 
