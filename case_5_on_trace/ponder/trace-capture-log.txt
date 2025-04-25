@@ -2671,3 +2671,12 @@ Error: in prepare, no such table: swap
 Error: in prepare, no such table: swap
 
 [2025-04-25T22:02:18.175Z] ⚠️ No sample swaps found. Trace capture may not be working correctly.
+[2025-04-25T22:07:18.238Z] 🔍 Checking trace capture status...
+[2025-04-25T22:07:18.243Z] ✅ Ponder database found: /Users/yufeili/Desktop/sentio/indexer-benchmark/case_5_on_trace/ponder/data/ponder.db (0.00 MB)
+[2025-04-25T22:07:18.250Z] ❌ Error counting swaps: Command failed: sqlite3 "/Users/yufeili/Desktop/sentio/indexer-benchmark/case_5_on_trace/ponder/data/ponder.db" "SELECT COUNT(*) FROM swap"
+Error: in prepare, no such table: swap
+
+[2025-04-25T22:07:18.255Z] ❌ Error getting sample swaps: Command failed: sqlite3 -json "/Users/yufeili/Desktop/sentio/indexer-benchmark/case_5_on_trace/ponder/data/ponder.db" "SELECT * FROM swap LIMIT 5"
+Error: in prepare, no such table: swap
+
+[2025-04-25T22:07:18.255Z] ⚠️ No sample swaps found. Trace capture may not be working correctly.
