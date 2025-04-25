@@ -63,6 +63,12 @@ This benchmark showcases how performance is affected when indexers need to both 
 
 ## Access Information
 
+### Exported Data
+All the transfer event data and balances collected from each platform have been exported and is available via Google Drive:
+- **Google Drive Folder**: [Case 2 - LBTC Full Data](https://drive.google.com/drive/u/0/folders/1YV_xhTYViVaCiqXgEgPDDjoWb9s8QLMZ)
+- Contains datasets with transfer events and account balances from all platforms
+- Includes comparative analysis and benchmark results
+
 ### Sentio
 - **Dashboard URL**: https://app.sentio.xyz/yufei/case_2_lbtc_full/data-explorer/sql
 - **API Access**: 
