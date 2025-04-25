@@ -118,7 +118,7 @@ This benchmark provides a comparative analysis of indexer performance across dif
 | case_2_lbtc_full | 45m | 13m | 4h38m | 32m | 18h38m | |  |
 | case_3_ethereum_block | 18m | 7.9s | 33m | 1m‡ | 10m | |  |
 | case_4_on_transaction | 23m | 1m 26s | 33m | 5m | N/A | |  |
-| case_5_on_trace | 16m | 41s† | N/A§ | 2m | 8m | |  |
+| case_5_on_trace | 16m | 41s | N/A§ | 2m | 8m | |  |
 
 
 ### Data Completeness
@@ -170,11 +170,6 @@ This benchmark provides a comparative analysis of indexer performance across dif
    - RPC calls and complex data handling (case_2) increase indexing time for all indexers
    - Trace processing (case_5) demonstrates the efficiency of specialized data access methods, with Envio's HyperSync showing exceptional performance
    - While Ponder officially supports trace-level indexing, our implementation encountered persistent issues with capturing trace data despite multiple configuration attempts
-
-5. **Implementation Differences**:
-   - Block range handling varies between platforms, with some treating the end block as inclusive and others as exclusive
-   - In case_4, the Envio implementation uses a loop with condition `currentBlock < END_BLOCK`, processing blocks up to but not including 22,290,000
-   - These different approaches to block range boundaries should be considered when comparing data completeness metrics
 
 ## Exported Data
 
