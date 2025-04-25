@@ -20,7 +20,7 @@ Our most recent benchmark (April 2025) shows significant performance differences
 - **Best RPC Performance**: Envio (13m) and Sentio (45m) for complex RPC interactions
 - **Block Processing Leader**: Envio with HyperSync (7.9s) and Sentio (18m) for block-level indexing
 - **Transaction Processing**: Subsquid (5m) and Envio with HyperSync (1.5m) for gas usage indexing
-- **Trace Processing Leader**: Envio with HyperSync (10.92s) and Subsquid (2m) for transaction trace analysis
+- **Trace Processing Leader**: Envio with HyperSync (30.75s) and Subsquid (2m) for transaction trace analysis
 
 See the [complete benchmark results](#current-benchmark-results---april-2025) for detailed timing data, completeness metrics, and analysis.
 
@@ -81,6 +81,7 @@ Our benchmark cases are designed to test different aspects of indexer performanc
 | Event Handler | ✅ | ✅ | ✅ | ✅ | ✅ |
 | Block Handler | ✅ | ❌ | ✅ | ✅ | ✅ |
 | Transaction Handler | ✅ | ❌ | ✅ | ✅ | ✅ |
+| Trace/Internal Tx Handler | ✅ | ✅ | ✅ | ✅ | ⚠️† |
 | Native RPC | ✅ | ✅ | ✅ | ✅ | ❌ |
 | Read-After-Write | ✅ | ✅ | ✅ | ✅ | ✅ |
 | High-Speed Data Access | ✅ | ✅* | ⚠️ | ✅ | ⚠️ |
@@ -90,6 +91,8 @@ Our benchmark cases are designed to test different aspects of indexer performanc
 | Decentralized Network | ❌ | ❌ | ❌ | ✅ | ✅ |
 
 \* Envio's HyperSync technology offers up to 2000x faster data access compared to traditional RPC methods
+
+† Subgraph has limited internal transaction visibility, only detecting direct contract calls, not internal transactions. This leads to incomplete data (~40% fewer records) and inaccurate sender identification in trace-level indexing as documented in the [case_5_on_trace](./case_5_on_trace/) benchmark.
 
 ⚠️ Limited capability or requires additional configuration
 
@@ -115,7 +118,7 @@ This benchmark provides a comparative analysis of indexer performance across dif
 | case_2_lbtc_full | 45m | 13m | 4h38m | 32m | 18h38m | |  |
 | case_3_ethereum_block | 18m | 7.9s† | 33m | 1m‡ | 10m | |  |
 | case_4_on_transaction | 23m | 1m 26s†† | 33m | 5m | N/A | |  |
-| case_5_on_trace | 16m | 10.92s‡‡ | N/A§ | 2m | 8m | |  |
+| case_5_on_trace | 16m | 30.75s‡‡ | N/A§ | 2m | 8m | |  |
 
 \* Ponder is missing about 5% of data in case_1  
 † Envio implementation uses HyperSync technology  
@@ -132,12 +135,13 @@ This benchmark provides a comparative analysis of indexer performance across dif
 | case_2_lbtc_full | 12,165 transfers, 2,684 accounts | 12,165 transfers, 2,685 accounts | 12,165 transfers, 2,684 accounts | 12,165 transfers, 2,685 accounts | 12,165 transfers, N/A accounts‡ |
 | case_3_ethereum_block | 100,000 (1-100,000) | 100,000 (0-99,999) | 100,001 (0-100,000) | 13,156† | 100,001 (0-100,000) |
 | case_4_on_transaction | 1,696,641 | 1,696,423 | 1,696,423 | ~1.7M | N/A |
-| case_5_on_trace | N/A | 50,191 swaps | 0** | N/A | 50,191 swaps |
+| case_5_on_trace | 45,895 | 50,191 | 0** | 50,191 | 29,058§§ |
 
 \* Missing ~5% of events  
 † Missing 86,844 blocks (86.84% of target range)  
 ‡ Subgraph does not report account counts in the same way as other implementations  
-** Ponder documentation indicates trace support, but our implementation encountered configuration issues that prevented successful trace capture
+** Ponder documentation indicates trace support, but our implementation encountered configuration issues that prevented successful trace capture  
+§§ Subgraph captured only ~58% of swap traces due to architectural limitations in accessing internal transactions
 
 ### Key Observations
 
@@ -150,14 +154,15 @@ This benchmark provides a comparative analysis of indexer performance across dif
 2. **Data Completeness**:
    - Ponder is missing approximately 5% of data in case_1
    - Subsquid is missing about 87% of blocks in case_3, primarily indexing blocks in the 45,000-100,000 range
-   - All other indexers processed the complete dataset in their supported cases
+   - Sentio processed fewer traces in case_5 (45,895 vs 50,191 for Subsquid/Envio), possibly due to failed trace calls resulting from insufficient fees (requires further investigation to achieve complete data matching between implementations)
+   - Subgraph captured only ~58% of swap transactions in case_5 and identified significantly fewer unique senders (427 vs. ~1,200) due to limitations in accessing internal transactions
    - Case 3 shows perfect data consistency with 100% similarity for blocks across all platforms
 
 3. **Specialized Capabilities**:
-   - Envio shows exceptional performance with HyperSync technology (7.9s for 100K blocks, 10.92s for 90K blocks with trace data)
+   - Envio shows exceptional performance with HyperSync technology (7.9s for 100K blocks, 30.75s for 90K blocks with trace data)
    - Sentio performs consistently well across all test cases
    - Subsquid shows fast processing but significant data gaps in block-level indexing
-   - Subgraph handles trace data effectively despite traceAddress not being directly accessible
+   - Subgraph has fundamental architectural limitations for trace-level indexing, including inability to access internal transactions and inaccurate sender identification
 
 4. **Resource Efficiency**:
    - Event processing (case_1) is efficient across all indexers
