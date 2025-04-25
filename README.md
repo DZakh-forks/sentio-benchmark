@@ -114,16 +114,12 @@ This benchmark provides a comparative analysis of indexer performance across dif
 
 | Case | Sentio | Envio | Ponder | Subsquid | Subgraph | Sentio_Subgraph | Goldsky_Subgraph |
 |------|--------|-------|--------|----------|----------| ----------| ----------|
-| case_1_lbtc_event_only | 8m | 2m | 1h40m* | 10m | 3h9m | 26m |  |
+| case_1_lbtc_event_only | 8m | 2m | 1h40m | 10m | 3h9m | 26m |  |
 | case_2_lbtc_full | 45m | 13m | 4h38m | 32m | 18h38m | |  |
-| case_3_ethereum_block | 18m | 7.9s† | 33m | 1m‡ | 10m | |  |
-| case_4_on_transaction | 23m | 1m 26s† | 33m | 5m | N/A | |  |
+| case_3_ethereum_block | 18m | 7.9s | 33m | 1m‡ | 10m | |  |
+| case_4_on_transaction | 23m | 1m 26s | 33m | 5m | N/A | |  |
 | case_5_on_trace | 16m | 41s† | N/A§ | 2m | 8m | |  |
 
-\* Ponder is missing about 5% of data in case_1  
-† Envio implementation uses HyperSync technology  
-‡ Subsquid is missing about 87% of blocks  
-§ Ponder claims trace-level support, but implementation struggles with capturing traces in our testing configuration
 
 ### Data Completeness
 
@@ -131,24 +127,25 @@ This benchmark provides a comparative analysis of indexer performance across dif
 |------|--------|-------|--------|----------|----------|
 | case_1_lbtc_event_only | 296,734 | 296,734 | 296,138* | 296,734 | 296,734 |
 | case_2_lbtc_full | 2,684 | 2,685‡ | 2,684 | 2,685‡ | 2,685‡ |
-| case_3_ethereum_block | 100,000 | 100,000 | 100,001 | 13,156† | 100,001 |
+| case_3_ethereum_block | 100,000 | 100,000 | 100,001¶ | 13,156† | 100,001¶ |
 | case_4_on_transaction | 1,696,641 | 1,696,423†† | 1,696,423 | 1,696,641 | N/A& |
 | case_5_on_trace | 45,895+ | 50,191 | 0** | 50,191 | 29,058§§ |
 
 \* Missing ~5% of events  
-† Missing 86,844 blocks (86.84% of target range)  
 ‡ Some implementations include 0x0000000000000000000000000000000000000000 address  
-†† Envio processes blocks 22,280,000 to 22,289,999 due to exclusive end block handling, resulting in 218 fewer transactions  
+† Missing 86,844 blocks (86.84% of target range)  
 ¶ Some implementations count 100,001 blocks because they include block 0 in their range  
-& Subgraph does not support transaction level access  
+†† Envio processes blocks 22,280,000 to 22,289,999 due to exclusive end block handling, resulting in 218 fewer transactions  
+& Subgraph does not support transaction level access 
++ Sentio auto-filters failed calls due to insufficient fees 
 ** Ponder documentation indicates trace support, but our implementation encountered configuration issues that prevented successful trace capture  
 §§ Subgraph captured only ~58% of swap traces due to architectural limitations in accessing internal transactions  
-+ Sentio auto-filters failed calls due to insufficient fees
+
 
 ### Key Observations
 
 1. **Performance Comparison**:
-   - Sentio and Envio show the fastest indexing times across most test cases
+   - Envio and Sentio show the fastest indexing times across most test cases
    - Envio's HyperSync technology demonstrates exceptional performance for block and transaction indexing
    - Ponder shows longer indexing times but with complete data coverage in most cases
    - Subgraph demonstrates efficient block processing (10m for 100K blocks) with complete coverage
@@ -173,3 +170,19 @@ This benchmark provides a comparative analysis of indexer performance across dif
    - RPC calls and complex data handling (case_2) increase indexing time for all indexers
    - Trace processing (case_5) demonstrates the efficiency of specialized data access methods, with Envio's HyperSync showing exceptional performance
    - While Ponder officially supports trace-level indexing, our implementation encountered persistent issues with capturing trace data despite multiple configuration attempts
+
+5. **Implementation Differences**:
+   - Block range handling varies between platforms, with some treating the end block as inclusive and others as exclusive
+   - In case_4, the Envio implementation uses a loop with condition `currentBlock < END_BLOCK`, processing blocks up to but not including 22,290,000
+   - These different approaches to block range boundaries should be considered when comparing data completeness metrics
+
+## Exported Data
+
+All benchmark datasets, comparison reports, and analysis results are available via Google Drive:
+
+- **Complete Dataset Collection**: [Indexer Benchmark Datasets](https://drive.google.com/drive/u/0/folders/1zwJsEoxQJSAKKPMlji4xRqnqR2nqVQ4k)
+- Contains data from all benchmark cases for all tested indexer platforms
+- Includes raw data, comparison reports, and analysis files for each benchmark scenario
+- Individual case folders are also linked in their respective README files
+
+## Current Benchmark Results - April 2025
