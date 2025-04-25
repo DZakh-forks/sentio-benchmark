@@ -18,14 +18,14 @@ This benchmark tests the performance of various indexers when processing Ethereu
 | Sentio   | 18m            | 100,000 | 1-100,000   | Complete (excluding block 0) |
 | Subsquid | 1m*            | 13,156  | 0-100,000   | Sparse (13.16%) |
 | Envio    | 7.9s           | 100,000 | 0-99,999    | Complete |
-| Ponder   | 33m            | 100,001 | 0-100,000   | Complete |
-| Subgraph | 10m            | 100,001 | 0-100,000   | Complete |
+| Ponder   | 33m            | 100,001 | 0-100,000   | Complete (includes block 0) |
+| Subgraph | 10m            | 100,001 | 0-100,000   | Complete (includes block 0) |
 
 \* *Subsquid used an archival node but has missing data, primarily indexing blocks in the 45,000-100,000 range*
 
 ## Block Distribution Details
 
-- **Sentio**: Even distribution across the entire range (blocks 1-100,000)
+- **Sentio**: Even distribution across the entire range (blocks 1-100,000, excluding block 0)
 - **Subsquid**: Highly sparse distribution:
   - 0-9,999: Just 1 block (0.01% coverage) - only block 0
   - 10,000-39,999: No blocks at all (0% coverage)
@@ -37,9 +37,9 @@ This benchmark tests the performance of various indexers when processing Ethereu
   - 90,000-100,000: 2,220 blocks (22.20% coverage)
   - Largest gap: Block 0 to block 46,147 (46,146 missing blocks)
   - Overall, 86.84% of blocks in the range are missing
-- **Envio**: Complete coverage from 0-99,999
-- **Ponder**: Complete coverage from 0-100,000
-- **Subgraph**: Complete coverage from 0-100,000
+- **Envio**: Complete coverage from 0-99,999 (100,000 blocks total)
+- **Ponder**: Complete coverage from 0-100,000 (100,001 blocks total, including genesis block 0)
+- **Subgraph**: Complete coverage from 0-100,000 (100,001 blocks total, including genesis block 0)
 
 ## Similarity Analysis
 
@@ -68,7 +68,7 @@ We compared all platforms pairwise, focusing on three key fields:
 1. **Perfect Data Consistency**: All platforms show 100% similarity for the blocks they have in common. No differences were found in any of the key fields (hash, parentHash, timestamp) across any platform pair.
 
 2. **Coverage Variations**:
-   - **Complete Coverage**: Ponder and Subgraph have the most complete coverage with all 100,001 blocks (0-100,000).
+   - **Complete Coverage**: Ponder and Subgraph have the most complete coverage with all 100,001 blocks (0-100,000, including genesis block).
    - **Near Complete**: Sentio (missing only block 0) and Envio (complete 0-99,999) have essentially complete coverage.
    - **Sparse Coverage**: Subsquid has significantly lower coverage with only 13,156 blocks, primarily in the 40,000-100,000 range.
 

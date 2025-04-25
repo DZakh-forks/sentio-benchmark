@@ -20,7 +20,7 @@ Our most recent benchmark (April 2025) shows significant performance differences
 - **Best RPC Performance**: Envio (13m) and Sentio (45m) for complex RPC interactions
 - **Block Processing Leader**: Envio with HyperSync (7.9s) and Sentio (18m) for block-level indexing
 - **Transaction Processing**: Subsquid (5m) and Envio with HyperSync (1.5m) for gas usage indexing
-- **Trace Processing Leader**: Envio with HyperSync (30.75s) and Subsquid (2m) for transaction trace analysis
+- **Trace Processing Leader**: Envio with HyperSync (41s) and Subsquid (2m) for transaction trace analysis
 
 See the [complete benchmark results](#current-benchmark-results---april-2025) for detailed timing data, completeness metrics, and analysis.
 
@@ -117,14 +117,12 @@ This benchmark provides a comparative analysis of indexer performance across dif
 | case_1_lbtc_event_only | 8m | 2m | 1h40m* | 10m | 3h9m | 26m |  |
 | case_2_lbtc_full | 45m | 13m | 4h38m | 32m | 18h38m | |  |
 | case_3_ethereum_block | 18m | 7.9s† | 33m | 1m‡ | 10m | |  |
-| case_4_on_transaction | 23m | 1m 26s†† | 33m | 5m | N/A | |  |
-| case_5_on_trace | 16m | 40.67s‡‡ | N/A§ | 2m | 8m | |  |
+| case_4_on_transaction | 23m | 1m 26s† | 33m | 5m | N/A | |  |
+| case_5_on_trace | 16m | 41s† | N/A§ | 2m | 8m | |  |
 
 \* Ponder is missing about 5% of data in case_1  
 † Envio implementation uses HyperSync technology  
 ‡ Subsquid is missing about 87% of blocks  
-†† Envio implementation uses HyperSync technology  
-‡‡ Envio implementation uses HyperSync technology  
 § Ponder claims trace-level support, but implementation struggles with capturing traces in our testing configuration
 
 ### Data Completeness
@@ -133,13 +131,14 @@ This benchmark provides a comparative analysis of indexer performance across dif
 |------|--------|-------|--------|----------|----------|
 | case_1_lbtc_event_only | 296,734 | 296,734 | 296,138* | 296,734 | 296,734 |
 | case_2_lbtc_full | 12,165 transfers, 2,684 accounts | 12,165 transfers, 2,685 accounts | 12,165 transfers, 2,684 accounts | 12,165 transfers, 2,685 accounts | 12,165 transfers, N/A accounts‡ |
-| case_3_ethereum_block | 100,000 (1-100,000) | 100,000 (0-99,999) | 100,001 (0-100,000) | 13,156† | 100,001 (0-100,000) |
+| case_3_ethereum_block | 100,000 (1-100,000) | 100,000 (0-99,999) | 100,001 (0-100,000)¶ | 13,156† | 100,001 (0-100,000)¶ |
 | case_4_on_transaction | 1,696,641 | 1,696,423 | 1,696,423 | ~1.7M | N/A |
 | case_5_on_trace | 45,895 | 50,191 | 0** | 50,191 | 29,058§§ |
 
 \* Missing ~5% of events  
 † Missing 86,844 blocks (86.84% of target range)  
 ‡ Subgraph does not report account counts in the same way as other implementations  
+¶ Some implementations count 100,001 blocks because they include block 0 in their range  
 ** Ponder documentation indicates trace support, but our implementation encountered configuration issues that prevented successful trace capture  
 §§ Subgraph captured only ~58% of swap traces due to architectural limitations in accessing internal transactions
 
