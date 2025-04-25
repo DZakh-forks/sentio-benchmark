@@ -2885,3 +2885,9 @@ Trace monitoring started at 2025-04-24T22:04:03.339Z
 [2025-04-25T22:06:08.731Z] Swaps captured: -1, Highest block: 0
 [2025-04-25T22:06:55.690Z] Swaps captured: -1, Highest block: 0
 [2025-04-25T22:07:08.706Z] Swaps captured: -1, Highest block: 0
+[2025-04-25T22:07:55.688Z] Swaps captured: -1, Highest block: 0
+[2025-04-25T22:08:08.711Z] Swaps captured: -1, Highest block: 0
+[2025-04-25T22:08:55.713Z] Swaps captured: -1, Highest block: 0
+[2025-04-25T22:09:08.728Z] Swaps captured: -1, Highest block: 0
+[2025-04-25T22:09:55.698Z] Swaps captured: -1, Highest block: 0
+[2025-04-25T22:10:08.724Z] Swaps captured: -1, Highest block: 0

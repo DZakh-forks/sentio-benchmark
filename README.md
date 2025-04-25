@@ -179,5 +179,3 @@ All benchmark datasets, comparison reports, and analysis results are available v
 - Contains data from all benchmark cases for all tested indexer platforms
 - Includes raw data, comparison reports, and analysis files for each benchmark scenario
 - Individual case folders are also linked in their respective README files
-
-## Current Benchmark Results - April 2025
