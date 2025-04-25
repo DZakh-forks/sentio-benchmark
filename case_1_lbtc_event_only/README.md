@@ -63,6 +63,12 @@ This benchmark showcases performance differences when handling straightforward e
 
 ## Access Information
 
+### Exported Data
+All the transfer event data collected from each platform has been exported and is available via Google Drive:
+- **Google Drive Folder**: [Case 1 - LBTC Event-Only Data](https://drive.google.com/drive/u/0/folders/1D8HXn7U7qQjzaEh1TLUZbNzVW_6nIRpT)
+- Contains datasets with transfer events from all platforms
+- Includes comparative analysis and benchmark results
+
 ### Sentio
 - **Dashboard URL**: https://app.sentio.xyz/yufei/case_1_lbtc_event_only/data-explorer/sql
 - **API Access**: 
