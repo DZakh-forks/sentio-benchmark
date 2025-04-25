@@ -122,7 +122,7 @@ This benchmark provides a comparative analysis of indexer performance across dif
 ‡ Subsquid is missing about 87% of blocks  
 †† Envio implementation uses HyperSync technology  
 ‡‡ Envio implementation uses HyperSync technology  
-§ Ponder claims to support trace indexing but fails to capture any records in practice
+§ Ponder claims trace-level support, but implementation struggles with capturing traces in our testing configuration
 
 ### Data Completeness
 
@@ -137,7 +137,7 @@ This benchmark provides a comparative analysis of indexer performance across dif
 \* Missing ~5% of events  
 † Missing 86,844 blocks (86.84% of target range)  
 ‡ Subgraph does not report account counts in the same way as other implementations  
-** Ponder documentation claims trace support, but our tests show it fails to capture any swap traces
+** Ponder documentation indicates trace support, but our implementation encountered configuration issues that prevented successful trace capture
 
 ### Key Observations
 
@@ -164,4 +164,4 @@ This benchmark provides a comparative analysis of indexer performance across dif
    - Block-level indexing (case_3) shows dramatic performance differences between traditional approaches and Envio's HyperSync
    - RPC calls and complex data handling (case_2) increase indexing time for all indexers
    - Trace processing (case_5) demonstrates the efficiency of specialized data access methods, with Envio's HyperSync showing exceptional performance
-   - While Ponder documentation claims trace support, our implementation was unable to capture any Uniswap V2 swap traces despite multiple configuration attempts
+   - While Ponder officially supports trace-level indexing, our implementation encountered persistent issues with capturing trace data despite multiple configuration attempts

@@ -18,7 +18,7 @@ This benchmark tests the performance of various indexers when processing Uniswap
 | Sentio   | 16m            | N/A     | 22,200,000-22,290,000 | Complete |
 | Subsquid | 2m             | N/A     | 22,200,000-22,290,000 | Complete |
 | Envio    | 10.92s         | 50,191 swaps | 22,200,000-22,290,000 | Complete (90,000 blocks) |
-| Ponder   | N/A            | N/A     | N/A         | Not supported |
+| Ponder   | N/A            | 0       | 22,200,000-22,290,000 | Configuration issues |
 | Subgraph | 8m             | 50,191 swaps | 22,200,000-22,290,000 | Complete |
 
 ## Data Distribution Details
@@ -59,7 +59,7 @@ The benchmark requires each indexer to:
    - **Subsquid** showed excellent performance at 2 minutes.
    - **Subgraph** completed in 8 minutes with reliable performance.
    - **Sentio** processed all traces in 16 minutes.
-   - **Ponder** does not currently support trace-level indexing.
+   - **Ponder** supports trace-level indexing in documentation but our implementation encountered configuration issues.
 
 3. **Implementation Approaches**:
    - Envio's implementation leverages their HyperSync technology for optimized blockchain data access.
@@ -83,8 +83,10 @@ The benchmark requires each indexer to:
 - Processed 90,000 blocks with 485,754 traces
 
 ### Ponder
-- Does not support trace-level indexing
-- No implementation for this benchmark case
+- Officially supports trace-level indexing according to documentation
+- Our implementation encountered persistent configuration issues
+- Unable to capture trace data despite multiple setup and configuration attempts
+- Issues included database connection problems and trace event handling
 
 ### Subgraph
 - Complete coverage despite traceAddress not being directly accessible

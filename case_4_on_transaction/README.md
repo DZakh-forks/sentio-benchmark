@@ -55,7 +55,7 @@ The distribution of transactions across platforms is remarkably consistent, with
 Each subdirectory contains the implementation for a specific indexing platform:
 - `/sentio`: Sentio implementation 
 - `/envio`: Envio implementation with HyperSync
-- `/ponder`: Ponder implementation
+- `/ponder`: Ponder implementation using transaction handlers with configurable API endpoints
 - `/sqd`: Subsquid implementation
 
 ## Platform Notes
@@ -81,6 +81,7 @@ Each subdirectory contains the implementation for a specific indexing platform:
 - Processing time: 33 minutes
 - Total transaction records: 1,696,423
 - Average processing time per block event: 33.057ms
+- Uses configurable RPC endpoint with placeholder for API key in configuration
 
 ### Subgraph
 - Does not support transaction handlers
@@ -89,6 +90,12 @@ Each subdirectory contains the implementation for a specific indexing platform:
 ## Conclusion
 
 This benchmark demonstrates significant performance differences in transaction data processing across indexing platforms. Envio's HyperSync technology demonstrates exceptional speed, followed by Subsquid's efficient processing. All platforms show impressive consistency in the data captured, with minimal variations in transaction counts.
+
+The implementations showcase different approaches to transaction handling:
+- Envio uses a specialized HyperSync technology for optimized data access
+- Ponder provides a developer-friendly approach with configurable RPC endpoints and standard transaction handlers
+- Sentio offers a robust solution with complete coverage
+- Subsquid demonstrates efficient processing with comprehensive transaction data
 
 These results highlight the importance of choosing the right indexing solution based on specific use cases, especially for applications requiring transaction-level analysis such as gas usage tracking, fee market analysis, or transaction monitoring.
 
