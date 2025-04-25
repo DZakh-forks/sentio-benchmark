@@ -61,45 +61,56 @@ function decodeSwapParams(input) {
     // Remove method signature (first 10 characters including '0x')
     const parametersHex = `0x${input.slice(10)}`;
     
-    // Extract parameters at specific offsets
+    // Extract fixed parameters at specific offsets
+    // According to the ABI, the order is:
+    // 1. amountIn (uint256)
+    // 2. amountOutMin (uint256)
+    // 3. path (address[]) - dynamic type with offset pointer
+    // 4. to (address)
+    // 5. deadline (uint256)
+    
     const amountInHex = parametersHex.slice(2, 66);
     const amountOutMinHex = parametersHex.slice(66, 130);
-    const deadlineHex = parametersHex.slice(130, 194);
+    // Position 130-194 contains a pointer to the path array (dynamic type), not the deadline
+    const pathPointerHex = parametersHex.slice(130, 194);
+    // The 'to' address is the 4th parameter
+    const toHex = parametersHex.slice(194, 258);
+    // The deadline is the 5th parameter
+    const deadlineHex = parametersHex.slice(258, 322);
     
-    // Extract token addresses from the path array
-    // First, extract the path length and offsets
-    const pathOffset = 192;
+    // Parse fixed parameters
+    const amountIn = new BigNumber(`0x${amountInHex}`).toString(10);
+    const amountOutMin = new BigNumber(`0x${amountOutMinHex}`).toString(10);
+    const deadline = new BigNumber(`0x${deadlineHex}`).toString(10);
+    
+    // Extract the 'to' address (recipient)
+    const to = `0x${toHex.slice(24)}`.toLowerCase();
+    
+    // Parse the path array (dynamic type)
+    // The pathPointer tells us the offset where the path array starts
+    const pathPointer = parseInt(`0x${pathPointerHex}`, 16);
+    // Calculate the actual offset in the hex string (each character is 0.5 bytes)
+    const pathOffset = 2 + (pathPointer * 2);
+    
+    // The first 32 bytes at path location contain the length of the array
     const pathLengthHex = parametersHex.slice(pathOffset, pathOffset + 64);
-    const pathLength = parseInt(pathLengthHex, 16);
+    const pathLength = parseInt(`0x${pathLengthHex}`, 16);
     
     // Now extract all tokens in the path
     const pathTokens = [];
     for (let i = 0; i < pathLength && i < 10; i++) { // Limit to 10 tokens to prevent errors
       const tokenOffset = pathOffset + 64 + (i * 64);
-      const tokenAddress = `0x${parametersHex.slice(tokenOffset + 24, tokenOffset + 64)}`;
+      if (tokenOffset + 64 > parametersHex.length) {
+        console.warn('Path extraction reached end of input data');
+        break;
+      }
+      const tokenHex = parametersHex.slice(tokenOffset, tokenOffset + 64);
+      const tokenAddress = `0x${tokenHex.slice(24)}`;
       // Validate and normalize address
       if (tokenAddress && tokenAddress.length === 42) {
         pathTokens.push(tokenAddress.toLowerCase()); // Normalize to lowercase
       }
     }
-    
-    // Extract recipient address (after the path array)
-    const toOffset = pathOffset + 64 + (pathLength * 64); // Position after path array
-    let to = '0x0000000000000000000000000000000000000000'; // Default to zero address
-    
-    // Validate that we have enough data to extract the recipient address
-    if (parametersHex.length >= toOffset + 64) {
-      const extractedTo = `0x${parametersHex.slice(toOffset + 24, toOffset + 64)}`;
-      // Ensure it's a valid address (0x + 40 hex chars)
-      if (extractedTo && extractedTo.length === 42 && extractedTo !== '0x0000000000000000000000000000000000000000') {
-        to = extractedTo.toLowerCase();
-      }
-    }
-    
-    // Convert hex values to BigNumber for safe handling of large numbers
-    const amountIn = new BigNumber(`0x${amountInHex}`).toString(10);
-    const amountOutMin = new BigNumber(`0x${amountOutMinHex}`).toString(10);
-    const deadline = new BigNumber(`0x${deadlineHex}`).toString(10);
     
     // Combine all tokens into a path string
     const pathString = pathTokens.join(',');
