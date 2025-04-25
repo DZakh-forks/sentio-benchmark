@@ -6,7 +6,7 @@ This module uses Envio's HyperSync API to efficiently collect Uniswap V2 swap da
 
 Using Envio's HyperSync API, we achieved the following performance:
 
-- **Total execution time**: 40.67 seconds
+- **Total execution time**: 41 seconds
 - **Blocks processed**: 90,000 (from block 22200000 to 22290000)
 - **Traces processed**: 4,039,431
 - **Swap records collected**: 50,191
