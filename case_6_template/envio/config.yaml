@@ -1,0 +1,22 @@
+# yaml-language-server: $schema=./node_modules/envio/evm.schema.json
+name: case_6_template
+description: Uniswap V2 Factory and Pairs
+networks:
+- id: 1
+  start_block: 19000000  # Block range with known Uniswap V2 pair creations
+  end_block: 19010000    # 1000 blocks for testing
+  contracts:
+  - name: UniswapV2Factory
+    abi_file_path: abis/UniswapV2Factory.json
+    address: "0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f"
+    handler: src/EventHandlers.ts
+    events:
+    - event: PairCreated(address token0, address token1, address pair, uint256)
+
+  - name: UniswapV2Pair
+    abi_file_path: abis/UniswapV2Pair.json
+    # No address field - we'll discover these addresses from events
+    handler: src/EventHandlers.ts
+    events:
+    - event: Swap(address sender, uint256 amount0In, uint256 amount1In, uint256 amount0Out, uint256 amount1Out, address to)
+unordered_multichain_mode: true
