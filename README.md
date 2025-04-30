@@ -68,7 +68,7 @@ Our benchmark cases are designed to test different aspects of indexer performanc
 | Cosmos | ⚠️ | ❌ | ❌ | ✅ | ✅ |
 | Solana | ⚠️ | ❌ | ✅ | ✅ | ✅ |
 | Bitcoin | ⚠️ | ❌ | ✅ | ✅ | ✅ |
-| Fuel | ✅ | ❌ | ❌ | ✅ | ❌ |
+| Fuel | ✅ | ✅ | ❌ | ✅ | ❌ |
 
 \* Including many EVM-compatible L1/L2 chains
 

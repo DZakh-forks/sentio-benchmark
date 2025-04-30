@@ -1,18 +1,8 @@
 /*
  * Please refer to https://docs.envio.dev for a thorough guide on all Envio indexer features
  */
-import { 
-  UniswapV2Factory,
-  UniswapV2Pair
-} from "../generated/src/Handlers.gen";
-
-import type {
-  handlerContext,
-  Pair,
-  Swap,
-  UniswapV2Factory_PairCreated_event,
-  UniswapV2Pair_Swap_event
-} from "../generated/src/Types.gen";
+import { UniswapV2Factory, UniswapV2Pair } from "generated";
+import type { Pair, Swap } from "generated";
 
 // Register UniswapV2Pair contracts whenever they're created by the factory
 UniswapV2Factory.PairCreated.contractRegister(
