@@ -23,6 +23,10 @@ importers:
       parquetjs:
         specifier: ^0.11.2
         version: 0.11.2
+    optionalDependencies:
+      generated:
+        specifier: ./generated
+        version: link:generated
     devDependencies:
       '@types/chai':
         specifier: ^4.3.11
@@ -48,10 +52,6 @@ importers:
       typescript:
         specifier: 5.2.2
         version: 5.2.2
-    optionalDependencies:
-      generated:
-        specifier: ./generated
-        version: link:generated
 
   generated:
     dependencies:
