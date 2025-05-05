@@ -1,0 +1,24 @@
+# Dependencies
+/node_modules
+
+# Debug logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Ponder specific
+/generated/
+/.ponder/
+.ponder2/
+log.log
+
+# Environment
+.env*.local
+
+# IDE and OS files
+.DS_Store
+.idea/
+.vscode/
+*.swp
+*.swo

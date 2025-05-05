@@ -15,10 +15,10 @@
     "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 uniswap-v2-trace-subgraph"
   },
   "dependencies": {
-    "@graphprotocol/graph-cli": "^0.48.0",
-    "@graphprotocol/graph-ts": "^0.29.3"
+    "@graphprotocol/graph-cli": "^0.97.0",
+    "@graphprotocol/graph-ts": "^0.38.0"
   },
   "devDependencies": {
     "matchstick-as": "^0.5.2"
   }
-} 
+}

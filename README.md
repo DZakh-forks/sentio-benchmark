@@ -122,7 +122,7 @@ This benchmark provides a comparative analysis of indexer performance across dif
 | case_3_ethereum_block | 18m | 7.9s | 33m | 1m‡ | 10m | |  |
 | case_4_on_transaction | 23m | 1m 26s | 33m | 5m | N/A | |  |
 | case_5_on_trace | 16m | 41s | N/A§ | 2m | 8m | |  |
-| case_6_template | 12m | 20s | 2h24m | 2m | 34m | |  |
+| case_6_template | 12m | 20s | 2h24m | 2m | 34m | | 20h24m |
 
 ### Data Completeness
 
