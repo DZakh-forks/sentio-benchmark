@@ -92,8 +92,8 @@ Our benchmark cases are designed to test different aspects of indexer performanc
 | Auto Scaling | ✅ | ✅ | ⚠️ | ✅ | ✅ |
 | Decentralized Network | ❌ | ❌ | ❌ | ✅ | ✅ |
 
-\* Envio's HyperSync technology offers up to 2000x faster data access compared to traditional RPC methods
-$ Envio does not support natively, but one can utilize HyperSync to retrieve data
+\* Envio's HyperSync technology offers up to 2000x faster data access compared to traditional RPC methods  
+$ Envio does not support natively, but one can utilize HyperSync to retrieve data  
 † Subgraph has limited internal transaction visibility, only detecting direct contract calls, not internal transactions. This leads to incomplete data (~40% fewer records) and inaccurate sender identification in trace-level indexing as documented in the [case_5_on_trace](./case_5_on_trace/) benchmark.
 
 ⚠️ Limited capability or requires additional configuration
