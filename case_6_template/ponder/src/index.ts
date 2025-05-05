@@ -1,7 +1,8 @@
 import { ponder } from "ponder:registry";
+import type { Context } from "ponder:registry";
 import { Pair, Swap } from "../ponder.schema";
 
-ponder.on("UniswapV2Factory:PairCreated", async ({ event, context }) => {
+ponder.on("UniswapV2Factory:PairCreated", async ({ event, context }: { event: any; context: Context }) => {
   await context.db.insert(Pair).values({
     id: event.args[2].toLowerCase(),
     token0: event.args[0].toLowerCase(),
@@ -11,7 +12,7 @@ ponder.on("UniswapV2Factory:PairCreated", async ({ event, context }) => {
   });
 });
 
-ponder.on("UniswapV2Pair:Swap", async ({ event, context }) => {
+ponder.on("UniswapV2Pair:Swap", async ({ event, context }: { event: any; context: Context }) => {
   const pair = await context.db.find(Pair, { id: event.log.address.toLowerCase() });
   
   if (!pair) {
