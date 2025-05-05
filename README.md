@@ -132,18 +132,18 @@ This benchmark provides a comparative analysis of indexer performance across dif
 | case_2_lbtc_full | 2,684 | 2,685‡ | 2,684 | 2,685‡ | 2,685‡ |
 | case_3_ethereum_block | 100,000 | 100,000 | 100,001¶ | 13,156† | 100,001¶ |
 | case_4_on_transaction | 1,696,641 | 1,696,423†† | 1,696,423 | 1,696,641 | N/A& |
-| case_5_on_trace | 45,895+ | 50,191 | 0** | 50,191 | 29,058§§ |
+| case_5_on_trace | 45,895¶¶ | 50,191 | 0** | 50,191 | 29,058§§ |
 | case_6_template | 35,039 | 35,039 | 35,039 | 33,972††† | 35,039 |
 
 \* Missing ~5% of events  
-‡ Some implementations include 0x0000000000000000000000000000000000000000 address  
-† Missing 86,844 blocks (86.84% of target range)  
-¶ Some implementations count 100,001 blocks because they include block 0 in their range  
-†† Envio processes blocks 22,280,000 to 22,289,999 due to exclusive end block handling, resulting in 218 fewer transactions  
-& Subgraph does not support transaction level access 
-\+ Sentio auto-filters failed calls due to insufficient fees 
-** Ponder documentation indicates trace support, but our implementation encountered configuration issues that prevented successful trace capture  
-§§ Subgraph captured only ~58% of swap traces due to architectural limitations in accessing internal transactions  
+‡   Some implementations include 0x0000000000000000000000000000000000000000 address  
+†   Missing 86,844 blocks (86.84% of target range)  
+¶   Some implementations count 100,001 blocks because they include block 0 in their range  
+††  Envio processes blocks 22,280,000 to 22,289,999 due to exclusive end block handling, resulting in 218 fewer transactions  
+&   Subgraph does not support transaction level access 
+¶¶  Sentio auto-filters failed calls due to insufficient fees 
+**  Ponder documentation indicates trace support, but our implementation encountered configuration issues that prevented successful trace capture  
+§§  Subgraph captured only ~58% of swap traces due to architectural limitations in accessing internal transactions  
 ††† Subsquid captured 1,067 fewer swaps than other platforms
  
 ### Key Observations
