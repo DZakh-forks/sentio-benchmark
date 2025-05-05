@@ -1,6 +1,6 @@
 manifestVersion: subsquid.io/v0.1
 name: case-2-lbtc-full
-version: 1
+version: 2
 description: 'The very first evm squid from manifest  '
 build: 
 deploy:

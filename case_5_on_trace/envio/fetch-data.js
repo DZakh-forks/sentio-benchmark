@@ -139,7 +139,7 @@ async function main() {
   try {
     // Initialize HyperSync client
     const client = await HypersyncClient.new({
-      url: "https://eth.hypersync.xyz",
+      url: "https://eth-traces.hypersync.xyz",
       maxRetries: 3,
       retryDelay: 1000,
     });

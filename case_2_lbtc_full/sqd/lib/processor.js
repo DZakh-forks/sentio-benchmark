@@ -28,6 +28,11 @@ const util_internal_1 = require("@subsquid/util-internal");
 const evm_processor_1 = require("@subsquid/evm-processor");
 const constant_1 = require("./constant");
 const lbtcAbi = __importStar(require("./abi/LBTC.js"));
+const dotenv = __importStar(require("dotenv"));
+// Load environment variables from .env file
+dotenv.config();
+// Get RPC endpoint from environment variable 
+const rpcEndpoint = process.env.RPC_ENDPOINT;
 exports.processor = new evm_processor_1.EvmBatchProcessor()
     // Lookup archive by the network name in Subsquid registry
     // See https://docs.subsquid.io/evm-indexing/supported-networks/
@@ -38,24 +43,28 @@ exports.processor = new evm_processor_1.EvmBatchProcessor()
     .setRpcEndpoint({
     // Set the URL via .env for local runs or via secrets when deploying to Subsquid Cloud
     // https://docs.subsquid.io/deploy-squid/env-variables/
-    url: (0, util_internal_1.assertNotNull)("https://eth-mainnet.g.alchemy.com/v2/L4amjfJQdlC3eIzgAR0AyJvlhJb3Ulos", 'No RPC endpoint supplied')
+    url: (0, util_internal_1.assertNotNull)('https://rpc.sentio.xyz/oTSQQwOgzr9ERJ0petpRSbgkQDCPJ9Al/ethereum', 'No RPC endpoint supplied - set RPC_ENDPOINT environment variable')
 })
     .setFinalityConfirmation(75)
     .setFields({
+    block: {
+        height: true,
+        timestamp: true,
+    },
     transaction: {
+        hash: true,
         from: true,
         value: true,
-        hash: true,
     },
 })
     .setBlockRange({
-    from: 22100000,
+    from: 22180000,
     to: 22200000,
 })
     .addLog({
     address: [constant_1.LBTC_PROXY],
     topic0: [lbtcAbi.events.Transfer.topic],
-    transaction: false,
+    transaction: true,
     transactionLogs: false,
 });
 //# sourceMappingURL=processor.js.map

@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Platform Comparison Report</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .container { max-width: 1200px; margin: 0 auto; }
+        table { border-collapse: collapse; width: 100%; margin: 20px 0; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f5f5f5; }
+        .chart-container { height: 400px; margin: 20px 0; }
+        .comparison-matrix { margin: 20px 0; }
+        .platform-card { border: 1px solid #ddd; padding: 15px; margin: 10px 0; border-radius: 5px; }
+        .highlight { background-color: #f0f8ff; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Platform Comparison Report</h1>
+        <p>Generated on: 2025-05-02T17:10:07.250Z</p>
+
+        <h2>Overview</h2>
+        <table>
+            <tr>
+                <th>Platform</th>
+                <th>Total Swaps</th>
+                <th>Unique Pairs (from swaps)</th>
+                <th>Unique Tokens (from pairs)</th>
+                <th>Unique Senders</th>
+                <th>Unique Recipients</th>
+            </tr>
+            
+                <tr>
+                    <td>ponder</td>
+                    <td>35.04K</td>
+                    <td>212.00</td>
+                    <td class="highlight">236.00</td>
+                    <td>135.00</td>
+                    <td>8.79K</td>
+                </tr>
+            
+                <tr>
+                    <td>subgraph</td>
+                    <td>35.04K</td>
+                    <td>212.00</td>
+                    <td class="highlight">236.00</td>
+                    <td>135.00</td>
+                    <td>8.79K</td>
+                </tr>
+            
+                <tr>
+                    <td>sentio</td>
+                    <td>35.04K</td>
+                    <td>212.00</td>
+                    <td class="highlight">236.00</td>
+                    <td>135.00</td>
+                    <td>8.79K</td>
+                </tr>
+            
+                <tr>
+                    <td>sqd</td>
+                    <td>33.97K</td>
+                    <td>211.00</td>
+                    <td class="highlight">236.00</td>
+                    <td>134.00</td>
+                    <td>8.37K</td>
+                </tr>
+            
+                <tr>
+                    <td>envio</td>
+                    <td>35.04K</td>
+                    <td>212.00</td>
+                    <td class="highlight">236.00</td>
+                    <td>135.00</td>
+                    <td>8.79K</td>
+                </tr>
+            
+        </table>
+
+        <h2>Pairs Analysis</h2>
+        <table>
+            <tr>
+                <th>Platform</th>
+                <th>Total Pairs</th>
+                <th>Unique Tokens</th>
+                <th>Unique Factories</th>
+            </tr>
+            
+                <tr>
+                    <td>ponder</td>
+                    <td>232.00</td>
+                    <td class="highlight">236.00</td>
+                    <td>1.00</td>
+                </tr>
+            
+                <tr>
+                    <td>subgraph</td>
+                    <td>232.00</td>
+                    <td class="highlight">236.00</td>
+                    <td>0.00</td>
+                </tr>
+            
+                <tr>
+                    <td>sentio</td>
+                    <td>232.00</td>
+                    <td class="highlight">236.00</td>
+                    <td>0.00</td>
+                </tr>
+            
+                <tr>
+                    <td>sqd</td>
+                    <td>232.00</td>
+                    <td class="highlight">236.00</td>
+                    <td>0.00</td>
+                </tr>
+            
+                <tr>
+                    <td>envio</td>
+                    <td>232.00</td>
+                    <td class="highlight">236.00</td>
+                    <td>0.00</td>
+                </tr>
+            
+        </table>
+
+        <h2>Volume Analysis</h2>
+        <div class="chart-container">
+            <canvas id="volumeChart"></canvas>
+        </div>
+
+        <h2>Platform Comparisons</h2>
+        <div class="comparison-matrix">
+            
+                <div class="platform-card">
+                    <h3>ponder_vs_subgraph</h3>
+                    <table>
+                        <tr>
+                            <td>Common Swaps:</td>
+                            <td>35.03K</td>
+                        </tr>
+                        <tr>
+                            <td>Jaccard Similarity:</td>
+                            <td>100.00%</td>
+                        </tr>
+                    </table>
+                </div>
+            
+                <div class="platform-card">
+                    <h3>ponder_vs_sentio</h3>
+                    <table>
+                        <tr>
+                            <td>Common Swaps:</td>
+                            <td>35.03K</td>
+                        </tr>
+                        <tr>
+                            <td>Jaccard Similarity:</td>
+                            <td>100.00%</td>
+                        </tr>
+                    </table>
+                </div>
+            
+                <div class="platform-card">
+                    <h3>ponder_vs_sqd</h3>
+                    <table>
+                        <tr>
+                            <td>Common Swaps:</td>
+                            <td>33.96K</td>
+                        </tr>
+                        <tr>
+                            <td>Jaccard Similarity:</td>
+                            <td>96.95%</td>
+                        </tr>
+                    </table>
+                </div>
+            
+                <div class="platform-card">
+                    <h3>ponder_vs_envio</h3>
+                    <table>
+                        <tr>
+                            <td>Common Swaps:</td>
+                            <td>35.00K</td>
+                        </tr>
+                        <tr>
+                            <td>Jaccard Similarity:</td>
+                            <td>99.91%</td>
+                        </tr>
+                    </table>
+                </div>
+            
+                <div class="platform-card">
+                    <h3>subgraph_vs_sentio</h3>
+                    <table>
+                        <tr>
+                            <td>Common Swaps:</td>
+                            <td>35.03K</td>
+                        </tr>
+                        <tr>
+                            <td>Jaccard Similarity:</td>
+                            <td>100.00%</td>
+                        </tr>
+                    </table>
+                </div>
+            
+                <div class="platform-card">
+                    <h3>subgraph_vs_sqd</h3>
+                    <table>
+                        <tr>
+                            <td>Common Swaps:</td>
+                            <td>33.96K</td>
+                        </tr>
+                        <tr>
+                            <td>Jaccard Similarity:</td>
+                            <td>96.95%</td>
+                        </tr>
+                    </table>
+                </div>
+            
+                <div class="platform-card">
+                    <h3>subgraph_vs_envio</h3>
+                    <table>
+                        <tr>
+                            <td>Common Swaps:</td>
+                            <td>35.00K</td>
+                        </tr>
+                        <tr>
+                            <td>Jaccard Similarity:</td>
+                            <td>99.91%</td>
+                        </tr>
+                    </table>
+                </div>
+            
+                <div class="platform-card">
+                    <h3>sentio_vs_sqd</h3>
+                    <table>
+                        <tr>
+                            <td>Common Swaps:</td>
+                            <td>33.96K</td>
+                        </tr>
+                        <tr>
+                            <td>Jaccard Similarity:</td>
+                            <td>96.95%</td>
+                        </tr>
+                    </table>
+                </div>
+            
+                <div class="platform-card">
+                    <h3>sentio_vs_envio</h3>
+                    <table>
+                        <tr>
+                            <td>Common Swaps:</td>
+                            <td>35.00K</td>
+                        </tr>
+                        <tr>
+                            <td>Jaccard Similarity:</td>
+                            <td>99.91%</td>
+                        </tr>
+                    </table>
+                </div>
+            
+                <div class="platform-card">
+                    <h3>sqd_vs_envio</h3>
+                    <table>
+                        <tr>
+                            <td>Common Swaps:</td>
+                            <td>33.93K</td>
+                        </tr>
+                        <tr>
+                            <td>Jaccard Similarity:</td>
+                            <td>96.86%</td>
+                        </tr>
+                    </table>
+                </div>
+            
+        </div>
+    </div>
+
+    <script>
+        const ctx = document.getElementById('volumeChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ["ponder","subgraph","sentio","sqd","envio"],
+                datasets: [
+                    {
+                        label: 'Amount0In',
+                        data: [1.099970014745431e+34,1.099970014745431e+34,1.099970014745433e+34,1.099970014745484e+34,1.0999700147454858e+34],
+                        backgroundColor: 'rgba(54, 162, 235, 0.5)'
+                    },
+                    {
+                        label: 'Amount0Out',
+                        data: [4.0586959101962277e+33,4.0586959101962277e+33,4.0586959101962e+33,3.495019503968031e+33,4.058695910196192e+33],
+                        backgroundColor: 'rgba(255, 99, 132, 0.5)'
+                    },
+                    {
+                        label: 'Amount1In',
+                        data: [2.4106547542988705e+33,2.4106547542988705e+33,2.410654754298937e+33,2.41065475429912e+33,2.4106547542991654e+33],
+                        backgroundColor: 'rgba(75, 192, 192, 0.5)'
+                    },
+                    {
+                        label: 'Amount1Out',
+                        data: [2.444185121961034e+29,2.444185121961034e+29,2.444185121961033e+29,2.4435538522962532e+29,2.444185121967709e+29],
+                        backgroundColor: 'rgba(255, 159, 64, 0.5)'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

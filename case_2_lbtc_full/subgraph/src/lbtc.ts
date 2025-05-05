@@ -2,7 +2,7 @@ import {
   Transfer as TransferEvent,
   LBTC as LBTCContract,
   Transfer
-} from "../generated/LBTC/LBTC"
+} from "../generated/case_2_lbtc_full/LBTC"
 import { Accounts, Snapshot, AccountRegistry } from "../generated/schema"
 import { BigDecimal, BigInt, Address, ethereum } from "@graphprotocol/graph-ts"
 
