@@ -2,6 +2,7 @@
   "name": "ponder",
   "version": "0.0.1",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "ponder dev",
     "start": "ponder start",
@@ -11,23 +12,20 @@
     "typecheck": "tsc"
   },
   "dependencies": {
-    "@ponder/utils": "^0.2.3",
-    "@types/fs-extra": "^11.0.4",
-    "apache-arrow": "^19.0.1",
-    "fs-extra": "^11.3.0",
+    "ponder": "^0.10.21",
     "hono": "^4.5.0",
+    "viem": "^2.21.3",
+    "@hono/graphql-server": "^0.5.1",
+    "graphql": "^16.8.1",
+    "fs-extra": "^11.3.0",
     "parquetjs": "^0.11.2",
-    "pg": "^8.14.1",
-    "pg-pool": "^3.8.0",
-    "ponder": "^0.10.14",
-    "sqlite": "^5.1.1",
-    "sqlite3": "^5.1.7",
-    "viem": "^2.21.3"
+    "pg": "^8.11.3",
+    "pg-pool": "^3.6.1"
   },
   "devDependencies": {
     "@types/node": "^20.9.0",
     "eslint": "^8.53.0",
-    "eslint-config-ponder": "^0.10.13",
+    "eslint-config-ponder": "^0.10.21",
     "typescript": "^5.2.2"
   },
   "engines": {

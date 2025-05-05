@@ -1,7 +1,7 @@
 import { createConfig } from "ponder";
 import { http } from "viem";
 
-// Import UniswapV2Router02 ABI
+// Import ABIs
 import { UniswapV2Router02ABI } from "./abis/UniswapV2Router02";
 
 export default createConfig({

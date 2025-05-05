@@ -11,3 +11,4 @@ app.use("/", graphql({ db, schema }));
 app.use("/graphql", graphql({ db, schema }));
 
 export default app;
+
