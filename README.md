@@ -11,6 +11,7 @@ This repository contains performance benchmarks for various blockchain indexers,
 | [case_3_ethereum_block](./case_3_ethereum_block/) | Block-level indexing of Ethereum blocks | Block handling, Metadata extraction |
 | [case_4_on_transaction](./case_4_on_transaction/) | Transaction gas usage indexing | Transaction handling, Gas calculations |
 | [case_5_on_trace](./case_5_on_trace/) | Uniswap V2 transaction trace analysis | Transaction trace handling, Swap decoding |
+| [case_6_template](./case_6_template/) | Uniswap V2 template benchmark | Event handling, Pair and swap analysis |
 
 ## Latest Benchmark Results
 
@@ -21,6 +22,7 @@ Our most recent benchmark (April 2025) shows significant performance differences
 - **Block Processing Leader**: Envio with HyperSync (7.9s) and Sentio (18m) for block-level indexing
 - **Transaction Processing**: Subsquid (5m) and Envio with HyperSync (1.5m) for gas usage indexing
 - **Trace Processing Leader**: Envio with HyperSync (41s) and Subsquid (2m) for transaction trace analysis
+- **Template Processing**: Envio (20s) and Subsquid (2m) for Uniswap V2 template indexing
 
 See the [complete benchmark results](#current-benchmark-results---april-2025) for detailed timing data, completeness metrics, and analysis.
 
@@ -109,6 +111,7 @@ This benchmark provides a comparative analysis of indexer performance across dif
 | case_3_ethereum_block | Ethereum Block Processing | Ethereum | 0 to 100000 | Block handling, Metadata extraction |
 | case_4_on_transaction | Ethereum Transaction Gas Usage | Ethereum | 22280000 to 22290000 | Transaction handling, Gas calculations |
 | case_5_on_trace | Uniswap V2 Swap Trace Analysis | Ethereum | 22200000 to 22290000 | Transaction trace handling, Swap decoding |
+| case_6_template | Uniswap V2 Template | Ethereum | 19000000 to 19100000 | Event handling, Pair and swap analysis |
 
 ### Performance Results
 
@@ -119,7 +122,7 @@ This benchmark provides a comparative analysis of indexer performance across dif
 | case_3_ethereum_block | 18m | 7.9s | 33m | 1m‡ | 10m | |  |
 | case_4_on_transaction | 23m | 1m 26s | 33m | 5m | N/A | |  |
 | case_5_on_trace | 16m | 41s | N/A§ | 2m | 8m | |  |
-
+| case_6_template | 12m | 20s | 2h24m | 2m | 34m | |  |
 
 ### Data Completeness
 
@@ -130,6 +133,7 @@ This benchmark provides a comparative analysis of indexer performance across dif
 | case_3_ethereum_block | 100,000 | 100,000 | 100,001¶ | 13,156† | 100,001¶ |
 | case_4_on_transaction | 1,696,641 | 1,696,423†† | 1,696,423 | 1,696,641 | N/A& |
 | case_5_on_trace | 45,895+ | 50,191 | 0** | 50,191 | 29,058§§ |
+| case_6_template | 35,039 | 35,039 | 35,039 | 33,972††† | 35,039 |
 
 \* Missing ~5% of events  
 ‡ Some implementations include 0x0000000000000000000000000000000000000000 address  
@@ -140,7 +144,7 @@ This benchmark provides a comparative analysis of indexer performance across dif
 + Sentio auto-filters failed calls due to insufficient fees 
 ** Ponder documentation indicates trace support, but our implementation encountered configuration issues that prevented successful trace capture  
 §§ Subgraph captured only ~58% of swap traces due to architectural limitations in accessing internal transactions  
-
+††† Subsquid captured 1,067 fewer swaps than other platforms
 
 ### Key Observations
 
@@ -175,7 +179,7 @@ This benchmark provides a comparative analysis of indexer performance across dif
 
 All benchmark datasets, comparison reports, and analysis results are available via Google Drive:
 
-- **Complete Dataset Collection**: [Indexer Benchmark Datasets](https://drive.google.com/drive/u/0/folders/1zwJsEoxQJSAKKPMlji4xRqnqR2nqVQ4k)
+- **Complete Dataset Collection**: [Indexer Benchmark Datasets](https://drive.google.com/drive/folders/1zwJsEoxQJSAKKPMlji4xRqnqR2nqVQ4k)
 - Contains data from all benchmark cases for all tested indexer platforms
 - Includes raw data, comparison reports, and analysis files for each benchmark scenario
 - Individual case folders are also linked in their respective README files

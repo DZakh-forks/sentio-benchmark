@@ -1,0 +1,1375 @@
+Starting platform comparison analysis...
+Processing ponder...
+Read 35039 records from /Users/yufeili/Desktop/sentio/indexer-benchmark/case_6_template/data/ponder_swaps.parquet
+Read 232 records from /Users/yufeili/Desktop/sentio/indexer-benchmark/case_6_template/data/ponder_pairs.parquet
+- Loaded 35039 records from ponder
+Processing subgraph...
+Read 35039 records from /Users/yufeili/Desktop/sentio/indexer-benchmark/case_6_template/data/subgraph_swaps.parquet
+Read 232 records from /Users/yufeili/Desktop/sentio/indexer-benchmark/case_6_template/data/subgraph_pairs.parquet
+- Loaded 35039 records from subgraph
+Processing sentio...
+Read 35039 records from /Users/yufeili/Desktop/sentio/indexer-benchmark/case_6_template/data/sentio_swaps.parquet
+Read 232 records from /Users/yufeili/Desktop/sentio/indexer-benchmark/case_6_template/data/sentio_pairs.parquet
+- Loaded 35039 records from sentio
+Processing sqd...
+Read 33972 records from /Users/yufeili/Desktop/sentio/indexer-benchmark/case_6_template/data/sqd_swaps.parquet
+Read 232 records from /Users/yufeili/Desktop/sentio/indexer-benchmark/case_6_template/data/sqd_pairs.parquet
+- Loaded 33972 records from sqd
+Processing envio...
+Read 35039 records from /Users/yufeili/Desktop/sentio/indexer-benchmark/case_6_template/data/envio_swaps.parquet
+Read 232 records from /Users/yufeili/Desktop/sentio/indexer-benchmark/case_6_template/data/envio_pairs.parquet
+- Loaded 35039 records from envio
+Read 35039 records from /Users/yufeili/Desktop/sentio/indexer-benchmark/case_6_template/data/ponder_swaps.parquet
+Read 35039 records from /Users/yufeili/Desktop/sentio/indexer-benchmark/case_6_template/data/subgraph_swaps.parquet
+Read 232 records from /Users/yufeili/Desktop/sentio/indexer-benchmark/case_6_template/data/ponder_pairs.parquet
+Read 232 records from /Users/yufeili/Desktop/sentio/indexer-benchmark/case_6_template/data/subgraph_pairs.parquet
+
+Raw data structure analysis:
+Platform 1 first record: {
+  "id": "0x000189e3b872e90104557f9646665fb6d51da42545db3374b26ffe01dd9f771c-139",
+  "pairId": "0x183f3c782f4be525b9d88cbd539b1a0b8bec6f8b",
+  "sender": "0x3fc91a3afd70395cd496c647d5a6cc9d4b2b7fad",
+  "to": "0xae104ab765c07e1dadbe870493ec7c9de247cb1e",
+  "amount0In": 0,
+  "amount0Out": 216993311985497060,
+  "amount1In": 20000000000000000,
+  "amount1Out": 0,
+  "timestamp": 1705243511,
+  "blockNumber": 19005805
+}
+Platform 2 first record: {
+  "id": "0x000189e3b872e90104557f9646665fb6d51da42545db3374b26ffe01dd9f771c-139",
+  "amount0In": 0,
+  "amount0Out": 216993311985497060,
+  "amount1In": 20000000000000000,
+  "amount1Out": 0,
+  "blockNumber": 19005805,
+  "pair": "0x183f3c782f4be525b9d88cbd539b1a0b8bec6f8b",
+  "sender": "0x3fc91a3afd70395cd496c647d5a6cc9d4b2b7fad",
+  "timestamp": 1705243511,
+  "to": "0xae104ab765c07e1dadbe870493ec7c9de247cb1e"
+}
+
+Platform 1 first pair record: {
+  "id": "0x050d078ea4aa03241cd1869ac84aa007521c7181",
+  "token0": "0x1a316a3c76f9404cc6706d52417ac3308a76bdb2",
+  "token1": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+  "factory": "0x5c69bee701ef814a2b6a3edd4b1652cb9cc5aa6f",
+  "createdAt": 19001487
+}
+Platform 2 first pair record: {
+  "id": "0x26b62a9a8320c0d7767f873274ed93688f7dc4ca",
+  "token0": "0x4f1200c1a6453e0e22ad528d203844727d3cf0d4",
+  "token1": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+  "createdAt": 19000040
+}
+
+Raw data counts:
+Platform 1 swaps data count: 35039
+Platform 2 swaps data count: 35039
+Platform 1 pairs data count: 232
+Platform 2 pairs data count: 232
+
+Extracting pairs from Platform 1 pairs data:
+Added pair from pairs data: 0x050d078ea4aa03241cd1869ac84aa007521c7181
+Full pair record: {
+  "id": "0x050d078ea4aa03241cd1869ac84aa007521c7181",
+  "token0": "0x1a316a3c76f9404cc6706d52417ac3308a76bdb2",
+  "token1": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+  "factory": "0x5c69bee701ef814a2b6a3edd4b1652cb9cc5aa6f",
+  "createdAt": 19001487
+}
+Added pair from pairs data: 0x05e478d5ada33dbfa9d659e427b5462d11744ed2
+Full pair record: {
+  "id": "0x05e478d5ada33dbfa9d659e427b5462d11744ed2",
+  "token0": "0x66a9ff157d41df3bf582ca1b5fefbd121e86da9b",
+  "token1": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+  "factory": "0x5c69bee701ef814a2b6a3edd4b1652cb9cc5aa6f",
+  "createdAt": 19009320
+}
+Added pair from pairs data: 0x06246f4a8a2f1de7abd94279c605b5eca31cae17
+Full pair record: {
+  "id": "0x06246f4a8a2f1de7abd94279c605b5eca31cae17",
+  "token0": "0x4999e1ecf1331eba7f4e5d379075a2e02f015ab7",
+  "token1": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+  "factory": "0x5c69bee701ef814a2b6a3edd4b1652cb9cc5aa6f",
+  "createdAt": 19006324
+}
+Added pair from pairs data: 0x0aac240d9661f55d9ad53efa540d1efc01ecafd3
+Full pair record: {
+  "id": "0x0aac240d9661f55d9ad53efa540d1efc01ecafd3",
+  "token0": "0x765fa6b0fd526e63f4580bbb57e0a03add5f2426",
+  "token1": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+  "factory": "0x5c69bee701ef814a2b6a3edd4b1652cb9cc5aa6f",
+  "createdAt": 19000570
+}
+Added pair from pairs data: 0x0b03bed1a26b713c80dc86196cbd695d2e2d2a9e
+Full pair record: {
+  "id": "0x0b03bed1a26b713c80dc86196cbd695d2e2d2a9e",
+  "token0": "0xad6d0fd6e7b23320114bd1dd7537ccec45a03cef",
+  "token1": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+  "factory": "0x5c69bee701ef814a2b6a3edd4b1652cb9cc5aa6f",
+  "createdAt": 19009365
+}
+
+Extracting pairs from Platform 2 pairs data:
+Added pair from pairs data: 0x26b62a9a8320c0d7767f873274ed93688f7dc4ca
+Full pair record: {
+  "id": "0x26b62a9a8320c0d7767f873274ed93688f7dc4ca",
+  "token0": "0x4f1200c1a6453e0e22ad528d203844727d3cf0d4",
+  "token1": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+  "createdAt": 19000040
+}
+Added pair from pairs data: 0x1d7ed8f18c7a34ae0208245f579da1940d53bdc3
+Full pair record: {
+  "id": "0x1d7ed8f18c7a34ae0208245f579da1940d53bdc3",
+  "token0": "0x410ee4ae568c90f9d498430add10980981d1be7b",
+  "token1": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+  "createdAt": 19000045
+}
+Added pair from pairs data: 0xccf0f3aa34599c53e8b10a8e66f5074102c389ef
+Full pair record: {
+  "id": "0xccf0f3aa34599c53e8b10a8e66f5074102c389ef",
+  "token0": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+  "token1": "0xc8c1509c46f23bcfac30a28e848319f02b811329",
+  "createdAt": 19000054
+}
+Added pair from pairs data: 0x71de5abd42f80c195e0d64e6b829565a6e0860ce
+Full pair record: {
+  "id": "0x71de5abd42f80c195e0d64e6b829565a6e0860ce",
+  "token0": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+  "token1": "0xfcbc85aebf649a8e4fd4529af75f96d2d7e633bc",
+  "createdAt": 19000070
+}
+Added pair from pairs data: 0x862d0f9471066cb3849e44d28a63b448506f55a3
+Full pair record: {
+  "id": "0x862d0f9471066cb3849e44d28a63b448506f55a3",
+  "token0": "0xa9f6a8c770f74616563f87c6aa8f21be9f269f73",
+  "token1": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+  "createdAt": 19000083
+}
+
+Unique pairs counts after processing pairs data:
+Platform 1 unique pairs: 232
+Platform 2 unique pairs: 232
+
+Missing pairs summary:
+Pairs in Platform 1 but not in Platform 2: 0
+
+Pairs in Platform 2 but not in Platform 1: 0
+Read 35039 records from /Users/yufeili/Desktop/sentio/indexer-benchmark/case_6_template/data/ponder_swaps.parquet
+Read 35039 records from /Users/yufeili/Desktop/sentio/indexer-benchmark/case_6_template/data/sentio_swaps.parquet
+Read 232 records from /Users/yufeili/Desktop/sentio/indexer-benchmark/case_6_template/data/ponder_pairs.parquet
+Read 232 records from /Users/yufeili/Desktop/sentio/indexer-benchmark/case_6_template/data/sentio_pairs.parquet
+
+Raw data structure analysis:
+Platform 1 first record: {
+  "id": "0x000189e3b872e90104557f9646665fb6d51da42545db3374b26ffe01dd9f771c-139",
+  "pairId": "0x183f3c782f4be525b9d88cbd539b1a0b8bec6f8b",
+  "sender": "0x3fc91a3afd70395cd496c647d5a6cc9d4b2b7fad",
+  "to": "0xae104ab765c07e1dadbe870493ec7c9de247cb1e",
+  "amount0In": 0,
+  "amount0Out": 216993311985497060,
+  "amount1In": 20000000000000000,
+  "amount1Out": 0,
+  "timestamp": 1705243511,
+  "blockNumber": 19005805
+}
+Platform 2 first record: {
+  "amount0In": 0,
+  "amount0Out": 84872635909936820,
+  "amount1In": 50000000000000000,
+  "amount1Out": 0,
+  "blockNumber": 19000677,
+  "id": "0xfe08fc7d3fe08b25969cf7668ad458597bd2ad6656e99e1e3f775a2efab0392d-45",
+  "pair": "0x56589febb9e17fc64e34f1f85a71c67ada9ed194",
+  "sender": "0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D",
+  "timestamp": 1705181591000,
+  "to__": "0xbA8C00B47fE632035A1AF6CbF4CC1718797a5768"
+}
+
+Platform 1 first pair record: {
+  "id": "0x050d078ea4aa03241cd1869ac84aa007521c7181",
+  "token0": "0x1a316a3c76f9404cc6706d52417ac3308a76bdb2",
+  "token1": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+  "factory": "0x5c69bee701ef814a2b6a3edd4b1652cb9cc5aa6f",
+  "createdAt": 19001487
+}
+Platform 2 first pair record: {
+  "createdAt": 19005691,
+  "id": "0x468486A437FE822F7277c1c0ba4991e2e1B3aB53",
+  "token0": "0x7baff7Fa8FbC2AfdcD0d3B57abd9B1856a19f0F1",
+  "token1": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"
+}
+
+Raw data counts:
+Platform 1 swaps data count: 35039
+Platform 2 swaps data count: 35039
+Platform 1 pairs data count: 232
+Platform 2 pairs data count: 232
+
+Extracting pairs from Platform 1 pairs data:
+Added pair from pairs data: 0x050d078ea4aa03241cd1869ac84aa007521c7181
+Full pair record: {
+  "id": "0x050d078ea4aa03241cd1869ac84aa007521c7181",
+  "token0": "0x1a316a3c76f9404cc6706d52417ac3308a76bdb2",
+  "token1": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+  "factory": "0x5c69bee701ef814a2b6a3edd4b1652cb9cc5aa6f",
+  "createdAt": 19001487
+}
+Added pair from pairs data: 0x05e478d5ada33dbfa9d659e427b5462d11744ed2
+Full pair record: {
+  "id": "0x05e478d5ada33dbfa9d659e427b5462d11744ed2",
+  "token0": "0x66a9ff157d41df3bf582ca1b5fefbd121e86da9b",
+  "token1": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+  "factory": "0x5c69bee701ef814a2b6a3edd4b1652cb9cc5aa6f",
+  "createdAt": 19009320
+}
+Added pair from pairs data: 0x06246f4a8a2f1de7abd94279c605b5eca31cae17
+Full pair record: {
+  "id": "0x06246f4a8a2f1de7abd94279c605b5eca31cae17",
+  "token0": "0x4999e1ecf1331eba7f4e5d379075a2e02f015ab7",
+  "token1": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+  "factory": "0x5c69bee701ef814a2b6a3edd4b1652cb9cc5aa6f",
+  "createdAt": 19006324
+}
+Added pair from pairs data: 0x0aac240d9661f55d9ad53efa540d1efc01ecafd3
+Full pair record: {
+  "id": "0x0aac240d9661f55d9ad53efa540d1efc01ecafd3",
+  "token0": "0x765fa6b0fd526e63f4580bbb57e0a03add5f2426",
+  "token1": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+  "factory": "0x5c69bee701ef814a2b6a3edd4b1652cb9cc5aa6f",
+  "createdAt": 19000570
+}
+Added pair from pairs data: 0x0b03bed1a26b713c80dc86196cbd695d2e2d2a9e
+Full pair record: {
+  "id": "0x0b03bed1a26b713c80dc86196cbd695d2e2d2a9e",
+  "token0": "0xad6d0fd6e7b23320114bd1dd7537ccec45a03cef",
+  "token1": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+  "factory": "0x5c69bee701ef814a2b6a3edd4b1652cb9cc5aa6f",
+  "createdAt": 19009365
+}
+
+Extracting pairs from Platform 2 pairs data:
+Added pair from pairs data: 0x468486a437fe822f7277c1c0ba4991e2e1b3ab53
+Full pair record: {
+  "createdAt": 19005691,
+  "id": "0x468486A437FE822F7277c1c0ba4991e2e1B3aB53",
+  "token0": "0x7baff7Fa8FbC2AfdcD0d3B57abd9B1856a19f0F1",
+  "token1": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"
+}
+Added pair from pairs data: 0x1f7836df05d275bf4700c76e3df47501bdacff0c
+Full pair record: {
+  "createdAt": 19006802,
+  "id": "0x1F7836Df05d275Bf4700C76e3DF47501bDaCFf0C",
+  "token0": "0xB0C5DbB5C683608C5223201b78105E843042dfD8",
+  "token1": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"
+}
+Added pair from pairs data: 0xc4df6723f61876d2bebb47bef3eb03cd8d79de11
+Full pair record: {
+  "createdAt": 19000436,
+  "id": "0xc4Df6723f61876d2bebB47Bef3eB03cd8d79dE11",
+  "token0": "0x00404A91420cE213531999504c0e3143312e82E3",
+  "token1": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"
+}
+Added pair from pairs data: 0x4d9055f11c27fa82d08249a452f0d5eaa76fb64d
+Full pair record: {
+  "createdAt": 19008412,
+  "id": "0x4D9055f11c27fA82d08249a452f0d5Eaa76fb64D",
+  "token0": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
+  "token1": "0xF0a426c01E3C2368De3b58De32A28ed84cB74470"
+}
+Added pair from pairs data: 0x0cee0bd6741b96be391707093c2eb7e708465c6d
+Full pair record: {
+  "createdAt": 19008148,
+  "id": "0x0cEE0Bd6741B96Be391707093C2eB7E708465c6d",
+  "token0": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
+  "token1": "0xF2c2Af9FFEC397F01001130cD7F25184a4898F1C"
+}
+
+Unique pairs counts after processing pairs data:
+Platform 1 unique pairs: 232
+Platform 2 unique pairs: 232
+
+Missing pairs summary:
+Pairs in Platform 1 but not in Platform 2: 0
+
+Pairs in Platform 2 but not in Platform 1: 0
+Read 35039 records from /Users/yufeili/Desktop/sentio/indexer-benchmark/case_6_template/data/ponder_swaps.parquet
+Read 33972 records from /Users/yufeili/Desktop/sentio/indexer-benchmark/case_6_template/data/sqd_swaps.parquet
+Read 232 records from /Users/yufeili/Desktop/sentio/indexer-benchmark/case_6_template/data/ponder_pairs.parquet
+Read 232 records from /Users/yufeili/Desktop/sentio/indexer-benchmark/case_6_template/data/sqd_pairs.parquet
+
+Raw data structure analysis:
+Platform 1 first record: {
+  "id": "0x000189e3b872e90104557f9646665fb6d51da42545db3374b26ffe01dd9f771c-139",
+  "pairId": "0x183f3c782f4be525b9d88cbd539b1a0b8bec6f8b",
+  "sender": "0x3fc91a3afd70395cd496c647d5a6cc9d4b2b7fad",
+  "to": "0xae104ab765c07e1dadbe870493ec7c9de247cb1e",
+  "amount0In": 0,
+  "amount0Out": 216993311985497060,
+  "amount1In": 20000000000000000,
+  "amount1Out": 0,
+  "timestamp": 1705243511,
+  "blockNumber": 19005805
+}
+Platform 2 first record: {
+  "id": "0x8d64ffe69f2f4dae8b3f226a957a443bdf6993d49193f5fd46fc74b26c87ed7d-23",
+  "pair": "0x26b62a9a8320c0d7767f873274ed93688f7dc4ca",
+  "sender": "0x50b8f49f4b2e80e09ce8015c4e7a9c277738fd3d",
+  "to": "0xe03a775f364612688c1c897efcf84812f9b14e5c",
+  "amount0In": "0",
+  "amount1In": "50000000000000000",
+  "amount0Out": "471583345314337836",
+  "amount1Out": "0",
+  "blockNumber": "19000041",
+  "timestamp": "1705173935000"
+}
+
+Platform 1 first pair record: {
+  "id": "0x050d078ea4aa03241cd1869ac84aa007521c7181",
+  "token0": "0x1a316a3c76f9404cc6706d52417ac3308a76bdb2",
+  "token1": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+  "factory": "0x5c69bee701ef814a2b6a3edd4b1652cb9cc5aa6f",
+  "createdAt": 19001487
+}
+Platform 2 first pair record: {
+  "id": "0x26b62a9a8320c0d7767f873274ed93688f7dc4ca",
+  "token0": "0x4f1200c1a6453e0e22ad528d203844727d3cf0d4",
+  "token1": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+  "createdAt": "19000040"
+}
+
+Raw data counts:
+Platform 1 swaps data count: 35039
+Platform 2 swaps data count: 33972
+Platform 1 pairs data count: 232
+Platform 2 pairs data count: 232
+
+Extracting pairs from Platform 1 pairs data:
+Added pair from pairs data: 0x050d078ea4aa03241cd1869ac84aa007521c7181
+Full pair record: {
+  "id": "0x050d078ea4aa03241cd1869ac84aa007521c7181",
+  "token0": "0x1a316a3c76f9404cc6706d52417ac3308a76bdb2",
+  "token1": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+  "factory": "0x5c69bee701ef814a2b6a3edd4b1652cb9cc5aa6f",
+  "createdAt": 19001487
+}
+Added pair from pairs data: 0x05e478d5ada33dbfa9d659e427b5462d11744ed2
+Full pair record: {
+  "id": "0x05e478d5ada33dbfa9d659e427b5462d11744ed2",
+  "token0": "0x66a9ff157d41df3bf582ca1b5fefbd121e86da9b",
+  "token1": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+  "factory": "0x5c69bee701ef814a2b6a3edd4b1652cb9cc5aa6f",
+  "createdAt": 19009320
+}
+Added pair from pairs data: 0x06246f4a8a2f1de7abd94279c605b5eca31cae17
+Full pair record: {
+  "id": "0x06246f4a8a2f1de7abd94279c605b5eca31cae17",
+  "token0": "0x4999e1ecf1331eba7f4e5d379075a2e02f015ab7",
+  "token1": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+  "factory": "0x5c69bee701ef814a2b6a3edd4b1652cb9cc5aa6f",
+  "createdAt": 19006324
+}
+Added pair from pairs data: 0x0aac240d9661f55d9ad53efa540d1efc01ecafd3
+Full pair record: {
+  "id": "0x0aac240d9661f55d9ad53efa540d1efc01ecafd3",
+  "token0": "0x765fa6b0fd526e63f4580bbb57e0a03add5f2426",
+  "token1": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+  "factory": "0x5c69bee701ef814a2b6a3edd4b1652cb9cc5aa6f",
+  "createdAt": 19000570
+}
+Added pair from pairs data: 0x0b03bed1a26b713c80dc86196cbd695d2e2d2a9e
+Full pair record: {
+  "id": "0x0b03bed1a26b713c80dc86196cbd695d2e2d2a9e",
+  "token0": "0xad6d0fd6e7b23320114bd1dd7537ccec45a03cef",
+  "token1": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+  "factory": "0x5c69bee701ef814a2b6a3edd4b1652cb9cc5aa6f",
+  "createdAt": 19009365
+}
+
+Extracting pairs from Platform 2 pairs data:
+Added pair from pairs data: 0x26b62a9a8320c0d7767f873274ed93688f7dc4ca
+Full pair record: {
+  "id": "0x26b62a9a8320c0d7767f873274ed93688f7dc4ca",
+  "token0": "0x4f1200c1a6453e0e22ad528d203844727d3cf0d4",
+  "token1": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+  "createdAt": "19000040"
+}
+Added pair from pairs data: 0x1d7ed8f18c7a34ae0208245f579da1940d53bdc3
+Full pair record: {
+  "id": "0x1d7ed8f18c7a34ae0208245f579da1940d53bdc3",
+  "token0": "0x410ee4ae568c90f9d498430add10980981d1be7b",
+  "token1": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+  "createdAt": "19000045"
+}
+Added pair from pairs data: 0xccf0f3aa34599c53e8b10a8e66f5074102c389ef
+Full pair record: {
+  "id": "0xccf0f3aa34599c53e8b10a8e66f5074102c389ef",
+  "token0": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+  "token1": "0xc8c1509c46f23bcfac30a28e848319f02b811329",
+  "createdAt": "19000054"
+}
+Added pair from pairs data: 0x71de5abd42f80c195e0d64e6b829565a6e0860ce
+Full pair record: {
+  "id": "0x71de5abd42f80c195e0d64e6b829565a6e0860ce",
+  "token0": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+  "token1": "0xfcbc85aebf649a8e4fd4529af75f96d2d7e633bc",
+  "createdAt": "19000070"
+}
+Added pair from pairs data: 0x862d0f9471066cb3849e44d28a63b448506f55a3
+Full pair record: {
+  "id": "0x862d0f9471066cb3849e44d28a63b448506f55a3",
+  "token0": "0xa9f6a8c770f74616563f87c6aa8f21be9f269f73",
+  "token1": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+  "createdAt": "19000083"
+}
+
+Unique pairs counts after processing pairs data:
+Platform 1 unique pairs: 232
+Platform 2 unique pairs: 232
+
+Missing pairs summary:
+Pairs in Platform 1 but not in Platform 2: 0
+
+Pairs in Platform 2 but not in Platform 1: 0
+
+Comparing SQD with ponder:
+Read 35039 records from /Users/yufeili/Desktop/sentio/indexer-benchmark/case_6_template/data/ponder_swaps.parquet
+Read 35039 records from /Users/yufeili/Desktop/sentio/indexer-benchmark/case_6_template/data/envio_swaps.parquet
+Read 232 records from /Users/yufeili/Desktop/sentio/indexer-benchmark/case_6_template/data/ponder_pairs.parquet
+Read 232 records from /Users/yufeili/Desktop/sentio/indexer-benchmark/case_6_template/data/envio_pairs.parquet
+
+Raw data structure analysis:
+Platform 1 first record: {
+  "id": "0x000189e3b872e90104557f9646665fb6d51da42545db3374b26ffe01dd9f771c-139",
+  "pairId": "0x183f3c782f4be525b9d88cbd539b1a0b8bec6f8b",
+  "sender": "0x3fc91a3afd70395cd496c647d5a6cc9d4b2b7fad",
+  "to": "0xae104ab765c07e1dadbe870493ec7c9de247cb1e",
+  "amount0In": 0,
+  "amount0Out": 216993311985497060,
+  "amount1In": 20000000000000000,
+  "amount1Out": 0,
+  "timestamp": 1705243511,
+  "blockNumber": 19005805
+}
+Platform 2 first record: {
+  "id": "0xa0c035fe4d839f953f993fc1305fc1ac789bf628193d4805386d0cd6def71220-129",
+  "pair": "0x26B62a9A8320C0D7767F873274eD93688F7dc4CA",
+  "sender": "0x3328F7f4A1D1C57c35df56bBf0c9dCAFCA309C49",
+  "to": "0x13582cDdd4FDd75bB6bd20d6CCe3078AFF80cb69",
+  "amount0In": "0",
+  "amount1In": "58652871813784054",
+  "amount0Out": "2000000000000000000",
+  "amount1Out": "0",
+  "blockNumber": "19000040",
+  "timestamp": "1705173923"
+}
+
+Platform 1 first pair record: {
+  "id": "0x050d078ea4aa03241cd1869ac84aa007521c7181",
+  "token0": "0x1a316a3c76f9404cc6706d52417ac3308a76bdb2",
+  "token1": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+  "factory": "0x5c69bee701ef814a2b6a3edd4b1652cb9cc5aa6f",
+  "createdAt": 19001487
+}
+Platform 2 first pair record: {
+  "id": "0x26B62a9A8320C0D7767F873274eD93688F7dc4CA",
+  "token0": "0x4f1200C1a6453e0e22aD528D203844727D3cF0D4",
+  "token1": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
+  "createdAt": "19000040"
+}
+
+Raw data counts:
+Platform 1 swaps data count: 35039
+Platform 2 swaps data count: 35039
+Platform 1 pairs data count: 232
+Platform 2 pairs data count: 232
+
+Extracting pairs from Platform 1 pairs data:
+Added pair from pairs data: 0x050d078ea4aa03241cd1869ac84aa007521c7181
+Full pair record: {
+  "id": "0x050d078ea4aa03241cd1869ac84aa007521c7181",
+  "token0": "0x1a316a3c76f9404cc6706d52417ac3308a76bdb2",
+  "token1": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+  "factory": "0x5c69bee701ef814a2b6a3edd4b1652cb9cc5aa6f",
+  "createdAt": 19001487
+}
+Added pair from pairs data: 0x05e478d5ada33dbfa9d659e427b5462d11744ed2
+Full pair record: {
+  "id": "0x05e478d5ada33dbfa9d659e427b5462d11744ed2",
+  "token0": "0x66a9ff157d41df3bf582ca1b5fefbd121e86da9b",
+  "token1": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+  "factory": "0x5c69bee701ef814a2b6a3edd4b1652cb9cc5aa6f",
+  "createdAt": 19009320
+}
+Added pair from pairs data: 0x06246f4a8a2f1de7abd94279c605b5eca31cae17
+Full pair record: {
+  "id": "0x06246f4a8a2f1de7abd94279c605b5eca31cae17",
+  "token0": "0x4999e1ecf1331eba7f4e5d379075a2e02f015ab7",
+  "token1": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+  "factory": "0x5c69bee701ef814a2b6a3edd4b1652cb9cc5aa6f",
+  "createdAt": 19006324
+}
+Added pair from pairs data: 0x0aac240d9661f55d9ad53efa540d1efc01ecafd3
+Full pair record: {
+  "id": "0x0aac240d9661f55d9ad53efa540d1efc01ecafd3",
+  "token0": "0x765fa6b0fd526e63f4580bbb57e0a03add5f2426",
+  "token1": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+  "factory": "0x5c69bee701ef814a2b6a3edd4b1652cb9cc5aa6f",
+  "createdAt": 19000570
+}
+Added pair from pairs data: 0x0b03bed1a26b713c80dc86196cbd695d2e2d2a9e
+Full pair record: {
+  "id": "0x0b03bed1a26b713c80dc86196cbd695d2e2d2a9e",
+  "token0": "0xad6d0fd6e7b23320114bd1dd7537ccec45a03cef",
+  "token1": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+  "factory": "0x5c69bee701ef814a2b6a3edd4b1652cb9cc5aa6f",
+  "createdAt": 19009365
+}
+
+Extracting pairs from Platform 2 pairs data:
+Added pair from pairs data: 0x26b62a9a8320c0d7767f873274ed93688f7dc4ca
+Full pair record: {
+  "id": "0x26B62a9A8320C0D7767F873274eD93688F7dc4CA",
+  "token0": "0x4f1200C1a6453e0e22aD528D203844727D3cF0D4",
+  "token1": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
+  "createdAt": "19000040"
+}
+Added pair from pairs data: 0x1d7ed8f18c7a34ae0208245f579da1940d53bdc3
+Full pair record: {
+  "id": "0x1d7Ed8f18C7A34aE0208245F579DA1940D53bdC3",
+  "token0": "0x410eE4Ae568c90F9d498430ADd10980981D1BE7B",
+  "token1": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
+  "createdAt": "19000045"
+}
+Added pair from pairs data: 0xccf0f3aa34599c53e8b10a8e66f5074102c389ef
+Full pair record: {
+  "id": "0xccF0F3AA34599C53e8b10a8e66F5074102c389eF",
+  "token0": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
+  "token1": "0xC8C1509c46F23bcfAC30A28e848319F02b811329",
+  "createdAt": "19000054"
+}
+Added pair from pairs data: 0x71de5abd42f80c195e0d64e6b829565a6e0860ce
+Full pair record: {
+  "id": "0x71de5aBd42F80C195e0D64e6B829565A6E0860Ce",
+  "token0": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
+  "token1": "0xFcbc85AeBf649A8e4FD4529AF75F96D2D7E633Bc",
+  "createdAt": "19000070"
+}
+Added pair from pairs data: 0x862d0f9471066cb3849e44d28a63b448506f55a3
+Full pair record: {
+  "id": "0x862D0f9471066cb3849E44d28A63b448506F55A3",
+  "token0": "0xa9f6a8C770f74616563F87c6Aa8f21be9F269f73",
+  "token1": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
+  "createdAt": "19000083"
+}
+
+Unique pairs counts after processing pairs data:
+Platform 1 unique pairs: 232
+Platform 2 unique pairs: 232
+
+Missing pairs summary:
+Pairs in Platform 1 but not in Platform 2: 0
+
+Pairs in Platform 2 but not in Platform 1: 0
+Read 35039 records from /Users/yufeili/Desktop/sentio/indexer-benchmark/case_6_template/data/subgraph_swaps.parquet
+Read 35039 records from /Users/yufeili/Desktop/sentio/indexer-benchmark/case_6_template/data/sentio_swaps.parquet
+Read 232 records from /Users/yufeili/Desktop/sentio/indexer-benchmark/case_6_template/data/subgraph_pairs.parquet
+Read 232 records from /Users/yufeili/Desktop/sentio/indexer-benchmark/case_6_template/data/sentio_pairs.parquet
+
+Raw data structure analysis:
+Platform 1 first record: {
+  "id": "0x000189e3b872e90104557f9646665fb6d51da42545db3374b26ffe01dd9f771c-139",
+  "amount0In": 0,
+  "amount0Out": 216993311985497060,
+  "amount1In": 20000000000000000,
+  "amount1Out": 0,
+  "blockNumber": 19005805,
+  "pair": "0x183f3c782f4be525b9d88cbd539b1a0b8bec6f8b",
+  "sender": "0x3fc91a3afd70395cd496c647d5a6cc9d4b2b7fad",
+  "timestamp": 1705243511,
+  "to": "0xae104ab765c07e1dadbe870493ec7c9de247cb1e"
+}
+Platform 2 first record: {
+  "amount0In": 0,
+  "amount0Out": 84872635909936820,
+  "amount1In": 50000000000000000,
+  "amount1Out": 0,
+  "blockNumber": 19000677,
+  "id": "0xfe08fc7d3fe08b25969cf7668ad458597bd2ad6656e99e1e3f775a2efab0392d-45",
+  "pair": "0x56589febb9e17fc64e34f1f85a71c67ada9ed194",
+  "sender": "0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D",
+  "timestamp": 1705181591000,
+  "to__": "0xbA8C00B47fE632035A1AF6CbF4CC1718797a5768"
+}
+
+Platform 1 first pair record: {
+  "id": "0x26b62a9a8320c0d7767f873274ed93688f7dc4ca",
+  "token0": "0x4f1200c1a6453e0e22ad528d203844727d3cf0d4",
+  "token1": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+  "createdAt": 19000040
+}
+Platform 2 first pair record: {
+  "createdAt": 19005691,
+  "id": "0x468486A437FE822F7277c1c0ba4991e2e1B3aB53",
+  "token0": "0x7baff7Fa8FbC2AfdcD0d3B57abd9B1856a19f0F1",
+  "token1": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"
+}
+
+Raw data counts:
+Platform 1 swaps data count: 35039
+Platform 2 swaps data count: 35039
+Platform 1 pairs data count: 232
+Platform 2 pairs data count: 232
+
+Extracting pairs from Platform 1 pairs data:
+Added pair from pairs data: 0x26b62a9a8320c0d7767f873274ed93688f7dc4ca
+Full pair record: {
+  "id": "0x26b62a9a8320c0d7767f873274ed93688f7dc4ca",
+  "token0": "0x4f1200c1a6453e0e22ad528d203844727d3cf0d4",
+  "token1": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+  "createdAt": 19000040
+}
+Added pair from pairs data: 0x1d7ed8f18c7a34ae0208245f579da1940d53bdc3
+Full pair record: {
+  "id": "0x1d7ed8f18c7a34ae0208245f579da1940d53bdc3",
+  "token0": "0x410ee4ae568c90f9d498430add10980981d1be7b",
+  "token1": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+  "createdAt": 19000045
+}
+Added pair from pairs data: 0xccf0f3aa34599c53e8b10a8e66f5074102c389ef
+Full pair record: {
+  "id": "0xccf0f3aa34599c53e8b10a8e66f5074102c389ef",
+  "token0": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+  "token1": "0xc8c1509c46f23bcfac30a28e848319f02b811329",
+  "createdAt": 19000054
+}
+Added pair from pairs data: 0x71de5abd42f80c195e0d64e6b829565a6e0860ce
+Full pair record: {
+  "id": "0x71de5abd42f80c195e0d64e6b829565a6e0860ce",
+  "token0": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+  "token1": "0xfcbc85aebf649a8e4fd4529af75f96d2d7e633bc",
+  "createdAt": 19000070
+}
+Added pair from pairs data: 0x862d0f9471066cb3849e44d28a63b448506f55a3
+Full pair record: {
+  "id": "0x862d0f9471066cb3849e44d28a63b448506f55a3",
+  "token0": "0xa9f6a8c770f74616563f87c6aa8f21be9f269f73",
+  "token1": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+  "createdAt": 19000083
+}
+
+Extracting pairs from Platform 2 pairs data:
+Added pair from pairs data: 0x468486a437fe822f7277c1c0ba4991e2e1b3ab53
+Full pair record: {
+  "createdAt": 19005691,
+  "id": "0x468486A437FE822F7277c1c0ba4991e2e1B3aB53",
+  "token0": "0x7baff7Fa8FbC2AfdcD0d3B57abd9B1856a19f0F1",
+  "token1": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"
+}
+Added pair from pairs data: 0x1f7836df05d275bf4700c76e3df47501bdacff0c
+Full pair record: {
+  "createdAt": 19006802,
+  "id": "0x1F7836Df05d275Bf4700C76e3DF47501bDaCFf0C",
+  "token0": "0xB0C5DbB5C683608C5223201b78105E843042dfD8",
+  "token1": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"
+}
+Added pair from pairs data: 0xc4df6723f61876d2bebb47bef3eb03cd8d79de11
+Full pair record: {
+  "createdAt": 19000436,
+  "id": "0xc4Df6723f61876d2bebB47Bef3eB03cd8d79dE11",
+  "token0": "0x00404A91420cE213531999504c0e3143312e82E3",
+  "token1": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"
+}
+Added pair from pairs data: 0x4d9055f11c27fa82d08249a452f0d5eaa76fb64d
+Full pair record: {
+  "createdAt": 19008412,
+  "id": "0x4D9055f11c27fA82d08249a452f0d5Eaa76fb64D",
+  "token0": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
+  "token1": "0xF0a426c01E3C2368De3b58De32A28ed84cB74470"
+}
+Added pair from pairs data: 0x0cee0bd6741b96be391707093c2eb7e708465c6d
+Full pair record: {
+  "createdAt": 19008148,
+  "id": "0x0cEE0Bd6741B96Be391707093C2eB7E708465c6d",
+  "token0": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
+  "token1": "0xF2c2Af9FFEC397F01001130cD7F25184a4898F1C"
+}
+
+Unique pairs counts after processing pairs data:
+Platform 1 unique pairs: 232
+Platform 2 unique pairs: 232
+
+Missing pairs summary:
+Pairs in Platform 1 but not in Platform 2: 0
+
+Pairs in Platform 2 but not in Platform 1: 0
+Read 35039 records from /Users/yufeili/Desktop/sentio/indexer-benchmark/case_6_template/data/subgraph_swaps.parquet
+Read 33972 records from /Users/yufeili/Desktop/sentio/indexer-benchmark/case_6_template/data/sqd_swaps.parquet
+Read 232 records from /Users/yufeili/Desktop/sentio/indexer-benchmark/case_6_template/data/subgraph_pairs.parquet
+Read 232 records from /Users/yufeili/Desktop/sentio/indexer-benchmark/case_6_template/data/sqd_pairs.parquet
+
+Raw data structure analysis:
+Platform 1 first record: {
+  "id": "0x000189e3b872e90104557f9646665fb6d51da42545db3374b26ffe01dd9f771c-139",
+  "amount0In": 0,
+  "amount0Out": 216993311985497060,
+  "amount1In": 20000000000000000,
+  "amount1Out": 0,
+  "blockNumber": 19005805,
+  "pair": "0x183f3c782f4be525b9d88cbd539b1a0b8bec6f8b",
+  "sender": "0x3fc91a3afd70395cd496c647d5a6cc9d4b2b7fad",
+  "timestamp": 1705243511,
+  "to": "0xae104ab765c07e1dadbe870493ec7c9de247cb1e"
+}
+Platform 2 first record: {
+  "id": "0x8d64ffe69f2f4dae8b3f226a957a443bdf6993d49193f5fd46fc74b26c87ed7d-23",
+  "pair": "0x26b62a9a8320c0d7767f873274ed93688f7dc4ca",
+  "sender": "0x50b8f49f4b2e80e09ce8015c4e7a9c277738fd3d",
+  "to": "0xe03a775f364612688c1c897efcf84812f9b14e5c",
+  "amount0In": "0",
+  "amount1In": "50000000000000000",
+  "amount0Out": "471583345314337836",
+  "amount1Out": "0",
+  "blockNumber": "19000041",
+  "timestamp": "1705173935000"
+}
+
+Platform 1 first pair record: {
+  "id": "0x26b62a9a8320c0d7767f873274ed93688f7dc4ca",
+  "token0": "0x4f1200c1a6453e0e22ad528d203844727d3cf0d4",
+  "token1": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+  "createdAt": 19000040
+}
+Platform 2 first pair record: {
+  "id": "0x26b62a9a8320c0d7767f873274ed93688f7dc4ca",
+  "token0": "0x4f1200c1a6453e0e22ad528d203844727d3cf0d4",
+  "token1": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+  "createdAt": "19000040"
+}
+
+Raw data counts:
+Platform 1 swaps data count: 35039
+Platform 2 swaps data count: 33972
+Platform 1 pairs data count: 232
+Platform 2 pairs data count: 232
+
+Extracting pairs from Platform 1 pairs data:
+Added pair from pairs data: 0x26b62a9a8320c0d7767f873274ed93688f7dc4ca
+Full pair record: {
+  "id": "0x26b62a9a8320c0d7767f873274ed93688f7dc4ca",
+  "token0": "0x4f1200c1a6453e0e22ad528d203844727d3cf0d4",
+  "token1": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+  "createdAt": 19000040
+}
+Added pair from pairs data: 0x1d7ed8f18c7a34ae0208245f579da1940d53bdc3
+Full pair record: {
+  "id": "0x1d7ed8f18c7a34ae0208245f579da1940d53bdc3",
+  "token0": "0x410ee4ae568c90f9d498430add10980981d1be7b",
+  "token1": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+  "createdAt": 19000045
+}
+Added pair from pairs data: 0xccf0f3aa34599c53e8b10a8e66f5074102c389ef
+Full pair record: {
+  "id": "0xccf0f3aa34599c53e8b10a8e66f5074102c389ef",
+  "token0": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+  "token1": "0xc8c1509c46f23bcfac30a28e848319f02b811329",
+  "createdAt": 19000054
+}
+Added pair from pairs data: 0x71de5abd42f80c195e0d64e6b829565a6e0860ce
+Full pair record: {
+  "id": "0x71de5abd42f80c195e0d64e6b829565a6e0860ce",
+  "token0": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+  "token1": "0xfcbc85aebf649a8e4fd4529af75f96d2d7e633bc",
+  "createdAt": 19000070
+}
+Added pair from pairs data: 0x862d0f9471066cb3849e44d28a63b448506f55a3
+Full pair record: {
+  "id": "0x862d0f9471066cb3849e44d28a63b448506f55a3",
+  "token0": "0xa9f6a8c770f74616563f87c6aa8f21be9f269f73",
+  "token1": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+  "createdAt": 19000083
+}
+
+Extracting pairs from Platform 2 pairs data:
+Added pair from pairs data: 0x26b62a9a8320c0d7767f873274ed93688f7dc4ca
+Full pair record: {
+  "id": "0x26b62a9a8320c0d7767f873274ed93688f7dc4ca",
+  "token0": "0x4f1200c1a6453e0e22ad528d203844727d3cf0d4",
+  "token1": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+  "createdAt": "19000040"
+}
+Added pair from pairs data: 0x1d7ed8f18c7a34ae0208245f579da1940d53bdc3
+Full pair record: {
+  "id": "0x1d7ed8f18c7a34ae0208245f579da1940d53bdc3",
+  "token0": "0x410ee4ae568c90f9d498430add10980981d1be7b",
+  "token1": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+  "createdAt": "19000045"
+}
+Added pair from pairs data: 0xccf0f3aa34599c53e8b10a8e66f5074102c389ef
+Full pair record: {
+  "id": "0xccf0f3aa34599c53e8b10a8e66f5074102c389ef",
+  "token0": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+  "token1": "0xc8c1509c46f23bcfac30a28e848319f02b811329",
+  "createdAt": "19000054"
+}
+Added pair from pairs data: 0x71de5abd42f80c195e0d64e6b829565a6e0860ce
+Full pair record: {
+  "id": "0x71de5abd42f80c195e0d64e6b829565a6e0860ce",
+  "token0": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+  "token1": "0xfcbc85aebf649a8e4fd4529af75f96d2d7e633bc",
+  "createdAt": "19000070"
+}
+Added pair from pairs data: 0x862d0f9471066cb3849e44d28a63b448506f55a3
+Full pair record: {
+  "id": "0x862d0f9471066cb3849e44d28a63b448506f55a3",
+  "token0": "0xa9f6a8c770f74616563f87c6aa8f21be9f269f73",
+  "token1": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+  "createdAt": "19000083"
+}
+
+Unique pairs counts after processing pairs data:
+Platform 1 unique pairs: 232
+Platform 2 unique pairs: 232
+
+Missing pairs summary:
+Pairs in Platform 1 but not in Platform 2: 0
+
+Pairs in Platform 2 but not in Platform 1: 0
+
+Comparing SQD with subgraph:
+Read 35039 records from /Users/yufeili/Desktop/sentio/indexer-benchmark/case_6_template/data/subgraph_swaps.parquet
+Read 35039 records from /Users/yufeili/Desktop/sentio/indexer-benchmark/case_6_template/data/envio_swaps.parquet
+Read 232 records from /Users/yufeili/Desktop/sentio/indexer-benchmark/case_6_template/data/subgraph_pairs.parquet
+Read 232 records from /Users/yufeili/Desktop/sentio/indexer-benchmark/case_6_template/data/envio_pairs.parquet
+
+Raw data structure analysis:
+Platform 1 first record: {
+  "id": "0x000189e3b872e90104557f9646665fb6d51da42545db3374b26ffe01dd9f771c-139",
+  "amount0In": 0,
+  "amount0Out": 216993311985497060,
+  "amount1In": 20000000000000000,
+  "amount1Out": 0,
+  "blockNumber": 19005805,
+  "pair": "0x183f3c782f4be525b9d88cbd539b1a0b8bec6f8b",
+  "sender": "0x3fc91a3afd70395cd496c647d5a6cc9d4b2b7fad",
+  "timestamp": 1705243511,
+  "to": "0xae104ab765c07e1dadbe870493ec7c9de247cb1e"
+}
+Platform 2 first record: {
+  "id": "0xa0c035fe4d839f953f993fc1305fc1ac789bf628193d4805386d0cd6def71220-129",
+  "pair": "0x26B62a9A8320C0D7767F873274eD93688F7dc4CA",
+  "sender": "0x3328F7f4A1D1C57c35df56bBf0c9dCAFCA309C49",
+  "to": "0x13582cDdd4FDd75bB6bd20d6CCe3078AFF80cb69",
+  "amount0In": "0",
+  "amount1In": "58652871813784054",
+  "amount0Out": "2000000000000000000",
+  "amount1Out": "0",
+  "blockNumber": "19000040",
+  "timestamp": "1705173923"
+}
+
+Platform 1 first pair record: {
+  "id": "0x26b62a9a8320c0d7767f873274ed93688f7dc4ca",
+  "token0": "0x4f1200c1a6453e0e22ad528d203844727d3cf0d4",
+  "token1": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+  "createdAt": 19000040
+}
+Platform 2 first pair record: {
+  "id": "0x26B62a9A8320C0D7767F873274eD93688F7dc4CA",
+  "token0": "0x4f1200C1a6453e0e22aD528D203844727D3cF0D4",
+  "token1": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
+  "createdAt": "19000040"
+}
+
+Raw data counts:
+Platform 1 swaps data count: 35039
+Platform 2 swaps data count: 35039
+Platform 1 pairs data count: 232
+Platform 2 pairs data count: 232
+
+Extracting pairs from Platform 1 pairs data:
+Added pair from pairs data: 0x26b62a9a8320c0d7767f873274ed93688f7dc4ca
+Full pair record: {
+  "id": "0x26b62a9a8320c0d7767f873274ed93688f7dc4ca",
+  "token0": "0x4f1200c1a6453e0e22ad528d203844727d3cf0d4",
+  "token1": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+  "createdAt": 19000040
+}
+Added pair from pairs data: 0x1d7ed8f18c7a34ae0208245f579da1940d53bdc3
+Full pair record: {
+  "id": "0x1d7ed8f18c7a34ae0208245f579da1940d53bdc3",
+  "token0": "0x410ee4ae568c90f9d498430add10980981d1be7b",
+  "token1": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+  "createdAt": 19000045
+}
+Added pair from pairs data: 0xccf0f3aa34599c53e8b10a8e66f5074102c389ef
+Full pair record: {
+  "id": "0xccf0f3aa34599c53e8b10a8e66f5074102c389ef",
+  "token0": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+  "token1": "0xc8c1509c46f23bcfac30a28e848319f02b811329",
+  "createdAt": 19000054
+}
+Added pair from pairs data: 0x71de5abd42f80c195e0d64e6b829565a6e0860ce
+Full pair record: {
+  "id": "0x71de5abd42f80c195e0d64e6b829565a6e0860ce",
+  "token0": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+  "token1": "0xfcbc85aebf649a8e4fd4529af75f96d2d7e633bc",
+  "createdAt": 19000070
+}
+Added pair from pairs data: 0x862d0f9471066cb3849e44d28a63b448506f55a3
+Full pair record: {
+  "id": "0x862d0f9471066cb3849e44d28a63b448506f55a3",
+  "token0": "0xa9f6a8c770f74616563f87c6aa8f21be9f269f73",
+  "token1": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+  "createdAt": 19000083
+}
+
+Extracting pairs from Platform 2 pairs data:
+Added pair from pairs data: 0x26b62a9a8320c0d7767f873274ed93688f7dc4ca
+Full pair record: {
+  "id": "0x26B62a9A8320C0D7767F873274eD93688F7dc4CA",
+  "token0": "0x4f1200C1a6453e0e22aD528D203844727D3cF0D4",
+  "token1": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
+  "createdAt": "19000040"
+}
+Added pair from pairs data: 0x1d7ed8f18c7a34ae0208245f579da1940d53bdc3
+Full pair record: {
+  "id": "0x1d7Ed8f18C7A34aE0208245F579DA1940D53bdC3",
+  "token0": "0x410eE4Ae568c90F9d498430ADd10980981D1BE7B",
+  "token1": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
+  "createdAt": "19000045"
+}
+Added pair from pairs data: 0xccf0f3aa34599c53e8b10a8e66f5074102c389ef
+Full pair record: {
+  "id": "0xccF0F3AA34599C53e8b10a8e66F5074102c389eF",
+  "token0": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
+  "token1": "0xC8C1509c46F23bcfAC30A28e848319F02b811329",
+  "createdAt": "19000054"
+}
+Added pair from pairs data: 0x71de5abd42f80c195e0d64e6b829565a6e0860ce
+Full pair record: {
+  "id": "0x71de5aBd42F80C195e0D64e6B829565A6E0860Ce",
+  "token0": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
+  "token1": "0xFcbc85AeBf649A8e4FD4529AF75F96D2D7E633Bc",
+  "createdAt": "19000070"
+}
+Added pair from pairs data: 0x862d0f9471066cb3849e44d28a63b448506f55a3
+Full pair record: {
+  "id": "0x862D0f9471066cb3849E44d28A63b448506F55A3",
+  "token0": "0xa9f6a8C770f74616563F87c6Aa8f21be9F269f73",
+  "token1": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
+  "createdAt": "19000083"
+}
+
+Unique pairs counts after processing pairs data:
+Platform 1 unique pairs: 232
+Platform 2 unique pairs: 232
+
+Missing pairs summary:
+Pairs in Platform 1 but not in Platform 2: 0
+
+Pairs in Platform 2 but not in Platform 1: 0
+Read 35039 records from /Users/yufeili/Desktop/sentio/indexer-benchmark/case_6_template/data/sentio_swaps.parquet
+Read 33972 records from /Users/yufeili/Desktop/sentio/indexer-benchmark/case_6_template/data/sqd_swaps.parquet
+Read 232 records from /Users/yufeili/Desktop/sentio/indexer-benchmark/case_6_template/data/sentio_pairs.parquet
+Read 232 records from /Users/yufeili/Desktop/sentio/indexer-benchmark/case_6_template/data/sqd_pairs.parquet
+
+Raw data structure analysis:
+Platform 1 first record: {
+  "amount0In": 0,
+  "amount0Out": 84872635909936820,
+  "amount1In": 50000000000000000,
+  "amount1Out": 0,
+  "blockNumber": 19000677,
+  "id": "0xfe08fc7d3fe08b25969cf7668ad458597bd2ad6656e99e1e3f775a2efab0392d-45",
+  "pair": "0x56589febb9e17fc64e34f1f85a71c67ada9ed194",
+  "sender": "0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D",
+  "timestamp": 1705181591000,
+  "to__": "0xbA8C00B47fE632035A1AF6CbF4CC1718797a5768"
+}
+Platform 2 first record: {
+  "id": "0x8d64ffe69f2f4dae8b3f226a957a443bdf6993d49193f5fd46fc74b26c87ed7d-23",
+  "pair": "0x26b62a9a8320c0d7767f873274ed93688f7dc4ca",
+  "sender": "0x50b8f49f4b2e80e09ce8015c4e7a9c277738fd3d",
+  "to": "0xe03a775f364612688c1c897efcf84812f9b14e5c",
+  "amount0In": "0",
+  "amount1In": "50000000000000000",
+  "amount0Out": "471583345314337836",
+  "amount1Out": "0",
+  "blockNumber": "19000041",
+  "timestamp": "1705173935000"
+}
+
+Platform 1 first pair record: {
+  "createdAt": 19005691,
+  "id": "0x468486A437FE822F7277c1c0ba4991e2e1B3aB53",
+  "token0": "0x7baff7Fa8FbC2AfdcD0d3B57abd9B1856a19f0F1",
+  "token1": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"
+}
+Platform 2 first pair record: {
+  "id": "0x26b62a9a8320c0d7767f873274ed93688f7dc4ca",
+  "token0": "0x4f1200c1a6453e0e22ad528d203844727d3cf0d4",
+  "token1": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+  "createdAt": "19000040"
+}
+
+Raw data counts:
+Platform 1 swaps data count: 35039
+Platform 2 swaps data count: 33972
+Platform 1 pairs data count: 232
+Platform 2 pairs data count: 232
+
+Extracting pairs from Platform 1 pairs data:
+Added pair from pairs data: 0x468486a437fe822f7277c1c0ba4991e2e1b3ab53
+Full pair record: {
+  "createdAt": 19005691,
+  "id": "0x468486A437FE822F7277c1c0ba4991e2e1B3aB53",
+  "token0": "0x7baff7Fa8FbC2AfdcD0d3B57abd9B1856a19f0F1",
+  "token1": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"
+}
+Added pair from pairs data: 0x1f7836df05d275bf4700c76e3df47501bdacff0c
+Full pair record: {
+  "createdAt": 19006802,
+  "id": "0x1F7836Df05d275Bf4700C76e3DF47501bDaCFf0C",
+  "token0": "0xB0C5DbB5C683608C5223201b78105E843042dfD8",
+  "token1": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"
+}
+Added pair from pairs data: 0xc4df6723f61876d2bebb47bef3eb03cd8d79de11
+Full pair record: {
+  "createdAt": 19000436,
+  "id": "0xc4Df6723f61876d2bebB47Bef3eB03cd8d79dE11",
+  "token0": "0x00404A91420cE213531999504c0e3143312e82E3",
+  "token1": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"
+}
+Added pair from pairs data: 0x4d9055f11c27fa82d08249a452f0d5eaa76fb64d
+Full pair record: {
+  "createdAt": 19008412,
+  "id": "0x4D9055f11c27fA82d08249a452f0d5Eaa76fb64D",
+  "token0": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
+  "token1": "0xF0a426c01E3C2368De3b58De32A28ed84cB74470"
+}
+Added pair from pairs data: 0x0cee0bd6741b96be391707093c2eb7e708465c6d
+Full pair record: {
+  "createdAt": 19008148,
+  "id": "0x0cEE0Bd6741B96Be391707093C2eB7E708465c6d",
+  "token0": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
+  "token1": "0xF2c2Af9FFEC397F01001130cD7F25184a4898F1C"
+}
+
+Extracting pairs from Platform 2 pairs data:
+Added pair from pairs data: 0x26b62a9a8320c0d7767f873274ed93688f7dc4ca
+Full pair record: {
+  "id": "0x26b62a9a8320c0d7767f873274ed93688f7dc4ca",
+  "token0": "0x4f1200c1a6453e0e22ad528d203844727d3cf0d4",
+  "token1": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+  "createdAt": "19000040"
+}
+Added pair from pairs data: 0x1d7ed8f18c7a34ae0208245f579da1940d53bdc3
+Full pair record: {
+  "id": "0x1d7ed8f18c7a34ae0208245f579da1940d53bdc3",
+  "token0": "0x410ee4ae568c90f9d498430add10980981d1be7b",
+  "token1": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+  "createdAt": "19000045"
+}
+Added pair from pairs data: 0xccf0f3aa34599c53e8b10a8e66f5074102c389ef
+Full pair record: {
+  "id": "0xccf0f3aa34599c53e8b10a8e66f5074102c389ef",
+  "token0": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+  "token1": "0xc8c1509c46f23bcfac30a28e848319f02b811329",
+  "createdAt": "19000054"
+}
+Added pair from pairs data: 0x71de5abd42f80c195e0d64e6b829565a6e0860ce
+Full pair record: {
+  "id": "0x71de5abd42f80c195e0d64e6b829565a6e0860ce",
+  "token0": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+  "token1": "0xfcbc85aebf649a8e4fd4529af75f96d2d7e633bc",
+  "createdAt": "19000070"
+}
+Added pair from pairs data: 0x862d0f9471066cb3849e44d28a63b448506f55a3
+Full pair record: {
+  "id": "0x862d0f9471066cb3849e44d28a63b448506f55a3",
+  "token0": "0xa9f6a8c770f74616563f87c6aa8f21be9f269f73",
+  "token1": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+  "createdAt": "19000083"
+}
+
+Unique pairs counts after processing pairs data:
+Platform 1 unique pairs: 232
+Platform 2 unique pairs: 232
+
+Missing pairs summary:
+Pairs in Platform 1 but not in Platform 2: 0
+
+Pairs in Platform 2 but not in Platform 1: 0
+
+Comparing SQD with sentio:
+Read 35039 records from /Users/yufeili/Desktop/sentio/indexer-benchmark/case_6_template/data/sentio_swaps.parquet
+Read 35039 records from /Users/yufeili/Desktop/sentio/indexer-benchmark/case_6_template/data/envio_swaps.parquet
+Read 232 records from /Users/yufeili/Desktop/sentio/indexer-benchmark/case_6_template/data/sentio_pairs.parquet
+Read 232 records from /Users/yufeili/Desktop/sentio/indexer-benchmark/case_6_template/data/envio_pairs.parquet
+
+Raw data structure analysis:
+Platform 1 first record: {
+  "amount0In": 0,
+  "amount0Out": 84872635909936820,
+  "amount1In": 50000000000000000,
+  "amount1Out": 0,
+  "blockNumber": 19000677,
+  "id": "0xfe08fc7d3fe08b25969cf7668ad458597bd2ad6656e99e1e3f775a2efab0392d-45",
+  "pair": "0x56589febb9e17fc64e34f1f85a71c67ada9ed194",
+  "sender": "0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D",
+  "timestamp": 1705181591000,
+  "to__": "0xbA8C00B47fE632035A1AF6CbF4CC1718797a5768"
+}
+Platform 2 first record: {
+  "id": "0xa0c035fe4d839f953f993fc1305fc1ac789bf628193d4805386d0cd6def71220-129",
+  "pair": "0x26B62a9A8320C0D7767F873274eD93688F7dc4CA",
+  "sender": "0x3328F7f4A1D1C57c35df56bBf0c9dCAFCA309C49",
+  "to": "0x13582cDdd4FDd75bB6bd20d6CCe3078AFF80cb69",
+  "amount0In": "0",
+  "amount1In": "58652871813784054",
+  "amount0Out": "2000000000000000000",
+  "amount1Out": "0",
+  "blockNumber": "19000040",
+  "timestamp": "1705173923"
+}
+
+Platform 1 first pair record: {
+  "createdAt": 19005691,
+  "id": "0x468486A437FE822F7277c1c0ba4991e2e1B3aB53",
+  "token0": "0x7baff7Fa8FbC2AfdcD0d3B57abd9B1856a19f0F1",
+  "token1": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"
+}
+Platform 2 first pair record: {
+  "id": "0x26B62a9A8320C0D7767F873274eD93688F7dc4CA",
+  "token0": "0x4f1200C1a6453e0e22aD528D203844727D3cF0D4",
+  "token1": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
+  "createdAt": "19000040"
+}
+
+Raw data counts:
+Platform 1 swaps data count: 35039
+Platform 2 swaps data count: 35039
+Platform 1 pairs data count: 232
+Platform 2 pairs data count: 232
+
+Extracting pairs from Platform 1 pairs data:
+Added pair from pairs data: 0x468486a437fe822f7277c1c0ba4991e2e1b3ab53
+Full pair record: {
+  "createdAt": 19005691,
+  "id": "0x468486A437FE822F7277c1c0ba4991e2e1B3aB53",
+  "token0": "0x7baff7Fa8FbC2AfdcD0d3B57abd9B1856a19f0F1",
+  "token1": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"
+}
+Added pair from pairs data: 0x1f7836df05d275bf4700c76e3df47501bdacff0c
+Full pair record: {
+  "createdAt": 19006802,
+  "id": "0x1F7836Df05d275Bf4700C76e3DF47501bDaCFf0C",
+  "token0": "0xB0C5DbB5C683608C5223201b78105E843042dfD8",
+  "token1": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"
+}
+Added pair from pairs data: 0xc4df6723f61876d2bebb47bef3eb03cd8d79de11
+Full pair record: {
+  "createdAt": 19000436,
+  "id": "0xc4Df6723f61876d2bebB47Bef3eB03cd8d79dE11",
+  "token0": "0x00404A91420cE213531999504c0e3143312e82E3",
+  "token1": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2"
+}
+Added pair from pairs data: 0x4d9055f11c27fa82d08249a452f0d5eaa76fb64d
+Full pair record: {
+  "createdAt": 19008412,
+  "id": "0x4D9055f11c27fA82d08249a452f0d5Eaa76fb64D",
+  "token0": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
+  "token1": "0xF0a426c01E3C2368De3b58De32A28ed84cB74470"
+}
+Added pair from pairs data: 0x0cee0bd6741b96be391707093c2eb7e708465c6d
+Full pair record: {
+  "createdAt": 19008148,
+  "id": "0x0cEE0Bd6741B96Be391707093C2eB7E708465c6d",
+  "token0": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
+  "token1": "0xF2c2Af9FFEC397F01001130cD7F25184a4898F1C"
+}
+
+Extracting pairs from Platform 2 pairs data:
+Added pair from pairs data: 0x26b62a9a8320c0d7767f873274ed93688f7dc4ca
+Full pair record: {
+  "id": "0x26B62a9A8320C0D7767F873274eD93688F7dc4CA",
+  "token0": "0x4f1200C1a6453e0e22aD528D203844727D3cF0D4",
+  "token1": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
+  "createdAt": "19000040"
+}
+Added pair from pairs data: 0x1d7ed8f18c7a34ae0208245f579da1940d53bdc3
+Full pair record: {
+  "id": "0x1d7Ed8f18C7A34aE0208245F579DA1940D53bdC3",
+  "token0": "0x410eE4Ae568c90F9d498430ADd10980981D1BE7B",
+  "token1": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
+  "createdAt": "19000045"
+}
+Added pair from pairs data: 0xccf0f3aa34599c53e8b10a8e66f5074102c389ef
+Full pair record: {
+  "id": "0xccF0F3AA34599C53e8b10a8e66F5074102c389eF",
+  "token0": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
+  "token1": "0xC8C1509c46F23bcfAC30A28e848319F02b811329",
+  "createdAt": "19000054"
+}
+Added pair from pairs data: 0x71de5abd42f80c195e0d64e6b829565a6e0860ce
+Full pair record: {
+  "id": "0x71de5aBd42F80C195e0D64e6B829565A6E0860Ce",
+  "token0": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
+  "token1": "0xFcbc85AeBf649A8e4FD4529AF75F96D2D7E633Bc",
+  "createdAt": "19000070"
+}
+Added pair from pairs data: 0x862d0f9471066cb3849e44d28a63b448506f55a3
+Full pair record: {
+  "id": "0x862D0f9471066cb3849E44d28A63b448506F55A3",
+  "token0": "0xa9f6a8C770f74616563F87c6Aa8f21be9F269f73",
+  "token1": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
+  "createdAt": "19000083"
+}
+
+Unique pairs counts after processing pairs data:
+Platform 1 unique pairs: 232
+Platform 2 unique pairs: 232
+
+Missing pairs summary:
+Pairs in Platform 1 but not in Platform 2: 0
+
+Pairs in Platform 2 but not in Platform 1: 0
+Read 33972 records from /Users/yufeili/Desktop/sentio/indexer-benchmark/case_6_template/data/sqd_swaps.parquet
+Read 35039 records from /Users/yufeili/Desktop/sentio/indexer-benchmark/case_6_template/data/envio_swaps.parquet
+Read 232 records from /Users/yufeili/Desktop/sentio/indexer-benchmark/case_6_template/data/sqd_pairs.parquet
+Read 232 records from /Users/yufeili/Desktop/sentio/indexer-benchmark/case_6_template/data/envio_pairs.parquet
+
+Raw data structure analysis:
+Platform 1 first record: {
+  "id": "0x8d64ffe69f2f4dae8b3f226a957a443bdf6993d49193f5fd46fc74b26c87ed7d-23",
+  "pair": "0x26b62a9a8320c0d7767f873274ed93688f7dc4ca",
+  "sender": "0x50b8f49f4b2e80e09ce8015c4e7a9c277738fd3d",
+  "to": "0xe03a775f364612688c1c897efcf84812f9b14e5c",
+  "amount0In": "0",
+  "amount1In": "50000000000000000",
+  "amount0Out": "471583345314337836",
+  "amount1Out": "0",
+  "blockNumber": "19000041",
+  "timestamp": "1705173935000"
+}
+Platform 2 first record: {
+  "id": "0xa0c035fe4d839f953f993fc1305fc1ac789bf628193d4805386d0cd6def71220-129",
+  "pair": "0x26B62a9A8320C0D7767F873274eD93688F7dc4CA",
+  "sender": "0x3328F7f4A1D1C57c35df56bBf0c9dCAFCA309C49",
+  "to": "0x13582cDdd4FDd75bB6bd20d6CCe3078AFF80cb69",
+  "amount0In": "0",
+  "amount1In": "58652871813784054",
+  "amount0Out": "2000000000000000000",
+  "amount1Out": "0",
+  "blockNumber": "19000040",
+  "timestamp": "1705173923"
+}
+
+Platform 1 first pair record: {
+  "id": "0x26b62a9a8320c0d7767f873274ed93688f7dc4ca",
+  "token0": "0x4f1200c1a6453e0e22ad528d203844727d3cf0d4",
+  "token1": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+  "createdAt": "19000040"
+}
+Platform 2 first pair record: {
+  "id": "0x26B62a9A8320C0D7767F873274eD93688F7dc4CA",
+  "token0": "0x4f1200C1a6453e0e22aD528D203844727D3cF0D4",
+  "token1": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
+  "createdAt": "19000040"
+}
+
+Raw data counts:
+Platform 1 swaps data count: 33972
+Platform 2 swaps data count: 35039
+Platform 1 pairs data count: 232
+Platform 2 pairs data count: 232
+
+Extracting pairs from Platform 1 pairs data:
+Added pair from pairs data: 0x26b62a9a8320c0d7767f873274ed93688f7dc4ca
+Full pair record: {
+  "id": "0x26b62a9a8320c0d7767f873274ed93688f7dc4ca",
+  "token0": "0x4f1200c1a6453e0e22ad528d203844727d3cf0d4",
+  "token1": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+  "createdAt": "19000040"
+}
+Added pair from pairs data: 0x1d7ed8f18c7a34ae0208245f579da1940d53bdc3
+Full pair record: {
+  "id": "0x1d7ed8f18c7a34ae0208245f579da1940d53bdc3",
+  "token0": "0x410ee4ae568c90f9d498430add10980981d1be7b",
+  "token1": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+  "createdAt": "19000045"
+}
+Added pair from pairs data: 0xccf0f3aa34599c53e8b10a8e66f5074102c389ef
+Full pair record: {
+  "id": "0xccf0f3aa34599c53e8b10a8e66f5074102c389ef",
+  "token0": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+  "token1": "0xc8c1509c46f23bcfac30a28e848319f02b811329",
+  "createdAt": "19000054"
+}
+Added pair from pairs data: 0x71de5abd42f80c195e0d64e6b829565a6e0860ce
+Full pair record: {
+  "id": "0x71de5abd42f80c195e0d64e6b829565a6e0860ce",
+  "token0": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+  "token1": "0xfcbc85aebf649a8e4fd4529af75f96d2d7e633bc",
+  "createdAt": "19000070"
+}
+Added pair from pairs data: 0x862d0f9471066cb3849e44d28a63b448506f55a3
+Full pair record: {
+  "id": "0x862d0f9471066cb3849e44d28a63b448506f55a3",
+  "token0": "0xa9f6a8c770f74616563f87c6aa8f21be9f269f73",
+  "token1": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+  "createdAt": "19000083"
+}
+
+Extracting pairs from Platform 2 pairs data:
+Added pair from pairs data: 0x26b62a9a8320c0d7767f873274ed93688f7dc4ca
+Full pair record: {
+  "id": "0x26B62a9A8320C0D7767F873274eD93688F7dc4CA",
+  "token0": "0x4f1200C1a6453e0e22aD528D203844727D3cF0D4",
+  "token1": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
+  "createdAt": "19000040"
+}
+Added pair from pairs data: 0x1d7ed8f18c7a34ae0208245f579da1940d53bdc3
+Full pair record: {
+  "id": "0x1d7Ed8f18C7A34aE0208245F579DA1940D53bdC3",
+  "token0": "0x410eE4Ae568c90F9d498430ADd10980981D1BE7B",
+  "token1": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
+  "createdAt": "19000045"
+}
+Added pair from pairs data: 0xccf0f3aa34599c53e8b10a8e66f5074102c389ef
+Full pair record: {
+  "id": "0xccF0F3AA34599C53e8b10a8e66F5074102c389eF",
+  "token0": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
+  "token1": "0xC8C1509c46F23bcfAC30A28e848319F02b811329",
+  "createdAt": "19000054"
+}
+Added pair from pairs data: 0x71de5abd42f80c195e0d64e6b829565a6e0860ce
+Full pair record: {
+  "id": "0x71de5aBd42F80C195e0D64e6B829565A6E0860Ce",
+  "token0": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
+  "token1": "0xFcbc85AeBf649A8e4FD4529AF75F96D2D7E633Bc",
+  "createdAt": "19000070"
+}
+Added pair from pairs data: 0x862d0f9471066cb3849e44d28a63b448506f55a3
+Full pair record: {
+  "id": "0x862D0f9471066cb3849E44d28A63b448506F55A3",
+  "token0": "0xa9f6a8C770f74616563F87c6Aa8f21be9F269f73",
+  "token1": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
+  "createdAt": "19000083"
+}
+
+Unique pairs counts after processing pairs data:
+Platform 1 unique pairs: 232
+Platform 2 unique pairs: 232
+
+Missing pairs summary:
+Pairs in Platform 1 but not in Platform 2: 0
+
+Pairs in Platform 2 but not in Platform 1: 0
+
+Comparing SQD with envio:
+JSON report saved to: /Users/yufeili/Desktop/sentio/indexer-benchmark/case_6_template/data/template_comparison_report.json
+HTML report saved to: /Users/yufeili/Desktop/sentio/indexer-benchmark/case_6_template/data/template_comparison_report.html

@@ -12,6 +12,8 @@ if (!fs.existsSync(dataDir)) {
 // Sentio API details
 const API_KEY = 'hnZ7Z8cRsoxRadrVdhih2jRjBlH0lIYWl';
 const BASE_URL = 'https://app.sentio.xyz/api/v1/analytics/yufei/case_2_lbtc_full/sql/execute';
+const MAX_RETRIES = 3;
+const TIMEOUT = 30000; // 30 seconds
 
 // Schema definitions
 const transferSchema = new parquet.ParquetSchema({
@@ -34,38 +36,46 @@ const accountSchema = new parquet.ParquetSchema({
 // Test connection before starting
 async function testConnection() {
   console.log(`Testing connection to Sentio API: ${BASE_URL}`);
-  try {
-    const response = await axios.post(
-      BASE_URL,
-      {
-        sqlQuery: {
-          sql: `select 1 as test limit 1`
-        }
-      },
-      {
-        headers: {
-          'Content-Type': 'application/json',
-          'api-key': API_KEY
+  let retries = 0;
+  
+  while (retries < MAX_RETRIES) {
+    try {
+      const response = await axios.post(
+        BASE_URL,
+        {
+          sqlQuery: {
+            sql: `select 1 as test limit 1`
+          }
         },
-        timeout: 10000 // 10 seconds timeout
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'api-key': API_KEY
+          },
+          timeout: TIMEOUT
+        }
+      );
+      
+      if (response.data && response.data.result && response.data.result.rows) {
+        console.log('Connection test successful!');
+        return true;
+      } else {
+        console.error('Connection test response format unexpected:', JSON.stringify(response.data, null, 2));
       }
-    );
-    
-    if (response.data && response.data.result && response.data.result.rows) {
-      console.log('Connection test successful!');
-      return true;
-    } else {
-      console.error('Connection test response format unexpected:', JSON.stringify(response.data, null, 2));
-      return false;
+    } catch (error) {
+      console.error(`Connection test attempt ${retries + 1} failed:`, error.message);
+      if (error.response) {
+        console.error('Response status:', error.response.status);
+        console.error('Response data:', JSON.stringify(error.response.data, null, 2));
+      }
     }
-  } catch (error) {
-    console.error('Connection test failed:', error.message);
-    if (error.response) {
-      console.error('Response status:', error.response.status);
-      console.error('Response data:', JSON.stringify(error.response.data, null, 2));
+    retries++;
+    if (retries < MAX_RETRIES) {
+      console.log(`Retrying in 5 seconds... (attempt ${retries + 1}/${MAX_RETRIES})`);
+      await new Promise(resolve => setTimeout(resolve, 5000));
     }
-    return false;
   }
+  return false;
 }
 
 // Fetch and save transfer data
@@ -102,7 +112,7 @@ async function fetchSentioTransfers() {
               'Content-Type': 'application/json',
               'api-key': API_KEY
             },
-            timeout: 180000 // 3 minute timeout
+            timeout: TIMEOUT
           }
         );
         
@@ -267,7 +277,7 @@ async function fetchSentioAccounts() {
               'Content-Type': 'application/json',
               'api-key': API_KEY
             },
-            timeout: 180000 // 3 minute timeout
+            timeout: TIMEOUT
           }
         );
         

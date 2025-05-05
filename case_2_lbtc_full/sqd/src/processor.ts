@@ -42,7 +42,7 @@ export const processor = new EvmBatchProcessor()
         },
     })
     .setBlockRange({
-        from: 22100000,
+        from: 22180000,
         to:   22200000,
     })
 	.addLog({

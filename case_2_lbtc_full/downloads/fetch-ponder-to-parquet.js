@@ -11,12 +11,10 @@ if (!fs.existsSync(dataDir)) {
 
 // Ponder database details
 const DB_CONFIG = {
-  host: 'yamabiko.proxy.rlwy.net',
-  port: 10767,
-  database: 'railway',
-  user: 'postgres',
-  password: 'OlKFhKmUqTqTvHzpGBuZOPuOFhAIbold',
-  schema: '99ac6069-d39a-4622-8d96-8f8121a42b7b',
+  host: 'localhost',
+  port: 5432,
+  database: 'ponder_dev',
+  user: 'yufeili',
   // Increase connection timeout to 30 seconds
   connectionTimeoutMillis: 30000,
   // Increase query timeout to 3 minutes
@@ -53,8 +51,6 @@ async function fetchPonderTransfers() {
   const client = new Client(DB_CONFIG);
   await client.connect();
   
-  // Set search path to the specified schema
-  await client.query(`SET search_path TO "${DB_CONFIG.schema}"`);
   // Set statement timeout
   await client.query(`SET statement_timeout TO ${DB_CONFIG.statement_timeout}`);
   
@@ -63,13 +59,16 @@ async function fetchPonderTransfers() {
   const batchSize = 10000;
   let totalRows = 0;
   
-  console.log('Fetching transfer data from Ponder PostgreSQL...');
+  console.log('Fetching transfer data from local Ponder PostgreSQL...');
   
   while (true) {
     console.log(`Fetching transfers with offset ${offset}...`);
     
     const result = await client.query(
-      `SELECT * FROM lbtc_transfer ORDER BY id LIMIT $1 OFFSET $2`,
+      `SELECT id, block_number, transaction_hash, "from", "to", value 
+       FROM lbtc_transfer 
+       ORDER BY block_number DESC 
+       LIMIT $1 OFFSET $2`,
       [batchSize, offset]
     );
     
@@ -84,8 +83,8 @@ async function fetchPonderTransfers() {
         id: row.id || '',
         blockNumber: Number(row.block_number || 0),
         transactionHash: row.transaction_hash || '',
-        from: row.from_address || '',
-        to: row.to_address || '',
+        from: row.from || '',
+        to: row.to || '',
         value: row.value ? String(row.value) : '0'
       };
       

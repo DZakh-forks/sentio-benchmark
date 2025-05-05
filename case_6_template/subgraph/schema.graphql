@@ -1,0 +1,21 @@
+type Pair @entity(immutable: true) {
+  id: ID! # pair address
+  token0: String!
+  token1: String!
+  createdAt: BigInt!
+  swaps: [UniswapV2Event!]! @derivedFrom(field: "pair")
+}
+
+# This matches the UniswapV2Event in Sentio
+type UniswapV2Event @entity(immutable: true) {
+  id: ID! # transaction hash + log index
+  pair: Pair! # pair address
+  sender: String!
+  to: String!
+  amount0In: BigInt!
+  amount0Out: BigInt!
+  amount1In: BigInt!
+  amount1Out: BigInt!
+  timestamp: BigInt!
+  blockNumber: BigInt!
+} 

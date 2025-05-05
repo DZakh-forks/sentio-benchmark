@@ -14,8 +14,6 @@ type Swap {
   amount0Out: BigInt!
   amount1In: BigInt!
   amount1Out: BigInt!
-  reserve0: BigInt!
-  reserve1: BigInt!
   timestamp: BigInt!
   blockNumber: BigInt!
 }
