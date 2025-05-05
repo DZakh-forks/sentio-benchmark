@@ -145,7 +145,7 @@ This benchmark provides a comparative analysis of indexer performance across dif
 ** Ponder documentation indicates trace support, but our implementation encountered configuration issues that prevented successful trace capture  
 §§ Subgraph captured only ~58% of swap traces due to architectural limitations in accessing internal transactions  
 ††† Subsquid captured 1,067 fewer swaps than other platforms
-
+ 
 ### Key Observations
 
 1. **Performance Comparison**:
