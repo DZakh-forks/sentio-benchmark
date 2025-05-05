@@ -1,0 +1,28 @@
+type Pair {
+  id: ID!
+  token0: String!
+  token1: String!
+  createdAt: BigInt!
+}
+
+type Swap {
+  id: ID!
+  pair: String!
+  sender: String!
+  to: String!
+  amount0In: BigInt!
+  amount0Out: BigInt!
+  amount1In: BigInt!
+  amount1Out: BigInt!
+  timestamp: BigInt!
+  blockNumber: BigInt!
+}
+
+type UniswapV2Factory_PairCreated {
+  id: ID!
+  token0: String!
+  token1: String!
+  pair: String!
+  _3: BigInt!
+}
+

@@ -9,8 +9,8 @@ if (!fs.existsSync(dataDir)) {
   fs.mkdirSync(dataDir, { recursive: true });
 }
 
-// Envio GraphQL details - Updated to use the latest working endpoint
-const ENVIO_ENDPOINT = 'https://indexer.dev.hyperindex.xyz/6b5188a/v1/graphql';  // Latest working endpoint
+// Envio GraphQL details - Updated to use the Hasura endpoint
+const ENVIO_ENDPOINT = 'http://localhost:8080/v1/graphql';  // Hasura GraphQL endpoint
 
 // Schema definitions
 const transferSchema = new parquet.ParquetSchema({
@@ -132,7 +132,7 @@ async function fetchEnvioTransfers() {
 }
 
 // Fetch and save account data
-async function fetchEnvioAccounts() {
+async function fetchEnvioAccounts(returnData = false) {
   const outputPath = path.join(dataDir, 'envio-case2-accounts.parquet');
   
   // Remove existing file if it exists
@@ -140,88 +140,16 @@ async function fetchEnvioAccounts() {
     fs.unlinkSync(outputPath);
     console.log(`Removed existing file: ${outputPath}`);
   }
-
+  
   try {
-    // Step 1: Fetch all snapshots directly to build account balance map
-    console.log('Fetching all snapshots to build account balance map...');
-    
-    const accountBalanceMap = new Map();
+    const writer = await parquet.ParquetWriter.openFile(accountSchema, outputPath);
     let offset = 0;
     const pageSize = 1000;
-    
-    while (true) {
-      console.log(`Fetching snapshots with offset: ${offset}...`);
-      
-      try {
-        const response = await axios.post(
-          ENVIO_ENDPOINT,
-          {
-            query: `
-              query {
-                Snapshot(limit: ${pageSize}, offset: ${offset}, order_by: {timestampMilli: desc}) {
-                  id
-                  timestampMilli
-                  balance
-                  point
-                }
-              }
-            `
-          },
-          {
-            headers: { 'Content-Type': 'application/json' },
-            timeout: 180000 // 3 minute timeout
-          }
-        );
-        
-        // Process the response data
-        const snapshots = response.data.data.Snapshot;
-        console.log(`Received ${snapshots.length} snapshots for balance mapping`);
-        
-        if (snapshots.length === 0) {
-          break;
-        }
-        
-        for (const snapshot of snapshots) {
-          // Extract account ID from snapshot ID (format is typically: "accountId-timestamp")
-          const parts = snapshot.id.split('-');
-          if (parts.length < 2) continue;
-          
-          const accountId = parts[0];
-          const timestamp = snapshot.timestampMilli || '0';
-          
-          if (!accountBalanceMap.has(accountId) || 
-              BigInt(timestamp) > BigInt(accountBalanceMap.get(accountId).timestamp)) {
-            accountBalanceMap.set(accountId, {
-              balance: snapshot.balance || '0',
-              timestamp: timestamp,
-              point: snapshot.point || '0'
-            });
-          }
-        }
-        
-        offset += snapshots.length;
-        
-        if (snapshots.length < pageSize) {
-          break;
-        }
-      } catch (error) {
-        console.error('Error fetching snapshots for balance mapping:', error.message);
-        if (error.response) {
-          console.error('Response status:', error.response.status);
-          console.error('Response data:', JSON.stringify(error.response.data, null, 2));
-        }
-        break;
-      }
-    }
-    
-    console.log(`Built balance map for ${accountBalanceMap.size} accounts`);
-    
-    // Step 2: Create the accounts parquet file
-    const writer = await parquet.ParquetWriter.openFile(accountSchema, outputPath);
+    let totalRows = 0;
     
     console.log('Fetching account data from Envio GraphQL...');
-    offset = 0;
-    let totalRows = 0;
+    
+    const allAccounts = [];
     
     while (true) {
       console.log(`Fetching accounts with offset: ${offset}...`);
@@ -232,7 +160,7 @@ async function fetchEnvioAccounts() {
           {
             query: `
               query {
-                Accounts(limit: ${pageSize}, offset: ${offset}, order_by: {id: asc}) {
+                Accounts(limit: ${pageSize}, offset: ${offset}) {
                   id
                   lastSnapshotTimestamp
                 }
@@ -246,6 +174,11 @@ async function fetchEnvioAccounts() {
         );
         
         // Process the response data
+        if (!response.data || !response.data.data || !response.data.data.Accounts) {
+          console.log('Invalid response structure:', JSON.stringify(response.data, null, 2));
+          break;
+        }
+        
         const accounts = response.data.data.Accounts;
         console.log(`Received ${accounts.length} accounts`);
         
@@ -254,24 +187,23 @@ async function fetchEnvioAccounts() {
         }
         
         for (const account of accounts) {
-          const accountId = account.id;
-          
-          // Get the latest snapshot data for this account
-          const snapshotData = accountBalanceMap.get(accountId) || { 
-            balance: '0', 
-            timestamp: account.lastSnapshotTimestamp || '0',
-            point: '0'
-          };
-          
-          const record = {
-            id: accountId,
-            balance: snapshotData.balance,
-            point: snapshotData.point,
-            timestamp: BigInt(snapshotData.timestamp)
-          };
-          
-          await writer.appendRow(record);
-          totalRows++;
+          try {
+            const record = {
+              id: account.id,
+              balance: '0',
+              point: '0',
+              timestamp: BigInt(account.lastSnapshotTimestamp || 0)
+            };
+            
+            await writer.appendRow(record);
+            if (returnData) {
+              allAccounts.push(record);
+            }
+            totalRows++;
+          } catch (error) {
+            console.error('Error processing account:', error.message);
+            console.error('Account data:', JSON.stringify(account, null, 2));
+          }
         }
         
         offset += accounts.length;
@@ -289,120 +221,92 @@ async function fetchEnvioAccounts() {
       }
     }
     
-    await writer.close();
-    console.log(`Saved ${totalRows} account records to ${outputPath}`);
-    return totalRows;
-  } catch (error) {
-    console.error('Error in fetchEnvioAccounts:', error);
-    return 0;
-  }
-}
-
-// Fetch and save snapshot data
-async function fetchEnvioSnapshots(returnData = false) {
-  const outputPath = path.join(dataDir, 'envio-case2-snapshots.parquet');
-  
-  // Remove existing file if it exists
-  if (fs.existsSync(outputPath)) {
-    fs.unlinkSync(outputPath);
-    console.log(`Removed existing file: ${outputPath}`);
-  }
-
-  try {
-    const writer = await parquet.ParquetWriter.openFile(snapshotSchema, outputPath);
-    let offset = 0;
-    const pageSize = 1000;
-    let totalRows = 0;
-    
-    console.log('Fetching snapshot data from Envio GraphQL...');
-    
-    const allSnapshots = [];
-    
-    while (true) {
-      console.log(`Fetching snapshots with offset: ${offset}...`);
-      
-      try {
-        const response = await axios.post(
-          ENVIO_ENDPOINT,
-          {
-            query: `
-              query {
-                Snapshot(limit: ${pageSize}, offset: ${offset}, order_by: {timestampMilli: desc}) {
-                  id
-                  timestampMilli
-                  balance
-                  point
-                }
-              }
-            `
-          },
-          {
-            headers: { 'Content-Type': 'application/json' },
-            timeout: 180000 // 3 minute timeout
-          }
-        );
-        
-        // Process the response data
-        const snapshots = response.data.data.Snapshot;
-        console.log(`Received ${snapshots.length} snapshots`);
-        
-        if (snapshots.length === 0) {
-          break;
-        }
-        
-        for (const snapshot of snapshots) {
-          // Extract account ID from snapshot ID (format is typically: "accountId-timestamp")
-          const parts = snapshot.id.split('-');
-          if (parts.length < 2) continue;
-          
-          const accountId = parts[0];
-          
-          const record = {
-            id: snapshot.id,
-            accountId: accountId,
-            balance: snapshot.balance || '0',
-            timestampMilli: BigInt(snapshot.timestampMilli || 0),
-            point: snapshot.point || '0'
-          };
-          
-          await writer.appendRow(record);
-          if (returnData) {
-            allSnapshots.push(record);
-          }
-        }
-        
-        totalRows += snapshots.length;
-        offset += snapshots.length;
-        
-        if (snapshots.length < pageSize) {
-          break;
-        }
-      } catch (error) {
-        console.error('Error fetching snapshots:', error.message);
-        if (error.response) {
-          console.error('Response status:', error.response.status);
-          console.error('Response data:', JSON.stringify(error.response.data, null, 2));
-        }
-        break;
-      }
-    }
-    
     try {
       if (totalRows > 0) {
         await writer.close();
-        console.log(`Saved ${totalRows} snapshot records to ${outputPath}`);
+        console.log(`Saved ${totalRows} account records to ${outputPath}`);
       } else {
-        console.log('No snapshots found to save');
+        console.log('No accounts found to save');
       }
     } catch (error) {
       console.error('Error closing writer:', error.message);
     }
     
-    return returnData ? allSnapshots : null;
+    return returnData ? allAccounts : null;
   } catch (error) {
-    console.error('Error in fetchEnvioSnapshots:', error);
+    console.error('Error in fetchEnvioAccounts:', error);
     return returnData ? [] : null;
   }
+}
+
+// Fetch and save snapshot data
+async function fetchEnvioSnapshots(returnData = false) {
+  console.log('Fetching all snapshots to build account balance map...');
+  const balanceMap = new Map();
+  let offset = 0;
+  const pageSize = 1000;
+  
+  while (true) {
+    console.log(`Fetching snapshots with offset: ${offset}...`);
+    const query = `
+      query {
+        Snapshot(limit: ${pageSize}, offset: ${offset}, order_by: {timestampMilli: desc}) {
+          id
+          balance
+          timestampMilli
+          point
+        }
+      }
+    `;
+    
+    try {
+      const response = await axios.post(
+        ENVIO_ENDPOINT,
+        { query },
+        {
+          headers: { 'Content-Type': 'application/json' },
+          timeout: 180000
+        }
+      );
+      
+      if (!response.data || !response.data.data || !response.data.data.Snapshot) {
+        console.log('Invalid response structure:', JSON.stringify(response.data, null, 2));
+        break;
+      }
+      
+      const snapshots = response.data.data.Snapshot;
+      console.log(`Received ${snapshots.length} snapshots`);
+      
+      if (snapshots.length === 0) {
+        break;
+      }
+      
+      for (const snapshot of snapshots) {
+        // Extract account ID from snapshot ID (format: "accountId-timestamp")
+        const parts = snapshot.id.split('-');
+        if (parts.length >= 1) {
+          const accountId = parts[0];
+          balanceMap.set(accountId, {
+            balance: snapshot.balance,
+            point: snapshot.point,
+            timestamp: BigInt(snapshot.timestampMilli)
+          });
+        }
+      }
+      
+      offset += snapshots.length;
+    } catch (error) {
+      console.error('Error fetching snapshots:', error.message);
+      if (error.response) {
+        console.error('Response status:', error.response.status);
+        console.error('Response data:', JSON.stringify(error.response.data, null, 2));
+      }
+      break;
+    }
+  }
+  
+  console.log(`Built balance map for ${balanceMap.size} accounts`);
+  return returnData ? balanceMap : undefined;
 }
 
 // Test connection before starting
@@ -438,24 +342,27 @@ async function testConnection() {
 
 // Main execution function
 async function main() {
-  console.log('Starting Envio data extraction to Parquet files');
+  console.log('\nStarting Envio data extraction to Parquet files');
   
+  // Test connection first
+  console.log('Testing connection to Envio endpoint:', ENVIO_ENDPOINT);
   try {
     await testConnection();
-    
-    console.log('1. Fetching transfers');
-    const transferCount = await fetchEnvioTransfers();
-    console.log(`Completed transfer fetch: ${transferCount} records saved\n`);
-    
-    console.log('2. Fetching accounts from snapshot data');
-    const accountCount = await fetchEnvioAccounts();
-    console.log(`Completed account fetch: ${accountCount} records saved\n`);
-    
-    console.log('All data has been successfully fetched and saved to Parquet files!');
+    console.log('Connection test successful!');
   } catch (error) {
-    console.error('Error in main execution:', error);
-    process.exit(1);
+    console.error('Connection test failed:', error.message);
+    return;
   }
+  
+  console.log('1. Fetching transfers');
+  const transfers = await fetchEnvioTransfers();
+  console.log('Completed transfer fetch:', transfers ? transfers.length : 'undefined', 'records saved\n');
+  
+  console.log('2. Fetching accounts');
+  const accounts = await fetchEnvioAccounts();
+  console.log('Completed account fetch:', accounts ? accounts.length : 'undefined', 'records saved\n');
+  
+  console.log('All data has been successfully fetched and saved to Parquet files!');
 }
 
 // Execute the main function

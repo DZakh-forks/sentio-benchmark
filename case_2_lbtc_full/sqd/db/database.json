@@ -1,0 +1,9 @@
+{
+  "outDir": "src/model",
+  "connection": {
+    "host": "localhost",
+    "port": 5432,
+    "database": "squid",
+    "user": "yufeili"
+  }
+} 
