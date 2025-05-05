@@ -1,0 +1,31 @@
+manifestVersion: subsquid.io/v0.1
+name: case-6-template
+version: 1
+description: case_6_template
+
+build:
+
+deploy:
+  addons:
+    postgres:
+    rpc:
+      - eth.http
+  processor:
+    cmd:
+      - sqd
+      - process:prod
+  api:
+    cmd:
+      - sqd
+      - serve:prod
+
+scale:
+  processor:
+    profile: medium
+  api:
+    profile: large
+    replicas: 1
+  addons:
+    postgres:
+      storage: 100G
+      profile: medium
