@@ -64,7 +64,7 @@ Our benchmark cases are designed to test different aspects of indexer performanc
 | Chain | Sentio | Envio | Ponder | Subsquid | Subgraph |
 |-------|--------|-------|--------|----------|----------|
 | EVM* | ✅ | ✅ | ✅ | ✅ | ✅ |
-| Sui | ✅ | ❌ | ❌ | ✅ | ❌ |
+| Sui | ✅ | ❌ | ❌ | ❌ | ❌ |
 | Aptos | ✅ | ❌ | ❌ | ❌ | ❌ |
 | StarkNet | ✅ | ❌ | ❌ | ✅ | ✅ |
 | Cosmos | ⚠️ | ❌ | ❌ | ✅ | ✅ |
@@ -117,11 +117,11 @@ This benchmark provides a comparative analysis of indexer performance across dif
 
 | Case | Sentio | Envio | Ponder | Subsquid | Subgraph | Sentio_Subgraph | Goldsky_Subgraph |
 |------|--------|-------|--------|----------|----------| ----------| ----------|
-| case_1_lbtc_event_only | 8m | 2m | 1h40m | 10m | 3h9m | 26m |  |
-| case_2_lbtc_full | 45m | 13m | 4h38m | 32m | 18h38m | |  |
-| case_3_ethereum_block | 18m | 7.9s | 33m | 1m‡ | 10m | |  |
+| case_1_lbtc_event_only | 8m | 2m | 1h40m | 10m | 3h9m | 2h36m |  |
+| case_2_lbtc_full | 45m | 13m | 4h38m | 32m | 18h38m | 16h55m |  |
+| case_3_ethereum_block | 18m | 7.9s | 33m | 1m‡ | 10m | 15m |  |
 | case_4_on_transaction | 23m | 1m 26s | 33m | 5m | N/A | |  |
-| case_5_on_trace | 16m | 41s | N/A§ | 2m | 8m | |  |
+| case_5_on_trace | 16m | 41s | N/A§ | 2m | 8m | 1h21m |  |
 | case_6_template | 12m | 20s | 2h24m | 2m | 34m | | 20h24m |
 
 ### Data Completeness
