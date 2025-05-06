@@ -67,9 +67,9 @@ Our benchmark cases are designed to test different aspects of indexer performanc
 | Sui | ✅ | ❌ | ❌ | ❌ | ❌ |
 | Aptos | ✅ | ❌ | ❌ | ❌ | ❌ |
 | StarkNet | ✅ | ❌ | ❌ | ✅ | ✅ |
-| Cosmos | ⚠️ | ❌ | ❌ | ✅ | ✅ |
-| Solana | ⚠️ | ❌ | ✅ | ✅ | ✅ |
-| Bitcoin | ⚠️ | ❌ | ✅ | ✅ | ✅ |
+| Cosmos | ⚠️ | ❌ | ❌ | ❌ | ❌ |
+| Solana | ⚠️ | ❌ | ❌ | ✅ | ⚠️ |
+| Bitcoin | ⚠️ | ❌ | ❌ | ❌ | ❌ |
 | Fuel | ✅ | ✅ | ❌ | ✅ | ❌ |
 
 \* Including many EVM-compatible L1/L2 chains
