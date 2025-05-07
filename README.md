@@ -82,17 +82,13 @@ Our benchmark cases are designed to test different aspects of indexer performanc
 |---------|--------|-------|--------|----------|----------|
 | Event Handler | ✅ | ✅ | ✅ | ✅ | ✅ |
 | Block Handler | ✅ | ⚠️$ | ✅ | ✅ | ✅ |
-| Transaction Handler | ✅ | ⚠️$ | ✅ | ✅ | ✅ |
+| Transaction Handler | ✅ | ⚠️$ | ✅ | ✅ | ❌ |
 | Trace/Internal Tx Handler | ✅ | ⚠️$ | ✅ | ✅ | ⚠️† |
-| Native RPC | ✅ | ✅ | ✅ | ✅ | ❌ |
-| Read-After-Write | ✅ | ✅ | ✅ | ✅ | ✅ |
-| High-Speed Data Access | ✅ | ✅* | ⚠️ | ✅ | ⚠️ |
+| Native RPC | ✅ | ⚠️$ | ❌ | ❌ | ❌ |
 | SQL Querying | ✅ | ✅ | ✅ | ✅ | ❌ |
-| GraphQL API | ✅ | ✅ | ✅ | ✅ | ✅ |
-| Auto Scaling | ✅ | ✅ | ⚠️ | ✅ | ✅ |
+| GraphQL API | ✅ | ✅ | ✅ | ❌ | ✅ |
 | Decentralized Network | ❌ | ❌ | ❌ | ✅ | ✅ |
 
-\* Envio's HyperSync technology offers up to 2000x faster data access compared to traditional RPC methods  
 $ Envio does not support natively, but one can utilize HyperSync to retrieve data  
 † Subgraph has limited internal transaction visibility, only detecting direct contract calls, not internal transactions. This leads to incomplete data (~40% fewer records) and inaccurate sender identification in trace-level indexing as documented in the [case_5_on_trace](./case_5_on_trace/) benchmark.
 
