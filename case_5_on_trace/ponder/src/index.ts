@@ -32,15 +32,15 @@ let currentBatch: any[] = [];
 // Function to write swaps to Parquet file
 async function writeSwapsToParquet(swaps: any[]) {
   if (swaps.length === 0) return;
-
+  
   const filename = path.join(PARQUET_DIR, `swaps_${Date.now()}.parquet`);
   const writer = await parquetjs.ParquetWriter.openFile(ParquetSchema, filename);
 
-  for (const swap of swaps) {
+    for (const swap of swaps) {
     await writer.appendRow(swap);
   }
 
-  await writer.close();
+    await writer.close();
   console.log(`Wrote ${swaps.length} swaps to ${filename}`);
 }
 
@@ -61,7 +61,7 @@ ponder.on("UniswapV2Router02.swapExactTokensForTokens()", async ({ event, contex
   const swapData = {
     id: `${event.transaction.hash}-${event.trace.traceIndex}`,
     blockNumber: event.block.number,
-    transactionHash: event.transaction.hash,
+      transactionHash: event.transaction.hash,
     from: event.trace.from,
     to: event.trace.to,
     amountIn: event.args[0].toString(),  // amountIn (first argument)

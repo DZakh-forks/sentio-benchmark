@@ -51,17 +51,17 @@ async function fetchPairs() {
 
     while (hasMore) {
       const query = `{
-        pairs(
-          first: ${BATCH_SIZE}
-          skip: ${skip}
-          orderBy: createdAt
-          orderDirection: asc
-        ) {
-          id
-          token0
-          token1
-          createdAt
-        }
+          pairs(
+            first: ${BATCH_SIZE}
+            skip: ${skip}
+            orderBy: createdAt
+            orderDirection: asc
+          ) {
+    id
+    token0
+    token1
+    createdAt
+          }
       }`;
 
       const response = await fetch(SUBGRAPH_URL, {
@@ -141,38 +141,38 @@ async function fetchSwaps() {
         `where: {blockNumber_gte: ${lastBlockNumber}, blockNumber_lte: 19010000}`;
 
       const query = `{
-        uniswapV2Events(
-          first: ${BATCH_SIZE},
-          ${whereCondition},
-          orderBy: id,
-          orderDirection: asc
-        ) {
-          id
-          timestamp
-          blockNumber
-          pair {
+          uniswapV2Events(
+            first: ${BATCH_SIZE},
+            ${whereCondition},
+            orderBy: id,
+            orderDirection: asc
+          ) {
             id
-          }
-          sender
-          to
-          amount0In
-          amount0Out
-          amount1In
-          amount1Out
+            timestamp
+            blockNumber
+            pair {
+              id
+            }
+      sender
+      to
+      amount0In
+      amount0Out
+      amount1In
+      amount1Out
         }
       }`;
 
       const response = await fetch(SUBGRAPH_URL, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ query }),
-      });
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ query }),
+        });
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
 
       const result = await response.json();
       
@@ -194,22 +194,22 @@ async function fetchSwaps() {
           console.log(`Skipping duplicate swap: ${swap.id}`);
           continue;
         }
-        seenIds.add(swap.id);
+          seenIds.add(swap.id);
 
-        await writer.appendRow({
-          id: swap.id,
+          await writer.appendRow({
+                    id: swap.id,
           amount0In: parseFloat(swap.amount0In),
           amount0Out: parseFloat(swap.amount0Out),
           amount1In: parseFloat(swap.amount1In),
           amount1Out: parseFloat(swap.amount1Out),
-          blockNumber: parseInt(swap.blockNumber),
-          pair: swap.pair.id,
-          sender: swap.sender,
+            blockNumber: parseInt(swap.blockNumber),
+            pair: swap.pair.id,
+                    sender: swap.sender,
           timestamp: parseInt(swap.timestamp),
           to: swap.to
         });
 
-        totalEvents++;
+          totalEvents++;
       }
 
       console.log(`Processed ${eventsInBatch} swaps (total: ${totalEvents})`);

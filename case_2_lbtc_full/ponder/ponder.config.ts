@@ -1,5 +1,13 @@
 import { createConfig, mergeAbis } from "ponder";
 import { http } from "viem";
+import { config } from "dotenv";
+
+// Load environment variables from .env.local
+config({ path: '.env' });
+
+if (!process.env.RPC_URL) {
+  throw new Error('RPC_URL is required in .env.local');
+}
 
 import { LBTCAbi } from "./abis/LBTCAbi";
 
@@ -7,7 +15,7 @@ export default createConfig({
   networks: {
     mainnet: {
       chainId: 1,
-      transport: http("https://rpc.sentio.xyz/oTSQQwOgzr9ERJ0petpRSbgkQDCPJ9Al/ethereum"),
+      transport: http(process.env.RPC_URL),
     },
   },
   contracts: {

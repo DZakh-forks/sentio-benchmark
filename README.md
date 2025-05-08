@@ -59,6 +59,20 @@ Our benchmark cases are designed to test different aspects of indexer performanc
 
 ## Indexer Platforms
 
+### Platform Descriptions
+
+- **Sentio**: A comprehensive blockchain data platform supporting multiple chains and providing both raw data access and indexing capabilities
+- **Envio HyperSync**: Envio's high-performance blockchain data engine that serves as a direct replacement for traditional RPC endpoints for raw blockchain data
+- **Envio HyperIndex**: Built on top of HyperSync, providing a complete indexing framework with schema management, event handling, and GraphQL APIs
+- **Ponder**: A framework for building and deploying blockchain data APIs
+- **Subsquid**: A framework for building GraphQL APIs on top of blockchain data
+- **Subgraph**: The Graph Protocol's indexing solution for building open APIs
+
+### Use Cases
+
+- Use HyperSync directly when you need raw blockchain data at maximum speed
+- Use HyperIndex when you need a full-featured indexing solution
+
 ### Supported Chains
 
 | Chain | Sentio | Envio | Ponder | Subsquid | Subgraph |
@@ -111,14 +125,14 @@ This benchmark provides a comparative analysis of indexer performance across dif
 
 ### Performance Results
 
-| Case | Sentio | Envio | Ponder | Subsquid | Subgraph | Sentio_Subgraph | Goldsky_Subgraph |
-|------|--------|-------|--------|----------|----------| ----------| ----------|
-| case_1_lbtc_event_only | 8m | 2m | 1h40m | 10m | 3h9m | 2h36m |  |
-| case_2_lbtc_full | 45m | 13m | 4h38m | 32m | 18h38m | 16h55m |  |
-| case_3_ethereum_block | 18m | 7.9s | 33m | 1m‡ | 10m | 15m |  |
-| case_4_on_transaction | 23m | 1m 26s | 33m | 5m | N/A | |  |
-| case_5_on_trace | 16m | 41s | N/A§ | 2m | 8m | 1h21m |  |
-| case_6_template | 12m | 20s | 2h24m | 2m | 34m | | 20h24m |
+| Case | Sentio | Envio HyperSync | Envio HyperIndex | Ponder | Subsquid | Subgraph | Sentio_Subgraph | Goldsky_Subgraph |
+|------|--------|-----------------|------------------|--------|----------|----------|----------------|------------------|
+| case_1_lbtc_event_only | 8m | | 2m | 1h40m | 10m | 3h9m | 2h36m |  |
+| case_2_lbtc_full | 45m | | 13m | 4h38m | 32m | 18h38m | 16h55m |  |
+| case_3_ethereum_block | 18m | 7.9s | | 33m | 1m‡ | 10m | 15m |  |
+| case_4_on_transaction | 23m | 1m26s | | 33m | 5m | N/A | |  |
+| case_5_on_trace | 16m | 41s | | N/A§ | 2m | 8m | 1h21m |  |
+| case_6_template | 12m | | 20s | 2h24m | 2m | 34m | | 20h24m |
 
 ### Data Completeness
 
@@ -145,8 +159,9 @@ This benchmark provides a comparative analysis of indexer performance across dif
 ### Key Observations
 
 1. **Performance Comparison**:
-   - Envio and Sentio show the fastest indexing times across most test cases
-   - Envio's HyperSync technology demonstrates exceptional performance for block and transaction indexing
+   - Envio's HyperSync technology shows exceptional performance across all test cases
+   - Envio HyperIndex provides a full-featured indexing solution with competitive performance
+   - Sentio performs consistently well across all test cases
    - Ponder shows longer indexing times but with complete data coverage in most cases
    - Subgraph demonstrates efficient block processing (10m for 100K blocks) with complete coverage
 
