@@ -39,35 +39,35 @@ async function testConnection() {
   let retries = 0;
   
   while (retries < MAX_RETRIES) {
-    try {
-      const response = await axios.post(
-        BASE_URL,
-        {
-          sqlQuery: {
-            sql: `select 1 as test limit 1`
-          }
-        },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            'api-key': API_KEY
-          },
-          timeout: TIMEOUT
+  try {
+    const response = await axios.post(
+      BASE_URL,
+      {
+        sqlQuery: {
+          sql: `select 1 as test limit 1`
         }
-      );
-      
-      if (response.data && response.data.result && response.data.result.rows) {
-        console.log('Connection test successful!');
-        return true;
-      } else {
-        console.error('Connection test response format unexpected:', JSON.stringify(response.data, null, 2));
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          'api-key': API_KEY
+        },
+          timeout: TIMEOUT
       }
-    } catch (error) {
+    );
+    
+    if (response.data && response.data.result && response.data.result.rows) {
+      console.log('Connection test successful!');
+      return true;
+    } else {
+      console.error('Connection test response format unexpected:', JSON.stringify(response.data, null, 2));
+    }
+  } catch (error) {
       console.error(`Connection test attempt ${retries + 1} failed:`, error.message);
-      if (error.response) {
-        console.error('Response status:', error.response.status);
-        console.error('Response data:', JSON.stringify(error.response.data, null, 2));
-      }
+    if (error.response) {
+      console.error('Response status:', error.response.status);
+      console.error('Response data:', JSON.stringify(error.response.data, null, 2));
+    }
     }
     retries++;
     if (retries < MAX_RETRIES) {
@@ -75,7 +75,7 @@ async function testConnection() {
       await new Promise(resolve => setTimeout(resolve, 5000));
     }
   }
-  return false;
+    return false;
 }
 
 // Fetch and save transfer data

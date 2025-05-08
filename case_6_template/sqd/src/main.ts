@@ -15,19 +15,20 @@ import { events as UniswapV2PairEvents } from './types/eth/UniswapV2Pair';
 import { assertNotNull } from '@subsquid/util-internal'
 import { ethers } from 'ethers'
 import { Store } from '@subsquid/typeorm-store'
+import { config as dotenvConfig } from 'dotenv'
 
 // Keep track of legitimate pair addresses
 const validPairs = new Set<string>();
-
+dotenvConfig({ path: '.env' });
 // Create RPC provider
-const provider = new ethers.JsonRpcProvider('https://rpc.sentio.xyz/oTSQQwOgzr9ERJ0petpRSbgkQDCPJ9Al/ethereum');
+const provider = new ethers.JsonRpcProvider(process.env.RPC_URL);
 
 // First we configure data retrieval.
 const processor = new EvmBatchProcessor()
   .setGateway('https://v2.archive.subsquid.io/network/ethereum-mainnet')
   .setRpcEndpoint({
     url: assertNotNull(
-      'https://rpc.sentio.xyz/oTSQQwOgzr9ERJ0petpRSbgkQDCPJ9Al/ethereum',
+      process.env.RPC_URL,
       'Required env variable RPC_ENDPOINT is missing'
     )
   })
