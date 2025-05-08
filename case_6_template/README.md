@@ -16,7 +16,7 @@ This case benchmarks various blockchain indexers using a Uniswap V2 template, fo
 ## Performance Results
 | Indexer    | Indexing Time |
 |------------|---------------|
-| Envio      | 20 seconds    |
+| Envio      | 10 seconds    |
 | Subsquid   | 2 minutes     |
 | Sentio     | 12 minutes    |
 | Subgraph   | 34 minutes    |
