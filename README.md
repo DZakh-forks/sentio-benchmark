@@ -61,8 +61,8 @@ Our benchmark cases are designed to test different aspects of indexer performanc
 
 ### Platform Descriptions
 
-- **Sentio**: A comprehensive blockchain data platform supporting multiple chains and providing both raw data access and indexing capabilities
-- **Envio HyperSync**: Envio's high-performance blockchain data engine that serves as a direct replacement for traditional RPC endpoints for raw blockchain data
+- **Sentio**: The most comprehensive blockchain data platform with the widest chain support, offering both raw data access and indexing capabilities across multiple blockchain ecosystems
+- **Envio HyperSync**: Envio's high-performance EVM based blockchain data engine that serves as a direct replacement for traditional RPC endpoints for raw blockchain data
 - **Envio HyperIndex**: Built on top of HyperSync, providing a complete indexing framework with schema management, event handling, and GraphQL APIs
 - **Ponder**: A framework for building and deploying blockchain data APIs
 - **Subsquid**: A framework for building GraphQL APIs on top of blockchain data
