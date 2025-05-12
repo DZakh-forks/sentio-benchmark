@@ -1,9 +1,9 @@
 {
-  "timestamp": "2025-04-25T18:18:22.663Z",
+  "timestamp": "2025-05-08T16:19:41.567Z",
   "data_type": "uniswap_swaps",
   "data_counts": {
     "sentio": {
-      "count": 45895,
+      "count": 50191,
       "loadSuccess": true,
       "error": null
     },
@@ -30,8 +30,8 @@
   },
   "unique_counts": {
     "sentio": {
-      "uniqueBlocks": 22967,
-      "uniqueTxs": 29202
+      "uniqueBlocks": 24858,
+      "uniqueTxs": 33491
     },
     "subsquid": {
       "uniqueBlocks": 24858,
@@ -79,10 +79,10 @@
   },
   "amount_stats": {
     "sentio": {
-      "total_amount_in": "3993057954123226507601502316311911",
-      "avg_amount_in": "8.700420425151381e+28",
-      "total_amount_out_min": "1233664307741145292201838179617672",
-      "avg_amount_out_min": "2.6880146154072236e+28"
+      "total_amount_in": "4000827389260738991597015855532489",
+      "avg_amount_in": "7.971204776276104e+28",
+      "total_amount_out_min": "8120219851980099346551239516994412875",
+      "avg_amount_out_min": "1.6178637309438145e+32"
     },
     "subsquid": {
       "total_amount_in": "4000827389278954379198121595012958",
@@ -111,8 +111,8 @@
   },
   "address_stats": {
     "sentio": {
-      "unique_senders": 1171,
-      "unique_recipients": 1283
+      "unique_senders": 1238,
+      "unique_recipients": 1343
     },
     "subsquid": {
       "unique_senders": 1238,
@@ -133,28 +133,28 @@
   },
   "path_stats": {
     "sentio": {
-      "avg_path_length": 2.057631550277808,
-      "unique_tokens": 1356,
+      "avg_path_length": 2.0680002390866887,
+      "unique_tokens": 1463,
       "most_common_tokens": [
         {
           "token": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
-          "count": 41892
+          "count": 45875
         },
         {
           "token": "0x7ef790d9bccc87989be0fdb88ffb955bec3d5e92",
-          "count": 16277
+          "count": 16281
         },
         {
           "token": "0xdac17f958d2ee523a2206206994597c13d831ec7",
-          "count": 3882
+          "count": 4752
         },
         {
           "token": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
-          "count": 2259
+          "count": 2452
         },
         {
           "token": "0x560363bda52bc6a44ca6c8c9b4a5fadbda32fa60",
-          "count": 1383
+          "count": 1452
         }
       ]
     },
@@ -244,29 +244,29 @@
   },
   "content_comparison": {
     "sentio_vs_subsquid": {
-      "platform1Count": 29202,
+      "platform1Count": 33491,
       "platform2Count": 33491,
-      "commonTxs": 29202,
-      "identicalRecords": 28996,
-      "differentRecords": 206,
+      "commonTxs": 33491,
+      "identicalRecords": 33318,
+      "differentRecords": 173,
       "uniqueToPlat1": 0,
-      "uniqueToPlat2": 4289,
-      "jaccardSimilarity": 0.8719357439312054,
-      "contentSimilarity": 0.9929456886514623
+      "uniqueToPlat2": 0,
+      "jaccardSimilarity": 1,
+      "contentSimilarity": 0.994834433131289
     },
     "sentio_vs_envio": {
-      "platform1Count": 29202,
+      "platform1Count": 33491,
       "platform2Count": 33491,
-      "commonTxs": 29202,
-      "identicalRecords": 28987,
-      "differentRecords": 215,
+      "commonTxs": 33491,
+      "identicalRecords": 33309,
+      "differentRecords": 182,
       "uniqueToPlat1": 0,
-      "uniqueToPlat2": 4289,
-      "jaccardSimilarity": 0.8719357439312054,
-      "contentSimilarity": 0.9926374905828368
+      "uniqueToPlat2": 0,
+      "jaccardSimilarity": 1,
+      "contentSimilarity": 0.9945657042190439
     },
     "sentio_vs_ponder": {
-      "platform1Count": 45895,
+      "platform1Count": 50191,
       "platform2Count": 0,
       "commonTxs": 0,
       "uniqueToPlat1": 0,
@@ -274,15 +274,15 @@
       "jaccardSimilarity": 0
     },
     "sentio_vs_subgraph": {
-      "platform1Count": 29202,
+      "platform1Count": 33491,
       "platform2Count": 29058,
       "commonTxs": 29058,
-      "identicalRecords": 28860,
-      "differentRecords": 198,
-      "uniqueToPlat1": 144,
+      "identicalRecords": 28888,
+      "differentRecords": 170,
+      "uniqueToPlat1": 4433,
       "uniqueToPlat2": 0,
-      "jaccardSimilarity": 0.995068830901993,
-      "contentSimilarity": 0.993186041709684
+      "jaccardSimilarity": 0.8676360813352841,
+      "contentSimilarity": 0.9941496317709408
     },
     "subsquid_vs_envio": {
       "platform1Count": 33491,
@@ -345,50 +345,6 @@
   "differing_records_examples": {
     "sentio_vs_subsquid": [
       {
-        "txHash": "0x006624059f274c177922a690d862b8959547ee69892855698cb4b9be8409cc29",
-        "differences": [
-          {
-            "field": "amountIn",
-            "value1": "4.634025107068963e+21",
-            "value2": "99133817858914133902"
-          },
-          {
-            "field": "amountOutMin",
-            "value1": "506694822670818300",
-            "value2": "31664205498685258"
-          },
-          {
-            "field": "path",
-            "value1": "0x967da4048cd07ab37855c090aaf366e4ce1b9f48,0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
-            "value2": "0x2e44f3f609ff5aa4819b323fd74690f07c3607c4,0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
-          }
-        ],
-        "sentio": {
-          "id": "0x006624059f274c177922a690d862b8959547ee69892855698cb4b9be8409cc29-4",
-          "blockNumber": 22213646,
-          "transactionHash": "0x006624059f274c177922a690d862b8959547ee69892855698cb4b9be8409cc29",
-          "from": "0x00806daa2cfe49715ea05243ff259deb195760fc",
-          "to": "0x9008d19f58aabd9ed0d60971565aa8510560ab41",
-          "amountIn": "4.634025107068963e+21",
-          "amountOutMin": "506694822670818300",
-          "deadline": "5.78960446186581e+76",
-          "path": "0x967da4048cd07ab37855c090aaf366e4ce1b9f48,0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
-          "pathLength": 2
-        },
-        "subsquid": {
-          "id": "0x006624059f274c177922a690d862b8959547ee69892855698cb4b9be8409cc29-9",
-          "blockNumber": 22213646,
-          "transactionHash": "0x006624059f274c177922a690d862b8959547ee69892855698cb4b9be8409cc29",
-          "from": "0x00806daa2cfe49715ea05243ff259deb195760fc",
-          "to": "0x9008d19f58aabd9ed0d60971565aa8510560ab41",
-          "amountIn": "99133817858914133902",
-          "amountOutMin": "31664205498685258",
-          "deadline": "57896044618658097711785492504343953926634992332820282019728792003956564819968",
-          "path": "0x2e44f3f609ff5aa4819b323fd74690f07c3607c4,0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
-          "pathLength": 2
-        }
-      },
-      {
         "txHash": "0x022ad7f6281ad7b2b259fe87de5805cf8d767fadcc50d83240ac70384e8834b6",
         "differences": [
           {
@@ -437,30 +393,30 @@
         "differences": [
           {
             "field": "amountIn",
-            "value1": "49973562450619",
+            "value1": "1.5948233667280145e+22",
             "value2": "564335330125253387"
           },
           {
             "field": "amountOutMin",
-            "value1": "900847178",
+            "value1": "104808462516240220",
             "value2": "144857770937917961207752272514"
           },
           {
             "field": "path",
-            "value1": "0x9e18d5bab2fa94a6a95f509ecb38f8f68322abd3,0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+            "value1": "0x93ed3fbe21207ec2e8f2d3c3de6e058cb73bc04d,0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
             "value2": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2,0xca530408c3e552b020a2300debc7bd18820fb42f"
           }
         ],
         "sentio": {
-          "id": "0x025548f74c92e14aa3ed824a584b13844dff18f3b296a8b7ed25cbf66cdc8497-6",
+          "id": "0x025548f74c92e14aa3ed824a584b13844dff18f3b296a8b7ed25cbf66cdc8497-8",
           "blockNumber": 22259959,
           "transactionHash": "0x025548f74c92e14aa3ed824a584b13844dff18f3b296a8b7ed25cbf66cdc8497",
           "from": "0x00806daa2cfe49715ea05243ff259deb195760fc",
           "to": "0x9008d19f58aabd9ed0d60971565aa8510560ab41",
-          "amountIn": "49973562450619",
-          "amountOutMin": "900847178",
+          "amountIn": "1.5948233667280145e+22",
+          "amountOutMin": "104808462516240220",
           "deadline": "5.78960446186581e+76",
-          "path": "0x9e18d5bab2fa94a6a95f509ecb38f8f68322abd3,0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+          "path": "0x93ed3fbe21207ec2e8f2d3c3de6e058cb73bc04d,0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
           "pathLength": 2
         },
         "subsquid": {
@@ -521,95 +477,95 @@
         }
       },
       {
-        "txHash": "0x02e1b42cf11c8bb3c488324164323b901dc5c492dc61cfc3076648508ddb9a5f",
+        "txHash": "0x04d6d63b06c33666fa61e8f48b7acb64e732bbbc23c4f030b9a92840d3303bcb",
         "differences": [
           {
             "field": "amountIn",
-            "value1": "11871509105220852",
-            "value2": "67705601245264271"
+            "value1": "198043089086944200",
+            "value2": "1969557678180000000000"
           },
           {
             "field": "amountOutMin",
-            "value1": "60993074585154260",
-            "value2": "4843276022706960"
+            "value1": "4.359196327237186e+21",
+            "value2": "155899670026815257"
           },
           {
             "field": "path",
-            "value1": "0xa93d86af16fe83f064e3c0e2f3d129f7b7b002b0,0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
-            "value2": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2,0xb2f095cc24d91d97d00afc1f8bde2c6cdf7e345f"
+            "value1": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2,0xb2617246d0c6c0087f18703d576831899ca94f01",
+            "value2": "0xef3a930e1ffffacd2fc13434ac81bd278b0ecc8d,0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
           }
         ],
         "sentio": {
-          "id": "0x02e1b42cf11c8bb3c488324164323b901dc5c492dc61cfc3076648508ddb9a5f-2",
-          "blockNumber": 22246732,
-          "transactionHash": "0x02e1b42cf11c8bb3c488324164323b901dc5c492dc61cfc3076648508ddb9a5f",
-          "from": "0x00806daa2cfe49715ea05243ff259deb195760fc",
+          "id": "0x04d6d63b06c33666fa61e8f48b7acb64e732bbbc23c4f030b9a92840d3303bcb-6",
+          "blockNumber": 22276553,
+          "transactionHash": "0x04d6d63b06c33666fa61e8f48b7acb64e732bbbc23c4f030b9a92840d3303bcb",
+          "from": "0x6bf97afe2d2c790999cded2a8523009eb8a0823f",
           "to": "0x9008d19f58aabd9ed0d60971565aa8510560ab41",
-          "amountIn": "11871509105220852",
-          "amountOutMin": "60993074585154260",
-          "deadline": "5.78960446186581e+76",
-          "path": "0xa93d86af16fe83f064e3c0e2f3d129f7b7b002b0,0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+          "amountIn": "198043089086944200",
+          "amountOutMin": "4.359196327237186e+21",
+          "deadline": "1.157920892373162e+77",
+          "path": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2,0xb2617246d0c6c0087f18703d576831899ca94f01",
           "pathLength": 2
         },
         "subsquid": {
-          "id": "0x02e1b42cf11c8bb3c488324164323b901dc5c492dc61cfc3076648508ddb9a5f-4",
-          "blockNumber": 22246732,
-          "transactionHash": "0x02e1b42cf11c8bb3c488324164323b901dc5c492dc61cfc3076648508ddb9a5f",
-          "from": "0x00806daa2cfe49715ea05243ff259deb195760fc",
+          "id": "0x04d6d63b06c33666fa61e8f48b7acb64e732bbbc23c4f030b9a92840d3303bcb-15",
+          "blockNumber": 22276553,
+          "transactionHash": "0x04d6d63b06c33666fa61e8f48b7acb64e732bbbc23c4f030b9a92840d3303bcb",
+          "from": "0x6bf97afe2d2c790999cded2a8523009eb8a0823f",
           "to": "0x9008d19f58aabd9ed0d60971565aa8510560ab41",
-          "amountIn": "67705601245264271",
-          "amountOutMin": "4843276022706960",
-          "deadline": "57896044618658097711785492504343953926634992332820282019728792003956564819968",
-          "path": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2,0xb2f095cc24d91d97d00afc1f8bde2c6cdf7e345f",
+          "amountIn": "1969557678180000000000",
+          "amountOutMin": "155899670026815257",
+          "deadline": "115792089237316195423570985008687907853269984665640564039457584007913129639935",
+          "path": "0xef3a930e1ffffacd2fc13434ac81bd278b0ecc8d,0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+          "pathLength": 2
+        }
+      },
+      {
+        "txHash": "0x07820373512738b14bf75125774e4d3d1457c70d5b45386f88bf0f9493a64d69",
+        "differences": [
+          {
+            "field": "amountIn",
+            "value1": "370835000000000000000",
+            "value2": "79594813142"
+          },
+          {
+            "field": "amountOutMin",
+            "value1": "617089915447060600000",
+            "value2": "910331759948"
+          },
+          {
+            "field": "path",
+            "value1": "0x3432b6a60d23ca0dfca7761b7ab56459d9c964d0,0x853d955acef822db058eb8505911ed77f175b99e",
+            "value2": "0xe0f63a424a4439cbe457d80e4f4b51ad25b2c56c,0x72e4f9f808c49a2a61de9c5896298920dc4eeea9"
+          }
+        ],
+        "sentio": {
+          "id": "0x07820373512738b14bf75125774e4d3d1457c70d5b45386f88bf0f9493a64d69-5",
+          "blockNumber": 22225691,
+          "transactionHash": "0x07820373512738b14bf75125774e4d3d1457c70d5b45386f88bf0f9493a64d69",
+          "from": "0x6bf97afe2d2c790999cded2a8523009eb8a0823f",
+          "to": "0x9008d19f58aabd9ed0d60971565aa8510560ab41",
+          "amountIn": "370835000000000000000",
+          "amountOutMin": "617089915447060600000",
+          "deadline": "1.157920892373162e+77",
+          "path": "0x3432b6a60d23ca0dfca7761b7ab56459d9c964d0,0x853d955acef822db058eb8505911ed77f175b99e",
+          "pathLength": 2
+        },
+        "subsquid": {
+          "id": "0x07820373512738b14bf75125774e4d3d1457c70d5b45386f88bf0f9493a64d69-14",
+          "blockNumber": 22225691,
+          "transactionHash": "0x07820373512738b14bf75125774e4d3d1457c70d5b45386f88bf0f9493a64d69",
+          "from": "0x6bf97afe2d2c790999cded2a8523009eb8a0823f",
+          "to": "0x9008d19f58aabd9ed0d60971565aa8510560ab41",
+          "amountIn": "79594813142",
+          "amountOutMin": "910331759948",
+          "deadline": "115792089237316195423570985008687907853269984665640564039457584007913129639935",
+          "path": "0xe0f63a424a4439cbe457d80e4f4b51ad25b2c56c,0x72e4f9f808c49a2a61de9c5896298920dc4eeea9",
           "pathLength": 2
         }
       }
     ],
     "sentio_vs_envio": [
-      {
-        "txHash": "0x006624059f274c177922a690d862b8959547ee69892855698cb4b9be8409cc29",
-        "differences": [
-          {
-            "field": "amountIn",
-            "value1": "4.634025107068963e+21",
-            "value2": "99133817858914133902"
-          },
-          {
-            "field": "amountOutMin",
-            "value1": "506694822670818300",
-            "value2": "31664205498685258"
-          },
-          {
-            "field": "path",
-            "value1": "0x967da4048cd07ab37855c090aaf366e4ce1b9f48,0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
-            "value2": "0x2e44f3f609ff5aa4819b323fd74690f07c3607c4,0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
-          }
-        ],
-        "sentio": {
-          "id": "0x006624059f274c177922a690d862b8959547ee69892855698cb4b9be8409cc29-4",
-          "blockNumber": 22213646,
-          "transactionHash": "0x006624059f274c177922a690d862b8959547ee69892855698cb4b9be8409cc29",
-          "from": "0x00806daa2cfe49715ea05243ff259deb195760fc",
-          "to": "0x9008d19f58aabd9ed0d60971565aa8510560ab41",
-          "amountIn": "4.634025107068963e+21",
-          "amountOutMin": "506694822670818300",
-          "deadline": "5.78960446186581e+76",
-          "path": "0x967da4048cd07ab37855c090aaf366e4ce1b9f48,0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
-          "pathLength": 2
-        },
-        "envio": {
-          "id": "0x006624059f274c177922a690d862b8959547ee69892855698cb4b9be8409cc29-5",
-          "blockNumber": 22213646,
-          "transactionHash": "0x006624059f274c177922a690d862b8959547ee69892855698cb4b9be8409cc29",
-          "from": "0x00806daa2cfe49715ea05243ff259deb195760fc",
-          "to": "0x9008d19f58aabd9ed0d60971565aa8510560ab41",
-          "amountIn": "99133817858914133902",
-          "amountOutMin": "31664205498685258",
-          "deadline": "57896044618658097711785492504343953926634992332820282019728792003956564819968",
-          "path": "0x2e44f3f609ff5aa4819b323fd74690f07c3607c4,0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
-          "pathLength": 2
-        }
-      },
       {
         "txHash": "0x022ad7f6281ad7b2b259fe87de5805cf8d767fadcc50d83240ac70384e8834b6",
         "differences": [
@@ -659,30 +615,30 @@
         "differences": [
           {
             "field": "amountIn",
-            "value1": "49973562450619",
+            "value1": "1.5948233667280145e+22",
             "value2": "564335330125253387"
           },
           {
             "field": "amountOutMin",
-            "value1": "900847178",
+            "value1": "104808462516240220",
             "value2": "144857770937917961207752272514"
           },
           {
             "field": "path",
-            "value1": "0x9e18d5bab2fa94a6a95f509ecb38f8f68322abd3,0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+            "value1": "0x93ed3fbe21207ec2e8f2d3c3de6e058cb73bc04d,0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
             "value2": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2,0xca530408c3e552b020a2300debc7bd18820fb42f"
           }
         ],
         "sentio": {
-          "id": "0x025548f74c92e14aa3ed824a584b13844dff18f3b296a8b7ed25cbf66cdc8497-6",
+          "id": "0x025548f74c92e14aa3ed824a584b13844dff18f3b296a8b7ed25cbf66cdc8497-8",
           "blockNumber": 22259959,
           "transactionHash": "0x025548f74c92e14aa3ed824a584b13844dff18f3b296a8b7ed25cbf66cdc8497",
           "from": "0x00806daa2cfe49715ea05243ff259deb195760fc",
           "to": "0x9008d19f58aabd9ed0d60971565aa8510560ab41",
-          "amountIn": "49973562450619",
-          "amountOutMin": "900847178",
+          "amountIn": "1.5948233667280145e+22",
+          "amountOutMin": "104808462516240220",
           "deadline": "5.78960446186581e+76",
-          "path": "0x9e18d5bab2fa94a6a95f509ecb38f8f68322abd3,0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+          "path": "0x93ed3fbe21207ec2e8f2d3c3de6e058cb73bc04d,0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
           "pathLength": 2
         },
         "envio": {
@@ -743,95 +699,95 @@
         }
       },
       {
-        "txHash": "0x02e1b42cf11c8bb3c488324164323b901dc5c492dc61cfc3076648508ddb9a5f",
+        "txHash": "0x04d6d63b06c33666fa61e8f48b7acb64e732bbbc23c4f030b9a92840d3303bcb",
         "differences": [
           {
             "field": "amountIn",
-            "value1": "11871509105220852",
-            "value2": "67705601245264271"
+            "value1": "198043089086944200",
+            "value2": "1969557678180000000000"
           },
           {
             "field": "amountOutMin",
-            "value1": "60993074585154260",
-            "value2": "4843276022706960"
+            "value1": "4.359196327237186e+21",
+            "value2": "155899670026815257"
           },
           {
             "field": "path",
-            "value1": "0xa93d86af16fe83f064e3c0e2f3d129f7b7b002b0,0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
-            "value2": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2,0xb2f095cc24d91d97d00afc1f8bde2c6cdf7e345f"
+            "value1": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2,0xb2617246d0c6c0087f18703d576831899ca94f01",
+            "value2": "0xef3a930e1ffffacd2fc13434ac81bd278b0ecc8d,0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
           }
         ],
         "sentio": {
-          "id": "0x02e1b42cf11c8bb3c488324164323b901dc5c492dc61cfc3076648508ddb9a5f-2",
-          "blockNumber": 22246732,
-          "transactionHash": "0x02e1b42cf11c8bb3c488324164323b901dc5c492dc61cfc3076648508ddb9a5f",
-          "from": "0x00806daa2cfe49715ea05243ff259deb195760fc",
+          "id": "0x04d6d63b06c33666fa61e8f48b7acb64e732bbbc23c4f030b9a92840d3303bcb-6",
+          "blockNumber": 22276553,
+          "transactionHash": "0x04d6d63b06c33666fa61e8f48b7acb64e732bbbc23c4f030b9a92840d3303bcb",
+          "from": "0x6bf97afe2d2c790999cded2a8523009eb8a0823f",
           "to": "0x9008d19f58aabd9ed0d60971565aa8510560ab41",
-          "amountIn": "11871509105220852",
-          "amountOutMin": "60993074585154260",
-          "deadline": "5.78960446186581e+76",
-          "path": "0xa93d86af16fe83f064e3c0e2f3d129f7b7b002b0,0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+          "amountIn": "198043089086944200",
+          "amountOutMin": "4.359196327237186e+21",
+          "deadline": "1.157920892373162e+77",
+          "path": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2,0xb2617246d0c6c0087f18703d576831899ca94f01",
           "pathLength": 2
         },
         "envio": {
-          "id": "0x02e1b42cf11c8bb3c488324164323b901dc5c492dc61cfc3076648508ddb9a5f-3",
-          "blockNumber": 22246732,
-          "transactionHash": "0x02e1b42cf11c8bb3c488324164323b901dc5c492dc61cfc3076648508ddb9a5f",
-          "from": "0x00806daa2cfe49715ea05243ff259deb195760fc",
+          "id": "0x04d6d63b06c33666fa61e8f48b7acb64e732bbbc23c4f030b9a92840d3303bcb-10",
+          "blockNumber": 22276553,
+          "transactionHash": "0x04d6d63b06c33666fa61e8f48b7acb64e732bbbc23c4f030b9a92840d3303bcb",
+          "from": "0x6bf97afe2d2c790999cded2a8523009eb8a0823f",
           "to": "0x9008d19f58aabd9ed0d60971565aa8510560ab41",
-          "amountIn": "67705601245264271",
-          "amountOutMin": "4843276022706960",
-          "deadline": "57896044618658097711785492504343953926634992332820282019728792003956564819968",
-          "path": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2,0xb2f095cc24d91d97d00afc1f8bde2c6cdf7e345f",
+          "amountIn": "1969557678180000000000",
+          "amountOutMin": "155899670026815257",
+          "deadline": "115792089237316195423570985008687907853269984665640564039457584007913129639935",
+          "path": "0xef3a930e1ffffacd2fc13434ac81bd278b0ecc8d,0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+          "pathLength": 2
+        }
+      },
+      {
+        "txHash": "0x07820373512738b14bf75125774e4d3d1457c70d5b45386f88bf0f9493a64d69",
+        "differences": [
+          {
+            "field": "amountIn",
+            "value1": "370835000000000000000",
+            "value2": "79594813142"
+          },
+          {
+            "field": "amountOutMin",
+            "value1": "617089915447060600000",
+            "value2": "910331759948"
+          },
+          {
+            "field": "path",
+            "value1": "0x3432b6a60d23ca0dfca7761b7ab56459d9c964d0,0x853d955acef822db058eb8505911ed77f175b99e",
+            "value2": "0xe0f63a424a4439cbe457d80e4f4b51ad25b2c56c,0x72e4f9f808c49a2a61de9c5896298920dc4eeea9"
+          }
+        ],
+        "sentio": {
+          "id": "0x07820373512738b14bf75125774e4d3d1457c70d5b45386f88bf0f9493a64d69-5",
+          "blockNumber": 22225691,
+          "transactionHash": "0x07820373512738b14bf75125774e4d3d1457c70d5b45386f88bf0f9493a64d69",
+          "from": "0x6bf97afe2d2c790999cded2a8523009eb8a0823f",
+          "to": "0x9008d19f58aabd9ed0d60971565aa8510560ab41",
+          "amountIn": "370835000000000000000",
+          "amountOutMin": "617089915447060600000",
+          "deadline": "1.157920892373162e+77",
+          "path": "0x3432b6a60d23ca0dfca7761b7ab56459d9c964d0,0x853d955acef822db058eb8505911ed77f175b99e",
+          "pathLength": 2
+        },
+        "envio": {
+          "id": "0x07820373512738b14bf75125774e4d3d1457c70d5b45386f88bf0f9493a64d69-12",
+          "blockNumber": 22225691,
+          "transactionHash": "0x07820373512738b14bf75125774e4d3d1457c70d5b45386f88bf0f9493a64d69",
+          "from": "0x6bf97afe2d2c790999cded2a8523009eb8a0823f",
+          "to": "0x9008d19f58aabd9ed0d60971565aa8510560ab41",
+          "amountIn": "79594813142",
+          "amountOutMin": "910331759948",
+          "deadline": "115792089237316195423570985008687907853269984665640564039457584007913129639935",
+          "path": "0xe0f63a424a4439cbe457d80e4f4b51ad25b2c56c,0x72e4f9f808c49a2a61de9c5896298920dc4eeea9",
           "pathLength": 2
         }
       }
     ],
     "sentio_vs_subgraph": [
-      {
-        "txHash": "0x006624059f274c177922a690d862b8959547ee69892855698cb4b9be8409cc29",
-        "differences": [
-          {
-            "field": "amountIn",
-            "value1": "4.634025107068963e+21",
-            "value2": "99133817858914133902"
-          },
-          {
-            "field": "amountOutMin",
-            "value1": "506694822670818300",
-            "value2": "31664205498685258"
-          },
-          {
-            "field": "path",
-            "value1": "0x967da4048cd07ab37855c090aaf366e4ce1b9f48,0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
-            "value2": "0x2e44f3f609ff5aa4819b323fd74690f07c3607c4,0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
-          }
-        ],
-        "sentio": {
-          "id": "0x006624059f274c177922a690d862b8959547ee69892855698cb4b9be8409cc29-4",
-          "blockNumber": 22213646,
-          "transactionHash": "0x006624059f274c177922a690d862b8959547ee69892855698cb4b9be8409cc29",
-          "from": "0x00806daa2cfe49715ea05243ff259deb195760fc",
-          "to": "0x9008d19f58aabd9ed0d60971565aa8510560ab41",
-          "amountIn": "4.634025107068963e+21",
-          "amountOutMin": "506694822670818300",
-          "deadline": "5.78960446186581e+76",
-          "path": "0x967da4048cd07ab37855c090aaf366e4ce1b9f48,0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
-          "pathLength": 2
-        },
-        "subgraph": {
-          "id": "0x006624059f274c177922a690d862b8959547ee69892855698cb4b9be8409cc29-1",
-          "blockNumber": 22213646,
-          "transactionHash": "0x006624059f274c177922a690d862b8959547ee69892855698cb4b9be8409cc29",
-          "from": "0x00806daa2cfe49715ea05243ff259deb195760fc",
-          "to": "0x9008d19f58aabd9ed0d60971565aa8510560ab41",
-          "amountIn": "99133817858914133902",
-          "amountOutMin": "31664205498685258",
-          "deadline": "57896044618658097711785492504343953926634992332820282019728792003956564819968",
-          "path": "0x2e44f3f609ff5aa4819b323fd74690f07c3607c4,0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
-          "pathLength": 2
-        }
-      },
       {
         "txHash": "0x022ad7f6281ad7b2b259fe87de5805cf8d767fadcc50d83240ac70384e8834b6",
         "differences": [
@@ -881,30 +837,30 @@
         "differences": [
           {
             "field": "amountIn",
-            "value1": "49973562450619",
+            "value1": "1.5948233667280145e+22",
             "value2": "564335330125253387"
           },
           {
             "field": "amountOutMin",
-            "value1": "900847178",
+            "value1": "104808462516240220",
             "value2": "144857770937917961207752272514"
           },
           {
             "field": "path",
-            "value1": "0x9e18d5bab2fa94a6a95f509ecb38f8f68322abd3,0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+            "value1": "0x93ed3fbe21207ec2e8f2d3c3de6e058cb73bc04d,0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
             "value2": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2,0xca530408c3e552b020a2300debc7bd18820fb42f"
           }
         ],
         "sentio": {
-          "id": "0x025548f74c92e14aa3ed824a584b13844dff18f3b296a8b7ed25cbf66cdc8497-6",
+          "id": "0x025548f74c92e14aa3ed824a584b13844dff18f3b296a8b7ed25cbf66cdc8497-8",
           "blockNumber": 22259959,
           "transactionHash": "0x025548f74c92e14aa3ed824a584b13844dff18f3b296a8b7ed25cbf66cdc8497",
           "from": "0x00806daa2cfe49715ea05243ff259deb195760fc",
           "to": "0x9008d19f58aabd9ed0d60971565aa8510560ab41",
-          "amountIn": "49973562450619",
-          "amountOutMin": "900847178",
+          "amountIn": "1.5948233667280145e+22",
+          "amountOutMin": "104808462516240220",
           "deadline": "5.78960446186581e+76",
-          "path": "0x9e18d5bab2fa94a6a95f509ecb38f8f68322abd3,0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+          "path": "0x93ed3fbe21207ec2e8f2d3c3de6e058cb73bc04d,0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
           "pathLength": 2
         },
         "subgraph": {
@@ -965,46 +921,90 @@
         }
       },
       {
-        "txHash": "0x02e1b42cf11c8bb3c488324164323b901dc5c492dc61cfc3076648508ddb9a5f",
+        "txHash": "0x04d6d63b06c33666fa61e8f48b7acb64e732bbbc23c4f030b9a92840d3303bcb",
         "differences": [
           {
             "field": "amountIn",
-            "value1": "11871509105220852",
-            "value2": "67705601245264271"
+            "value1": "198043089086944200",
+            "value2": "1969557678180000000000"
           },
           {
             "field": "amountOutMin",
-            "value1": "60993074585154260",
-            "value2": "4843276022706960"
+            "value1": "4.359196327237186e+21",
+            "value2": "155899670026815257"
           },
           {
             "field": "path",
-            "value1": "0xa93d86af16fe83f064e3c0e2f3d129f7b7b002b0,0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
-            "value2": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2,0xb2f095cc24d91d97d00afc1f8bde2c6cdf7e345f"
+            "value1": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2,0xb2617246d0c6c0087f18703d576831899ca94f01",
+            "value2": "0xef3a930e1ffffacd2fc13434ac81bd278b0ecc8d,0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
           }
         ],
         "sentio": {
-          "id": "0x02e1b42cf11c8bb3c488324164323b901dc5c492dc61cfc3076648508ddb9a5f-2",
-          "blockNumber": 22246732,
-          "transactionHash": "0x02e1b42cf11c8bb3c488324164323b901dc5c492dc61cfc3076648508ddb9a5f",
-          "from": "0x00806daa2cfe49715ea05243ff259deb195760fc",
+          "id": "0x04d6d63b06c33666fa61e8f48b7acb64e732bbbc23c4f030b9a92840d3303bcb-6",
+          "blockNumber": 22276553,
+          "transactionHash": "0x04d6d63b06c33666fa61e8f48b7acb64e732bbbc23c4f030b9a92840d3303bcb",
+          "from": "0x6bf97afe2d2c790999cded2a8523009eb8a0823f",
           "to": "0x9008d19f58aabd9ed0d60971565aa8510560ab41",
-          "amountIn": "11871509105220852",
-          "amountOutMin": "60993074585154260",
-          "deadline": "5.78960446186581e+76",
-          "path": "0xa93d86af16fe83f064e3c0e2f3d129f7b7b002b0,0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+          "amountIn": "198043089086944200",
+          "amountOutMin": "4.359196327237186e+21",
+          "deadline": "1.157920892373162e+77",
+          "path": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2,0xb2617246d0c6c0087f18703d576831899ca94f01",
           "pathLength": 2
         },
         "subgraph": {
-          "id": "0x02e1b42cf11c8bb3c488324164323b901dc5c492dc61cfc3076648508ddb9a5f-1",
-          "blockNumber": 22246732,
-          "transactionHash": "0x02e1b42cf11c8bb3c488324164323b901dc5c492dc61cfc3076648508ddb9a5f",
-          "from": "0x00806daa2cfe49715ea05243ff259deb195760fc",
+          "id": "0x04d6d63b06c33666fa61e8f48b7acb64e732bbbc23c4f030b9a92840d3303bcb-1",
+          "blockNumber": 22276553,
+          "transactionHash": "0x04d6d63b06c33666fa61e8f48b7acb64e732bbbc23c4f030b9a92840d3303bcb",
+          "from": "0x6bf97afe2d2c790999cded2a8523009eb8a0823f",
           "to": "0x9008d19f58aabd9ed0d60971565aa8510560ab41",
-          "amountIn": "67705601245264271",
-          "amountOutMin": "4843276022706960",
-          "deadline": "57896044618658097711785492504343953926634992332820282019728792003956564819968",
-          "path": "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2,0xb2f095cc24d91d97d00afc1f8bde2c6cdf7e345f",
+          "amountIn": "1969557678180000000000",
+          "amountOutMin": "155899670026815257",
+          "deadline": "115792089237316195423570985008687907853269984665640564039457584007913129639935",
+          "path": "0xef3a930e1ffffacd2fc13434ac81bd278b0ecc8d,0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
+          "pathLength": 2
+        }
+      },
+      {
+        "txHash": "0x07820373512738b14bf75125774e4d3d1457c70d5b45386f88bf0f9493a64d69",
+        "differences": [
+          {
+            "field": "amountIn",
+            "value1": "370835000000000000000",
+            "value2": "79594813142"
+          },
+          {
+            "field": "amountOutMin",
+            "value1": "617089915447060600000",
+            "value2": "910331759948"
+          },
+          {
+            "field": "path",
+            "value1": "0x3432b6a60d23ca0dfca7761b7ab56459d9c964d0,0x853d955acef822db058eb8505911ed77f175b99e",
+            "value2": "0xe0f63a424a4439cbe457d80e4f4b51ad25b2c56c,0x72e4f9f808c49a2a61de9c5896298920dc4eeea9"
+          }
+        ],
+        "sentio": {
+          "id": "0x07820373512738b14bf75125774e4d3d1457c70d5b45386f88bf0f9493a64d69-5",
+          "blockNumber": 22225691,
+          "transactionHash": "0x07820373512738b14bf75125774e4d3d1457c70d5b45386f88bf0f9493a64d69",
+          "from": "0x6bf97afe2d2c790999cded2a8523009eb8a0823f",
+          "to": "0x9008d19f58aabd9ed0d60971565aa8510560ab41",
+          "amountIn": "370835000000000000000",
+          "amountOutMin": "617089915447060600000",
+          "deadline": "1.157920892373162e+77",
+          "path": "0x3432b6a60d23ca0dfca7761b7ab56459d9c964d0,0x853d955acef822db058eb8505911ed77f175b99e",
+          "pathLength": 2
+        },
+        "subgraph": {
+          "id": "0x07820373512738b14bf75125774e4d3d1457c70d5b45386f88bf0f9493a64d69-1",
+          "blockNumber": 22225691,
+          "transactionHash": "0x07820373512738b14bf75125774e4d3d1457c70d5b45386f88bf0f9493a64d69",
+          "from": "0x6bf97afe2d2c790999cded2a8523009eb8a0823f",
+          "to": "0x9008d19f58aabd9ed0d60971565aa8510560ab41",
+          "amountIn": "79594813142",
+          "amountOutMin": "910331759948",
+          "deadline": "115792089237316195423570985008687907853269984665640564039457584007913129639935",
+          "path": "0xe0f63a424a4439cbe457d80e4f4b51ad25b2c56c,0x72e4f9f808c49a2a61de9c5896298920dc4eeea9",
           "pathLength": 2
         }
       }
@@ -1457,12 +1457,12 @@
   },
   "transaction_analysis": {
     "sentio": {
-      "total_records": 45895,
-      "unique_transactions": 29202,
+      "total_records": 50191,
+      "unique_transactions": 33491,
       "transactions_with_multiple_traces": 0,
       "max_traces_per_transaction": 1,
       "avg_traces_per_transaction": 1,
-      "unique_composite_keys": 29202
+      "unique_composite_keys": 33491
     },
     "subsquid": {
       "total_records": 50191,
@@ -1491,50 +1491,42 @@
   },
   "trace_comparison": {
     "sentio_vs_subsquid": {
-      "platform1Traces": 29202,
+      "platform1Traces": 33491,
       "platform2Traces": 33491,
-      "commonTraces": 29202,
+      "commonTraces": 33491,
       "uniqueToPlat1": 0,
-      "uniqueToPlat2": 4289,
-      "traceSimilarity": 0.8719357439312054,
+      "uniqueToPlat2": 0,
+      "traceSimilarity": 1,
       "exampleTraceUnique1": null,
-      "exampleTraceUnique2": {
-        "traceKey": "0x826d64e0789fdf25589af2a0387df99a1a82cf03bfd53b7b87478da8231b9aeb_0",
-        "sameTransactionDifferentTraces": false,
-        "traceCountInOtherPlatform": 0
-      },
-      "platform1Txs": 29202,
+      "exampleTraceUnique2": null,
+      "platform1Txs": 33491,
       "platform2Txs": 33491,
-      "commonTxs": 29202,
+      "commonTxs": 33491,
       "uniqueTxToPlat1": 0,
-      "uniqueTxToPlat2": 4289,
-      "txSimilarity": 0.8719357439312054
+      "uniqueTxToPlat2": 0,
+      "txSimilarity": 1
     },
     "sentio_vs_envio": {
-      "platform1Traces": 29202,
+      "platform1Traces": 33491,
       "platform2Traces": 33491,
-      "commonTraces": 29202,
+      "commonTraces": 33491,
       "uniqueToPlat1": 0,
-      "uniqueToPlat2": 4289,
-      "traceSimilarity": 0.8719357439312054,
+      "uniqueToPlat2": 0,
+      "traceSimilarity": 1,
       "exampleTraceUnique1": null,
-      "exampleTraceUnique2": {
-        "traceKey": "0x826d64e0789fdf25589af2a0387df99a1a82cf03bfd53b7b87478da8231b9aeb_0",
-        "sameTransactionDifferentTraces": false,
-        "traceCountInOtherPlatform": 0
-      },
-      "platform1Txs": 29202,
+      "exampleTraceUnique2": null,
+      "platform1Txs": 33491,
       "platform2Txs": 33491,
-      "commonTxs": 29202,
+      "commonTxs": 33491,
       "uniqueTxToPlat1": 0,
-      "uniqueTxToPlat2": 4289,
-      "txSimilarity": 0.8719357439312054
+      "uniqueTxToPlat2": 0,
+      "txSimilarity": 1
     },
     "sentio_vs_ponder": {
-      "platform1Traces": 29202,
+      "platform1Traces": 33491,
       "platform2Traces": 0,
       "commonTraces": 0,
-      "uniqueToPlat1": 29202,
+      "uniqueToPlat1": 33491,
       "uniqueToPlat2": 0,
       "traceSimilarity": 0,
       "exampleTraceUnique1": {
@@ -1543,32 +1535,32 @@
         "traceCountInOtherPlatform": 0
       },
       "exampleTraceUnique2": null,
-      "platform1Txs": 29202,
+      "platform1Txs": 33491,
       "platform2Txs": 0,
       "commonTxs": 0,
-      "uniqueTxToPlat1": 29202,
+      "uniqueTxToPlat1": 33491,
       "uniqueTxToPlat2": 0,
       "txSimilarity": 0
     },
     "sentio_vs_subgraph": {
-      "platform1Traces": 29202,
+      "platform1Traces": 33491,
       "platform2Traces": 29058,
       "commonTraces": 29058,
-      "uniqueToPlat1": 144,
+      "uniqueToPlat1": 4433,
       "uniqueToPlat2": 0,
-      "traceSimilarity": 0.995068830901993,
+      "traceSimilarity": 0.8676360813352841,
       "exampleTraceUnique1": {
-        "traceKey": "0x012f5b96d3bb5112f6a6903eb1e4f03d1b527ec22753ad37b1d985ada977785b_0",
+        "traceKey": "0x0001215936c0ce2ca349dcfda9cdd76b669390931a17a96c85d120dc5d081c2c_0",
         "sameTransactionDifferentTraces": false,
         "traceCountInOtherPlatform": 0
       },
       "exampleTraceUnique2": null,
-      "platform1Txs": 29202,
+      "platform1Txs": 33491,
       "platform2Txs": 29058,
       "commonTxs": 29058,
-      "uniqueTxToPlat1": 144,
+      "uniqueTxToPlat1": 4433,
       "uniqueTxToPlat2": 0,
-      "txSimilarity": 0.995068830901993
+      "txSimilarity": 0.8676360813352841
     },
     "subsquid_vs_envio": {
       "platform1Traces": 33491,

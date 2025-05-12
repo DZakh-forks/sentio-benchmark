@@ -1,4 +1,4 @@
-# LBTC Full Indexing Benchmark
+# Case 2: LBTC Full Indexing Benchmark
 
 This benchmark tests the performance of various indexers when processing Transfer events and making RPC calls to fetch token balances from the LBTC token contract.
 
@@ -98,33 +98,6 @@ All the transfer event data and balances collected from each platform have been 
   - **Account Records**: Approximately 2,685 accounts
   - **Snapshot Records**: Approximately 16,338 snapshots
   - **Timestamps**: Range from 1742618075 to 1743823319 (Unix millisecond timestamps)
-
-### Ponder
-- **Database Connection**:
-  ```
-  postgresql://postgres:OlKFhKmUqTqTvHzpGBuZOPuOFhAIbold@yamabiko.proxy.rlwy.net:10767/railway
-  --schema 99ac6069-d39a-4622-8d96-8f8121a42b7b
-  ```
-- **Data Summary**:
-  - **Transfer Records**: 12,165 records in lbtc_transfer table
-  - **Account Records**: 2,684 records in accounts table
-  - **Snapshot Records**: 501,711 records in snapshot table
-
-### Subsquid
-- **Dashboard URL**: https://app.subsquid.io/squids/case-2-lbtc-full/v1
-- **Database Connection**:
-  ```
-  PGPASSWORD="2lABMqtGktrOpcaZwKEVbwM2GAxXamat" psql -h pg.squid.subsquid.io -d 16175_0hotg1 -U 16175_0hotg1
-  ```
-- **Data Summary**:
-  - **Transfer Records**: 12,165 records in the transfer table
-  - **Account Records**: 2,685 records in the accounts table
-  - **Snapshot Records**: 24,618 records in the snapshot table
-  - **Block Range**: Block 22100049 to Block 22199998
-
-### Subgraph
-- **Dashboard URL**: https://thegraph.com/studio/subgraph/case_2_lbtc_full/endpoints
-- **GraphQL Endpoint**: https://api.studio.thegraph.com/query/108520/case_2_lbtc_full/version/latest
 
 ### Sentio Subgraph
 - **Dashboard URL**: https://app.sentio.xyz/yufei/case_2_lbtc_full_subgraph/data-explorer/sql

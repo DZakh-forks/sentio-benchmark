@@ -61,8 +61,8 @@ Our benchmark cases are designed to test different aspects of indexer performanc
 
 ### Platform Descriptions
 
-- **Sentio**: A comprehensive blockchain data platform supporting multiple chains and providing both raw data access and indexing capabilities
-- **Envio HyperSync**: Envio's high-performance blockchain data engine that serves as a direct replacement for traditional RPC endpoints for raw blockchain data
+- **Sentio**: The most comprehensive blockchain data platform with the widest chain support, offering both raw data access and indexing capabilities across multiple blockchain ecosystems
+- **Envio HyperSync**: Envio's high-performance EVM based blockchain data engine that serves as a direct replacement for traditional RPC endpoints for raw blockchain data
 - **Envio HyperIndex**: Built on top of HyperSync, providing a complete indexing framework with schema management, event handling, and GraphQL APIs
 - **Ponder**: A framework for building and deploying blockchain data APIs
 - **Subsquid**: A framework for building GraphQL APIs on top of blockchain data
@@ -132,7 +132,7 @@ This benchmark provides a comparative analysis of indexer performance across dif
 | case_3_ethereum_block | 18m | 7.9s | | 33m | 1m‡ | 10m | 15m |  |
 | case_4_on_transaction | 23m | 1m26s | | 33m | 5m | N/A | |  |
 | case_5_on_trace | 16m | 41s | | N/A§ | 2m | 8m | 1h21m |  |
-| case_6_template | 12m | | 20s | 2h24m | 2m | 34m | | 20h24m |
+| case_6_template | 12m | | 10s | 2h24m | 2m | 34m | | 20h24m |
 
 ### Data Completeness
 
@@ -142,7 +142,7 @@ This benchmark provides a comparative analysis of indexer performance across dif
 | case_2_lbtc_full | 2,684 | 2,685‡ | 2,684 | 2,685‡ | 2,685‡ |
 | case_3_ethereum_block | 100,000 | 100,000 | 100,001¶ | 13,156† | 100,001¶ |
 | case_4_on_transaction | 1,696,641 | 1,696,423†† | 1,696,423 | 1,696,641 | N/A& |
-| case_5_on_trace | 45,895¶¶ | 50,191 | 0** | 50,191 | 29,058§§ |
+| case_5_on_trace | 50,191 | 50,191 | 0** | 50,191 | 29,058§§ |
 | case_6_template | 35,039 | 35,039 | 35,039 | 33,972††† | 35,039 |
 
 \* Missing ~5% of events  
@@ -151,7 +151,6 @@ This benchmark provides a comparative analysis of indexer performance across dif
 ¶   Some implementations count 100,001 blocks because they include block 0 in their range  
 ††  Envio processes blocks 22,280,000 to 22,289,999 due to exclusive end block handling, resulting in 218 fewer transactions  
 &   Subgraph does not support transaction level access  
-¶¶  Sentio auto-filters failed calls due to insufficient fees  
 **  Ponder documentation indicates trace support, but our implementation encountered configuration issues that prevented successful trace capture  
 §§  Subgraph captured only ~58% of swap traces due to architectural limitations in accessing internal transactions  
 ††† Subsquid captured 1,067 fewer swaps than other platforms  

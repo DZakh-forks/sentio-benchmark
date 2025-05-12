@@ -1,4 +1,4 @@
-# LBTC Event-Only Indexing Benchmark
+# Case 1: LBTC Event-Only Indexing Benchmark
 
 This benchmark tests the performance of various indexers when processing simple Transfer events from the LBTC token contract.
 
@@ -92,30 +92,6 @@ All the transfer event data collected from each platform has been exported and i
 - **Data Summary**: 
   - Block Range: 20016816 to 22199998
   - Total Records: Approximately 294,278
-
-### Ponder
-- **Database Connection**:
-  ```
-  postgresql://postgres:IaYFUoJeDdJXgiTXXXOZmaNkjjXjkBZJ@shinkansen.proxy.rlwy.net:29835/railway
-  --schema fc56df99-dd01-4846-9d2e-67fbaf93c52d
-  ```
-- **Data Summary**:
-  - Total Transfer Records: 293,682 in the "lbtc_transfer" table
-  - Block Range: Block 20016816 to Block 22199998
-
-### Subsquid
-- **Dashboard URL**: https://app.subsquid.io/squids/case-1-lbtc-event-only/v1
-- **Database Connection**:
-  ```
-  PGPASSWORD="kbr06QnqfXX66cb7Bm9Qdovvx6TvU8C~" psql -h pg.squid.subsquid.io -d 16177_ku9u1f -U 16177_ku9u1f
-  ```
-- **Data Summary**:
-  - Transfer Records: 294,278 records in the transfer table
-  - Block Range: Block 20016816 to Block 22199998
-
-### Subgraph
-- **Dashboard URL**: https://thegraph.com/studio/subgraph/case_1_lbtc_event_only/endpoints
-- **GraphQL Endpoint**: https://api.studio.thegraph.com/query/108520/case_1_lbtc_event_only/version/latest
 
 ### Sentio Subgraph
 - **Dashboard URL**: https://app.sentio.xyz/yufei/case_1_lbtc_event_only_subgraph/data-explorer/sql

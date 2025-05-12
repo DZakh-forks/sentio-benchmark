@@ -24,11 +24,6 @@ const processor = UniswapV2Router02Processor.bind({
 processor.onCallSwapExactTokensForTokens(
   async (call: SwapExactTokensForTokensCallTrace, 
         ctx: UniswapV2Router02Context) => {
-  // Skip failed calls
-  if (call.error) {
-    return;
-  }
-
   // Extract swap parameters from the call arguments
   const { amountIn, amountOutMin, path, to, deadline } = call.args;
   

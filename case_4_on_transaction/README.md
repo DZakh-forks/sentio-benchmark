@@ -1,4 +1,4 @@
-# Ethereum Transaction Gas Usage Indexing Benchmark
+# Case 4: Ethereum Transaction Gas Usage Indexing Benchmark
 
 This benchmark tests the performance of various indexers when processing transaction data and computing gas usage metrics from Ethereum transactions.
 
@@ -119,25 +119,3 @@ All the transaction data collected from each platform has been exported and is a
      }'
   ```
 - **Data Summary**: 1,696,641 gas records with complete coverage
-
-### Envio
-- **Data Summary**: 
-  - Total blocks processed: 9,901 (from 22,280,000 to 22,289,999)
-  - Gas records collected: 1,696,423 transactions (approximately 170 transactions per block)
-  - Unique senders: 493,181
-  - Unique recipients: 315,861
-  - Total gas value: 10,161,297,133,770,000,000,000 wei
-  - Average gas value per transaction: 5,989,836,929,686,758 wei (approximately 0.00599 ETH)
-
-### Ponder
-- **Data Summary**: 
-  - Total Records Processed: 1,696,423 gas transaction records
-  - Blocks Processed: 10,000 blocks (from block 22,280,000 to 22,290,000)
-  - Average Processing Time per Block Event: 33.057ms
-  - Average Transactions per Block: ~170 transactions
-
-### Subsquid
-- **GraphQL Endpoint**: https://pine-quench.squids.live/case-4-on-transaction@v1/api/graphql
-- **Data Summary**: Approximately 1.7M gas records within 10,000 block range
-- Processing completed in 5 minutes
-
