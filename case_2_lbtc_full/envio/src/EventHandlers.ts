@@ -4,108 +4,112 @@
 import {
   LBTC,
   Transfer,
-  AccountRegistry,
   Accounts,
-  Snapshot,
   BigDecimal
 } from "generated";
 
 import {getBalance} from "./util"
 
-LBTC.Transfer.handler(async ({ event, context }) => {
-  const HOUR_IN_MS = 60n * 60n * 1000n
-  const blockTimestamp = BigInt(event.block.timestamp)
-  const blockNumber = BigInt(event.block.number)
+LBTC.Transfer.handlerWithLoader({
+  loader: ({ event, context }) => {
+    const blockNumber = BigInt(event.block.number)
+    return Promise.all([
+      event.params.from !== '0x0000000000000000000000000000000000000000' ? context.effect(getBalance, {address: event.params.from, blockNumber: blockNumber}) : Promise.resolve(BigDecimal(0)),
+      context.effect(getBalance, {address: event.params.to, blockNumber: blockNumber})
+    ])
+  },
+  handler: async ({ event, context, loaderReturn }) => {
+    const HOUR_IN_MS = 60n * 60n * 1000n
+    const blockTimestamp = BigInt(event.block.timestamp)
+    const blockNumber = BigInt(event.block.number)
+    const [fromBalance, toBalance] = loaderReturn
 
-  let {from, to, value} = {from: event.params.from, to: event.params.to, value: event.params.value}
+    let {from, to, value} = event.params
 
-  const entity: Transfer = {
-    id: `${event.chainId}_${event.block.number}_${event.logIndex}`,
-    from: from,
-    to: to,
-    value: value,
-    blockNumber: BigInt(event.block.number),
-    transactionHash: event.transaction.hash 
-  };
+    const entity: Transfer = {
+      id: `${event.chainId}_${event.block.number}_${event.logIndex}`,
+      from: from,
+      to: to,
+      value: value,
+      blockNumber: BigInt(event.block.number),
+      transactionHash: event.transaction.hash 
+    };
 
-  context.Transfer.set(entity);
-  // Process sender account
-  if (from !== '0x0000000000000000000000000000000000000000') {
-      const fromAccount = await getOrCreateAccount(context,from)
-      const fromLastData = await getLastSnapshotData(context, from)
-      const fromBalance = BigDecimal((await getBalance(from, blockNumber)).toString())
-      
-      await createAndSaveSnapshot(
-          context,
-          from, 
-          blockTimestamp,
-          fromBalance,
-          fromLastData.point,
-          fromLastData.balance,
-          fromLastData.timestamp,
-          fromLastData.mintAmount
-      )
+    context.Transfer.set(entity);
+
+    const isMint = from === '0x0000000000000000000000000000000000000000'
+
+    // Process sender account
+    if (!isMint) {
+        const fromAccount = await getOrCreateAccount(context,from)
+        const fromLastData = await getLastSnapshotData(context, from)
+        
+        await createAndSaveSnapshot(
+            context,
+            from, 
+            blockTimestamp,
+            fromBalance,
+            fromLastData.point,
+            fromLastData.balance,
+            fromLastData.timestamp,
+            fromLastData.mintAmount
+        )
+    }
+
+    // Process receiver account
+    const toAccount = await getOrCreateAccount(context, to)
+    const toLastData = await getLastSnapshotData(context, to)
+    
+    await createAndSaveSnapshot(
+        context,
+        to,
+        blockTimestamp,
+        toBalance,
+        toLastData.point,
+        toLastData.balance,
+        toLastData.timestamp,
+        toLastData.mintAmount,
+        isMint,
+        value
+    )
+
+    const registry = await context.AccountRegistry.get("main")
+    if (registry) {
+        // Only run the global update if an hour has passed since the last global update
+        if (!registry.lastSnapshotTimestamp || (blockTimestamp - registry.lastSnapshotTimestamp) >= HOUR_IN_MS) {
+            // Update the global timestamp
+            context.AccountRegistry.set({
+              ...registry,
+              lastSnapshotTimestamp: blockTimestamp
+            });
+            
+            // Get all accounts that need updating
+            await Promise.all(
+              registry.accounts.map(async (accountId) => {
+                const account = await context.Accounts.get(accountId)
+                if (!account) return
+                
+                // Check if it's time for an hourly update for this specific account
+                if (await shouldUpdateHourly(context, accountId, blockTimestamp)) {
+                    const lastData = await getLastSnapshotData(context, accountId)
+                    const balance = await context.effect(getBalance, {address: accountId, blockNumber: blockNumber})
+                    
+                    await createAndSaveSnapshot(
+                        context,
+                        accountId,
+                        blockTimestamp,
+                        balance,
+                        lastData.point,
+                        lastData.balance,
+                        lastData.timestamp,
+                        lastData.mintAmount
+                    )
+                }
+              })
+            )
+        }
+    }
   }
-
-  // Process receiver account
-  const toAccount = await getOrCreateAccount(context, to)
-  const toLastData = await getLastSnapshotData(context, to)
-  const toBalance = BigDecimal((await getBalance(to, blockNumber)).toString())
-  
-  const isMint = from === '0x0000000000000000000000000000000000000000'
-  
-  await createAndSaveSnapshot(
-      context,
-      to,
-      blockTimestamp,
-      toBalance,
-      toLastData.point,
-      toLastData.balance,
-      toLastData.timestamp,
-      toLastData.mintAmount,
-      isMint,
-      value
-  )
-
-  const registry = await context.AccountRegistry.get("main")
-  if (registry) {
-      // Only run the global update if an hour has passed since the last global update
-      if (!registry.lastSnapshotTimestamp || (blockTimestamp - registry.lastSnapshotTimestamp) >= HOUR_IN_MS) {
-          // Update the global timestamp
-          context.AccountRegistry.set({
-            ...registry,
-            lastSnapshotTimestamp: blockTimestamp
-          });
-          
-          // Get all accounts that need updating
-          for (const accountId of registry.accounts) {
-              const account = await context.Accounts.get(accountId)
-              if (!account) continue
-              
-              // Check if it's time for an hourly update for this specific account
-              if (await shouldUpdateHourly(context, accountId, blockTimestamp)) {
-                  const lastData = await getLastSnapshotData(context, accountId)
-                  const balance = BigDecimal((await getBalance(accountId, blockNumber)).toString())
-                  
-                  await createAndSaveSnapshot(
-                      context,
-                      accountId,
-                      blockTimestamp,
-                      balance,
-                      lastData.point,
-                      lastData.balance,
-                      lastData.timestamp,
-                      lastData.mintAmount
-                  )
-              }
-          }
-      }
-  }
-  
-  // Log processing summary
-  const startBlock = event.block.number
-  const endBlock = event.block.number
-  context.log.info(`Processed block ${startBlock}`)
 });
 
 // Helper function to add account to registry

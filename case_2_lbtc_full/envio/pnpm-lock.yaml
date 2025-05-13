@@ -9,8 +9,12 @@ importers:
   .:
     dependencies:
       envio:
-        specifier: 2.16.0
-        version: 2.16.0(typescript@5.2.2)
+        specifier: 2.19.2
+        version: 2.19.2(typescript@5.2.2)
+    optionalDependencies:
+      generated:
+        specifier: ./generated
+        version: link:generated
     devDependencies:
       '@types/chai':
         specifier: ^4.3.11
@@ -36,10 +40,6 @@ importers:
       typescript:
         specifier: 5.2.2
         version: 5.2.2
-    optionalDependencies:
-      generated:
-        specifier: ./generated
-        version: link:generated
 
   generated:
     dependencies:
@@ -82,9 +82,6 @@ importers:
       js-sdsl:
         specifier: 4.4.2
         version: 4.4.2
-      node-fetch:
-        specifier: 2.7.0
-        version: 2.7.0
       pino:
         specifier: 8.16.1
         version: 8.16.1
@@ -105,10 +102,10 @@ importers:
         version: 11.1.3
       rescript-envsafe:
         specifier: 5.0.0
-        version: 5.0.0(rescript-schema@9.1.0(rescript@11.1.3))(rescript@11.1.3)
+        version: 5.0.0(rescript-schema@9.3.0(rescript@11.1.3))(rescript@11.1.3)
       rescript-schema:
-        specifier: 9.1.0
-        version: 9.1.0(rescript@11.1.3)
+        specifier: 9.3.0
+        version: 9.3.0(rescript@11.1.3)
       root:
         specifier: ../.
         version: link:..
@@ -554,28 +551,28 @@ packages:
   end-of-stream@1.4.4:
     resolution: {integrity: sha512-+uw1inIHVPQoaVuHzRyXd21icM+cnt4CzD5rW+NC1wjOUSTOs+Te7FOv7AhN7vS9x/oIyhLP5PR1H+phQAHu5Q==}
 
-  envio-darwin-arm64@2.16.0:
-    resolution: {integrity: sha512-IGDxnYyl4GIAsdWhcYuTUrhkMFteB+HPSOeRAte9SnkzbbiTkpy/CNqCQl6F003WF92nrWf2yzZrX+f/FTXy4w==}
+  envio-darwin-arm64@2.19.2:
+    resolution: {integrity: sha512-Tjgfpj6jloPCg3EdXATjWFaGteN8Ijf4ujex86bLOqlQ+XPuh1iV17SdfB8djQbzr9G1b+0i/W6+WglOGQccaQ==}
     cpu: [arm64]
     os: [darwin]
 
-  envio-darwin-x64@2.16.0:
-    resolution: {integrity: sha512-DDFYbTls0dsEdxpqEIF6qbz3gNLGH0qwpXR4yMcf3Jy/iO2sVzvhJqd0DbR64Z/Dxs6zvcHca46GbQQdegcdXA==}
+  envio-darwin-x64@2.19.2:
+    resolution: {integrity: sha512-uhX0BZhyCGdcv85RxVWUlTI2M8gdACXNX4fqQ9Bz6O0BPdnD6nNzdPRR8JFt2YzX6gjHpiXwLeVI8Hz2T5u7fA==}
     cpu: [x64]
     os: [darwin]
 
-  envio-linux-arm64@2.16.0:
-    resolution: {integrity: sha512-Na2fKWJB5FXNxwNJEoGVp8i+fU1DZXQ6ujmB/U5hpolN1cqe6w9b0+DZFRK7lhCaz8s19BgaecM6H8cmYKkpNg==}
+  envio-linux-arm64@2.19.2:
+    resolution: {integrity: sha512-RNZTfMQmgX4SPIq8T6agNzJUMeTwxdw/DfHsFTCbZx9Bc21Dbxdni+KhvVjtS9YQxmG4T3s1Z2rx4J53+YgvNQ==}
     cpu: [arm64]
     os: [linux]
 
-  envio-linux-x64@2.16.0:
-    resolution: {integrity: sha512-sqmPLTR/lOf5tsedgFqBhbDqfM+HgRXa/mrpX0MAqKTrZ5SS1FnrC74PS/fiJkTDI13/sCXkRbz2CunWi7HS9w==}
+  envio-linux-x64@2.19.2:
+    resolution: {integrity: sha512-4xW7Oy/ySLiHdYftTz2uM3Ud+hYSu3VrlGIR2/1xEJWGF14pxO0P7hqkF8PIJwAHyl7yC8wKbaOPDp28F7jyLA==}
     cpu: [x64]
     os: [linux]
 
-  envio@2.16.0:
-    resolution: {integrity: sha512-DWWK11+qLPM70gSerGKccZHymPWV9x1OskytszAoq7IA98wazPNs0RFpTxfU88tQlybHyvHVToDG5JIGMZ78+w==}
+  envio@2.19.2:
+    resolution: {integrity: sha512-tjTyjtofJR+hNAKMW4zbli3oO5UBJ045K7vv/HwcThVmICzvQ7TWdH1MXrN5FikE1dizj6gK8UvS9Z4MgVwRjA==}
     hasBin: true
 
   es-define-property@1.0.1:
@@ -922,10 +919,6 @@ packages:
     resolution: {integrity: sha512-nLDxIFRyhDblz3qMuq+SoRZED4+miJ/G+tdDrjkkkRnjAsBexeGpgjLEQ0blJy7rHhR2b93rhQY4SvyWu9v03g==}
     engines: {node: '>=10'}
 
-  minimatch@5.1.6:
-    resolution: {integrity: sha512-lKwV/1brpG6mBUFHtb7NUmtABCb2WZZmm2wNiOA5hAb8VdCS4B3dtMWyvcoViccwAW/COERjXLt0zP1zXUN26g==}
-    engines: {node: '>=10'}
-
   minimist@1.2.8:
     resolution: {integrity: sha512-2yyAR8qBkN3YuheJanUpWC5U3bb5osDywNB8RzDVlDwDHbocAJveqqj1u8+SVD7jkWT4yvsHCpWqqWqAxb0zCA==}
 
@@ -955,15 +948,6 @@ packages:
   negotiator@0.6.3:
     resolution: {integrity: sha512-+EUsqGPLsM+j/zdChZjsnX51g4XrHFOIXwfnCVPGlQk/k5giakcKsuxCObBRu6DSm9opw/O6slWbJdghQM4bBg==}
     engines: {node: '>= 0.6'}
-
-  node-fetch@2.7.0:
-    resolution: {integrity: sha512-c4FRfUm/dbcWZ7U+1Wq0AwCyFL+3nt2bEw05wfxSz+DWpWsitgmSgYmy2dQdWyKC1694ELPqMs/YzUSNozLt8A==}
-    engines: {node: 4.x || >=6.0.0}
-    peerDependencies:
-      encoding: ^0.1.0
-    peerDependenciesMeta:
-      encoding:
-        optional: true
 
   normalize-path@3.0.0:
     resolution: {integrity: sha512-6eZs5Ls3WtCisHWp9S2GUy8dqkpGi4BVSz3GaqiE6ezub0512ESztXUwUB6C6IKbQkY2Pnb/mD4WYojCRwcwLA==}
@@ -1137,10 +1121,13 @@ packages:
       rescript: 11.x
       rescript-schema: 9.x
 
-  rescript-schema@9.1.0:
-    resolution: {integrity: sha512-zD6hpg59HF6QJ3rnmhFV6mYtbfUd6ZTu20osL93aR9fdc3GTIX6N8Fy/6btgZ9a35A2NAzTvCgh/dz3EK7qfAw==}
+  rescript-schema@9.3.0:
+    resolution: {integrity: sha512-NiHAjlhFKZCmNhx/Ij40YltCEJJgVNhBWTN/ZfagTg5hdWWuvCiUacxZv+Q/QQolrAhTnHnCrL7RDvZBogHl5A==}
     peerDependencies:
       rescript: 11.x
+    peerDependenciesMeta:
+      rescript:
+        optional: true
 
   rescript@11.1.3:
     resolution: {integrity: sha512-bI+yxDcwsv7qE34zLuXeO8Qkc2+1ng5ErlSjnUIZdrAWKoGzHXpJ6ZxiiRBUoYnoMsgRwhqvrugIFyNgWasmsw==}
@@ -1281,9 +1268,6 @@ packages:
     resolution: {integrity: sha512-o5sSPKEkg/DIQNmH43V0/uerLrpzVedkUh8tGNvaeXpfpuwjKenlSox/2O/BTlZUtEe+JG7s5YhEz608PlAHRA==}
     engines: {node: '>=0.6'}
 
-  tr46@0.0.3:
-    resolution: {integrity: sha512-N3WMsuqV66lT30CrXNbEjx4GEwlow3v6rr4mCcv6prnfwhS01rkgyFdjPNBYd9br7LpXV1+Emh01fHnq2Gdgrw==}
-
   ts-mocha@10.1.0:
     resolution: {integrity: sha512-T0C0Xm3/WqCuF2tpa0GNGESTBoKZaiqdUP8guNv4ZY316AFXlyidnrzQ1LUrCT0Wb1i3J0zFTgOh/55Un44WdA==}
     engines: {node: '>= 6.X.X'}
@@ -1371,12 +1355,6 @@ packages:
 
   webauthn-p256@0.0.5:
     resolution: {integrity: sha512-drMGNWKdaixZNobeORVIqq7k5DsRC9FnG201K2QjeOoQLmtSDaSsVZdkg6n5jUALJKcAG++zBPJXmv6hy0nWFg==}
-
-  webidl-conversions@3.0.1:
-    resolution: {integrity: sha512-2JAn3z8AR6rjK8Sm8orRC0h/bcl/DqL7tRPdGZ4I1CjdF+EaMLmYxBHyXuKL849eucPFhvBoxMsflfOb8kxaeQ==}
-
-  whatwg-url@5.0.0:
-    resolution: {integrity: sha512-saE57nupxk6v3HY35+jzBwYa0rKSy0XR8JSxZPwgLr7ys0IBzhGviA1/TUGJLmSVqs8pb9AnvICXEuOHLprYTw==}
 
   widest-line@3.1.0:
     resolution: {integrity: sha512-NsmoXalsWVDMGupxZ5R08ka9flZjjiLvHVAWYOKtiKM8ujtZWr9cRffak+uSE48+Ob8ObalXpwyeUiyDD6QFgg==}
@@ -1855,29 +1833,29 @@ snapshots:
     dependencies:
       once: 1.4.0
 
-  envio-darwin-arm64@2.16.0:
+  envio-darwin-arm64@2.19.2:
     optional: true
 
-  envio-darwin-x64@2.16.0:
+  envio-darwin-x64@2.19.2:
     optional: true
 
-  envio-linux-arm64@2.16.0:
+  envio-linux-arm64@2.19.2:
     optional: true
 
-  envio-linux-x64@2.16.0:
+  envio-linux-x64@2.19.2:
     optional: true
 
-  envio@2.16.0(typescript@5.2.2):
+  envio@2.19.2(typescript@5.2.2):
     dependencies:
       '@envio-dev/hypersync-client': 0.6.3
       rescript: 11.1.3
-      rescript-schema: 9.1.0(rescript@11.1.3)
+      rescript-schema: 9.3.0(rescript@11.1.3)
       viem: 2.21.0(typescript@5.2.2)
     optionalDependencies:
-      envio-darwin-arm64: 2.16.0
-      envio-darwin-x64: 2.16.0
-      envio-linux-arm64: 2.16.0
-      envio-linux-x64: 2.16.0
+      envio-darwin-arm64: 2.19.2
+      envio-darwin-x64: 2.19.2
+      envio-linux-arm64: 2.19.2
+      envio-linux-x64: 2.19.2
     transitivePeerDependencies:
       - bufferutil
       - typescript
@@ -2046,7 +2024,7 @@ snapshots:
       fs.realpath: 1.0.0
       inflight: 1.0.6
       inherits: 2.0.4
-      minimatch: 5.1.6
+      minimatch: 5.0.1
       once: 1.4.0
 
   gopd@1.2.0: {}
@@ -2247,10 +2225,6 @@ snapshots:
     dependencies:
       brace-expansion: 2.0.1
 
-  minimatch@5.1.6:
-    dependencies:
-      brace-expansion: 2.0.1
-
   minimist@1.2.8: {}
 
   mkdirp@0.5.6:
@@ -2290,10 +2264,6 @@ snapshots:
   nanoid@3.3.3: {}
 
   negotiator@0.6.3: {}
-
-  node-fetch@2.7.0:
-    dependencies:
-      whatwg-url: 5.0.0
 
   normalize-path@3.0.0: {}
 
@@ -2476,13 +2446,13 @@ snapshots:
 
   require-directory@2.1.1: {}
 
-  rescript-envsafe@5.0.0(rescript-schema@9.1.0(rescript@11.1.3))(rescript@11.1.3):
+  rescript-envsafe@5.0.0(rescript-schema@9.3.0(rescript@11.1.3))(rescript@11.1.3):
     dependencies:
       rescript: 11.1.3
-      rescript-schema: 9.1.0(rescript@11.1.3)
+      rescript-schema: 9.3.0(rescript@11.1.3)
 
-  rescript-schema@9.1.0(rescript@11.1.3):
-    dependencies:
+  rescript-schema@9.3.0(rescript@11.1.3):
+    optionalDependencies:
       rescript: 11.1.3
 
   rescript@11.1.3: {}
@@ -2642,8 +2612,6 @@ snapshots:
 
   toidentifier@1.0.1: {}
 
-  tr46@0.0.3: {}
-
   ts-mocha@10.1.0(mocha@10.2.0):
     dependencies:
       mocha: 10.2.0
@@ -2741,13 +2709,6 @@ snapshots:
     dependencies:
       '@noble/curves': 1.4.0
       '@noble/hashes': 1.4.0
-
-  webidl-conversions@3.0.1: {}
-
-  whatwg-url@5.0.0:
-    dependencies:
-      tr46: 0.0.3
-      webidl-conversions: 3.0.1
 
   widest-line@3.1.0:
     dependencies:

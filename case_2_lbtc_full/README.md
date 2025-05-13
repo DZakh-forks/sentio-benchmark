@@ -27,7 +27,7 @@ This benchmark tests the ability of indexers to not only process events but also
 | Indexer  | Time to Complete | Notes |
 |----------|------------------|-------|
 | Sentio   | 45m              | |
-| Envio    | 13m              | |
+| Envio    | 15s              | |
 | Ponder   | 4h38m            | Significantly slower with RPC calls |
 | Subsquid | 32m              | |
 | Subgraph | 18h38m           | Longest processing time |
