@@ -1,4 +1,4 @@
-import { BigInt } from "@graphprotocol/graph-ts"
+import { BigInt, DataSourceContext } from "@graphprotocol/graph-ts"
 import { PairCreated } from "../../generated/UniswapV2Factory/UniswapV2Factory"
 import { Pair } from "../../generated/schema"
 import { UniswapV2Pair } from "../../generated/templates"
@@ -10,6 +10,6 @@ export function handlePairCreated(event: PairCreated): void {
   pair.createdAt = event.block.number
   pair.save()
 
-  // create the tracked contract based on the template
+  // Create the tracked contract based on the template with context
   UniswapV2Pair.create(event.params.pair)
 } 

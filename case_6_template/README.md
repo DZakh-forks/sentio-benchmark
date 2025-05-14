@@ -19,7 +19,7 @@ This benchmark tests the performance of various indexers when processing Uniswap
 | Subsquid | 2m             | 33,972  | 19,000,000-19,100,000 |
 | Envio    | 10s            | 35,039  | 19,000,000-19,100,000 |
 | Ponder   | 2h 24m         | 35,039  | 19,000,000-19,100,000 |
-| Subgraph | 34m            | 35,039  | 19,000,000-19,100,000 |
+| Subgraph | 19m            | 35,039  | 19,000,000-19,100,000 |
 
 ## Data Distribution Details
 
