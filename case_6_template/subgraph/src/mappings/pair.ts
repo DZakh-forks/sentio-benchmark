@@ -1,13 +1,10 @@
-import { BigInt } from "@graphprotocol/graph-ts"
+import { BigInt, dataSource } from "@graphprotocol/graph-ts"
 import { Swap } from "../../generated/UniswapV2Pair/UniswapV2Pair"
-import { UniswapV2Event, Pair } from "../../generated/schema"
+import { UniswapV2Event } from "../../generated/schema"
 
 export function handleSwap(event: Swap): void {
-  let pairAddress = event.address.toHexString()
-  let pair = Pair.load(pairAddress)
-  if (pair === null) {
-    return
-  }
+  // Get pair address and token information from dataSource
+  let pairAddress = dataSource.address().toHexString()
 
   let swapEvent = new UniswapV2Event(event.transaction.hash.toHexString().concat('-').concat(event.logIndex.toString()))
   swapEvent.pair = pairAddress
