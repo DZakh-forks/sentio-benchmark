@@ -2,8 +2,8 @@
 name: case_2_lbtc_full
 networks:
 - id: 1
-  start_block: 22100000
-  end_block: 22200000
+  start_block: 22000000
+  end_block: 23000000
   contracts:
   - name: LBTC
     address:

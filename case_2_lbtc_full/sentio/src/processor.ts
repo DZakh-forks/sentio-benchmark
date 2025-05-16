@@ -104,7 +104,7 @@ async function process(
     
     // Measure point calculation time
     const pointStartTime = performance.now();
-    const points = await calcPoints(ctx, snapshotTimestampMilli, snapshotLbtcBalance);
+    const points = calcPoints(ctx, snapshotTimestampMilli, snapshotLbtcBalance);
     pointCalcTime += performance.now() - pointStartTime;
 
     const newTimestampMilli = BigInt(ctx.timestamp.getTime());
@@ -147,11 +147,11 @@ async function process(
 }
 
 // calculate the points for each account based on the balance and time
-async function calcPoints(
+function calcPoints(
     ctx: LBTCContext,
     snapshotTimestampMilli: bigint,
     snapshotLbtcBalance: BigDecimal
-): Promise<BigDecimal> {
+): BigDecimal {
     const nowMilli = ctx.timestamp.getTime();
     const snapshotMilli = Number(snapshotTimestampMilli);
     if (nowMilli < snapshotMilli) {
