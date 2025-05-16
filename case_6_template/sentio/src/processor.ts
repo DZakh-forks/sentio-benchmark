@@ -6,8 +6,8 @@ import { UniswapV2Event, Pair } from "./schema/schema.js";
 const factoryProcessor = UniswapV2FactoryProcessor.bind({
   address: "0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f",
   network: EthChainId.ETHEREUM,
-  startBlock: 19_000_000,  // Recent block with good activity
-  endBlock: 19_010_000,    // 1000 blocks should be enough for testing
+  startBlock: 19000000,  // Recent block with good activity
+  endBlock: 19010000,    // 1000 blocks should be enough for testing
 }).onEventPairCreated(async (event: PairCreatedEvent, ctx: UniswapV2FactoryContext) => {
     // Store pair creation
     const pair = new Pair({
@@ -16,7 +16,7 @@ const factoryProcessor = UniswapV2FactoryProcessor.bind({
       token1: event.args.token1,
       createdAt: BigInt(ctx.blockNumber)
     });
-    await ctx.store.upsert(pair);
+    await ctx.eventLogger.emit('Pair1', {pair});
 
     poolTemplate.bind({
       address: event.args.pair,
@@ -39,6 +39,6 @@ const poolTemplate = new UniswapV2PairProcessorTemplate()
         blockNumber: BigInt(ctx.blockNumber)    
     });
 
-    await ctx.store.upsert(swapEvent);
+    await ctx.eventLogger.emit('Swap1', {swapEvent});
   }
 );

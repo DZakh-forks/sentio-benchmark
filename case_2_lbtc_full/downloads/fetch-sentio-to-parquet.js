@@ -33,6 +33,15 @@ const accountSchema = new parquet.ParquetSchema({
   point: { type: 'UTF8' } // Added point field
 });
 
+// Add new schema for point updates
+const pointUpdateSchema = new parquet.ParquetSchema({
+  account: { type: 'UTF8' },
+  blockNumber: { type: 'INT64' },
+  points: { type: 'UTF8' }, // Using UTF8 for large numbers
+  newTimestampMilli: { type: 'INT64' },
+  newLbtcBalance: { type: 'UTF8' } // Using UTF8 for large numbers
+});
+
 // Test connection before starting
 async function testConnection() {
   console.log(`Testing connection to Sentio API: ${BASE_URL}`);
@@ -350,22 +359,138 @@ async function fetchSentioAccounts() {
   }
 }
 
-// Main function
-async function main() {
+// Add new function to fetch point updates
+async function fetchSentioPointUpdates() {
+  const outputPath = path.join(dataDir, 'sentio-case2-point-updates.parquet');
+  
+  // Remove existing file if it exists
+  if (fs.existsSync(outputPath)) {
+    fs.unlinkSync(outputPath);
+    console.log(`Removed existing file: ${outputPath}`);
+  }
+
   try {
-    // Test connection first
-    const connected = await testConnection();
-    if (!connected) {
-      console.error('Could not connect to Sentio API. Exiting.');
-      return;
+    const writer = await parquet.ParquetWriter.openFile(pointUpdateSchema, outputPath);
+    let offset = 0;
+    const pageSize = 5000;
+    let totalRows = 0;
+    
+    console.log('Fetching point update data from Sentio...');
+    
+    while (true) {
+      console.log(`Fetching point updates with offset ${offset}...`);
+      
+      try {
+        const response = await axios.post(
+          BASE_URL,
+          {
+            sqlQuery: {
+              sql: `
+                WITH LatestUpdates AS (
+                  SELECT 
+                    account,
+                    block_number,
+                    points,
+                    newTimestampMilli,
+                    newLbtcBalance,
+                    ROW_NUMBER() OVER (PARTITION BY account ORDER BY block_number DESC) as rn
+                  FROM point_update
+                )
+                SELECT 
+                  account,
+                  block_number,
+                  points,
+                  newTimestampMilli,
+                  newLbtcBalance
+                FROM LatestUpdates
+                WHERE rn = 1
+                ORDER BY account
+                LIMIT ${pageSize} OFFSET ${offset}
+              `
+            }
+          },
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              'api-key': API_KEY
+            },
+            timeout: TIMEOUT
+          }
+        );
+        
+        const rows = response.data.result && response.data.result.rows ? response.data.result.rows : [];
+        console.log(`Received ${rows.length} rows`);
+        
+        if (rows.length === 0) {
+          break;
+        }
+        
+        for (const row of rows) {
+          try {
+            const record = {
+              account: String(row.account || ''),
+              blockNumber: BigInt(row.block_number || 0),
+              points: String(row.points || '0'),
+              newTimestampMilli: BigInt(row.newTimestampMilli || 0),
+              newLbtcBalance: String(row.newLbtcBalance || '0')
+            };
+            
+            await writer.appendRow(record);
+            totalRows++;
+          } catch (rowError) {
+            console.error(`Error processing row: ${rowError.message}`, row);
+          }
+        }
+        
+        offset += pageSize;
+        
+        if (rows.length < pageSize) {
+          break;
+        }
+      } catch (error) {
+        console.error('Error fetching point updates:', error.message);
+        if (error.response) {
+          console.error('Response status:', error.response.status);
+          console.error('Response data:', JSON.stringify(error.response.data, null, 2));
+        }
+        offset += pageSize;
+      }
     }
     
-    const transfersCount = await fetchSentioTransfers();
-    const accountsCount = await fetchSentioAccounts();
+    // If we didn't process any rows, write a dummy row to avoid Parquet errors
+    if (totalRows === 0) {
+      console.log('No point updates were processed. Writing a dummy record to avoid Parquet error.');
+      await writer.appendRow({
+        account: 'dummy',
+        blockNumber: BigInt(0),
+        points: '0',
+        newTimestampMilli: BigInt(0),
+        newLbtcBalance: '0'
+      });
+      totalRows = 1;
+    }
     
-    console.log(`Sentio data fetching complete! Fetched ${transfersCount} transfers and ${accountsCount} accounts.`);
+    await writer.close();
+    console.log(`Successfully wrote ${totalRows} point update records to ${outputPath}`);
   } catch (error) {
-    console.error('Error in main function:', error);
+    console.error('Error in fetchSentioPointUpdates:', error);
+  }
+}
+
+// Modify main function to include point updates
+async function main() {
+  if (!await testConnection()) {
+    console.error('Failed to connect to Sentio API. Exiting...');
+    return;
+  }
+
+  try {
+    await fetchSentioTransfers();
+    await fetchSentioAccounts();
+    await fetchSentioPointUpdates();
+    console.log('All data fetched and saved successfully!');
+  } catch (error) {
+    console.error('Error in main:', error);
   }
 }
 

@@ -23,12 +23,6 @@ UniswapV2Factory.PairCreated.handler(async ({ event, context }) => {
 
 // Handle Swap events from all UniswapV2Pair contracts
 UniswapV2Pair.Swap.handler(async ({ event, context }) => {
-  const pair = await context.Pair.get(event.srcAddress);
-  if (!pair) {
-    context.log.error(`Pair not found for address ${event.srcAddress}`);
-    return;
-  }
-
   // Create and save Swap event
   const swap: Swap = {
     id: `${event.block.hash}-${event.logIndex}`,

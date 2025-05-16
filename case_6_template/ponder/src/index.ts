@@ -13,16 +13,11 @@ ponder.on("UniswapV2Factory:PairCreated", async ({ event, context }: { event: an
 });
 
 ponder.on("UniswapV2Pair:Swap", async ({ event, context }: { event: any; context: Context }) => {
-  const pair = await context.db.find(Pair, { id: event.log.address.toLowerCase() });
-  
-  if (!pair) {
-    // console.log(`Swap event for non-existent pair: ${event.log.address.toLowerCase()}`);
-    return;
-  }
-  console.log(`Swap event for pair: ${pair.id}`, event.transaction.hash);
+  const pairAddress = event.log.address.toLowerCase();
+
   await context.db.insert(Swap).values({
     id: event.transaction.hash+'-'+event.log.logIndex,
-    pairId: pair.id,
+    pairId: pairAddress,
     sender: event.args.sender.toLowerCase(),
     to: event.args.to.toLowerCase(),
     amount0In: event.args.amount0In,

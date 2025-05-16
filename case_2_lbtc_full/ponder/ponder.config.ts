@@ -5,8 +5,8 @@ import { config } from "dotenv";
 // Load environment variables from .env.local
 config({ path: '.env' });
 
-if (!process.env.RPC_URL) {
-  throw new Error('RPC_URL is required in .env.local');
+if (!process.env.PONDER_RPC_URL_1) {
+  throw new Error('PONDER_RPC_URL_1 is required in .env.local');
 }
 
 import { LBTCAbi } from "./abis/LBTCAbi";
@@ -15,7 +15,7 @@ export default createConfig({
   networks: {
     mainnet: {
       chainId: 1,
-      transport: http(process.env.RPC_URL),
+      transport: http(process.env.PONDER_RPC_URL_1),
     },
   },
   contracts: {
@@ -23,7 +23,7 @@ export default createConfig({
       network: "mainnet",
       abi: LBTCAbi,
       address: "0x8236a87084f8B84306f72007F36F2618A5634494",
-      startBlock: 22180000,
+      startBlock: 22100000,
       endBlock: 22200000,
     }
   },
@@ -31,7 +31,7 @@ export default createConfig({
     HourlyUpdate: {
       network: "mainnet",
       interval: 60 * 60 / 12, // Approximating hourly based on block time
-      startBlock: 22180000,
+      startBlock: 22100000,
       endBlock: 22200000,
     }
   },

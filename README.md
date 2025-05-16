@@ -121,7 +121,7 @@ This benchmark provides a comparative analysis of indexer performance across dif
 | case_3_ethereum_block | Ethereum Block Processing | Ethereum | 0 to 100000 | Block handling, Metadata extraction |
 | case_4_on_transaction | Ethereum Transaction Gas Usage | Ethereum | 22280000 to 22290000 | Transaction handling, Gas calculations |
 | case_5_on_trace | Uniswap V2 Swap Trace Analysis | Ethereum | 22200000 to 22290000 | Transaction trace handling, Swap decoding |
-| case_6_template | Uniswap V2 Template | Ethereum | 19000000 to 19100000 | Event handling, Pair and swap analysis |
+| case_6_template | Uniswap V2 Template | Ethereum | 19000000 to 19010000 | Event handling, Pair and swap analysis |
 
 ### Performance Results
 
@@ -132,7 +132,7 @@ This benchmark provides a comparative analysis of indexer performance across dif
 | case_3_ethereum_block | 18m | 7.9s | | 33m | 1m‡ | 10m | 15m |  |
 | case_4_on_transaction | 23m | 1m26s | | 33m | 5m | N/A | |  |
 | case_5_on_trace | 16m | 41s | | N/A§ | 2m | 8m | 1h21m |  |
-| case_6_template | 12m | | 10s | 2h24m | 2m | 19m | | 20h24m |
+| case_6_template | 19m | | 30s | 11m | 2m | 19m | 10m | 20h24m |
 
 ### Data Completeness
 
