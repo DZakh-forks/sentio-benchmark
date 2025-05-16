@@ -110,10 +110,17 @@ async function process(
     const newTimestampMilli = BigInt(ctx.timestamp.getTime());
     const tokenInfo = await token.getERC20TokenInfo(ctx, ctx.contract.address)
     
-    // Measure balanceOf RPC call time
-    const rpcStartTime = performance.now();
-    const newLbtcBalance = await (await ctx.contract.balanceOf(account)).scaleDown(tokenInfo.decimal);
-    rpcBalanceTime += performance.now() - rpcStartTime;
+    let newLbtcBalance: BigDecimal;
+    // Only make RPC call if this is from transferEventHandler
+    if (triggerEvent === "Transfer") {
+        // Measure balanceOf RPC call time
+        const rpcStartTime = performance.now();
+        newLbtcBalance = await (await ctx.contract.balanceOf(account)).scaleDown(tokenInfo.decimal);
+        rpcBalanceTime += performance.now() - rpcStartTime;
+    } else {
+        // For hourly updates, use the existing balance
+        newLbtcBalance = snapshotLbtcBalance;
+    }
     
     const newSnapshot = new AccountSnapshot({
         id: account,
@@ -177,7 +184,7 @@ async function calcPoints(
 
 // processor binding logic to bind the right contract address and attach right event and block handlers
 // onTimeInterval is used to update the balance and points of each account every hour
-LBTCProcessor.bind({ address: LBTC_PROXY, startBlock: 22100000, endBlock: 22200000 })
+LBTCProcessor.bind({ address: LBTC_PROXY, startBlock: 22000000, endBlock: 23000000 })
     .onEventTransfer(transferEventHandler) // if filter by mint LBTC Processor.filters.Transfer(0x0, null)
     .onTimeInterval(
         async (_, ctx) => {
