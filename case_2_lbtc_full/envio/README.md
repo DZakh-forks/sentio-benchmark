@@ -55,9 +55,10 @@ This implementation:
 1. Uses Envio's HyperSync technology for ultra-fast blockchain data access
 2. Processes Transfer events from the LBTC token contract
 3. Makes balanceOf() RPC calls to fetch current token balances
-4. Creates and updates Account entities with balance information
-5. Creates Snapshot entities to track historical balances
-6. Demonstrates Envio's ability to handle read-after-write operations
+4. The use of [Loaders and Effect API](https://docs.envio.dev/docs/HyperIndex/loaders) optimises performance by batching RPC calls and making data retrieval in parallel
+5. Creates and updates Account entities with balance information
+6. Creates Snapshot entities to track historical balances
+7. Demonstrates Envio's ability to handle read-after-write operations
 
 ## Performance Advantages
 
@@ -69,7 +70,7 @@ Envio's HyperSync technology offers significant advantages for this complex use 
 
 ## Performance Results
 
-In the benchmark test, this Envio implementation indexed LBTC transfers with RPC calls in **45 minutes**, showing excellent performance for complex data processing with external contract calls.
+In the benchmark test, this Envio implementation indexed LBTC transfers with RPC calls in **15 seconds**, showing excellent performance for complex data processing with external contract calls.
 
 ## Additional Commands
 

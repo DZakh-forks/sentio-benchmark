@@ -1,5 +1,7 @@
 import { createPublicClient, http, parseAbi, getContract } from "viem";
+import { experimental_createEffect, S } from "envio";
 import { mainnet } from "viem/chains";
+import { BigDecimal } from "generated";
 
 // Define the ABI for the ERC20 balanceOf function
 const erc20Abi = parseAbi([
@@ -15,7 +17,9 @@ if (!rpcUrl) {
 // Create a public client to interact with the blockchain
 const client = createPublicClient({
   chain: mainnet,
-  transport: http(rpcUrl),
+  transport: http(rpcUrl, {batch: {
+    batchSize: 100
+  }}),
 });
 
 // Get the contract instance for LBTC
@@ -26,18 +30,22 @@ const lbtcContract = getContract({
 });
 
 // Function to get the balance of a specific address at a specific block
-export async function getBalance(address: string, blockNumber?: bigint) {
+export const getBalance = experimental_createEffect({
+  name: "getBalance",
+  input: {
+    address: S.string,
+    blockNumber: S.optional(S.bigint),
+  },
+  output: S.bigDecimal,
+}, async ({ input, context }) => {
   try {
     // If blockNumber is provided, use it to get balance at that specific block
-    const options = blockNumber ? { blockNumber } : undefined;
-    const balance = await lbtcContract.read.balanceOf([address as `0x${string}`], options);
-    
-    // Only log on successful retrieval to reduce noise
-    console.log(`Balance of ${address}${blockNumber ? ` at block ${blockNumber}` : ''}: ${balance}`);
-    return balance;
+    const options = input.blockNumber ? { blockNumber: input.blockNumber } : undefined;
+    const balance = await lbtcContract.read.balanceOf([input.address as `0x${string}`], options);
+    return BigDecimal(balance.toString());
   } catch (error) {
-    console.error(`Error getting balance for ${address}: ${error}`);
+    context.log.error(`Error getting balance for ${input.address}`, error as Error);
     // Return 0 on error to prevent processing failures
-    return BigInt(0);
+    return BigDecimal(0);
   }
-}
+})
