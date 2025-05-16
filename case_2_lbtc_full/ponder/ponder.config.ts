@@ -1,12 +1,12 @@
 import { createConfig, mergeAbis } from "ponder";
 import { http } from "viem";
-import { config } from "dotenv";
 
-// Load environment variables from .env.local
-config({ path: '.env.local' });
+// Remove dotenv import and config
+// import { config } from "dotenv";
+// config({ path: '.env.local' });
 
 if (!process.env.PONDER_RPC_URL_1) {
-  throw new Error('PONDER_RPC_URL_1 is required in .env.local');
+  throw new Error('PONDER_RPC_URL_1 is required in environment variables');
 }
 
 import { LBTCAbi } from "./abis/LBTCAbi";
