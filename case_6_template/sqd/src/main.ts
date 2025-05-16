@@ -28,7 +28,7 @@ const processor = new EvmBatchProcessor()
   .setGateway('https://v2.archive.subsquid.io/network/ethereum-mainnet')
   .setRpcEndpoint({
     url: assertNotNull(
-      process.env.RPC_URL,
+      'https://rpc.sentio.xyz/oTSQQwOgzr9ERJ0petpRSbgkQDCPJ9Al/ethereum',
       'Required env variable RPC_ENDPOINT is missing'
     )
   })

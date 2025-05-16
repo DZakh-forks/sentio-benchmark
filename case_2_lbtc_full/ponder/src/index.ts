@@ -4,6 +4,12 @@ import schema from "ponder:schema";
 // Constants
 const HOUR_IN_MS = 60n * 60n * 1000n;
 
+// Add timer variables at the top
+let rpcTime = 0;
+let computeTime = 0;
+let storageTime = 0;
+let operationCount = 0;
+
 // Event handler for Transfers
 ponder.on("LBTC:Transfer", async ({ event, context }) => {
   const { from, to, value } = event.args;
@@ -15,16 +21,21 @@ ponder.on("LBTC:Transfer", async ({ event, context }) => {
   
   // Process "to" account
   const lbtc = context.contracts.LBTC;
+  
+  // Measure RPC time for balanceOf
+  const rpcStartTime = performance.now();
   const toBalance = await context.client.readContract({
     abi: lbtc.abi,
     address: lbtc.address,
     functionName: "balanceOf",
     args: [to]
   });
+  rpcTime += performance.now() - rpcStartTime;
   
   // Check if this is a mint
   const isMint = from === "0x0000000000000000000000000000000000000000";
   
+  // Remove compute timing here since createAndSaveSnapshot has its own timing
   await createAndSaveSnapshot(
     context.db,
     to,
@@ -40,13 +51,17 @@ ponder.on("LBTC:Transfer", async ({ event, context }) => {
   
   // Process "from" account (skip if mint)
   if (!isMint) {
+    // Measure RPC time for balanceOf
+    const fromRpcStartTime = performance.now();
     const fromBalance = await context.client.readContract({
       abi: lbtc.abi,
       address: lbtc.address,
       functionName: "balanceOf",
       args: [from]
     });
+    rpcTime += performance.now() - fromRpcStartTime;
     
+    // Remove compute timing here since createAndSaveSnapshot has its own timing
     await createAndSaveSnapshot(
       context.db,
       from,
@@ -62,6 +77,7 @@ ponder.on("LBTC:Transfer", async ({ event, context }) => {
   }
   
   // Create transfer record
+  const transferStartTime = performance.now();
   await context.db.insert(schema.lbtcTransfer).values({
     id: event.id,
     from,
@@ -70,52 +86,55 @@ ponder.on("LBTC:Transfer", async ({ event, context }) => {
     blockNumber: BigInt(event.block.number),
     transactionHash: event.transaction.hash
   });
+  storageTime += performance.now() - transferStartTime;
   
-  // Validate snapshot objects before insertion
-  const validSnapshots = [...snapshots.values()].filter(snapshot => 
-    snapshot && snapshot.id && typeof snapshot.id === 'string'
-  );
-  
-  // Batch insert snapshots - with conflict handling to update existing snapshots
-  if (validSnapshots.length > 0) {
+  // Batch insert snapshots
+  if (snapshots.size > 0) {
+    const snapshotStartTime = performance.now();
     await context.db.insert(schema.snapshot)
-      .values(validSnapshots)
+      .values([...snapshots.values()])
       .onConflictDoUpdate((existing) => {
         const snapshot = snapshots.get(existing.id);
-        if (!snapshot) {
-          return {}; // No changes if snapshot not found
-        }
+        if (!snapshot) return {};
         return {
-          accountId: snapshot.accountId,  // match schema
+          accountId: snapshot.accountId,
           balance: snapshot.balance,
           point: snapshot.point,
           mintAmount: snapshot.mintAmount,
           timestampMilli: snapshot.timestampMilli
         };
       });
+    storageTime += performance.now() - snapshotStartTime;
   }
   
-  // Batch insert/update accounts with conflict handling
+  // Batch insert/update accounts
   if (accountsToUpdate.size > 0) {
+    const accountStartTime = performance.now();
     await context.db.insert(schema.accounts)
       .values([...accountsToUpdate.values()])
       .onConflictDoUpdate((existing) => {
         const account = accountsToUpdate.get(existing.id);
-        if (!account) {
-          // If account not found in Map, return existing values
-          return {
-            lastSnapshotTimestamp: existing.lastSnapshotTimestamp
-          };
-        }
-        return {
-          lastSnapshotTimestamp: account.lastSnapshotTimestamp
-        };
+        if (!account) return { lastSnapshotTimestamp: existing.lastSnapshotTimestamp };
+        return { lastSnapshotTimestamp: account.lastSnapshotTimestamp };
       });
+    storageTime += performance.now() - accountStartTime;
+  }
+
+  operationCount++;
+  if (operationCount % 1000 === 0) {
+    console.log(`block number: ${event.block.number}`);
+    console.log(`Performance metrics after ${operationCount} operations:`);
+    console.log(`RPC time: ${(rpcTime / 1000).toFixed(2)}s`);
+    console.log(`Compute time: ${(computeTime / 1000).toFixed(2)}s`);
+    console.log(`Storage time: ${(storageTime / 1000).toFixed(2)}s`);
   }
 });
 
 // Handle hourly updates with a trigger for block events
 ponder.on("HourlyUpdate:block", async ({ event, context }) => {
+  if (event.block.number % 1000n === 0n) {
+    console.log(`block number: ${event.block.number}`);
+  }
   const timestamp = BigInt(event.block.timestamp) * 1000n;
   
   const registry = await context.db.find(schema.accountRegistry, { id: "main" });
@@ -251,13 +270,18 @@ async function getLastSnapshotData(db: any, accountId: string) {
     mintAmount: 0n
   };
   
+  // Measure storage time for account lookup
+  const storageStartTime = performance.now();
   const account = await db.find(schema.accounts, { id: accountId });
+  storageTime += performance.now() - storageStartTime;
   
   if (!account || !account.lastSnapshotTimestamp) return defaultData;
   
-  // Direct lookup by ID using our simplified format: accountId-timestamp
+  // Measure storage time for snapshot lookup
+  const snapshotStartTime = performance.now();
   const snapshotId = `${accountId}-${account.lastSnapshotTimestamp.toString()}`;
   const snapshot = await db.find(schema.snapshot, { id: snapshotId });
+  storageTime += performance.now() - snapshotStartTime;
   
   if (snapshot) {
     return {
@@ -292,50 +316,48 @@ async function createAndSaveSnapshot(
   // Normalize account ID to lowercase
   const normalizedAccountId = accountId.toLowerCase();
   
-  // Only create account if specified
+  // Measure storage time for account operations
+  const storageStartTime = performance.now();
   if (createIfNotExists) {
-    // Make sure account exists
     await getOrCreateAccount(db, normalizedAccountId);
   }
-  
-  // Get last snapshot data
   const lastData = await getLastSnapshotData(db, normalizedAccountId);
+  storageTime += performance.now() - storageStartTime;
   
-  // Simplified ID without transaction hash - allows natural overwriting
+  // Measure compute time for point calculations
+  const computeStartTime = performance.now();
   const snapshotId = `${normalizedAccountId}-${timestamp.toString()}`;
-  
-  // Calculate new mint amount
   let newMintAmount = lastData.mintAmount;
   if (isMint) {
     newMintAmount = lastData.mintAmount + mintAmount;
   }
   
-  // Calculate points
   let point = 0n;
   if (lastData.timestamp !== 0n) {
-    // Calculate time diff in seconds
     const timeDiffSeconds = Number((timestamp - lastData.timestamp) / 1000n);
-    // Points formula: balance * 1000 per day = balance * 1000/86400 per second
     const pointsToAdd = lastData.balance * BigInt(timeDiffSeconds) * 1000n / 86400n;
     point = lastData.point + pointsToAdd;
   }
+  computeTime += performance.now() - computeStartTime;
   
   // Get the full account object for proper relationship
+  const accountStartTime = performance.now();
   const account = await db.find(schema.accounts, { id: normalizedAccountId });
+  storageTime += performance.now() - accountStartTime;
   
   // Only proceed if we have a valid account
   if (account) {
-    // Add snapshot to collection instead of inserting immediately
+    // Add snapshot to collection
     snapshots.set(snapshotId, {
       id: snapshotId,
-      accountId: normalizedAccountId,  // Changed from account: account to match schema
+      accountId: normalizedAccountId,
       timestampMilli: timestamp,
       balance,
       point,
       mintAmount: newMintAmount
     });
     
-    // Add account update to collection instead of updating immediately
+    // Add account update to collection
     accountsToUpdate.set(normalizedAccountId, {
       id: normalizedAccountId,
       lastSnapshotTimestamp: timestamp

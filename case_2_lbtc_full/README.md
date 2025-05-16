@@ -22,6 +22,45 @@ The benchmark requires each indexer to:
 
 This benchmark tests the ability of indexers to not only process events but also to make external RPC calls and manage more complex data relationships.
 
+## Platform-Specific Implementation Details
+
+Each platform handles periodic updates differently:
+
+1. **Points Calculation**
+   - All platforms calculate points whenever new transfers occur
+   - This ensures real-time point updates for all accounts
+
+2. **Periodic Updates**
+   - **Sentio**: 
+     - Features both `onTimeInterval` and `onBlockInterval` functionalities (`onTimeInterval` is exclusive to Sentio)
+     - Dual-interval system:
+       - Historical interval: For speedy catchup of past data
+       - Ongoing interval: For prompt updates of new data
+     - This dual approach enables:
+       - Faster historical data processing
+       - Real-time updates for new events
+     - Example: Daily intervals for history + hourly intervals for ongoing updates
+     - Other platforms must implement their own interval tracking mechanisms or rely on block intervals to mimic `onTimeInterval`
+
+   - **Envio**: 
+     - No built-in `onTimeInterval` or `onBlockInterval`
+     - Implements global update timestamp in transfer handler
+     - Updates on hourly basis within the handler
+
+   - **Ponder**: 
+     - Approximates time interval updates using fixed block intervals
+     - Relies on block-based handler
+
+   - **Subsquid**: 
+     - Block-based starting points for all indexers
+     - Implements global updates inside the processing loop
+     - Uses fixed time intervals for updates
+
+   - **Subgraph**: 
+     - Uses `handleBlock` for periodic updates
+     - Configurable block intervals in `subgraph.yaml`
+     - Block-based scheduling approach
+
 ## Performance Results
 
 | Indexer  | Time to Complete | Notes |

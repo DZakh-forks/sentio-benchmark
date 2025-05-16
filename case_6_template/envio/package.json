@@ -24,7 +24,7 @@
   "dependencies": {
     "@urql/core": "^5.1.1",
     "apache-arrow": "^19.0.1",
-    "envio": "2.19.0",
+    "envio": "2.18.0",
     "parquet-wasm": "^0.6.1",
     "parquetjs": "^0.11.2"
   },
