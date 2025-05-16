@@ -3,7 +3,7 @@ import { http } from "viem";
 import { config } from "dotenv";
 
 // Load environment variables from .env.local
-config({ path: '.env' });
+config({ path: '.env.local' });
 
 if (!process.env.PONDER_RPC_URL_1) {
   throw new Error('PONDER_RPC_URL_1 is required in .env.local');
