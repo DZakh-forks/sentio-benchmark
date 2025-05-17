@@ -1,12 +1,12 @@
 import { createConfig, mergeAbis } from "ponder";
 import { http } from "viem";
-import { config } from "dotenv";
 
-// Load environment variables from .env.local
-config({ path: '.env' });
+// Remove dotenv import and config
+// import { config } from "dotenv";
+// config({ path: '.env.local' });
 
 if (!process.env.PONDER_RPC_URL_1) {
-  throw new Error('PONDER_RPC_URL_1 is required in .env.local');
+  throw new Error('PONDER_RPC_URL_1 is required in environment variables');
 }
 
 import { LBTCAbi } from "./abis/LBTCAbi";
@@ -23,16 +23,16 @@ export default createConfig({
       network: "mainnet",
       abi: LBTCAbi,
       address: "0x8236a87084f8B84306f72007F36F2618A5634494",
-      startBlock: 22100000,
-      endBlock: 22200000,
+      startBlock: 22000000,
+      endBlock: 23000000,
     }
   },
   blocks: {
     HourlyUpdate: {
       network: "mainnet",
       interval: 60 * 60 / 12, // Approximating hourly based on block time
-      startBlock: 22100000,
-      endBlock: 22200000,
+      startBlock: 22000000,
+      endBlock: 23000000,
     }
   },
 });

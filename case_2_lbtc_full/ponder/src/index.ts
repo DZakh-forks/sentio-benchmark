@@ -161,13 +161,8 @@ ponder.on("HourlyUpdate:block", async ({ event, context }) => {
     // Only update accounts with existing snapshots
     if (account.lastSnapshotTimestamp !== 0n) {
       // Get current balance
-      const balance = await context.client.readContract({
-        abi: lbtc.abi,
-        address: lbtc.address,
-        functionName: "balanceOf",
-        args: [accountId]
-      });
-      
+
+      const balance = account.balance;
       // Create new snapshot with a unique ID that includes the block number
       await createAndSaveSnapshot(
         context.db,
@@ -252,10 +247,11 @@ async function getOrCreateAccount(db: any, address: string) {
   if (!account) {
     await db.insert(schema.accounts).values({
       id: accountId,
-      lastSnapshotTimestamp: 0n
+      lastSnapshotTimestamp: 0n,
+      balance: 0n
     });
     await addAccountToRegistry(db, accountId);
-    return { id: accountId, lastSnapshotTimestamp: 0n };
+    return { id: accountId, lastSnapshotTimestamp: 0n, balance: 0n };
   }
   
   return account;
@@ -360,7 +356,8 @@ async function createAndSaveSnapshot(
     // Add account update to collection
     accountsToUpdate.set(normalizedAccountId, {
       id: normalizedAccountId,
-      lastSnapshotTimestamp: timestamp
+      lastSnapshotTimestamp: timestamp,
+      balance
     });
   }
 }

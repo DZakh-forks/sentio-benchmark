@@ -12,6 +12,7 @@ export const snapshot = onchainTable("snapshot", (t) => ({
 export const accounts = onchainTable("accounts", (t) => ({
   id: t.hex().primaryKey(),
   lastSnapshotTimestamp: t.bigint().notNull(),
+  balance: t.bigint().notNull(),
 }));
 
 export const accountRegistry = onchainTable("account_registry", (t) => ({
