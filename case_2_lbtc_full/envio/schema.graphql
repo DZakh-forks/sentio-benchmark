@@ -1,15 +1,15 @@
 type Snapshot {
   id: ID! # account-timestamp or GLOBAL_UPDATE_KEY for global state
   account: Accounts @index # Null for global update tracker
-  timestampMilli: BigInt! @index # Block timestamp in milliseconds
+  timestamp: BigInt! @index # Block timestamp in milliseconds
   mintAmount: BigDecimal # Amount minted in this snapshot (if applicable)
   balance: BigDecimal! # Current token balance
   point: BigDecimal # Accumulated points
 }
 
 type Accounts {
-  id: ID! # Account address
-  lastSnapshotTimestamp: BigInt! # Timestamp of the last snapshot for this account
+  id: ID! # Account address - this is the only unique identifier
+  lastSnapshotTimestamp: BigInt! # Remove ! to make it updatable
   snapshots: [Snapshot!]! @derivedFrom(field: "account") # All snapshots for this account
 }
 

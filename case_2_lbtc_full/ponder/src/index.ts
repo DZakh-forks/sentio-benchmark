@@ -1,9 +1,6 @@
 import { ponder } from "ponder:registry";
 import schema from "ponder:schema";
 
-// Constants
-const HOUR_IN_MS = 60n * 60n * 1000n;
-
 // Add timer variables at the top
 let rpcTime = 0;
 let computeTime = 0;
@@ -13,7 +10,7 @@ let operationCount = 0;
 // Event handler for Transfers
 ponder.on("LBTC:Transfer", async ({ event, context }) => {
   const { from, to, value } = event.args;
-  const timestamp = BigInt(event.block.timestamp) * 1000n;
+  const timestamp = BigInt(event.block.timestamp);
   
   // Collections for batch operations
   const snapshots = new Map();
@@ -35,8 +32,7 @@ ponder.on("LBTC:Transfer", async ({ event, context }) => {
   // Check if this is a mint
   const isMint = from === "0x0000000000000000000000000000000000000000";
   
-  // Remove compute timing here since createAndSaveSnapshot has its own timing
-  await createAndSaveSnapshot(
+  await createAndSaveSnapshot( 
     context.db,
     to,
     timestamp,
@@ -61,7 +57,6 @@ ponder.on("LBTC:Transfer", async ({ event, context }) => {
     });
     rpcTime += performance.now() - fromRpcStartTime;
     
-    // Remove compute timing here since createAndSaveSnapshot has its own timing
     await createAndSaveSnapshot(
       context.db,
       from,
@@ -101,7 +96,7 @@ ponder.on("LBTC:Transfer", async ({ event, context }) => {
           balance: snapshot.balance,
           point: snapshot.point,
           mintAmount: snapshot.mintAmount,
-          timestampMilli: snapshot.timestampMilli
+          timestamp: snapshot.timestamp
         };
       });
     storageTime += performance.now() - snapshotStartTime;
@@ -114,8 +109,16 @@ ponder.on("LBTC:Transfer", async ({ event, context }) => {
       .values([...accountsToUpdate.values()])
       .onConflictDoUpdate((existing) => {
         const account = accountsToUpdate.get(existing.id);
-        if (!account) return { lastSnapshotTimestamp: existing.lastSnapshotTimestamp };
-        return { lastSnapshotTimestamp: account.lastSnapshotTimestamp };
+        if (!account) return {
+          lastSnapshotTimestamp: existing.lastSnapshotTimestamp,
+          balance: existing.balance,
+          point: existing.point
+        };
+        return {
+          lastSnapshotTimestamp: account.lastSnapshotTimestamp,
+          balance: account.balance,
+          point: account.point
+        };
       });
     storageTime += performance.now() - accountStartTime;
   }
@@ -132,12 +135,11 @@ ponder.on("LBTC:Transfer", async ({ event, context }) => {
 
 // Handle hourly updates with a trigger for block events
 ponder.on("HourlyUpdate:block", async ({ event, context }) => {
-  if (event.block.number % 1000n === 0n) {
-    console.log(`block number: ${event.block.number}`);
-  }
-  const timestamp = BigInt(event.block.timestamp) * 1000n;
+  const timestamp = BigInt(event.block.timestamp);
   
+  const storageStartTime = performance.now();
   const registry = await context.db.find(schema.accountRegistry, { id: "main" });
+  storageTime += performance.now() - storageStartTime;
   
   if (!registry) return;
   
@@ -146,16 +148,19 @@ ponder.on("HourlyUpdate:block", async ({ event, context }) => {
   const accountsToUpdate = new Map();
   
   // Update lastSnapshotTimestamp in registry
+  const updateStartTime = performance.now();
   await context.db.update(schema.accountRegistry, { id: "main" }).set({
     lastSnapshotTimestamp: timestamp
   });
+  storageTime += performance.now() - updateStartTime;
   
   const lbtc = context.contracts.LBTC;
   
   // Process all accounts
   for (const accountId of registry.accounts) {
+    const accountStartTime = performance.now();
     const account = await context.db.find(schema.accounts, { id: accountId });
-    
+    storageTime += performance.now() - accountStartTime;
     if (!account) continue;
     
     // Only update accounts with existing snapshots
@@ -163,7 +168,6 @@ ponder.on("HourlyUpdate:block", async ({ event, context }) => {
       // Get current balance
 
       const balance = account.balance;
-      // Create new snapshot with a unique ID that includes the block number
       await createAndSaveSnapshot(
         context.db,
         accountId,
@@ -186,6 +190,7 @@ ponder.on("HourlyUpdate:block", async ({ event, context }) => {
   
   // Batch insert snapshots - with conflict handling
   if (validSnapshots.length > 0) {
+    const insertStartTime = performance.now();
     await context.db.insert(schema.snapshot)
       .values(validSnapshots)
       .onConflictDoUpdate((existing) => {
@@ -198,13 +203,15 @@ ponder.on("HourlyUpdate:block", async ({ event, context }) => {
           balance: snapshot.balance,
           point: snapshot.point,
           mintAmount: snapshot.mintAmount,
-          timestampMilli: snapshot.timestampMilli
+          timestamp: snapshot.timestamp
         };
       });
+    storageTime += performance.now() - insertStartTime;
   }
   
   // Batch insert/update accounts
   if (accountsToUpdate.size > 0) {
+    const insertStartTime = performance.now();
     await context.db.insert(schema.accounts)
       .values([...accountsToUpdate.values()])
       .onConflictDoUpdate((existing) => {
@@ -219,39 +226,51 @@ ponder.on("HourlyUpdate:block", async ({ event, context }) => {
           lastSnapshotTimestamp: account.lastSnapshotTimestamp
         };
       });
+    storageTime += performance.now() - insertStartTime;
   }
 });
 
 // Helper function to add account to registry
 async function addAccountToRegistry(db: any, accountId: string) {
+  const storageStartTime = performance.now();
   const registry = await db.find(schema.accountRegistry, { id: "main" });
+  storageTime += performance.now() - storageStartTime;
   
   if (!registry) {
+    const insertStartTime = performance.now();
     await db.insert(schema.accountRegistry).values({
       id: "main",
       accounts: [accountId],
       lastSnapshotTimestamp: 0n
     });
+    storageTime += performance.now() - insertStartTime;
   } else if (!registry.accounts.includes(accountId)) {
+    const insertStartTime = performance.now();
     await db.update(schema.accountRegistry, { id: "main" }).set({
       accounts: [...registry.accounts, accountId]
     });
+    storageTime += performance.now() - insertStartTime;
   }
 }
 
 // Helper to get or create an account
 async function getOrCreateAccount(db: any, address: string) {
   const accountId = address.toLowerCase();
+  const storageStartTime = performance.now();
   const account = await db.find(schema.accounts, { id: accountId });
-  
+  storageTime += performance.now() - storageStartTime;
   if (!account) {
+    // Create new account in both memory and database
+    const insertStartTime = performance.now();
     await db.insert(schema.accounts).values({
       id: accountId,
       lastSnapshotTimestamp: 0n,
-      balance: 0n
+      balance: 0n,
+      point: 0n
     });
+    storageTime += performance.now() - insertStartTime;
     await addAccountToRegistry(db, accountId);
-    return { id: accountId, lastSnapshotTimestamp: 0n, balance: 0n };
+    return { id: accountId, lastSnapshotTimestamp: 0n, balance: 0n, point: 0n };
   }
   
   return account;
@@ -313,12 +332,10 @@ async function createAndSaveSnapshot(
   const normalizedAccountId = accountId.toLowerCase();
   
   // Measure storage time for account operations
-  const storageStartTime = performance.now();
   if (createIfNotExists) {
     await getOrCreateAccount(db, normalizedAccountId);
   }
   const lastData = await getLastSnapshotData(db, normalizedAccountId);
-  storageTime += performance.now() - storageStartTime;
   
   // Measure compute time for point calculations
   const computeStartTime = performance.now();
@@ -330,8 +347,8 @@ async function createAndSaveSnapshot(
   
   let point = 0n;
   if (lastData.timestamp !== 0n) {
-    const timeDiffSeconds = Number((timestamp - lastData.timestamp) / 1000n);
-    const pointsToAdd = lastData.balance * BigInt(timeDiffSeconds) * 1000n / 86400n;
+    const timeDiffSeconds = Number((timestamp - lastData.timestamp));
+    const pointsToAdd = lastData.balance * BigInt(timeDiffSeconds) * 1000n / 60n / 60n / 24n;
     point = lastData.point + pointsToAdd;
   }
   computeTime += performance.now() - computeStartTime;
@@ -347,17 +364,18 @@ async function createAndSaveSnapshot(
     snapshots.set(snapshotId, {
       id: snapshotId,
       accountId: normalizedAccountId,
-      timestampMilli: timestamp,
-      balance,
-      point,
+      timestamp: timestamp,
+      balance: balance,  // Make sure we're using the RPC balance
+      point: point,
       mintAmount: newMintAmount
     });
-    
     // Add account update to collection
     accountsToUpdate.set(normalizedAccountId, {
       id: normalizedAccountId,
       lastSnapshotTimestamp: timestamp,
-      balance
+      balance: balance,  // Make sure we're using the RPC balance
+      point: point
     });
+    storageTime += performance.now() - accountStartTime;
   }
 }

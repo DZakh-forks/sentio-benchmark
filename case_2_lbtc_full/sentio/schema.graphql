@@ -1,7 +1,8 @@
 type AccountSnapshot @entity {
   id: String!,
-  timestampMilli: BigInt!
+  timestamp: BigInt!
   lbtcBalance: BigDecimal!
+  points: BigDecimal!
 }
 
 type Transfer @entity {

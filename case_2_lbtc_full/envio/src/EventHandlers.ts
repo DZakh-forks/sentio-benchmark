@@ -5,16 +5,18 @@ import {
   LBTC,
   Transfer,
   Accounts,
-  BigDecimal
+  BigDecimal,
+  HandlerContext
 } from "generated";
 
-import {getBalance} from "./util"
+import {getBalance, rpcTime} from "./util"
 
 // Add timer variables
-let rpcBalanceTime = 0;
 let pointCalcTime = 0;
 let storageTime = 0;
 let operationCount = 0;
+const SECOND_PER_HOUR = 60n * 60n;
+const DAILY_POINTS = 1000;
 
 LBTC.Transfer.handlerWithLoader({
   loader: ({ event, context }) => {
@@ -24,8 +26,7 @@ LBTC.Transfer.handlerWithLoader({
       context.effect(getBalance, {address: event.params.to, blockNumber: blockNumber})
     ])
   },
-  handler: async ({ event, context, loaderReturn }) => {
-    const HOUR_IN_MS = 60n * 60n * 1000n
+  handler: async ({ event, context, loaderReturn }: { event: any, context: HandlerContext, loaderReturn: any }) => {
     const blockTimestamp = BigInt(event.block.timestamp)
     const blockNumber = BigInt(event.block.number)
     const [fromBalance, toBalance] = loaderReturn
@@ -50,7 +51,6 @@ LBTC.Transfer.handlerWithLoader({
 
     // Process sender account
     if (!isMint) {
-        const fromAccount = await getOrCreateAccount(context,from)
         const fromLastData = await getLastSnapshotData(context, from)
         
         await createAndSaveSnapshot(
@@ -66,7 +66,6 @@ LBTC.Transfer.handlerWithLoader({
     }
 
     // Process receiver account
-    const toAccount = await getOrCreateAccount(context, to)
     const toLastData = await getLastSnapshotData(context, to)
     
     await createAndSaveSnapshot(
@@ -82,6 +81,7 @@ LBTC.Transfer.handlerWithLoader({
         value
     )
 
+
     // Measure storage time for registry
     const registryStartTime = performance.now();
     const registry = await context.AccountRegistry.get("main")
@@ -89,7 +89,7 @@ LBTC.Transfer.handlerWithLoader({
 
     if (registry) {
         // Only run the global update if an hour has passed since the last global update
-        if (!registry.lastSnapshotTimestamp || (blockTimestamp - registry.lastSnapshotTimestamp) >= HOUR_IN_MS) {
+        if (!registry.lastSnapshotTimestamp || (blockTimestamp - registry.lastSnapshotTimestamp) >= SECOND_PER_HOUR) {
             // Update the global timestamp
             const registryStorageStartTime = performance.now();
             context.AccountRegistry.set({
@@ -100,7 +100,7 @@ LBTC.Transfer.handlerWithLoader({
             
             // Get all accounts that need updating
             await Promise.all(
-              registry.accounts.map(async (accountId) => {
+              registry.accounts.map(async (accountId: string) => {
                 // Measure storage time for account fetch
                 const accountFetchStartTime = performance.now();
                 const account = await context.Accounts.get(accountId)
@@ -129,7 +129,7 @@ LBTC.Transfer.handlerWithLoader({
     operationCount++;
     if (operationCount % 1000 === 0) {
       context.log.info(`Performance metrics after ${operationCount} operations:`);
-      context.log.info(`RPC balanceOf time: ${(rpcBalanceTime / 1000).toFixed(2)}s`);
+      context.log.info(`RPC balanceOf time: ${(rpcTime / 1000).toFixed(2)}s`);
       context.log.info(`Point calculation time: ${(pointCalcTime / 1000).toFixed(2)}s`);
       context.log.info(`Storage operation time: ${(storageTime / 1000).toFixed(2)}s`);
     }
@@ -162,28 +162,6 @@ async function addAccountToRegistry(context: any, accountId: string): Promise<vo
   }
 }
 
-// Helper to get or create an account
-async function getOrCreateAccount(context: any, address: string): Promise<Accounts> {
-  // Measure storage time for account fetch
-  const accountFetchStartTime = performance.now();
-  let account = await context.Accounts.get({id: address})
-  storageTime += performance.now() - accountFetchStartTime;
-  
-  if (!account) {
-    account = {
-      id: address,
-      lastSnapshotTimestamp: 0n
-    }
-    const accountSaveStartTime = performance.now();
-    context.Accounts.set(account)
-    storageTime += performance.now() - accountSaveStartTime;
-    // Add to registry
-    addAccountToRegistry(context, account.id)
-  }
-  
-  return account
-}
-
 // Helper to get the last snapshot data
 async function getLastSnapshotData(context: any, accountId: string): Promise<{
   point: BigDecimal,
@@ -198,7 +176,7 @@ async function getLastSnapshotData(context: any, accountId: string): Promise<{
   
   // Measure storage time for account fetch
   const accountFetchStartTime = performance.now();
-  let account = await context.Accounts.get({id: accountId})
+  let account = await context.Accounts.get(accountId)
   storageTime += performance.now() - accountFetchStartTime;
   if (account && account.lastSnapshotTimestamp) {
     lastTimestamp = account.lastSnapshotTimestamp
@@ -227,22 +205,20 @@ async function getLastSnapshotData(context: any, accountId: string): Promise<{
 
 // Helper to check if it's time for an hourly update
 async function shouldUpdateHourly(context: any, accountId: string, currentTimestamp: bigint): Promise<boolean> {
-  const HOUR_IN_MS = 60n * 60n * 1000n
-  
   // Measure storage time for account fetch
   const accountFetchStartTime = performance.now();
-  let account = await context.Accounts.get({id: accountId})
+  let account = await context.Accounts.get(accountId)
   storageTime += performance.now() - accountFetchStartTime;
   if (!account) return false
   
   // Check if the account has a lastSnapshotTimestamp and if an hour has passed
   return account.lastSnapshotTimestamp > 0n && 
-         (currentTimestamp - account.lastSnapshotTimestamp) >= HOUR_IN_MS
+         (currentTimestamp - account.lastSnapshotTimestamp) >= SECOND_PER_HOUR
 }
 
 // Helper to create and save a snapshot
 async function createAndSaveSnapshot(
-  context: any,
+  context: HandlerContext,
   accountId: string, 
   timestamp: bigint, 
   balance: BigDecimal, 
@@ -260,7 +236,7 @@ async function createAndSaveSnapshot(
 
   // Measure storage time for account fetch
   const accountFetchStartTime = performance.now();
-  let account = await context.Accounts.get({id: accountId})
+  let account = await context.Accounts.get(accountId)
   storageTime += performance.now() - accountFetchStartTime;
 
   if (!account) {
@@ -270,13 +246,15 @@ async function createAndSaveSnapshot(
     }
     const accountSaveStartTime = performance.now();
     context.Accounts.set(account)
+    await addAccountToRegistry(context, account.id)
     storageTime += performance.now() - accountSaveStartTime;
   }
   
   let snapshot = {
     id: `${accountId}-${timestamp}`,
+    account_id: accountId,
     account,
-    timestampMilli: timestamp,
+    timestamp: timestamp,
     balance: balance,
     mintAmount: lastMintAmount,
     point: lastPoint
@@ -293,13 +271,13 @@ async function createAndSaveSnapshot(
     const pointStartTime = performance.now();
     
     // Calculate time delta in seconds
-    const secondsSinceLastUpdate = Number(timestamp - lastTimestamp) / 1000
+    const secondsSinceLastUpdate = Number(timestamp - lastTimestamp)
     
     // Updated points calculation: 1000 points per day
     snapshot.point = lastPoint.plus(
       lastBalance
-        .times(BigDecimal(1000)) // 1000 points per day
-        .times(BigDecimal(secondsSinceLastUpdate / 86400)) // Convert to days
+        .times(BigDecimal(DAILY_POINTS/24)) // 1000 points per day
+        .times(BigDecimal(secondsSinceLastUpdate / Number(SECOND_PER_HOUR))) // Convert to hours
     )
     
     pointCalcTime += performance.now() - pointStartTime;
@@ -311,8 +289,11 @@ async function createAndSaveSnapshot(
   const snapshotStorageStartTime = performance.now();
   context.Snapshot.set(snapshot)
   
-  // Update account's last snapshot timestamp
-  account.lastSnapshotTimestamp = timestamp
-  context.Accounts.set(account)
+  // Update account's last snapshot timestamp by creating a new account object
+  const updatedAccount = {
+    ...account,
+    lastSnapshotTimestamp: timestamp,
+  }
+  context.Accounts.set(updatedAccount)
   storageTime += performance.now() - snapshotStorageStartTime;
 }

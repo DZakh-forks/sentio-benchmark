@@ -1,7 +1,7 @@
 type Snapshot @entity {
   id: ID! @index
   account: Accounts @index # Null for global update tracker
-  timestampMilli: BigInt! @index # Block timestamp in milliseconds
+  timestamp: BigInt! @index # Block timestamp in seconds
   mintAmount: BigDecimal # Amount minted in this snapshot (if applicable)
   balance: BigDecimal! # Current token balance
   point: BigDecimal # Accumulated points

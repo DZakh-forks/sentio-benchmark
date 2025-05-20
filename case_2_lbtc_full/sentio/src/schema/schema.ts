@@ -15,8 +15,9 @@ import { DatabaseSchema } from '@sentio/sdk'
 
 interface AccountSnapshotConstructorInput {
   id: String;
-  timestampMilli: BigInt;
+  timestamp: BigInt;
   lbtcBalance: BigDecimal;
+  points: BigDecimal;
 }
 @Entity("AccountSnapshot")
 export class AccountSnapshot extends AbstractEntity  {
@@ -27,11 +28,15 @@ export class AccountSnapshot extends AbstractEntity  {
 
 	@Required
 	@Column("BigInt")
-	timestampMilli: BigInt
+	timestamp: BigInt
 
 	@Required
 	@Column("BigDecimal")
 	lbtcBalance: BigDecimal
+
+	@Required
+	@Column("BigDecimal")
+	points: BigDecimal
   constructor(data: AccountSnapshotConstructorInput) {super()}
   
 }
@@ -77,8 +82,9 @@ export class Transfer extends AbstractEntity  {
 
 const source = `type AccountSnapshot @entity {
   id: String!,
-  timestampMilli: BigInt!
+  timestamp: BigInt!
   lbtcBalance: BigDecimal!
+  points: BigDecimal!
 }
 
 type Transfer @entity {

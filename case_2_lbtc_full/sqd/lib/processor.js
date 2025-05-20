@@ -29,11 +29,11 @@ const evm_processor_1 = require("@subsquid/evm-processor");
 const constant_1 = require("./constant");
 const lbtcAbi = __importStar(require("./abi/LBTC.js"));
 const dotenv = __importStar(require("dotenv"));
-// Load environment variables from .env.local
-dotenv.config({ path: '.env' });
-if (!process.env.RPC_URL) {
-  throw new Error('RPC_URL is required in .env.local');
-}
+// Load environment variables from .env file
+dotenv.config();
+// Get RPC endpoint from environment variable 
+const rpcEndpoint = 'https://rpc.sentio.xyz/oTSQQwOgzr9ERJ0petpRSbgkQDCPJ9Al/ethereum';
+// const rpcEndpoint = process.env.RPC_ENDPOINT
 exports.processor = new evm_processor_1.EvmBatchProcessor()
     // Lookup archive by the network name in Subsquid registry
     // See https://docs.subsquid.io/evm-indexing/supported-networks/
@@ -42,9 +42,9 @@ exports.processor = new evm_processor_1.EvmBatchProcessor()
     //  - indexing unfinalized blocks https://docs.subsquid.io/basics/unfinalized-blocks/
     //  - querying the contract state https://docs.subsquid.io/evm-indexing/query-state/
     .setRpcEndpoint({
-    // Set the URL via .env.local for local runs or via secrets when deploying to Subsquid Cloud
+    // Set the URL via .env for local runs or via secrets when deploying to Subsquid Cloud
     // https://docs.subsquid.io/deploy-squid/env-variables/
-    url: (0, util_internal_1.assertNotNull)(process.env.RPC_URL, 'No RPC endpoint supplied - set RPC_URL in .env.local')
+    url: (0, util_internal_1.assertNotNull)(rpcEndpoint, 'No RPC endpoint supplied - set RPC_ENDPOINT environment variable')
 })
     .setFinalityConfirmation(75)
     .setFields({
@@ -59,8 +59,8 @@ exports.processor = new evm_processor_1.EvmBatchProcessor()
     },
 })
     .setBlockRange({
-    from: 22180000,
-    to: 22200000,
+    from: 15000000,
+    to: 22500000,
 })
     .addLog({
     address: [constant_1.LBTC_PROXY],

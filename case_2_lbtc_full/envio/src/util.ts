@@ -29,6 +29,9 @@ const lbtcContract = getContract({
   client: client,
 });
 
+// Global variable to track RPC time
+export let rpcTime = 0;
+
 // Function to get the balance of a specific address at a specific block
 export const getBalance = experimental_createEffect({
   name: "getBalance",
@@ -41,7 +44,10 @@ export const getBalance = experimental_createEffect({
   try {
     // If blockNumber is provided, use it to get balance at that specific block
     const options = input.blockNumber ? { blockNumber: input.blockNumber } : undefined;
+    const startTime = performance.now();
     const balance = await lbtcContract.read.balanceOf([input.address as `0x${string}`], options);
+    const endTime = performance.now();
+    rpcTime += (endTime - startTime);
     return BigDecimal(balance.toString());
   } catch (error) {
     context.log.error(`Error getting balance for ${input.address}`, error as Error);

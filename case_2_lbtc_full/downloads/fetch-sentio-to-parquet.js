@@ -38,7 +38,7 @@ const pointUpdateSchema = new parquet.ParquetSchema({
   account: { type: 'UTF8' },
   blockNumber: { type: 'INT64' },
   points: { type: 'UTF8' }, // Using UTF8 for large numbers
-  newTimestampMilli: { type: 'INT64' },
+  newTimestamp: { type: 'INT64' },
   newLbtcBalance: { type: 'UTF8' } // Using UTF8 for large numbers
 });
 
@@ -239,7 +239,7 @@ async function fetchSentioAccounts() {
       WITH LatestSnapshots AS (
         SELECT 
           id as account_id,
-          MAX(timestampMilli) as latest_timestamp
+          MAX(timestamp) as latest_timestamp
         FROM 
           AccountSnapshot
         GROUP BY 
@@ -250,20 +250,20 @@ async function fetchSentioAccounts() {
         SELECT
           account,
           points,
-          newTimestampMilli,
-          ROW_NUMBER() OVER (PARTITION BY account ORDER BY newTimestampMilli DESC) as rn
+          newTimestamp,
+          ROW_NUMBER() OVER (PARTITION BY account ORDER BY newTimestamp DESC) as rn
         FROM
           point_update
       )
       SELECT 
         a.id,
         a.lbtcBalance * 100000000 as balance, -- Convert to integer representation
-        a.timestampMilli as timestamp,
+        a.timestamp as timestamp,
         COALESCE(p.points * 100000000, 0) as point -- Convert to integer representation
       FROM 
         AccountSnapshot a
       INNER JOIN 
-        LatestSnapshots l ON a.id = l.account_id AND a.timestampMilli = l.latest_timestamp
+        LatestSnapshots l ON a.id = l.account_id AND a.timestamp = l.latest_timestamp
       LEFT JOIN
         LatestPointUpdates p ON a.id = p.account AND p.rn = 1
       ORDER BY 
@@ -391,7 +391,7 @@ async function fetchSentioPointUpdates() {
                     account,
                     block_number,
                     points,
-                    newTimestampMilli,
+                    newTimestamp,
                     newLbtcBalance,
                     ROW_NUMBER() OVER (PARTITION BY account ORDER BY block_number DESC) as rn
                   FROM point_update
@@ -400,7 +400,7 @@ async function fetchSentioPointUpdates() {
                   account,
                   block_number,
                   points,
-                  newTimestampMilli,
+                  newTimestamp,
                   newLbtcBalance
                 FROM LatestUpdates
                 WHERE rn = 1
@@ -431,7 +431,7 @@ async function fetchSentioPointUpdates() {
               account: String(row.account || ''),
               blockNumber: BigInt(row.block_number || 0),
               points: String(row.points || '0'),
-              newTimestampMilli: BigInt(row.newTimestampMilli || 0),
+              newTimestamp: BigInt(row.newTimestamp || 0),
               newLbtcBalance: String(row.newLbtcBalance || '0')
             };
             
@@ -464,7 +464,7 @@ async function fetchSentioPointUpdates() {
         account: 'dummy',
         blockNumber: BigInt(0),
         points: '0',
-        newTimestampMilli: BigInt(0),
+        newTimestamp: BigInt(0),
         newLbtcBalance: '0'
       });
       totalRows = 1;

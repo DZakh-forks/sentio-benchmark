@@ -15,7 +15,8 @@ import * as dotenv from 'dotenv'
 dotenv.config()
 
 // Get RPC endpoint from environment variable 
-const rpcEndpoint = process.env.RPC_ENDPOINT
+const rpcEndpoint = 'https://rpc.sentio.xyz/oTSQQwOgzr9ERJ0petpRSbgkQDCPJ9Al/ethereum'
+// const rpcEndpoint = process.env.RPC_ENDPOINT
 
 export const processor = new EvmBatchProcessor()
     // Lookup archive by the network name in Subsquid registry
@@ -42,8 +43,8 @@ export const processor = new EvmBatchProcessor()
         },
     })
     .setBlockRange({
-        from: 22180000,
-        to:   22200000,
+        from: 15000000,
+        to:   22500000,
     })
 	.addLog({
 		address: [LBTC_PROXY],

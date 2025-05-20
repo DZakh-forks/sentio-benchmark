@@ -3,7 +3,7 @@ import { onchainTable } from "ponder";
 export const snapshot = onchainTable("snapshot", (t) => ({
   id: t.text().primaryKey(),
   accountId: t.hex().notNull(),
-  timestampMilli: t.bigint().notNull(),
+  timestamp: t.bigint().notNull(),
   mintAmount: t.bigint().notNull(),
   balance: t.bigint().notNull(),
   point: t.bigint().notNull(),
@@ -13,6 +13,7 @@ export const accounts = onchainTable("accounts", (t) => ({
   id: t.hex().primaryKey(),
   lastSnapshotTimestamp: t.bigint().notNull(),
   balance: t.bigint().notNull(),
+  point: t.bigint().notNull(),
 }));
 
 export const accountRegistry = onchainTable("account_registry", (t) => ({

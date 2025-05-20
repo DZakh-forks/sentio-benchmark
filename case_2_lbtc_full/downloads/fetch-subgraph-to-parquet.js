@@ -122,108 +122,120 @@ async function fetchSubgraphTransfers() {
 async function fetchSubgraphAccounts() {
   const outputPath = path.join(dataDir, 'subgraph-case2-accounts.parquet');
   
-  // Remove existing file if it exists
   if (fs.existsSync(outputPath)) {
     fs.unlinkSync(outputPath);
     console.log(`Removed existing file: ${outputPath}`);
   }
 
-  const writer = await parquet.ParquetWriter.openFile(accountSchema, outputPath);
-  let lastId = '';
-  const pageSize = 1000;
-  let totalRows = 0;
-  
-  console.log('Fetching account data from Subgraph GraphQL...');
-  
-  // Create a map to keep track of the latest snapshot for each account
-  const accountLatestSnapshots = new Map();
-  
-  while (true) {
-    console.log(`Fetching snapshots after ID: ${lastId || 'start'}...`);
+  try {
+    const writer = await parquet.ParquetWriter.openFile(accountSchema, outputPath);
+    let offset = 0;
+    const pageSize = 1000;
+    let totalRows = 0;
     
-    const whereCondition = lastId ? `where: {id_gt: "${lastId}"}` : '';
-    const query = `
-      query {
-        snapshots(${whereCondition}, first: ${pageSize}, orderBy: id, orderDirection: asc) {
-          id
-          account {
-            id
+    console.log('Fetching account data from Subgraph GraphQL...');
+    
+    const allAccounts = [];
+    
+    while (true) {
+      console.log(`Fetching accounts with offset: ${offset}...`);
+      
+      try {
+        const response = await axios.post(
+          SUBGRAPH_ENDPOINT,
+          {
+            query: `
+              query {
+                accounts_collection(
+                  first: ${pageSize}
+                  skip: ${offset}
+                  orderBy: id
+                  orderDirection: asc
+                ) {
+                  id
+                  lastSnapshotTimestamp
+                  snapshots(
+                    first: 1
+                    orderBy: timestamp
+                    orderDirection: desc
+                  ) {
+                    id
+                    timestamp
+                    balance
+                    point
+                    mintAmount
+                  }
+                }
+              }
+            `
+          },
+          {
+            headers: { 'Content-Type': 'application/json' },
+            timeout: 180000
           }
-          balance
-          point
-          timestampMilli
+        );
+        
+        if (!response.data?.data?.accounts_collection) {
+          console.log('Invalid response structure:', JSON.stringify(response.data, null, 2));
+          break;
         }
+        
+        const accounts = response.data.data.accounts_collection;
+        console.log(`Received ${accounts.length} accounts`);
+        
+        if (accounts.length === 0) {
+          break;
+        }
+        
+        for (const account of accounts) {
+          // Skip zero address
+          if (account.id.toLowerCase() === "0x0000000000000000000000000000000000000000") {
+            continue;
+          }
+          
+          if (!account.snapshots || account.snapshots.length === 0) {
+            console.log(`No snapshots found for account ${account.id}`);
+            continue;
+          }
+          
+          const latestSnapshot = account.snapshots[0];
+          const record = {
+            id: account.id,
+            balance: latestSnapshot.balance || '0',
+            point: latestSnapshot.point || '0',
+            timestamp: parseInt(latestSnapshot.timestamp, 10) || 0
+          };
+          
+          await writer.appendRow(record);
+          allAccounts.push(record);
+          totalRows++;
+        }
+        
+        offset += accounts.length;
+        
+        if (accounts.length < pageSize) {
+          break;
+        }
+        
+        // Add a small delay to avoid rate limiting
+        await new Promise(resolve => setTimeout(resolve, 100));
+      } catch (error) {
+        console.error('Error fetching accounts:', error.message);
+        if (error.response) {
+          console.error('Response status:', error.response.status);
+          console.error('Response data:', JSON.stringify(error.response.data, null, 2));
+        }
+        break;
       }
-    `;
-    
-    const response = await axios.post(
-      SUBGRAPH_ENDPOINT,
-      { query },
-      {
-        headers: { 'Content-Type': 'application/json' },
-        timeout: 180000 // 3 minute timeout
-      }
-    );
-    
-    const snapshots = response.data.data.snapshots;
-    console.log(`Received ${snapshots.length} snapshots`);
-    
-    if (snapshots.length === 0) {
-      // If we haven't fetched any accounts yet, create a dummy record
-      if (accountLatestSnapshots.size === 0) {
-        await writer.appendRow({
-          id: 'dummy',
-          balance: '0',
-          point: '0',
-          timestamp: 0
-        });
-        totalRows = 1;
-        console.log("Added a dummy record since no snapshots were found.");
-      }
-      break;
     }
     
-    for (const snapshot of snapshots) {
-      const accountId = snapshot.account.id;
-      const timestampMilli = parseInt(snapshot.timestampMilli, 10);
-      
-      // Track the latest snapshot for each account
-      if (!accountLatestSnapshots.has(accountId) || 
-          accountLatestSnapshots.get(accountId).timestampMilli < timestampMilli) {
-        accountLatestSnapshots.set(accountId, {
-          id: accountId,
-          balance: snapshot.balance,
-          point: snapshot.point,
-          timestampMilli: timestampMilli
-        });
-      }
-      
-      lastId = snapshot.id;
-    }
-    
-    if (snapshots.length < pageSize) {
-      break;
-    }
+    await writer.close();
+    console.log(`Saved ${totalRows} account records to ${outputPath}`);
+    return totalRows;
+  } catch (error) {
+    console.error('Error in fetchSubgraphAccounts:', error);
+    throw error;
   }
-  
-  console.log(`Processing ${accountLatestSnapshots.size} unique accounts...`);
-  
-  // Write the latest snapshots to the Parquet file
-  for (const account of accountLatestSnapshots.values()) {
-    const record = {
-      id: account.id || '',
-      balance: account.balance || '0',
-      point: account.point || '0',
-      timestamp: account.timestampMilli || 0
-    };
-    
-    await writer.appendRow(record);
-    totalRows++;
-  }
-  
-  await writer.close();
-  console.log(`Saved ${totalRows} account records to ${outputPath}`);
-  return totalRows;
 }
 
 // Main function
@@ -312,4 +324,4 @@ main().catch(error => {
   console.error('Error occurred during data fetching:');
   console.error(error);
   process.exit(1);
-}); 
+});

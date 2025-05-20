@@ -9,12 +9,13 @@ if (!fs.existsSync(dataDir)) {
   fs.mkdirSync(dataDir, { recursive: true });
 }
 
-// Subsquid database details
+// Local PostgreSQL database details
 const DB_CONFIG = {
   host: 'pg.squid.subsquid.io',
-  database: '16175_0hotg1',
-  user: '16175_0hotg1',
-  password: '2lABMqtGktrOpcaZwKEVbwM2GAxXamat',
+  port: 5432,
+  database: '16573_6ovpdj',
+  user: '16573_6ovpdj',
+  password: 'fL1m4VN~SuEdeX0EYDrjWqd9X65-Hs9~',
   // Increase connection timeout to 30 seconds
   connectionTimeoutMillis: 30000,
   // Increase query timeout to 3 minutes
@@ -53,11 +54,11 @@ async function fetchSubsquidData() {
   
   // Close the database connection
   await client.end();
-  console.log('Subsquid data fetching complete!');
+  console.log('Local database data fetching complete!');
 }
 
 async function fetchTransfers(client) {
-  const outputPath = path.join(dataDir, 'subsquid-case2-transfers.parquet');
+  const outputPath = path.join(dataDir, 'sqd-case2-transfers.parquet');
   
   // Remove existing file if it exists
   if (fs.existsSync(outputPath)) {
@@ -70,7 +71,7 @@ async function fetchTransfers(client) {
   const batchSize = 10000;
   let totalRows = 0;
   
-  console.log('Fetching transfer data from Subsquid PostgreSQL...');
+  console.log('Fetching transfer data from local PostgreSQL...');
   
   while (true) {
     console.log(`Fetching transfers with offset ${offset}...`);
@@ -79,7 +80,7 @@ async function fetchTransfers(client) {
       `SELECT id, block_number, 
               encode(transaction_hash, 'hex') as transaction_hash, 
               "from", "to", value::text 
-       FROM transfer 
+       FROM "transfer" 
        ORDER BY id 
        LIMIT $1 OFFSET $2`,
       [batchSize, offset]
@@ -117,7 +118,7 @@ async function fetchTransfers(client) {
 }
 
 async function fetchAccounts(client) {
-  const outputPath = path.join(dataDir, 'subsquid-case2-accounts.parquet');
+  const outputPath = path.join(dataDir, 'sqd-case2-accounts.parquet');
   
   // Remove existing file if it exists
   if (fs.existsSync(outputPath)) {
@@ -128,7 +129,7 @@ async function fetchAccounts(client) {
   const writer = await parquet.ParquetWriter.openFile(accountSchema, outputPath);
   let totalRows = 0;
   
-  console.log('Fetching account data from Subsquid PostgreSQL...');
+  console.log('Fetching account data from local PostgreSQL...');
   
   // Query to get the latest snapshot for each account
   const query = `
@@ -137,9 +138,9 @@ async function fetchAccounts(client) {
         account_id AS id, 
         balance::text AS balance,
         point::text AS point,
-        timestamp_milli
-      FROM snapshot
-      ORDER BY account_id, timestamp_milli DESC
+        timestamp
+      FROM "snapshot"
+      ORDER BY account_id, timestamp DESC
     )
     SELECT * FROM latest_snapshots
     ORDER BY id
@@ -153,7 +154,7 @@ async function fetchAccounts(client) {
       id: row.id || '',
       balance: row.balance || '0',
       point: row.point || '0',
-      timestamp: row.timestamp_milli ? Number(row.timestamp_milli) : 0
+      timestamp: row.timestamp ? Number(row.timestamp) : 0
     };
     
     await writer.appendRow(record);

@@ -23,16 +23,16 @@ export default createConfig({
       network: "mainnet",
       abi: LBTCAbi,
       address: "0x8236a87084f8B84306f72007F36F2618A5634494",
-      startBlock: 22000000,
-      endBlock: 23000000,
+      startBlock: 22400000,
+      endBlock: 22500000,
     }
   },
   blocks: {
     HourlyUpdate: {
       network: "mainnet",
       interval: 60 * 60 / 12, // Approximating hourly based on block time
-      startBlock: 22000000,
-      endBlock: 23000000,
+      startBlock: 22400000,
+      endBlock: 22500000,
     }
   },
 });

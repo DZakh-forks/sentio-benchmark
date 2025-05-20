@@ -126,11 +126,9 @@ async function fetchPonderAccounts(client) {
   
   // Query to get the latest snapshot for each account
   const query = `
-    SELECT a.id, s.balance, s.timestamp_milli as timestamp, s.point
-    FROM accounts a
-    JOIN snapshot s ON s.account_id = a.id 
-    WHERE s.timestamp_milli = a.last_snapshot_timestamp
-    ORDER BY a.id
+    SELECT id, balance, last_snapshot_timestamp as timestamp, point
+    FROM accounts
+    ORDER BY id
   `;
   
   const result = await client.query(query);

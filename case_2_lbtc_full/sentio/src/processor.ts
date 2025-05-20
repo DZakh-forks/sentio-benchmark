@@ -14,7 +14,7 @@ import { EthChainId, isNullAddress } from "@sentio/sdk/eth";
 import { LBTC_PROXY, } from "./constant.js"
 import { AccountSnapshot, Transfer } from './schema/schema.js'
 
-const MILLISECOND_PER_DAY = 60 * 60 * 1000 * 24;
+const SECOND_PER_DAY = 60 * 60 * 24;
 const DAILY_POINTS = 1000;
 
 // commonly used option for Gauge
@@ -99,15 +99,15 @@ async function process(
         snapshot = await ctx.store.get(AccountSnapshot, account);
         storageTime += performance.now() - fetchStartTime;
     }
-    const snapshotTimestampMilli = snapshot?.timestampMilli ?? 0n;
+    const snapshotTimestamp = snapshot?.timestamp ?? 0n;
     const snapshotLbtcBalance: BigDecimal = snapshot?.lbtcBalance ?? new BigDecimal(0);
     
     // Measure point calculation time
     const pointStartTime = performance.now();
-    const points = calcPoints(ctx, snapshotTimestampMilli, snapshotLbtcBalance);
+    const points = (snapshot?.points ?? new BigDecimal(0)).plus(calcPoints(ctx, snapshotTimestamp, snapshotLbtcBalance));
     pointCalcTime += performance.now() - pointStartTime;
 
-    const newTimestampMilli = BigInt(ctx.timestamp.getTime());
+    const newTimestamp = BigInt(ctx.timestamp.getTime() / 1000);
     const tokenInfo = await token.getERC20TokenInfo(ctx, ctx.contract.address)
     
     let newLbtcBalance: BigDecimal;
@@ -124,8 +124,9 @@ async function process(
     
     const newSnapshot = new AccountSnapshot({
         id: account,
-        timestampMilli: newTimestampMilli,
+        timestamp: newTimestamp,
         lbtcBalance: newLbtcBalance,
+        points: points,
     });
 
     // Measure storage operation time for event emission
@@ -133,9 +134,9 @@ async function process(
     ctx.eventLogger.emit("point_update", {
         account,
         points,
-        snapshotTimestampMilli,
+        snapshotTimestamp,
         snapshotLbtcBalance,
-        newTimestampMilli,
+        newTimestamp,
         newLbtcBalance,
         triggerEvent,
     });
@@ -156,24 +157,24 @@ async function process(
 // calculate the points for each account based on the balance and time
 function calcPoints(
     ctx: LBTCContext,
-    snapshotTimestampMilli: bigint,
+    snapshotTimestamp: bigint,
     snapshotLbtcBalance: BigDecimal
 ): BigDecimal {
-    const nowMilli = ctx.timestamp.getTime();
-    const snapshotMilli = Number(snapshotTimestampMilli);
-    if (nowMilli < snapshotMilli) {
+    const now = ctx.timestamp.getTime() / 1000;
+    const snapshot = Number(snapshotTimestamp);
+    if (now < snapshot) {
         console.error(
             "unexpected account snapshot from the future",
-            nowMilli,
-            snapshotTimestampMilli,
+            now,
+            snapshotTimestamp,
             snapshotLbtcBalance
         );
         return new BigDecimal(0);
-    } else if (nowMilli == snapshotMilli) {
+    } else if (now == snapshot) {
         // account affected for multiple times in the block
         return new BigDecimal(0);
     }
-    const deltaDay = (nowMilli - snapshotMilli) / MILLISECOND_PER_DAY;
+    const deltaDay = (now - snapshot) / SECOND_PER_DAY;
 
     const lPoints = snapshotLbtcBalance
       .multipliedBy(deltaDay)
@@ -184,7 +185,7 @@ function calcPoints(
 
 // processor binding logic to bind the right contract address and attach right event and block handlers
 // onTimeInterval is used to update the balance and points of each account every hour
-LBTCProcessor.bind({ address: LBTC_PROXY, startBlock: 22000000, endBlock: 23000000 })
+LBTCProcessor.bind({ address: LBTC_PROXY, startBlock: 22400000, endBlock: 22500000 })
     .onEventTransfer(transferEventHandler) // if filter by mint LBTC Processor.filters.Transfer(0x0, null)
     .onTimeInterval(
         async (_, ctx) => {

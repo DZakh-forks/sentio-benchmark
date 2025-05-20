@@ -1,7 +1,7 @@
 type Snapshot @entity(immutable: false) {
   id: ID! # account-timestamp
   account: Accounts! @index
-  timestampMilli: BigInt! @index
+  timestamp: BigInt! @index
   mintAmount: BigDecimal
   balance: BigDecimal!
   point: BigDecimal
