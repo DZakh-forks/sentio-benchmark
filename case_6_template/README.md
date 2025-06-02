@@ -1,85 +1,69 @@
 # Case 6: Uniswap V2 Template Benchmark
 
-This benchmark tests the performance of various indexers when processing Uniswap V2 events and analyzing pair and swap data.
+This benchmark tests the performance of various indexers when processing Uniswap V2 factory events and tracking pair creation.
 
 ## Benchmark Specification
 
-- **Target Data**: Uniswap V2 events (PairCreated, Sync, Swap)
-- **Data Processed**: Pair creation and swap events with token analysis
-- **Block Range**: 19000000 to 19010000 (100,000 blocks)
-- **Data Operations**: Event processing with pair and swap analysis
-- **RPC Calls**: Minimal (only for token metadata)
-- **Dataset**: [Google Drive](https://drive.google.com/drive/folders/1DdAvXK1r27VUHagyb20rRn2OjfVDVfMN)
+- **Target Data**: Uniswap V2 factory events and pair creation tracking
+- **Data Processed**: Factory events and pair data
+- **Block Range**: 19000000 to 19010000 (10000 blocks)
+- **Data Operations**: Event handling and pair analysis
+- **RPC Calls**: Required for pair data retrieval
+- **Dataset**: [Google Drive](https://drive.google.com/drive/folders/1407EeP-KzUwzujdnkoP_DiewJNbOHqcY)
 
 ## Performance Results
 
-| Indexer  | Processing Time | Records | Block Range | 
-|----------|----------------|---------|-------------|
-| Sentio   | 19m            | 35,039  | 19,000,000-19,010,000 |
-| Subsquid | 2m             | 33,972  | 19,000,000-19,010,000 |
-| Envio    | 10s            | 35,039  | 19,000,000-19,010,000 |
-| Ponder   | 21m            | 35,039  | 19,000,000-19,010,000 |
-| Subgraph | 19m            | 35,039  | 19,000,000-19,010,000 |
+| Indexer    | Processing Time | Records | Block Range |
+|------------|----------------|---------|-------------|
+| Envio HyperIndex | 30s            | 35,039  | 19000000-19010000 |
+| Subsquid   | 2m             | 33,972  | 19000000-19010000 |
+| Sentio     | 19m            | 35,039  | 19000000-19010000 |
+| Subgraph   | 19m            | 35,039  | 19000000-19010000 |
+| Ponder     | 21m            | 35,039  | 19000000-19010000 |
 
 ## Data Distribution Details
 
-The distribution of Uniswap V2 events across platforms shows variations in data completeness:
+The distribution of factory events and pairs across platforms shows some variations in data completeness:
 
-- **Sentio**: 35,039 event records
-  - PairCreated events: 1,234
-  - Sync events: 28,456
-  - Swap events: 5,349
-  - Unique pairs: 1,234
-  - Unique tokens: 2,468
-- **Subsquid**: 33,972 event records
-  - PairCreated events: 1,234
-  - Sync events: 27,389
-  - Swap events: 5,349
-  - Unique pairs: 1,234
-  - Unique tokens: 2,468
-- **Envio**: 35,039 event records
-  - PairCreated events: 1,234
-  - Sync events: 28,456
-  - Swap events: 5,349
-  - Unique pairs: 1,234
-  - Unique tokens: 2,468
-- **Ponder**: 35,039 event records
-  - PairCreated events: 1,234
-  - Sync events: 28,456
-  - Swap events: 5,349
-  - Unique pairs: 1,234
-  - Unique tokens: 2,468
-- **Subgraph**: 35,039 event records
-  - PairCreated events: 1,234
-  - Sync events: 28,456
-  - Swap events: 5,349
-  - Unique pairs: 1,234
-  - Unique tokens: 2,468
+- **Sentio**: 35,039 records
+  - Complete coverage of all factory events
+  - Accurate pair tracking
+- **Subsquid**: 33,972 records
+  - Missing 1,067 pairs compared to other platforms
+  - Limited by template configuration constraints
+- **Envio HyperIndex**: 35,039 records
+  - Complete coverage of all factory events
+  - Accurate pair tracking
+- **Ponder**: 35,039 records
+  - Complete coverage of all factory events
+  - Accurate pair tracking
+- **Subgraph**: 35,039 records
+  - Complete coverage of all factory events
+  - Accurate pair tracking
 
 ## Key Findings
 
 1. **Data Completeness**:
-   - **Complete Coverage**: Sentio, Envio, Ponder, and Subgraph all captured 35,039 event records
-   - **Partial Coverage**: Subsquid captured 33,972 records (1,067 fewer Sync events)
-   - **Event Distribution**: All platforms show consistent distribution of event types
+   - **Complete Coverage**: Sentio, Envio HyperIndex, Ponder, and Subgraph all captured 35,039 records
+   - **Partial Coverage**: Subsquid captured 33,972 records (~97% of total)
+   - The difference in Subsquid's record count is due to template configuration limitations
 
 2. **Performance Differences**:
-   - **Envio** demonstrated exceptional performance at 10 seconds
+   - **Envio HyperIndex** demonstrated exceptional performance at 30 seconds
    - **Subsquid** showed excellent performance at 2 minutes
-   - **Sentio** completed in 12 minutes with reliable performance
-   - **Subgraph** processed in 34 minutes
-   - **Ponder** took 2 hours 24 minutes
+   - **Sentio** and **Subgraph** completed in 19 minutes
+   - **Ponder** processed in 21 minutes
 
 3. **Implementation Approaches**:
-   - Envio's implementation leverages their HyperIndex technology for optimized event processing
-   - Traditional indexers process events through event handlers
-   - All platforms successfully captured the core Uniswap V2 events
+   - Envio HyperIndex's implementation leverages their optimized template processing
+   - Traditional indexers process factory events through event handlers
+   - Subsquid requires manual configuration updates for template optimization
 
 ## Implementation Details
 
 Each subdirectory contains the implementation for a specific indexing platform:
 - `/sentio`: Sentio implementation 
-- `/envio`: Envio implementation with HyperIndex
+- `/envio`: Envio HyperIndex implementation
 - `/ponder`: Ponder implementation
 - `/sqd`: Subsquid implementation
 - `/subgraph`: Subgraph implementation
@@ -87,55 +71,49 @@ Each subdirectory contains the implementation for a specific indexing platform:
 ## Platform Notes
 
 ### Sentio
-- Complete coverage of all Uniswap V2 events
-- Processing time: 12 minutes
-- Total event records: 35,039
-- Captures all event types with consistent distribution
-- Identifies 1,234 unique pairs and 2,468 unique tokens
+- Complete coverage of all factory events
+- Processing time: 19 minutes
+- Total records: 35,039
+- Accurate pair tracking and analysis
 
 ### Subsquid
 - Partial coverage with 33,972 records
 - Processing time: 2 minutes
-- Missing 1,067 Sync events
-- Maintains complete coverage of PairCreated and Swap events
+- Limited by template configuration constraints
+- Requires manual updates for optimal performance
 
-### Envio
-- Uses HyperIndex technology for optimized event processing
-- Processing time: 10 seconds
-- Total event records: 35,039
-- Identical data distribution to Sentio, Ponder, and Subgraph
+### Envio HyperIndex
+- Uses optimized template processing
+- Processing time: 30 seconds
+- Total records: 35,039
+- Complete and accurate pair tracking
 
 ### Ponder
-- Complete coverage of all events
-- Processing time: 2 hours 24 minutes
-- Total event records: 35,039
-- Consistent event distribution with other platforms
+- Complete coverage of all factory events
+- Processing time: 21 minutes
+- Total records: 35,039
+- Accurate pair tracking
 
 ### Subgraph
-- Complete coverage of all events
-- Processing time: 34 minutes
-- Total event records: 35,039
-- Matches data distribution of other platforms
+- Complete coverage of all factory events
+- Processing time: 19 minutes
+- Total records: 35,039
+- Accurate pair tracking
 
 ## Conclusion
 
-This benchmark demonstrates the effectiveness of different indexing platforms in processing Uniswap V2 events. Envio's HyperIndex technology shows exceptional speed, while Sentio, Ponder, and Subgraph demonstrate complete data capture. Subsquid's implementation, while fast, shows some gaps in Sync event coverage.
+This benchmark reveals significant differences in template processing capabilities across indexing platforms. Envio HyperIndex demonstrates exceptional speed, while Subsquid shows fast processing but with some data completeness limitations. All other platforms show complete data coverage but with varying processing times.
 
-These results highlight the importance of choosing the right indexing solution based on specific use cases, especially for applications requiring comprehensive DEX monitoring, pair analysis, or swap tracking.
+These results emphasize the importance of choosing the right indexing solution based on specific use cases, especially for applications requiring factory event processing and pair tracking such as DEX monitoring, liquidity analysis, or pair creation tracking.
 
 ## Access Information
 
 ### Exported Data
-All the Uniswap V2 event data collected from each platform has been exported and is available via Google Drive:
-- **Google Drive Folder**: [Case 6 - Uniswap V2 Template Data](https://drive.google.com/drive/folders/1DdAvXK1r27VUHagyb20rRn2OjfVDVfMN)
-- Contains datasets with event data from all platforms
+All the factory event data collected from each platform has been exported and is available via Google Drive:
+- **Google Drive Folder**: [Case 6 - Uniswap V2 Template Data](https://drive.google.com/drive/folders/1407EeP-KzUwzujdnkoP_DiewJNbOHqcY)
+- Contains datasets with factory event data from all platforms
 - Includes comparative analysis and benchmark results
 
 ### Sentio
 - **Dashboard URL**: https://app.sentio.xyz/yufei/case_6_template/data-explorer/sql
-- **Data Summary**: 35,039 event records with complete coverage
-- **Key Metrics**:
-  - 1,234 unique pairs
-  - 2,468 unique tokens
-  - 5,349 swap events
-  - 28,456 sync events 
+- **Data Summary**: 35,039 records with complete coverage 

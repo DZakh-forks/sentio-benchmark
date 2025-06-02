@@ -7,7 +7,7 @@ This benchmark tests the performance of various indexers when processing simple 
 - **Target Contract**: LBTC Token (0x8236a87084f8B84306f72007F36F2618A5634494)
 - **Events Indexed**: Transfer events only
 - **Block Range**: 0 to 22200000
-- **Data Operations**: Write-only (no read-after-write)
+- **Data Operations**: Write-only operations
 - **RPC Calls**: None (data derived directly from event logs)
 - **Dataset**: [Google Drive](https://drive.google.com/drive/u/0/folders/1D8HXn7U7qQjzaEh1TLUZbNzVW_6nIRpT)
 
@@ -28,7 +28,7 @@ The benchmark requires each indexer to:
 | Indexer  | Time to Complete | Records Indexed | Notes |
 |----------|------------------|----------------|-------|
 | Sentio   | 8m               | 296,734        | |
-| Envio    | 2m               | 296,734        | Fastest processing time |
+| Envio HyperIndex | 2m        | 296,734        | Fastest processing time |
 | Ponder   | 1h40m            | 296,138        | Missing ~5% of events |
 | Subsquid | 10m              | 296,734        | |
 | Subgraph | 3h9m             | 296,734        | |
@@ -54,7 +54,7 @@ Each implementation includes its own setup and execution instructions. Generally
 
 ## Key Observations
 
-- Envio demonstrates the fastest processing time for this simple event indexing scenario
+- Envio HyperIndex demonstrates the fastest processing time for this simple event indexing scenario
 - Ponder processes events significantly slower and misses approximately 5% of the data
 - Sentio and Subsquid offer good balance of speed and completeness
 - Subgraph requires significantly more time to complete the indexing
@@ -83,15 +83,15 @@ All the transfer event data collected from each platform has been exported and i
        }
      }'
   ```
-- **Data Summary**: Approximately 294,278 records in the transfers collection
-- **Block Range**: Block 20016816 to Block 22199998
+- **Data Summary**: 296,734 records in the transfers collection
+- **Block Range**: 0 to 22200000
 
 ### Envio
 - **Dashboard URL**: https://envio.dev/app/0xdatapunk/case_1_lbtc_event_only
 - **GraphQL Endpoint**: https://indexer.dev.hyperindex.xyz/6c63ec1/v1/graphql
 - **Data Summary**: 
-  - Block Range: 20016816 to 22199998
-  - Total Records: Approximately 294,278
+  - Block Range: 0 to 22200000
+  - Total Records: 296,734
 
 ### Sentio Subgraph
 - **Dashboard URL**: https://app.sentio.xyz/yufei/case_1_lbtc_event_only_subgraph/data-explorer/sql

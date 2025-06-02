@@ -15,7 +15,7 @@ This benchmark tests the performance of various indexers when processing Uniswap
 
 | Indexer    | Processing Time | Records | Block Range |
 |------------|----------------|---------|-------------|
-| Envio      | 41s            | 50,191  | 22,200,000-22,290,000 |
+| Envio HyperSync     | 41s            | 50,191  | 22,200,000-22,290,000 |
 | Subsquid   | 2m             | 50,191  | 22,200,000-22,290,000 |
 | Sentio     | 16m            | 50,191  | 22,200,000-22,290,000 |
 | Subgraph   | 8m             | 29,058  | 22,200,000-22,290,000 |

@@ -5,7 +5,7 @@ This benchmark tests the performance of various indexers when processing Ethereu
 ## Benchmark Specification
 
 - **Target**: Ethereum blocks
-- **Block Range**: 0 to 100,000
+- **Block Range**: 0 to 100000
 - **Data Operations**: Block-level indexing
 - **Handler Type**: Block handlers (not event handlers)
 - **Block Data**: Block number, hash, timestamp, parent hash, etc.
@@ -15,31 +15,31 @@ This benchmark tests the performance of various indexers when processing Ethereu
 
 | Indexer  | Processing Time | Records | Block Range | Coverage |
 |----------|----------------|---------|-------------|----------|
-| Sentio   | 18m            | 100,000 | 1-100,000   | Complete (excluding block 0) |
-| Subsquid | 1m*            | 13,156  | 0-100,000   | Sparse (13.16%) |
-| Envio    | 7.9s           | 100,000 | 0-99,999    | Complete |
-| Ponder   | 33m            | 100,001 | 0-100,000   | Complete (includes block 0) |
-| Subgraph | 10m            | 100,001 | 0-100,000   | Complete (includes block 0) |
+| Sentio   | 18m            | 100001  | 0-100000    | Complete |
+| Subsquid | 1m*            | 13156   | 0-100000    | Sparse (13.16%) |
+| Envio HyperSync | 7.9s    | 100001  | 0-100000    | Complete |
+| Ponder   | 33m            | 100001  | 0-100000    | Complete |
+| Subgraph | 10m            | 100001  | 0-100000    | Complete |
 
-\* *Subsquid used an archival node but has missing data, primarily indexing blocks in the 45,000-100,000 range*
+\* *Subsquid used an archival node but has missing data, primarily indexing blocks in the 45000-100000 range*
 
 ## Block Distribution Details
 
-- **Sentio**: Even distribution across the entire range (blocks 1-100,000, excluding block 0)
+- **Sentio**: Complete coverage of blocks 0-100000 (100001 blocks total)
 - **Subsquid**: Highly sparse distribution:
-  - 0-9,999: Just 1 block (0.01% coverage) - only block 0
-  - 10,000-39,999: No blocks at all (0% coverage)
-  - 40,000-49,999: 1,455 blocks (14.55% coverage)
-  - 50,000-59,999: 2,092 blocks (20.92% coverage) 
-  - 60,000-69,999: 2,322 blocks (23.22% coverage)
-  - 70,000-79,999: 2,296 blocks (22.96% coverage)
-  - 80,000-89,999: 2,770 blocks (27.70% coverage)
-  - 90,000-100,000: 2,220 blocks (22.20% coverage)
-  - Largest gap: Block 0 to block 46,147 (46,146 missing blocks)
+  - 0-9999: Just 1 block (0.01% coverage) - only block 0
+  - 10000-39999: No blocks at all (0% coverage)
+  - 40000-49999: 1455 blocks (14.55% coverage)
+  - 50000-59999: 2092 blocks (20.92% coverage) 
+  - 60000-69999: 2322 blocks (23.22% coverage)
+  - 70000-79999: 2296 blocks (22.96% coverage)
+  - 80000-89999: 2770 blocks (27.70% coverage)
+  - 90000-100000: 2220 blocks (22.20% coverage)
+  - Largest gap: Block 0 to block 46147 (46146 missing blocks)
   - Overall, 86.84% of blocks in the range are missing
-- **Envio**: Complete coverage from 0-99,999 (100,000 blocks total)
-- **Ponder**: Complete coverage from 0-100,000 (100,001 blocks total, including genesis block 0)
-- **Subgraph**: Complete coverage from 0-100,000 (100,001 blocks total, including genesis block 0)
+- **Envio HyperSync**: Complete coverage of blocks 0-100000 (100001 blocks total)
+- **Ponder**: Complete coverage of blocks 0-100000 (100001 blocks total)
+- **Subgraph**: Complete coverage of blocks 0-100000 (100001 blocks total)
 
 ## Similarity Analysis
 
@@ -52,16 +52,16 @@ We compared all platforms pairwise, focusing on three key fields:
 
 | Platform Pair      | Common Blocks | Matching Blocks | Similarity (%) |
 |--------------------|---------------|-----------------|----------------|
-| Sentio vs Subsquid | 13,155        | 13,155          | 100.00%        |
-| Sentio vs Envio    | 99,999        | 99,999          | 100.00%        |
-| Sentio vs Ponder   | 100,000       | 100,000         | 100.00%        |
-| Sentio vs Subgraph | 100,000       | 100,000         | 100.00%        |
-| Subsquid vs Envio  | 13,155        | 13,155          | 100.00%        |
-| Subsquid vs Ponder | 13,156        | 13,156          | 100.00%        |
-| Subsquid vs Subgraph | 13,156      | 13,156          | 100.00%        |
-| Envio vs Ponder    | 100,000       | 100,000         | 100.00%        |
-| Envio vs Subgraph  | 100,000       | 100,000         | 100.00%        |
-| Ponder vs Subgraph | 100,001       | 100,001         | 100.00%        |
+| Sentio vs Subsquid | 13155         | 13155           | 100.00%        |
+| Sentio vs Envio    | 100001        | 100001          | 100.00%        |
+| Sentio vs Ponder   | 100001        | 100001          | 100.00%        |
+| Sentio vs Subgraph | 100001        | 100001          | 100.00%        |
+| Subsquid vs Envio  | 13155         | 13155           | 100.00%        |
+| Subsquid vs Ponder | 13156         | 13156           | 100.00%        |
+| Subsquid vs Subgraph | 13156       | 13156           | 100.00%        |
+| Envio vs Ponder    | 100001        | 100001          | 100.00%        |
+| Envio vs Subgraph  | 100001        | 100001          | 100.00%        |
+| Ponder vs Subgraph | 100001        | 100001          | 100.00%        |
 
 ## Key Findings
 
@@ -98,7 +98,7 @@ Each subdirectory contains the implementation for a specific indexing platform:
 - Total of 9,071 gaps identified with the largest being 46,146 consecutive missing blocks
 - Database connection: `PGPASSWORD="hcGgm1BIXTjbZ-lhkKeZ8vfBFQ3Xmkka" psql -h pg.squid.subsquid.io -d 16307_lf5mma -U 16307_lf5mma`
 
-### Envio
+### Envio HyperSync
 - Does not support traditional block handlers, but achieved complete coverage using HyperSync
 - Fastest processing time at 7.9 seconds for 100,000 blocks
 - Processes approximately 12,658 blocks per second

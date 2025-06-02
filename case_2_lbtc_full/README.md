@@ -82,7 +82,7 @@ Each platform handles periodic updates differently:
 | Sentio (timeInterval) | 7m | 7,634 | 181.12s | 0.55s | 53666.13s |
 | Sentio (blockInterval) | 5m | 7,634 | 149.48s | 0.75s | 55715.68s |
 | Ponder | 45m | 7,634 | 2401.97s | 0.26s | 83.49s |
-| Envio | 3m | 7,634 | 114132.07s | 10.17s | 260155.37s |
+| Envio HyperIndex | 3m | 7,634 | 114132.07s | 10.17s | 260155.37s |
 | Sqd | 34m | 7,634 | 1770.73s | 0.88s | 56268.61s |
 | Subgraph | 1h3m | 7,634 | - | - | - |
 | Sentio Subgraph | 56m | 7,634 | - | - | - |
