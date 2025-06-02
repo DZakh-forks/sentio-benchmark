@@ -7,7 +7,7 @@ This repository contains performance benchmarks for various blockchain indexers,
 | Case | Description | Features |
 |------|-------------|----------|
 | [case_1_lbtc_event_only](./case_1_lbtc_event_only/) | Simple event indexing of LBTC token transfers | Event handling, No RPC calls, Write-only operations |
-| [case_2_lbtc_full](./case_2_lbtc_full/) | Complex indexing with RPC calls for token balances | Event handling, RPC calls, Read-after-write operations |
+| [case_2_lbtc_full](./case_2_lbtc_full/) | Complex indexing with RPC calls for token balances and point calculation | Event handling, RPC calls, Read-after-write operations, Point calculation |
 | [case_3_ethereum_block](./case_3_ethereum_block/) | Block-level indexing of Ethereum blocks | Block handling, Metadata extraction |
 | [case_4_on_transaction](./case_4_on_transaction/) | Transaction gas usage indexing | Transaction handling, Gas calculations |
 | [case_5_on_trace](./case_5_on_trace/) | Uniswap V2 transaction trace analysis | Transaction trace handling, Swap decoding |
@@ -105,12 +105,15 @@ Our benchmark cases are designed to test different aspects of indexer performanc
 | Factory Template Dynamic Registation | ✅ | ✅ | ✅ | ⚠️* | ✅ | 
 | Batch RPC calls | ✅ | ✅ | ✅^ | ✅^ | ❌ |
 
-$ Envio does not support natively, but one can utilize HyperSync to retrieve data, but it requires manual decoding and client-side processing of reorgs.
-† Subgraph has limited internal transaction visibility, only detecting direct contract calls, not internal transactions. This leads to incomplete data (~40% fewer records) and inaccurate sender identification in trace-level indexing as documented in the [case_5_on_trace](./case_5_on_trace/) benchmark.
-* Subsquid requires manual configuration updates at fixed blocks to optimize template indexing, with limitations on the number of contracts (up to tens of thousands) and requiring periodic maintenance to minimize sync overhead.
-^ Rely on multicall contract deployed by MakerDAO
-
 ⚠️ Limited capability or requires additional configuration
+
+$ Envio does not support natively, but one can utilize HyperSync to retrieve data, but it requires manual decoding and client-side processing of reorgs.
+
+† Subgraph has limited internal transaction visibility, only detecting direct contract calls, not internal transactions. This leads to incomplete data (~40% fewer records) and inaccurate sender identification in trace-level indexing as documented in the [case_5_on_trace](./case_5_on_trace/) benchmark.
+
+\* Subsquid requires manual configuration updates at fixed blocks to optimize template indexing, with limitations on the number of contracts (up to tens of thousands) and requiring periodic maintenance to minimize sync overhead.
+
+^ Rely on multicall contract deployed by MakerDAO
 
 This benchmark provides a comparative analysis of indexer performance across different scenarios, helping developers choose the most appropriate indexing solution for their specific needs.
 
@@ -121,7 +124,7 @@ This benchmark provides a comparative analysis of indexer performance across dif
 | Case | Description | Chain | Block Range | Features |
 |------|-------------|-------|------------|----------|
 | case_1_lbtc_event_only | LBTC Token Transfer Events | Ethereum | 0 to 22200000 | Event handling, No RPC calls, Write-only |
-| case_2_lbtc_full | LBTC Token with RPC calls | Ethereum | 22100000 to 22200000 | Event handling, RPC calls, Read-after-write |
+| case_2_lbtc_full | LBTC Token with RPC calls | Ethereum | 22400000 to 22500000 | Event handling, RPC calls, Read-after-write, ponit calculation |
 | case_3_ethereum_block | Ethereum Block Processing | Ethereum | 0 to 100000 | Block handling, Metadata extraction |
 | case_4_on_transaction | Ethereum Transaction Gas Usage | Ethereum | 22280000 to 22290000 | Transaction handling, Gas calculations |
 | case_5_on_trace | Uniswap V2 Swap Trace Analysis | Ethereum | 22200000 to 22290000 | Transaction trace handling, Swap decoding |
@@ -132,14 +135,11 @@ This benchmark provides a comparative analysis of indexer performance across dif
 | Case | Sentio | Envio HyperSync | Envio HyperIndex | Ponder | Subsquid | Subgraph | Sentio_Subgraph | Goldsky_Subgraph |
 |------|--------|-----------------|------------------|--------|----------|----------|----------------|------------------|
 | case_1_lbtc_event_only | 8m | | 2m | 1h40m | 10m | 3h9m | 2h36m |  |
-| case_2_lbtc_full | 7m/5m* | | 3m | 45m | 34m | 1h3m | 56m |  |
+| case_2_lbtc_full | 6m | | 3m | 45m | 34m | 1h3m | 56m |  |
 | case_3_ethereum_block | 18m | 7.9s | | 33m | 1m‡ | 10m | 15m |  |
 | case_4_on_transaction | 23m | 1m26s | | 33m | 5m | N/A | |  |
 | case_5_on_trace | 16m | 41s | | N/A§ | 2m | 8m | 1h21m |  |
 | case_6_template | 19m | | 30s | 21m | 2m | 19m | 10m | 20h24m |
-
-* Sentio timeInterval: 7m (RPC: 181.12s, Point calc: 0.55s, Storage: 53666.13s)
-  Sentio blockInterval: 5m (RPC: 149.48s, Point calc: 0.75s, Storage: 55715.68s)
 
 ### Data Completeness
 
@@ -165,15 +165,17 @@ This benchmark provides a comparative analysis of indexer performance across dif
 ### Key Observations
 
 1. **Performance Comparison**:
-   - Envio's HyperSync technology shows exceptional performance across all test cases
+   - Envio's HyperSync, a RPC substitute, technology shows exceptional performance across relevent test cases
    - Envio HyperIndex provides a full-featured indexing solution with competitive performance
-   - Sentio performs consistently well across all test cases, with both timeInterval (7m) and blockInterval (5m) modes showing strong performance
+   - Sentio performs consistently well across all test cases, showing strong performance
    - Ponder shows improved performance in case_2 (45m) compared to previous benchmarks
    - Subgraph demonstrates consistent performance with complete data coverage
 
 2. **Data Completeness**:
    - All platforms achieved complete data coverage (7,634 records) in case_2
-   - Perfect correlation between platforms in point calculations in caee_2 (Pearson: 0.9917-1.0000, Spearman: 0.9971-1.0000)
+   - Perfect correlation between platforms in point calculations in case_2 (Pearson: 0.9917-1.0000, Spearman: 0.9971-1.0000)
+   - All platforms successfully captured the same set of accounts (7,634) in case_2
+   - Point calculations are consistent across all implementations, with minor variations in absolute values but perfect rank correlation
    - Ponder is missing approximately 5% of data in case_1
    - Subsquid is missing about 87% of blocks in case_3, primarily indexing blocks in the 45,000-100,000 range
    - Envio/Ponder processes blocks up to but not including the end block in case_4 (stopping at 22,289,999) due to its exclusive end block handling, which explains the difference of 218 records compared to Sentio

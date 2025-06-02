@@ -6,7 +6,7 @@ This benchmark tests the performance of various indexers when processing Transfe
 
 - **Target Contract**: LBTC Token (0x8236a87084f8B84306f72007F36F2618A5634494)
 - **Events Indexed**: Transfer events
-- **Block Range**: 22100000 to 22200000
+- **Block Range**: 22400000 to 22500000
 - **Data Operations**: Read-after-write (fetching balances after processing transfers)
 - **RPC Calls**: balanceOf() to fetch token balances for each address involved in transfers
 - **Dataset**: [Google Drive](https://drive.google.com/drive/u/0/folders/1YV_xhTYViVaCiqXgEgPDDjoWb9s8QLMZ)
@@ -14,13 +14,24 @@ This benchmark tests the performance of various indexers when processing Transfe
 ## Implementation Details
 
 The benchmark requires each indexer to:
-1. Listen for `Transfer(address indexed from, address indexed to, uint256 value)` events
-2. Create a record for each Transfer event
-3. Make RPC calls to fetch the current balance of both the sender and receiver
-4. Create snapshot records with account balances
-5. Update account records with latest balances and timestamps
 
-This benchmark tests the ability of indexers to not only process events but also to make external RPC calls and manage more complex data relationships.
+1. **Event Processing**:
+   - Listen for `Transfer(address indexed from, address indexed to, uint256 value)` events
+   - Create a record for each Transfer event
+
+2. **Balance Tracking**:
+   - Make RPC calls to fetch the current balance of both the sender and receiver
+   - Create snapshot records with account balances
+   - Update account records with latest balances and timestamps
+
+3. **Points Calculation**:
+   - Update points in real-time as new transfers occur
+   - Additionally, perform periodic updates using either:
+     - Time-based intervals (e.g., hourly updates)
+     - Block-based intervals (e.g., every N blocks)
+   - Each platform implements its own interval mechanism (see Platform-Specific Implementation Details)
+
+This benchmark tests the ability of indexers to not only process events but also to make external RPC calls and manage more complex data relationships, including real-time and periodic updates.
 
 ## Platform-Specific Implementation Details
 
@@ -36,11 +47,7 @@ Each platform handles periodic updates differently:
      - Dual-interval system:
        - Historical interval: For speedy catchup of past data
        - Ongoing interval: For prompt updates of new data
-     - This dual approach enables:
-       - Faster historical data processing
-       - Real-time updates for new events
      - Example: Daily intervals for history + hourly intervals for ongoing updates
-     - Other platforms must implement their own interval tracking mechanisms or rely on block intervals to mimic `onTimeInterval`
 
    - **Envio**: 
      - No built-in `onTimeInterval` or `onBlockInterval`
@@ -60,6 +67,11 @@ Each platform handles periodic updates differently:
      - Uses `handleBlock` for periodic updates
      - Configurable block intervals in `subgraph.yaml`
      - Block-based scheduling approach
+
+3. **RPC Batching**
+   - **Envio**: Built-in RPC batching through platform infrastructure
+   - **Sentio/Ponder/Subsquid**: Use multicall for batch RPC requests
+   - **Subgraph**: No native support for RPC batching, each call is made individually
 
 ## Performance Results
 
@@ -90,48 +102,56 @@ Each platform handles periodic updates differently:
      - Double counting of calculation time for each transfer (both sender and receiver)
      - Accumulation of calculation time in hourly updates
      - Reuse of timing variables in batch processing
-   - Note: Envio's timing metrics are accumulated across all operations and may include double counting due to its unique batch processing architecture
    - Sentio's compute time is consistent between modes (0.55s vs 0.75s)
-   - Note: Subgraph's compute time cannot be measured due to timing API limitations
 
 3. **Storage Performance**:
    - Envio shows the highest storage time (337790.82s)
-   - Note: Envio's storage time includes accumulated time across all operations, including parallel processing and batch updates
    - Sentio's storage time is high but consistent between modes (53666.13s vs 55715.68s)
    - Ponder demonstrates excellent storage performance at 83.49s
    - Sqd shows moderate storage time at 56268.61s
-   - Note: Subgraph's storage operations cannot be timed due to timing API limitations
 
-4. **Total Duration**:
-   - Sentio's blockInterval mode is fastest at 5m
-   - Envio follows at 3m despite high individual component times
-   - Note: Envio's high component times (RPC, Compute, Storage) are accumulated across all operations and may include double counting, but its total duration is accurate
-   - Ponder shows good overall performance at 45m
-   - Sqd completes in 34m
-   - Subgraph and Sentio Subgraph take longer at 1h3m and 56m respectively
-   - Note: Subgraph's total duration is measured from deployment to completion, as internal timing is not available
+### Points Distribution Analysis
 
-### Key Observations
+   ![Points Distribution Chart](./data/points-comparison.png)
+   - Shows point distribution across all platforms
+   - Highlights correlation between platforms
+   - Demonstrates consistent ranking patterns
 
-1. **Platform Strengths**:
-   - Sentio: Best RPC performance and consistent compute times
-   - Ponder: Excellent storage performance and balanced metrics
-   - Envio: Fast total duration despite high component times, with unique batch processing architecture
-   - Sqd: Good balance between RPC and compute times
-   - Subgraph: Limited timing capabilities but provides reliable total duration measurements
+Key findings from the points distribution analysis:
 
-2. **Architectural Differences**:
-   - Sentio's dual-mode system (timeInterval/blockInterval) provides flexibility
-   - Envio's architecture prioritizes total duration over individual component times, with accumulated timing metrics that may include double counting
-   - Ponder's architecture shows strong storage optimization
-   - Sqd maintains consistent performance across all metrics
-   - Subgraph's architecture does not support fine-grained timing measurements
+1. **Correlation Analysis**:
 
-3. **Data Consistency**:
-   - All platforms processed exactly 7,634 records
-   - Perfect correlation in point calculations between platforms
-   - Consistent data coverage across all implementations
-   - Note: While Subgraph's timing metrics are limited, its data consistency matches other platforms
+   **Pearson Correlation (Linear)**
+   | Platform | Subgraph | Ponder | Sentio BI | Sentio TI | Envio |
+   |----------|----------|---------|------------|------------|--------|
+   | Subgraph | 1.0000   | 1.0000  | 0.9917     | 0.9917     | 0.9917 |
+   | Ponder   | 1.0000   | 1.0000  | 0.9917     | 0.9917     | 0.9917 |
+   | Sentio BI| 0.9917   | 0.9917  | 1.0000     | 1.0000     | 1.0000 |
+   | Sentio TI| 0.9917   | 0.9917  | 1.0000     | 1.0000     | 1.0000 |
+   | Envio    | 0.9917   | 0.9917  | 1.0000     | 1.0000     | 1.0000 |
+
+   **Spearman Correlation (Rank)**
+   | Platform | Subgraph | Ponder | Sentio BI | Sentio TI | Envio |
+   |----------|----------|---------|------------|------------|--------|
+   | Subgraph | 1.0000   | 1.0000  | 0.9971     | 0.9971     | 0.9971 |
+   | Ponder   | 1.0000   | 1.0000  | 0.9971     | 0.9971     | 0.9971 |
+   | Sentio BI| 0.9971   | 0.9971  | 1.0000     | 1.0000     | 1.0000 |
+   | Sentio TI| 0.9971   | 0.9971  | 1.0000     | 1.0000     | 1.0000 |
+   | Envio    | 0.9971   | 0.9971  | 1.0000     | 1.0000     | 1.0000 |
+
+   - Perfect correlation between Subgraph and Ponder (1.0000)
+   - Very high correlation between all other platform pairs
+   - Slightly higher rank correlation (Spearman) compared to linear correlation (Pearson)
+
+2. **Distribution Patterns**:
+   - All platforms show similar point distribution patterns
+   - Top accounts maintain consistent rankings across platforms
+   - Minor variations in point values do not affect overall ranking
+
+3. **Data Quality**:
+   - All platforms successfully captured the same set of accounts (7,634)
+   - Point calculations are consistent across implementations
+   - No significant outliers or anomalies in the data
 
 ## Implementation Examples
 
@@ -142,91 +162,13 @@ Each subdirectory contains the implementation for a specific indexing platform:
 - `/sqd`: Subsquid implementation
 - `/subgraph`: The Graph subgraph implementation
 
-## Running the Benchmark
+## Exported Data
 
-Each implementation includes its own setup and execution instructions. Generally, you will need to:
-
-1. Install the required dependencies
-2. Configure RPC endpoints with adequate rate limits
-3. Start the indexer
-4. Monitor progress
-5. Record completion time
-
-## Key Observations
-
-- Adding RPC calls significantly increases indexing time across all platforms
-- Sentio maintains the best performance with complex operations
-- Ponder and Subgraph show substantial performance degradation with RPC calls
-- Subsquid handles the additional complexity relatively well
-- The read-after-write pattern creates additional processing overhead for all indexers
-
-This benchmark showcases how performance is affected when indexers need to both process events and interact with the blockchain to fetch additional data, a common pattern in many dApp backends.
-
-## Access Information
-
-### Exported Data
-All the transfer event data and balances collected from each platform have been exported and is available via Google Drive:
-- **Google Drive Folder**: [Case 2 - LBTC Full Data](https://drive.google.com/drive/u/0/folders/1YV_xhTYViVaCiqXgEgPDDjoWb9s8QLMZ)
-- Contains datasets with transfer events and account balances from all platforms
-- Includes comparative analysis and benchmark results
-
-### Sentio
-- **Dashboard URL**: https://app.sentio.xyz/yufei/case_2_lbtc_full/data-explorer/sql
-- **API Access**: 
-  ```
-  READ_ONLY KEY: hnZ7Z8cRsoxRadrVdhih2jRjBlH0lIYWl
-  curl -L -X POST 'https://app.sentio.xyz/api/v1/analytics/yufei/case_2_lbtc_full/sql/execute' \
-     -H 'Content-Type: application/json' \
-     -H 'api-key: hnZ7Z8cRsoxRadrVdhih2jRjBlH0lIYWl' \
-     --data-raw '{
-       "sqlQuery": {
-         "sql": "YOUR_QUERY_HERE"
-       }
-     }'
-  ```
-- **Data Summary**:
-  - **Transfer Records**: Approximately 12,165 records
-  - **Account Records**: Approximately 2,684 accounts
-  - **Points Records**: Approximately 44,700 point_updates
-
-### Envio
-- **Dashboard URL**: https://envio.dev/app/0xdatapunk/case_2_lbtc_full
-- **GraphQL Endpoint**: https://indexer.dev.hyperindex.xyz/6b5188a/v1/graphql
-- **RPC Provider**: Using Sentio's RPC endpoint for blockchain interactions
-- **Data Summary**:
-  - **Transfer Records**: Approximately 12,165 records
-  - **Block Range**: 22100049 to 22199998
-  - **Account Records**: Approximately 2,685 accounts
-  - **Snapshot Records**: Approximately 16,338 snapshots
-  - **Timestamps**: Range from 1742618075 to 1743823319 (Unix millisecond timestamps)
-
-### Sentio Subgraph
-- **Dashboard URL**: https://app.sentio.xyz/yufei/case_2_lbtc_full_subgraph/data-explorer/sql
-- **API Access**:
-  ```
-  READ_ONLY KEY: hnZ7Z8cRsoxRadrVdhih2jRjBlH0lIYWl
-  curl -L -X POST 'https://app.sentio.xyz/api/v1/analytics/yufei/case_2_lbtc_full_subgraph/sql/execute' \
-     -H 'Content-Type: application/json' \
-     -H 'api-key: hnZ7Z8cRsoxRadrVdhih2jRjBlH0lIYWl' \
-     --data-raw '{
-       "sqlQuery": {
-         "sql": "YOUR_QUERY_HERE"
-       }
-     }'
-  ``` 
-
-## Performance Comparison (Block Range: 22400000 - 22500000)
-
-| Indexer | Duration | Records | RPC Time | Compute Time | Storage Time |
-|---------|----------|---------|-----------|-------------|--------------|
-| Sentio  | 6m       | 7,634   | 183.87s   | 1.40s       | 12604.55s   |
-| Ponder  | 1h4m     | 7,634   | 3620.03s  | 0.27s       | 68.91s      |
-| Envio   | 2m       | 7,634   | 153219.90s| 0.14s       | 8.12s       |
-| Sqd     | 1h39m    | 7,634   | 5883.05s  | 2.06s       | 7.44s       |
-
-### Notes:
-- All indexers processed the same number of records (7,634)
-- Envio had the fastest total duration but highest RPC time
-- Sqd had the lowest storage time
-- Ponder had balanced performance across all metrics
-- Sentio had the highest storage time but moderate RPC time
+All benchmark data has been exported and is available for download:
+- **Google Drive**: [Case 2 - LBTC Full Data](https://drive.google.com/drive/folders/1YV_xhTYViVaCiqXgEgPDDjoWb9s8QLMZ)
+  - Transfer events from all platforms
+  - Account balances and snapshots
+  - Points calculation results
+  - Performance metrics and timing data
+  - Correlation analysis results
+  - Visualization data and charts

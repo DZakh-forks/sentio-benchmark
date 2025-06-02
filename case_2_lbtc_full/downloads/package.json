@@ -9,6 +9,7 @@
     "hypersync-client": "^0.0.5",
     "moment": "^2.30.1",
     "parquetjs": "^0.11.2",
-    "pg": "^8.14.1"
+    "pg": "^8.14.1",
+    "puppeteer": "^24.10.0"
   }
 }
