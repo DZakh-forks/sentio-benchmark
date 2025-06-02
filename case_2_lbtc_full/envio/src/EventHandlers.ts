@@ -62,7 +62,7 @@ LBTC.Transfer.handlerWithLoader({
       // Update last processed block in database
       if (fromAccount) {
         const fromAccountUpdateStartTime = performance.now();
-        await context.Accounts.set({
+        context.Accounts.set({
           ...fromAccount,
           lastProcessedBlock: blockNumber
         });
@@ -90,7 +90,7 @@ LBTC.Transfer.handlerWithLoader({
     // Update last processed block in database
     if (toAccount) {
       const toAccountUpdateStartTime = performance.now();
-      await context.Accounts.set({
+      context.Accounts.set({
         ...toAccount,
         lastProcessedBlock: blockNumber
       });
@@ -107,7 +107,7 @@ LBTC.Transfer.handlerWithLoader({
     };
 
     const transferStartTime = performance.now();
-    await context.Transfer.set(entity);
+    context.Transfer.set(entity);
     storageTime += performance.now() - transferStartTime;
 
     const isMint = from === '0x0000000000000000000000000000000000000000'
@@ -116,7 +116,6 @@ LBTC.Transfer.handlerWithLoader({
     if (!isMint) {
         const fromLastData = await getLastSnapshotData(context, from)
         
-        const calcStartTime = performance.now();
         await createAndSaveSnapshot(
             context,
             from, 
@@ -127,13 +126,11 @@ LBTC.Transfer.handlerWithLoader({
             fromLastData.timestamp,
             fromLastData.mintAmount
         )
-        calcTime += performance.now() - calcStartTime;
     }
 
     // Process receiver account
     const toLastData = await getLastSnapshotData(context, to)
     
-    const calcStartTime = performance.now();
     await createAndSaveSnapshot(
         context,
         to,
@@ -146,8 +143,7 @@ LBTC.Transfer.handlerWithLoader({
         isMint,
         value
     )
-    calcTime += performance.now() - calcStartTime;
-
+    
     const registryStartTime = performance.now();
     const registry = await context.AccountRegistry.get("main")
     storageTime += performance.now() - registryStartTime;
@@ -157,7 +153,7 @@ LBTC.Transfer.handlerWithLoader({
         if (!registry.lastSnapshotTimestamp || (blockTimestamp - registry.lastSnapshotTimestamp) >= SECOND_PER_HOUR) {
             // Update the global timestamp
             const registryUpdateStartTime = performance.now();
-            await context.AccountRegistry.set({
+            context.AccountRegistry.set({
               ...registry,
               lastSnapshotTimestamp: blockTimestamp
             });
@@ -174,7 +170,6 @@ LBTC.Transfer.handlerWithLoader({
                 // Check if it's time for an hourly update for this specific account
                 if (await shouldUpdateHourly(context, accountId, blockTimestamp)) {
                     const lastData = await getLastSnapshotData(context, accountId)                    
-                    const calcStartTime = performance.now();
                     await createAndSaveSnapshot(
                         context,
                         accountId,
@@ -185,7 +180,6 @@ LBTC.Transfer.handlerWithLoader({
                         lastData.timestamp,
                         lastData.mintAmount
                     )
-                    calcTime += performance.now() - calcStartTime;
                 }
               })
             )
@@ -354,6 +348,7 @@ async function createAndSaveSnapshot(
   
   // Calculate point based on previous values
   if (lastTimestamp != 0n) {
+    const calcStartTime = performance.now();
     // Convert timestamps to seconds for calculation
     const timeDiffInSeconds = Number(timestamp - lastTimestamp);
     
@@ -363,15 +358,18 @@ async function createAndSaveSnapshot(
       .div(BigDecimal(60))
       .div(BigDecimal(60));
     
+    calcTime += performance.now() - calcStartTime;
+    const point = lastPoint.plus(
+      lastBalance
+        .times(pointsPerSecond)
+        .times(BigDecimal(timeDiffInSeconds))
+    )
+    
     // Calculate new point value
     // Points = lastPoint + (lastBalance * pointsPerSecond * timeDiffInSeconds)
     snapshot = {
       ...snapshot,
-      point: lastPoint.plus(
-        lastBalance
-          .times(pointsPerSecond)
-          .times(BigDecimal(timeDiffInSeconds))
-      )
+      point: point
     } as Snapshot;
   } else {
     // For first snapshot, start with 0 points
@@ -390,8 +388,9 @@ async function createAndSaveSnapshot(
   // Save directly to database
   const saveStartTime = performance.now();
   if (snapshot) {
-    await context.Snapshot.set(snapshot);
+  context.Snapshot.set(snapshot);
+   calcTime += performance.now() - saveStartTime;
   }
-  await context.Accounts.set(account);
+  context.Accounts.set(account);
   storageTime += performance.now() - saveStartTime;
 }
