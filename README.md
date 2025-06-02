@@ -102,9 +102,13 @@ Our benchmark cases are designed to test different aspects of indexer performanc
 | SQL Querying | ✅ | ✅ | ✅ | ✅ | ❌ |
 | GraphQL API | ✅ | ✅ | ✅ | ❌ | ✅ |
 | Decentralized Network | ❌ | ❌ | ❌ | ✅ | ✅ |
+| Factory Template Dynamic Registation | ✅ | ✅ | ✅ | ⚠️* | ✅ | 
+| Batch RPC calls | ✅ | ✅ | ✅^ | ✅^ | ❌ |
 
-$ Envio does not support natively, but one can utilize HyperSync to retrieve data  
+$ Envio does not support natively, but one can utilize HyperSync to retrieve data, but it requires manual decoding and client-side processing of reorgs.
 † Subgraph has limited internal transaction visibility, only detecting direct contract calls, not internal transactions. This leads to incomplete data (~40% fewer records) and inaccurate sender identification in trace-level indexing as documented in the [case_5_on_trace](./case_5_on_trace/) benchmark.
+* Subsquid requires manual configuration updates at fixed blocks to optimize template indexing, with limitations on the number of contracts (up to tens of thousands) and requiring periodic maintenance to minimize sync overhead.
+^ Rely on multicall contract deployed by MakerDAO
 
 ⚠️ Limited capability or requires additional configuration
 
@@ -128,18 +132,21 @@ This benchmark provides a comparative analysis of indexer performance across dif
 | Case | Sentio | Envio HyperSync | Envio HyperIndex | Ponder | Subsquid | Subgraph | Sentio_Subgraph | Goldsky_Subgraph |
 |------|--------|-----------------|------------------|--------|----------|----------|----------------|------------------|
 | case_1_lbtc_event_only | 8m | | 2m | 1h40m | 10m | 3h9m | 2h36m |  |
-| case_2_lbtc_full | 45m | | 13m | 4h38m | 32m | 18h38m | 16h55m |  |
+| case_2_lbtc_full | 7m/5m* | | 3m | 45m | 34m | 1h3m | 56m |  |
 | case_3_ethereum_block | 18m | 7.9s | | 33m | 1m‡ | 10m | 15m |  |
 | case_4_on_transaction | 23m | 1m26s | | 33m | 5m | N/A | |  |
 | case_5_on_trace | 16m | 41s | | N/A§ | 2m | 8m | 1h21m |  |
-| case_6_template | 19m | | 30s | 11m | 2m | 19m | 10m | 20h24m |
+| case_6_template | 19m | | 30s | 21m | 2m | 19m | 10m | 20h24m |
+
+* Sentio timeInterval: 7m (RPC: 181.12s, Point calc: 0.55s, Storage: 53666.13s)
+  Sentio blockInterval: 5m (RPC: 149.48s, Point calc: 0.75s, Storage: 55715.68s)
 
 ### Data Completeness
 
 | Case | Sentio | Envio | Ponder | Subsquid | Subgraph |
 |------|--------|-------|--------|----------|----------|
 | case_1_lbtc_event_only | 296,734 | 296,734 | 296,138* | 296,734 | 296,734 |
-| case_2_lbtc_full | 2,684 | 2,685‡ | 2,684 | 2,685‡ | 2,685‡ |
+| case_2_lbtc_full | 7,634 | 7,634 | 7,634 | 7,634 | 7,634 |
 | case_3_ethereum_block | 100,000 | 100,000 | 100,001¶ | 13,156† | 100,001¶ |
 | case_4_on_transaction | 1,696,641 | 1,696,423†† | 1,696,423 | 1,696,641 | N/A& |
 | case_5_on_trace | 50,191 | 50,191 | 0** | 50,191 | 29,058§§ |
@@ -160,11 +167,13 @@ This benchmark provides a comparative analysis of indexer performance across dif
 1. **Performance Comparison**:
    - Envio's HyperSync technology shows exceptional performance across all test cases
    - Envio HyperIndex provides a full-featured indexing solution with competitive performance
-   - Sentio performs consistently well across all test cases
-   - Ponder shows longer indexing times but with complete data coverage in most cases
-   - Subgraph demonstrates efficient block processing (10m for 100K blocks) with complete coverage
+   - Sentio performs consistently well across all test cases, with both timeInterval (7m) and blockInterval (5m) modes showing strong performance
+   - Ponder shows improved performance in case_2 (45m) compared to previous benchmarks
+   - Subgraph demonstrates consistent performance with complete data coverage
 
 2. **Data Completeness**:
+   - All platforms achieved complete data coverage (7,634 records) in case_2
+   - Perfect correlation between platforms in point calculations in caee_2 (Pearson: 0.9917-1.0000, Spearman: 0.9971-1.0000)
    - Ponder is missing approximately 5% of data in case_1
    - Subsquid is missing about 87% of blocks in case_3, primarily indexing blocks in the 45,000-100,000 range
    - Envio/Ponder processes blocks up to but not including the end block in case_4 (stopping at 22,289,999) due to its exclusive end block handling, which explains the difference of 218 records compared to Sentio

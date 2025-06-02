@@ -12,9 +12,10 @@ if (!fs.existsSync(dataDir)) {
 // Ponder database details
 const DB_CONFIG = {
   host: 'localhost',
-  port: 5432,
+  port: 6432,
   database: 'ponder_dev',
-  user: 'yufeili',
+  user: 'postgres',
+  password: 'postgres',
   // Increase connection timeout to 30 seconds
   connectionTimeoutMillis: 30000,
   // Increase query timeout to 3 minutes
@@ -122,17 +123,30 @@ async function fetchPonderAccounts(client) {
   
   const accountWriter = await parquet.ParquetWriter.openFile(accountSchema, accountOutputPath);
   
-  console.log('Fetching account data with latest balances from Ponder PostgreSQL...');
+  console.log('Fetching account data with latest point values from snapshots...');
   
-  // Query to get the latest snapshot for each account
+  // Query to get the latest snapshot for each account using a CTE
   const query = `
-    SELECT id, balance, last_snapshot_timestamp as timestamp, point
-    FROM accounts
-    ORDER BY id
+    WITH latest_snapshots AS (
+      SELECT DISTINCT ON (account_id) 
+        account_id, 
+        point, 
+        timestamp
+      FROM snapshot 
+      ORDER BY account_id, timestamp DESC
+    )
+    SELECT 
+      a.id, 
+      a.balance, 
+      s.timestamp, 
+      s.point
+    FROM accounts a
+    LEFT JOIN latest_snapshots s ON a.id = s.account_id
+    ORDER BY a.id
   `;
   
   const result = await client.query(query);
-  console.log(`Received ${result.rows.length} accounts with their latest balances`);
+  console.log(`Received ${result.rows.length} accounts with their latest point values`);
   
   if (result.rows.length === 0) {
     // Write a dummy record to avoid empty parquet file
@@ -166,4 +180,4 @@ async function runWithErrorHandling() {
   }
 }
 
-runWithErrorHandling(); 
+runWithErrorHandling();

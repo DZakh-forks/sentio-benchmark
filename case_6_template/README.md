@@ -18,7 +18,7 @@ This benchmark tests the performance of various indexers when processing Uniswap
 | Sentio   | 19m            | 35,039  | 19,000,000-19,010,000 |
 | Subsquid | 2m             | 33,972  | 19,000,000-19,010,000 |
 | Envio    | 10s            | 35,039  | 19,000,000-19,010,000 |
-| Ponder   | 11m         | 35,039  | 19,000,000-19,010,000 |
+| Ponder   | 21m            | 35,039  | 19,000,000-19,010,000 |
 | Subgraph | 19m            | 35,039  | 19,000,000-19,010,000 |
 
 ## Data Distribution Details

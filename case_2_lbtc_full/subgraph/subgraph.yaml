@@ -24,6 +24,8 @@ dataSources:
       abis:
         - name: LBTC
           file: ./abis/LBTC.json
+        - name: Multicall
+          file: ./abis/Multicall.json
       eventHandlers:
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer

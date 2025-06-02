@@ -38,45 +38,43 @@ const tryAggregate = (0, evm_abi_1.fun)('0xbce38bd7', "tryAggregate(bool,(addres
 }, p.array(p.struct({ success: p.bool, returnData: p.bytes })));
 class Multicall extends evm_abi_1.ContractBase {
     async aggregate(...args) {
-        let [calls, funcs, page] = this.makeCalls(args);
-        let size = calls.length;
-        let results = new Array(size);
-        for (let [from, to] of splitIntoPages(size, page)) {
-            let { returnData } = await this.eth_call(aggregate, { calls: calls.slice(from, to) });
-            for (let i = from; i < to; i++) {
-                let data = returnData[i - from];
-                results[i] = funcs[i].decodeResult(data);
-            }
-        }
+        let [calls, pageSize] = this.makeCalls(args);
+        if (calls.length === 0)
+            return [];
+        const pages = Array.from(splitArray(pageSize, calls));
+        const results = await Promise.all(pages.flatMap(async (page) => {
+            const { returnData } = await this.eth_call(aggregate, { calls: page });
+            return returnData.map((data, i) => page[i].func.decodeResult(data));
+        }));
         return results;
     }
     async tryAggregate(...args) {
-        let [calls, funcs, page] = this.makeCalls(args);
-        let size = calls.length;
-        let results = new Array(size);
-        for (let [from, to] of splitIntoPages(size, page)) {
-            let response = await this.eth_call(tryAggregate, {
+        let [calls, pageSize] = this.makeCalls(args);
+        if (calls.length === 0)
+            return [];
+        const pages = Array.from(splitArray(pageSize, calls));
+        const results = await Promise.all(pages.flatMap(async (page) => {
+            const response = await this.eth_call(tryAggregate, {
                 requireSuccess: false,
-                calls: calls.slice(from, to)
+                calls: page,
             });
-            for (let i = from; i < to; i++) {
-                let res = response[i - from];
+            return response.map((res, i) => {
                 if (res.success) {
                     try {
-                        results[i] = {
+                        return {
                             success: true,
-                            value: funcs[i].decodeResult(res.returnData)
+                            value: page[i].func.decodeResult(res.returnData)
                         };
                     }
                     catch (err) {
-                        results[i] = { success: false, returnData: res.returnData };
+                        return { success: false, returnData: res.returnData };
                     }
                 }
                 else {
-                    results[i] = { success: false };
+                    return { success: false };
                 }
-            }
-        }
+            });
+        }));
         return results;
     }
     makeCalls(args) {
@@ -85,55 +83,60 @@ class Multicall extends evm_abi_1.ContractBase {
             case 1: {
                 let list = args[0];
                 let calls = new Array(list.length);
-                let funcs = new Array(list.length);
                 for (let i = 0; i < list.length; i++) {
                     let [func, address, args] = list[i];
-                    calls[i] = { target: address, callData: func.encode(args) };
-                    funcs[i] = func;
+                    calls[i] = { target: address, callData: func.encode(args), func };
                 }
-                return [calls, funcs, page];
+                return [calls, page];
             }
             case 2: {
                 let func = args[0];
                 let list = args[1];
                 let calls = new Array(list.length);
-                let funcs = new Array(list.length);
                 for (let i = 0; i < list.length; i++) {
                     let [address, args] = list[i];
-                    calls[i] = { target: address, callData: func.encode(args) };
-                    funcs[i] = func;
+                    calls[i] = { target: address, callData: func.encode(args), func };
                 }
-                return [calls, funcs, page];
+                return [calls, page];
             }
             case 3: {
                 let func = args[0];
                 let address = args[1];
                 let list = args[2];
                 let calls = new Array(list.length);
-                let funcs = new Array(list.length);
                 for (let i = 0; i < list.length; i++) {
                     let args = list[i];
-                    calls[i] = { target: address, callData: func.encode(args) };
-                    funcs[i] = func;
+                    calls[i] = { target: address, callData: func.encode(args), func };
                 }
-                return [calls, funcs, page];
+                return [calls, page];
             }
             default:
-                throw new Error('unexpected number of arguments');
+                throw new Error(`Unexpected number of arguments: ${args.length}`);
         }
     }
 }
 exports.Multicall = Multicall;
 Multicall.aggregate = aggregate;
 Multicall.tryAggregate = tryAggregate;
-function* splitIntoPages(size, page) {
-    let from = 0;
-    while (size) {
-        let step = Math.min(page, size);
-        let to = from + step;
-        yield [from, to];
-        size -= step;
-        from = to;
+function* splitSlice(maxSize, beg, end) {
+    maxSize = Math.max(1, maxSize);
+    end = end ?? Number.MAX_SAFE_INTEGER;
+    while (beg < end) {
+        let left = end - beg;
+        let splits = Math.ceil(left / maxSize);
+        let step = Math.round(left / splits);
+        yield [beg, beg + step];
+        beg += step;
+    }
+}
+function* splitArray(maxSize, arr) {
+    if (arr.length <= maxSize) {
+        yield arr;
+    }
+    else {
+        for (let [beg, end] of splitSlice(maxSize, 0, arr.length)) {
+            yield arr.slice(beg, end);
+        }
     }
 }
 //# sourceMappingURL=multicall.js.map

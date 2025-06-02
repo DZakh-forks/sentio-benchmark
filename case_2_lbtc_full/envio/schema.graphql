@@ -10,6 +10,7 @@ type Snapshot {
 type Accounts {
   id: ID! # Account address - this is the only unique identifier
   lastSnapshotTimestamp: BigInt! # Remove ! to make it updatable
+  lastProcessedBlock: BigInt! # Last block number processed for this account
   snapshots: [Snapshot!]! @derivedFrom(field: "account") # All snapshots for this account
 }
 

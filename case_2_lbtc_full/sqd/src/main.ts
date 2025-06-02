@@ -1,39 +1,17 @@
 import {TypeormDatabase} from '@subsquid/typeorm-store'
-import {Accounts, Snapshot, AccountRegistry, Transfer} from './model'
-import {LBTC_PROXY} from "./constant.js"
+import {Accounts, Snapshot, Transfer} from './model'
+import {LBTC_PROXY, MULTICALL_ADDRESS} from "./constant.js"
 import {processor} from './processor'
 import {BigDecimal} from '@subsquid/big-decimal'
-import {Contract, events} from "./abi/LBTC.js"
+import {Contract, events, functions} from "./abi/LBTC.js"
+import {Multicall} from "./abi/multicall.js"
 
 // Add timer variables
 let rpcTime = 0;
 let pointCalcTime = 0;
 let storageTime = 0;
-let operationCount = 0;
 const SECOND_PER_HOUR = 60n * 60n;
 const DAILY_POINTS = 1000;
-
-// Helper function to add account to registry
-async function addAccountToRegistry(store: any, accountId: string): Promise<void> {
-  const startTime = performance.now();
-  let registry = await store.get(AccountRegistry, "main")
-  if (!registry) {
-    registry = new AccountRegistry({
-      id: "main",
-      accounts: [],
-      lastSnapshotTimestamp: 0n
-    })
-  }
-  
-  let accountExists = registry.accounts.includes(accountId)
-  
-  // Add account if it doesn't exist
-  if (!accountExists) {
-    registry.accounts.push(accountId)
-    await store.save(registry)
-  }
-  storageTime += performance.now() - startTime;
-}
 
 // Helper to get the last snapshot data
 async function getLastSnapshotData(store: any, accountId: string): Promise<{
@@ -51,7 +29,7 @@ async function getLastSnapshotData(store: any, accountId: string): Promise<{
   let account = await store.get(Accounts, accountId)
   storageTime += performance.now() - accountStartTime;
   if (account && account.lastSnapshotTimestamp) {
-    lastTimestamp = account.lastSnapshotTimestamp
+    lastTimestamp = BigInt(account.lastSnapshotTimestamp)
     
     // If we have a previous snapshot, load it
     if (lastTimestamp != 0n) {
@@ -83,7 +61,7 @@ async function shouldUpdateHourly(store: any, accountId: string, currentTimestam
   
   // Check if the account has a lastSnapshotTimestamp and if an hour has passed
   return account.lastSnapshotTimestamp > 0n && 
-         (currentTimestamp - account.lastSnapshotTimestamp) >= SECOND_PER_HOUR
+         (currentTimestamp - BigInt(account.lastSnapshotTimestamp)) >= SECOND_PER_HOUR
 }
 
 // Helper to create and save a snapshot
@@ -99,7 +77,8 @@ async function createAndSaveSnapshot(
   snapshotsMap: Map<string, Snapshot>,
   accountsToUpdate: Map<string, Accounts>,
   isMint: boolean = false,
-  mintAmount: bigint = 0n
+  mintAmount: bigint = 0n,
+  triggerEvent: 'Transfer' | 'TimeInterval' = 'Transfer'
 ): Promise<void> {
     // Skip processing for zero address
     if (accountId === "0x0000000000000000000000000000000000000000") {
@@ -115,12 +94,9 @@ async function createAndSaveSnapshot(
   } else {
     account = await store.get(Accounts, accountId);
     if (!account) {
-      account = new Accounts({
-        id: accountId,
-        lastSnapshotTimestamp: 0n
-      });
-      // Add to registry and save the account immediately
-      await addAccountToRegistry(store, accountId);
+      account = new Accounts()
+      account.id = accountId
+      account.lastSnapshotTimestamp = 0n;
       const saveStartTime = performance.now();
       await store.save(account);
       storageTime += performance.now() - saveStartTime;
@@ -137,12 +113,12 @@ async function createAndSaveSnapshot(
     // Update the balance instead of skipping
     snapshot.balance = balance;
   } else {
-    snapshot = new Snapshot({
-      id: snapshotKey,
-      account,
-      timestamp: timestamp,
-      balance: balance
-    });
+    snapshot = new Snapshot()
+    snapshot.id = snapshotKey
+    snapshot.account = account
+    snapshot.timestamp = timestamp
+    snapshot.balance = balance
+    snapshot.triggerEvent = triggerEvent
   }
   
   // Handle mint amount if it's a mint transaction
@@ -159,7 +135,7 @@ async function createAndSaveSnapshot(
   // Calculate point based on previous values
   if (lastTimestamp != 0n) {
     const pointCalcStartTime = performance.now();
-    const secondsSinceLastUpdate = Number(timestamp - lastTimestamp);
+    const secondsSinceLastUpdate = Number(BigInt(snapshot.timestamp) - lastTimestamp);
     snapshot.point = lastPoint.plus(
       lastBalance
         .times(BigDecimal(DAILY_POINTS/24))
@@ -183,115 +159,140 @@ processor.run(new TypeormDatabase({supportHotBlocks: true}), async (ctx) => {
     // Use Maps for both snapshots and accounts to prevent duplicates
     const snapshotsMap = new Map<string, Snapshot>() // key: accountId-timestamp
     const accountsToUpdate = new Map<string, Accounts>()
-    
+    console.log(`Processing block ${ctx.blocks[0].header.height}, last block ${ctx.blocks[ctx.blocks.length - 1].header.height}`);
+        
     for (let block of ctx.blocks) {
         let lbtc = new Contract({_chain: ctx._chain, block: block.header}, LBTC_PROXY)
         const blockTimestamp = BigInt(block.header.timestamp / 1000)
         
+        // Collect all addresses that need balance queries for this block
+        const addressesToQuery = new Set<string>();
+        const blockTransfers: Transfer[] = [];
+        
+        // First pass: collect all addresses and transfers
         for (let log of block.logs) {
             if (log.topics[0] === events.Transfer.topic) {
-                // Handle transfer events
                 let {from, to, value} = events.Transfer.decode(log)
                 
-                transfers.push(
-                    new Transfer({
-                        id: `${block.header.id}_${block.header.height}_${log.logIndex}`,
-                        from: from,
-                        to: to,
-                        value: value,
-                        blockNumber: BigInt(block.header.height),
-                        transactionHash: log.transaction?.hash ? Buffer.from(log.transaction.hash, 'hex') : null
-                    })
-                )
+                const transfer = new Transfer()
+                transfer.id = `${block.header.id}_${block.header.height}_${log.logIndex}`
+                transfer.from = from
+                transfer.to = to
+                transfer.value = value
+                transfer.blockNumber = BigInt(block.header.height)
+                transfer.transactionHash = log.transaction?.hash ? Buffer.from(log.transaction.hash, 'hex') : undefined
+                blockTransfers.push(transfer)
 
-                // Process sender account
                 if (from !== '0x0000000000000000000000000000000000000000') {
-                    const fromLastData = await getLastSnapshotData(ctx.store, from)
-                    const rpcStartTime = performance.now();
-                    const fromBalance = BigDecimal(await lbtc.balanceOf(from))
-                    rpcTime += performance.now() - rpcStartTime;
-                    
+                    addressesToQuery.add(from);
+                }
+                if (to !== '0x0000000000000000000000000000000000000000') {
+                    addressesToQuery.add(to);
+                }
+            }
+        }
+
+        // Add block transfers to the main transfers array
+        transfers.push(...blockTransfers);
+
+        // If we have addresses to query, do a single multicall for all of them
+        if (addressesToQuery.size > 0) {
+            const rpcStartTime = performance.now();
+            const multicall = new Multicall({ _chain: ctx._chain, block: block.header }, MULTICALL_ADDRESS);
+            const balances = await multicall.aggregate(
+                functions.balanceOf,
+                LBTC_PROXY,
+                Array.from(addressesToQuery).map(addr => ({ account: addr })),
+                1000 // batch size to avoid RPC timeouts
+            );
+            rpcTime += performance.now() - rpcStartTime;
+
+            const balancesArray = balances.toString().split(',');
+            const balanceMap = new Map(Array.from(addressesToQuery).map((addr, i) => [addr, balancesArray[i]]));
+
+            // Second pass: process transfers and create snapshots
+            for (const transfer of blockTransfers) {
+                const {from, to, value} = transfer;
+                
+                if (from !== '0x0000000000000000000000000000000000000000') {
+                    const fromBalance = balanceMap.get(from);
+                    const lastData = await getLastSnapshotData(ctx.store, from);
                     await createAndSaveSnapshot(
                         ctx.store,
                         from,
                         blockTimestamp,
-                        fromBalance,
-                        fromLastData.point,
-                        fromLastData.balance,
-                        fromLastData.timestamp,
-                        fromLastData.mintAmount,
+                        BigDecimal(fromBalance ? fromBalance : "0"),
+                        lastData.point,
+                        lastData.balance,
+                        lastData.timestamp,
+                        lastData.mintAmount,
                         snapshotsMap,
-                        accountsToUpdate
-                    )
+                        accountsToUpdate,
+                        false,
+                        undefined,
+                        'Transfer'
+                    );
                 }
 
-                // Process receiver account
-                const toLastData = await getLastSnapshotData(ctx.store, to)
-                const rpcStartTime2 = performance.now();
-                const toBalance = BigDecimal(await lbtc.balanceOf(to))
-                rpcTime += performance.now() - rpcStartTime2;
-                
-                const isMint = from === '0x0000000000000000000000000000000000000000'
-                
-                await createAndSaveSnapshot(
-                    ctx.store,
-                    to,
-                    blockTimestamp,
-                    toBalance,
-                    toLastData.point,
-                    toLastData.balance,
-                    toLastData.timestamp,
-                    toLastData.mintAmount,
-                    snapshotsMap,
-                    accountsToUpdate,
-                    isMint,
-                    value
-                )
+                if (to !== '0x0000000000000000000000000000000000000000') {
+                    const toBalance = balanceMap.get(to);
+                    const lastData = await getLastSnapshotData(ctx.store, to);
+                    const isMint = from === '0x0000000000000000000000000000000000000000';
+                    await createAndSaveSnapshot(
+                        ctx.store,
+                        to,
+                        blockTimestamp,
+                        BigDecimal(toBalance ? toBalance : "0"),
+                        lastData.point,
+                        lastData.balance,
+                        lastData.timestamp,
+                        lastData.mintAmount,
+                        snapshotsMap,
+                        accountsToUpdate,
+                        isMint,
+                        isMint ? value : undefined,
+                        'Transfer'
+                    );
+                }
             }
         }
         
         // For the last block in the batch, process hourly updates for all accounts
         if (block === ctx.blocks[ctx.blocks.length - 1]) {
-            const registryStartTime = performance.now();
-            const registry = await ctx.store.get(AccountRegistry, "main")
-            storageTime += performance.now() - registryStartTime;
-            if (registry) {
-                // Only run the global update if an hour has passed since the last global update
-                if (!registry.lastSnapshotTimestamp || (blockTimestamp - registry.lastSnapshotTimestamp) >= SECOND_PER_HOUR) {
-                    // Update the global timestamp
-                    registry.lastSnapshotTimestamp = blockTimestamp
-                    const registrySaveStartTime = performance.now();
-                    await ctx.store.save(registry)
-                    storageTime += performance.now() - registrySaveStartTime;
+            const allAccounts = await ctx.store.find(Accounts, {});
+            console.log(`Found ${allAccounts.length} accounts to update`);
+            
+            // Filter accounts that need hourly updates
+            const accountsToUpdate = allAccounts.filter(account => 
+                shouldUpdateHourly(ctx.store, account.id, blockTimestamp)
+            );
+            
+            if (accountsToUpdate.length > 0) {
+                // Create a Map for accounts to update
+                const accountsToUpdateMap = new Map<string, Accounts>();
+                accountsToUpdate.forEach(account => {
+                    accountsToUpdateMap.set(account.id, account);
+                });
+                
+                // Process each account using its stored balance
+                for (const account of accountsToUpdate) {
+                    const lastData = await getLastSnapshotData(ctx.store, account.id);
                     
-                    // Get all accounts that need updating
-                    for (const accountId of registry.accounts) {
-                        const accountStartTime = performance.now();
-                        const account = await ctx.store.get(Accounts, accountId)
-                        storageTime += performance.now() - accountStartTime;
-                        if (!account) continue
-                        
-                        // Check if it's time for an hourly update for this specific account
-                        if (await shouldUpdateHourly(ctx.store, accountId, blockTimestamp)) {
-                            const lastData = await getLastSnapshotData(ctx.store, accountId)
-                            const rpcStartTime = performance.now();
-                            const balance = BigDecimal(await lbtc.balanceOf(accountId))
-                            rpcTime += performance.now() - rpcStartTime;
-                            
-                            await createAndSaveSnapshot(
-                                ctx.store,
-                                accountId,
-                                blockTimestamp,
-                                balance,
-                                lastData.point,
-                                lastData.balance,
-                                lastData.timestamp,
-                                lastData.mintAmount,
-                                snapshotsMap,
-                                accountsToUpdate
-                            )
-                        }
-                    }
+                    await createAndSaveSnapshot(
+                        ctx.store,
+                        account.id,
+                        blockTimestamp,
+                        lastData.balance, // Use the stored balance
+                        lastData.point,
+                        lastData.balance,
+                        lastData.timestamp,
+                        lastData.mintAmount,
+                        snapshotsMap,
+                        accountsToUpdateMap,
+                        false,
+                        undefined,
+                        'TimeInterval'
+                    );
                 }
             }
         }
@@ -304,12 +305,5 @@ processor.run(new TypeormDatabase({supportHotBlocks: true}), async (ctx) => {
     if (accountsToUpdate.size > 0) await ctx.store.save([...accountsToUpdate.values()])
     storageTime += performance.now() - storageStartTime;
     
-    // Log performance metrics
-    operationCount += transfers.length;
-    if (operationCount % 1000 === 0) {
-      ctx.log.info(`Performance metrics after ${operationCount} operations:`);
-      ctx.log.info(`RPC balanceOf time: ${(rpcTime / 1000).toFixed(2)}s`);
-      ctx.log.info(`Point calculation time: ${(pointCalcTime / 1000).toFixed(2)}s`);
-      ctx.log.info(`Storage operation time: ${(storageTime / 1000).toFixed(2)}s`);
-    }
+    ctx.log.info(`Performance metrics for block ${ctx.blocks[ctx.blocks.length - 1].header.height}: RPC balanceOf time: ${(rpcTime / 1000).toFixed(2)}s, Point calculation time: ${(pointCalcTime / 1000).toFixed(2)}s, Storage operation time: ${(storageTime / 1000).toFixed(2)}s`);
 })

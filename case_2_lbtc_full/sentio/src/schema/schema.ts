@@ -94,7 +94,8 @@ type Transfer @entity {
   value: BigInt!
   blockNumber: BigInt!
   transactionHash: Bytes
-}`
+}
+`
 DatabaseSchema.register({
   source,
   entities: {

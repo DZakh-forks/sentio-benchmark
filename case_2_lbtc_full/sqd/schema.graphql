@@ -5,18 +5,13 @@ type Snapshot @entity {
   mintAmount: BigDecimal # Amount minted in this snapshot (if applicable)
   balance: BigDecimal! # Current token balance
   point: BigDecimal # Accumulated points
+  triggerEvent: String!
 }
 
 type Accounts @entity {
   id: ID! @index
   lastSnapshotTimestamp: BigInt! # Timestamp of the last snapshot for this account
   snapshots: [Snapshot!]! @derivedFrom(field: "account") # All snapshots for this account
-}
-
-type AccountRegistry @entity {
-  id: ID! @index
-  accounts: [String!]! # List of all account addresses
-  lastSnapshotTimestamp: BigInt! # Timestamp of the last snapshot for global update
 }
 
 type Transfer @entity {

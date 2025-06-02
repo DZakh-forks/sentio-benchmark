@@ -16,12 +16,6 @@ export const accounts = onchainTable("accounts", (t) => ({
   point: t.bigint().notNull(),
 }));
 
-export const accountRegistry = onchainTable("account_registry", (t) => ({
-  id: t.text().primaryKey(), // Always "main"
-  accounts: t.hex().array().notNull(),
-  lastSnapshotTimestamp: t.bigint().notNull(),
-}));
-
 export const lbtcTransfer = onchainTable("lbtc_transfer", (t) => ({
   id: t.text().primaryKey(),
   from: t.hex().notNull(),

@@ -15,7 +15,7 @@ import * as dotenv from 'dotenv'
 dotenv.config()
 
 // Get RPC endpoint from environment variable 
-const rpcEndpoint = 'https://rpc.sentio.xyz/oTSQQwOgzr9ERJ0petpRSbgkQDCPJ9Al/ethereum'
+const rpcEndpoint = 'https://rpc.sentio.xyz/kQSkWjHcc9kKMod5EdAvVo9DYtO4iawC/ethereum'
 // const rpcEndpoint = process.env.RPC_ENDPOINT
 
 export const processor = new EvmBatchProcessor()
@@ -43,7 +43,7 @@ export const processor = new EvmBatchProcessor()
         },
     })
     .setBlockRange({
-        from: 15000000,
+        from: 22400000,
         to:   22500000,
     })
 	.addLog({

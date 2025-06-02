@@ -7,6 +7,71 @@ let computeTime = 0;
 let storageTime = 0;
 let operationCount = 0;
 
+// Multicall ABI for batch calls
+const MULTICALL_ABI = [
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "target",
+        "type": "address"
+      },
+      {
+        "internalType": "bytes",
+        "name": "callData",
+        "type": "bytes"
+      }
+    ],
+    "name": "call",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "success",
+        "type": "bool"
+      },
+      {
+        "internalType": "bytes",
+        "name": "returnData",
+        "type": "bytes"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }
+] as const;
+
+// Multicall address
+const MULTICALL_ADDRESS = "0xcA11bde05977b3631167028862bE2a173976CA11";
+
+// Helper function to batch balanceOf calls
+async function batchBalanceOf(
+  context: any,
+  addresses: string[],
+  lbtcAddress: string
+): Promise<Map<string, bigint>> {
+  const balanceMap = new Map<string, bigint>();
+  if (addresses.length === 0) return balanceMap;
+
+  // Batch call using multicall
+  const rpcStartTime = performance.now();
+  const results = await context.client.multicall({
+    contracts: addresses.map(addr => ({
+      address: lbtcAddress,
+      abi: context.contracts.LBTC.abi,
+      functionName: "balanceOf",
+      args: [addr]
+    }))
+  });
+  rpcTime += performance.now() - rpcStartTime;
+
+  // Map results
+  addresses.forEach((addr, i) => {
+    balanceMap.set(addr, results[i].result);
+  });
+
+  return balanceMap;
+}
+
 // Event handler for Transfers
 ponder.on("LBTC:Transfer", async ({ event, context }) => {
   const { from, to, value } = event.args;
@@ -16,27 +81,23 @@ ponder.on("LBTC:Transfer", async ({ event, context }) => {
   const snapshots = new Map();
   const accountsToUpdate = new Map();
   
-  // Process "to" account
-  const lbtc = context.contracts.LBTC;
+  // Collect addresses to query
+  const addresses = new Set<string>();
+  if (to !== "0x0000000000000000000000000000000000000000") addresses.add(to);
+  if (from !== "0x0000000000000000000000000000000000000000") addresses.add(from);
   
-  // Measure RPC time for balanceOf
-  const rpcStartTime = performance.now();
-  const toBalance = await context.client.readContract({
-    abi: lbtc.abi,
-    address: lbtc.address,
-    functionName: "balanceOf",
-    args: [to]
-  });
-  rpcTime += performance.now() - rpcStartTime;
+  // Batch get balances
+  const balanceMap = await batchBalanceOf(context, Array.from(addresses), context.contracts.LBTC.address);
   
   // Check if this is a mint
   const isMint = from === "0x0000000000000000000000000000000000000000";
   
+  // Process "to" account
   await createAndSaveSnapshot( 
     context.db,
     to,
     timestamp,
-    toBalance,
+    balanceMap.get(to) || 0n,
     snapshots,
     accountsToUpdate,
     true,
@@ -47,21 +108,11 @@ ponder.on("LBTC:Transfer", async ({ event, context }) => {
   
   // Process "from" account (skip if mint)
   if (!isMint) {
-    // Measure RPC time for balanceOf
-    const fromRpcStartTime = performance.now();
-    const fromBalance = await context.client.readContract({
-      abi: lbtc.abi,
-      address: lbtc.address,
-      functionName: "balanceOf",
-      args: [from]
-    });
-    rpcTime += performance.now() - fromRpcStartTime;
-    
     await createAndSaveSnapshot(
       context.db,
       from,
       timestamp,
-      fromBalance,
+      balanceMap.get(from) || 0n,
       snapshots,
       accountsToUpdate,
       true,
@@ -125,52 +176,31 @@ ponder.on("LBTC:Transfer", async ({ event, context }) => {
 
   operationCount++;
   if (operationCount % 1000 === 0) {
-    console.log(`block number: ${event.block.number}`);
-    console.log(`Performance metrics after ${operationCount} operations:`);
-    console.log(`RPC time: ${(rpcTime / 1000).toFixed(2)}s`);
-    console.log(`Compute time: ${(computeTime / 1000).toFixed(2)}s`);
-    console.log(`Storage time: ${(storageTime / 1000).toFixed(2)}s`);
+    console.log(`[${new Date().toISOString()}] Block ${event.block.number} - Ops: ${operationCount} - RPC: ${(rpcTime / 1000).toFixed(2)}s - Compute: ${(computeTime / 1000).toFixed(2)}s - Storage: ${(storageTime / 1000).toFixed(2)}s`);
   }
 });
 
 // Handle hourly updates with a trigger for block events
 ponder.on("HourlyUpdate:block", async ({ event, context }) => {
-  const timestamp = BigInt(event.block.timestamp);
-  
   const storageStartTime = performance.now();
-  const registry = await context.db.find(schema.accountRegistry, { id: "main" });
+  const accounts = await context.db.sql.query.accounts.findMany();  
   storageTime += performance.now() - storageStartTime;
   
-  if (!registry) return;
+  const timestamp = BigInt(event.block.timestamp);
   
   // Collections for batch operations
   const snapshots = new Map();
   const accountsToUpdate = new Map();
   
-  // Update lastSnapshotTimestamp in registry
-  const updateStartTime = performance.now();
-  await context.db.update(schema.accountRegistry, { id: "main" }).set({
-    lastSnapshotTimestamp: timestamp
-  });
-  storageTime += performance.now() - updateStartTime;
-  
-  const lbtc = context.contracts.LBTC;
-  
   // Process all accounts
-  for (const accountId of registry.accounts) {
-    const accountStartTime = performance.now();
-    const account = await context.db.find(schema.accounts, { id: accountId });
-    storageTime += performance.now() - accountStartTime;
-    if (!account) continue;
-    
+  for (const account of accounts) {
     // Only update accounts with existing snapshots
     if (account.lastSnapshotTimestamp !== 0n) {
       // Get current balance
-
       const balance = account.balance;
       await createAndSaveSnapshot(
         context.db,
-        accountId,
+        account.id,
         timestamp,
         balance,
         snapshots,
@@ -230,29 +260,6 @@ ponder.on("HourlyUpdate:block", async ({ event, context }) => {
   }
 });
 
-// Helper function to add account to registry
-async function addAccountToRegistry(db: any, accountId: string) {
-  const storageStartTime = performance.now();
-  const registry = await db.find(schema.accountRegistry, { id: "main" });
-  storageTime += performance.now() - storageStartTime;
-  
-  if (!registry) {
-    const insertStartTime = performance.now();
-    await db.insert(schema.accountRegistry).values({
-      id: "main",
-      accounts: [accountId],
-      lastSnapshotTimestamp: 0n
-    });
-    storageTime += performance.now() - insertStartTime;
-  } else if (!registry.accounts.includes(accountId)) {
-    const insertStartTime = performance.now();
-    await db.update(schema.accountRegistry, { id: "main" }).set({
-      accounts: [...registry.accounts, accountId]
-    });
-    storageTime += performance.now() - insertStartTime;
-  }
-}
-
 // Helper to get or create an account
 async function getOrCreateAccount(db: any, address: string) {
   const accountId = address.toLowerCase();
@@ -269,7 +276,6 @@ async function getOrCreateAccount(db: any, address: string) {
       point: 0n
     });
     storageTime += performance.now() - insertStartTime;
-    await addAccountToRegistry(db, accountId);
     return { id: accountId, lastSnapshotTimestamp: 0n, balance: 0n, point: 0n };
   }
   
@@ -331,7 +337,7 @@ async function createAndSaveSnapshot(
   // Normalize account ID to lowercase
   const normalizedAccountId = accountId.toLowerCase();
   
-  // Measure storage time for account operations
+  // Get or create account and last snapshot data
   if (createIfNotExists) {
     await getOrCreateAccount(db, normalizedAccountId);
   }
@@ -376,6 +382,5 @@ async function createAndSaveSnapshot(
       balance: balance,  // Make sure we're using the RPC balance
       point: point
     });
-    storageTime += performance.now() - accountStartTime;
   }
 }

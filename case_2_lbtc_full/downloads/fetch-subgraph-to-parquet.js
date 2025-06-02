@@ -129,26 +129,25 @@ async function fetchSubgraphAccounts() {
 
   try {
     const writer = await parquet.ParquetWriter.openFile(accountSchema, outputPath);
-    let offset = 0;
+    let lastId = '';
     const pageSize = 1000;
     let totalRows = 0;
     
     console.log('Fetching account data from Subgraph GraphQL...');
     
-    const allAccounts = [];
-    
     while (true) {
-      console.log(`Fetching accounts with offset: ${offset}...`);
+      console.log(`Fetching accounts after ID: ${lastId || 'start'}...`);
       
       try {
+        const whereCondition = lastId ? `where: {id_gt: "${lastId}"}` : '';
         const response = await axios.post(
           SUBGRAPH_ENDPOINT,
           {
             query: `
               query {
                 accounts_collection(
+                  ${whereCondition}
                   first: ${pageSize}
-                  skip: ${offset}
                   orderBy: id
                   orderDirection: asc
                 ) {
@@ -207,11 +206,9 @@ async function fetchSubgraphAccounts() {
           };
           
           await writer.appendRow(record);
-          allAccounts.push(record);
+          lastId = account.id;
           totalRows++;
         }
-        
-        offset += accounts.length;
         
         if (accounts.length < pageSize) {
           break;

@@ -1,24 +1,9 @@
 import {
   Transfer as TransferEvent,
-  LBTC as LBTCContract,
+  LBTC as LBTCContract
 } from "../generated/case_2_lbtc_full/LBTC"
 import { Accounts, Snapshot, AccountRegistry, Transfer as TransferEntity } from "../generated/schema"
 import { BigDecimal, BigInt, Address, ethereum, log } from "@graphprotocol/graph-ts"
-
-// Add timer variables
-let rpcTime: BigInt = BigInt.fromI32(0)
-let pointCalcTime: BigInt = BigInt.fromI32(0)
-let storageTime: BigInt = BigInt.fromI32(0)
-
-// Helper function to add time
-function addTime(current: BigInt, delta: BigInt): BigInt {
-  return current.plus(delta)
-}
-
-// Helper function to get current time as BigInt
-function getCurrentTime(): BigInt {
-  return BigInt.fromString((Date.now() / 1000).toString())
-}
 
 // Define a class for snapshot data
 class SnapshotData {
@@ -42,7 +27,6 @@ class SnapshotData {
 
 // Helper function to add account to registry
 function addAccountToRegistry(accountId: string, block: ethereum.Block): void {
-  const startTime = getCurrentTime()
   let registry = AccountRegistry.load("main")
   if (!registry) {
     registry = new AccountRegistry("main")
@@ -66,7 +50,6 @@ function addAccountToRegistry(accountId: string, block: ethereum.Block): void {
     registry.accounts = accounts
     registry.save()
   }
-  storageTime = addTime(storageTime, getCurrentTime().minus(startTime))
 }
 
 // Helper to get the last snapshot data for an account
@@ -76,7 +59,6 @@ function getLastSnapshotData(accountId: string, timestamp: BigInt, block: ethere
   let lastTimestamp = BigInt.fromI32(0)
   let lastMintAmount = BigDecimal.fromString("0")
 
-  const startTime = getCurrentTime()
   let account = Accounts.load(accountId)
   if (account && account.lastSnapshotTimestamp) {
     lastTimestamp = account.lastSnapshotTimestamp
@@ -85,23 +67,13 @@ function getLastSnapshotData(accountId: string, timestamp: BigInt, block: ethere
     if (lastTimestamp != BigInt.fromI32(0)) {
       let lastSnapshot = Snapshot.load(accountId + "-" + lastTimestamp.toString())
       if (lastSnapshot) {
-        // AssemblyScript-safe approach for properties that might be null
-        if (lastSnapshot.point) {
-          lastPoint = lastSnapshot.point!
-        }
-        
-        // For BigDecimal properties, no need for non-null assertion
-        if (lastSnapshot.balance) {
-          lastBalance = lastSnapshot.balance
-        }
-        
-        if (lastSnapshot.mintAmount) {
-          lastMintAmount = lastSnapshot.mintAmount!
-        }
+        // Use non-null assertion since we know these values exist in the schema
+        lastPoint = lastSnapshot.point as BigDecimal
+        lastBalance = lastSnapshot.balance as BigDecimal
+        lastMintAmount = lastSnapshot.mintAmount as BigDecimal
       }
     }
   } 
-  storageTime = addTime(storageTime, getCurrentTime().minus(startTime))
   return new SnapshotData(
     lastPoint,
     lastBalance,
@@ -127,17 +99,13 @@ function createAndSaveSnapshot(
   if (accountId === "0x0000000000000000000000000000000000000000") {
     return;
   }
-  const startAccountTime = getCurrentTime()
   let account = Accounts.load(accountId)
-  storageTime = addTime(storageTime, getCurrentTime().minus(startAccountTime))
   if (!account) {
     account = new Accounts(accountId)
     account.lastSnapshotTimestamp = BigInt.fromI32(0)
     // Add to registry
     addAccountToRegistry(accountId, block)
-    const startSaveTime = getCurrentTime()
     account.save()
-    storageTime = addTime(storageTime, getCurrentTime().minus(startSaveTime))
   }
   
   let snapshot = new Snapshot(accountId + "-" + timestamp.toString())
@@ -152,28 +120,66 @@ function createAndSaveSnapshot(
     snapshot.mintAmount = lastMintAmount
   }
   
+  // Set balance directly from the input parameter
   snapshot.balance = balance
   
   // Calculate point based on previous values
   if (lastTimestamp != BigInt.fromI32(0)) {
-    const calcStartTime = getCurrentTime()
-    let pointValue = BigDecimal.fromString(lastPoint.toString())
+    // Convert timestamps to seconds for calculation
+    let timeDiff = timestamp.minus(lastTimestamp)
+    let timeDiffInSeconds = timeDiff.toI32()
+    
+    // Calculate points per second (1000 points per day)
+    let pointsPerSecond = BigDecimal.fromString("1000")
+      .div(BigDecimal.fromString("24"))
+      .div(BigDecimal.fromString("60"))
+      .div(BigDecimal.fromString("60"))
+    
+    // Calculate new point value
+    let pointValue = lastPoint
       .plus(lastBalance
-        .times(BigDecimal.fromString("1000").div(BigDecimal.fromString("24")).div(BigDecimal.fromString("60")).div(BigDecimal.fromString("60")))
-        .times(BigDecimal.fromString(timestamp.minus(lastTimestamp).toString())))
+        .times(pointsPerSecond)
+        .times(BigDecimal.fromString(timeDiffInSeconds.toString())))
     
     snapshot.point = pointValue
-    pointCalcTime = addTime(pointCalcTime, getCurrentTime().minus(calcStartTime))
   } else {
     snapshot.point = BigDecimal.fromString("0")
   }
-  const startSaveTime = getCurrentTime()
+  
   snapshot.save()
   
   // Update account's last snapshot timestamp
   account.lastSnapshotTimestamp = timestamp
   account.save()
-  storageTime = addTime(storageTime, getCurrentTime().minus(startSaveTime))
+}
+
+// Helper function to batch balanceOf calls
+function batchBalanceOf(
+  lbtc: LBTCContract,
+  addresses: Address[]
+): Map<string, BigDecimal> {
+  let balanceMap = new Map<string, BigDecimal>()
+  if (addresses.length == 0) return balanceMap
+
+  // Process addresses in batches of 50 to avoid RPC timeouts
+  const BATCH_SIZE = 50
+  for (let i = 0; i < addresses.length; i += BATCH_SIZE) {
+    let batch = addresses.slice(i, i + BATCH_SIZE)
+    
+    // Process batch in parallel
+    for (let j = 0; j < batch.length; j++) {
+      let address = batch[j]
+      let callResult = lbtc.try_balanceOf(address)
+      if (!callResult.reverted) {
+        let balance = BigDecimal.fromString(callResult.value.toString())
+        balanceMap.set(address.toHexString(), balance)
+      } else {
+        balanceMap.set(address.toHexString(), BigDecimal.fromString("0"))
+      }
+    }
+  }
+
+  return balanceMap
 }
 
 export function handleTransfer(event: TransferEvent): void {
@@ -189,74 +195,72 @@ export function handleTransfer(event: TransferEvent): void {
   transfer.blockNumber = event.block.number
   transfer.blockTimestamp = event.block.timestamp
   transfer.transactionHash = event.transaction.hash
-  const startTime = getCurrentTime()
   transfer.save()
-  storageTime = addTime(storageTime, getCurrentTime().minus(startTime))
+  
+  // Collect addresses to query
+  let addresses: Address[] = []
+  if (event.params.to != Address.fromString("0x0000000000000000000000000000000000000000")) {
+    addresses.push(event.params.to)
+  }
+  if (event.params.from != Address.fromString("0x0000000000000000000000000000000000000000")) {
+    addresses.push(event.params.from)
+  }
+  
+  // Batch get balances
+  let balanceMap = batchBalanceOf(lbtc, addresses)
   
   // Handle "to" account
   let toLastData = getLastSnapshotData(event.params.to.toHexString(), event.block.timestamp, event.block)
   
-  // Create snapshot for the "to" account
-  const rpcStartTime = getCurrentTime()
-  let toBalance = BigDecimal.fromString(lbtc.balanceOf(event.params.to).toString())
-  rpcTime = addTime(rpcTime, getCurrentTime().minus(rpcStartTime))
-  
   // Check if this is a mint (from address is zero)
   let isMint = event.params.from == Address.fromString("0x0000000000000000000000000000000000000000")
   
-  if (event.params.to.toHexString()!="0x0000000000000000000000000000000000000000") {
-    createAndSaveSnapshot(
-      event.params.to.toHexString(),
-      event.block.timestamp,
-      toBalance,
-      toLastData.point,
-      toLastData.balance,
-      toLastData.timestamp,
-      toLastData.mintAmount,
-      event.block,
-      isMint,
-      event.params.value
-    )
+  if (event.params.to.toHexString() != "0x0000000000000000000000000000000000000000") {
+    let toBalance = balanceMap.get(event.params.to.toHexString())
+    if (toBalance) {
+      createAndSaveSnapshot(
+        event.params.to.toHexString(),
+        event.block.timestamp,
+        toBalance,
+        toLastData.point,
+        toLastData.balance,
+        toLastData.timestamp,
+        toLastData.mintAmount,
+        event.block,
+        isMint,
+        event.params.value
+      )
+    }
   }
   
   // Handle "from" account (skip if it's a mint)
   if (!isMint) {
     let fromLastData = getLastSnapshotData(event.params.from.toHexString(), event.block.timestamp, event.block)
-    
-    // Create snapshot for the "from" account
-    const rpcStartTime2 = getCurrentTime()
-    let fromBalance = BigDecimal.fromString(lbtc.balanceOf(event.params.from).toString())
-    rpcTime = addTime(rpcTime, getCurrentTime().minus(rpcStartTime2))
-    
-    createAndSaveSnapshot(
-      event.params.from.toHexString(),
-      event.block.timestamp,
-      fromBalance,
-      fromLastData.point,
-      fromLastData.balance,
-      fromLastData.timestamp,
-      fromLastData.mintAmount,
-      event.block
-    )
+    let fromBalance = balanceMap.get(event.params.from.toHexString())
+    if (fromBalance) {
+      createAndSaveSnapshot(
+        event.params.from.toHexString(),
+        event.block.timestamp,
+        fromBalance,
+        fromLastData.point,
+        fromLastData.balance,
+        fromLastData.timestamp,
+        fromLastData.mintAmount,
+        event.block
+      )
+    }
   }
 }
 
 export function handleBlock(block: ethereum.Block): void {
-  // Create contract instance
-  let lbtc = LBTCContract.bind(Address.fromString("0x8236a87084f8B84306f72007F36F2618A5634494"))
-  
   // Get all accounts from registry
-  const startRegistryTime = getCurrentTime()
   let registry = AccountRegistry.load("main")
-  storageTime = addTime(storageTime, getCurrentTime().minus(startRegistryTime))
   
   if (registry) {
     let accountIds = registry.accounts
     
     for (let i = 0; i < accountIds.length; i++) {
-      const startAccountTime = getCurrentTime()
       let account = Accounts.load(accountIds[i])
-      storageTime = addTime(storageTime, getCurrentTime().minus(startAccountTime))
       
       if (account) {
         // Get last snapshot data
@@ -264,7 +268,7 @@ export function handleBlock(block: ethereum.Block): void {
         
         // Only create new snapshot if we have a previous one
         if (lastData.timestamp != BigInt.fromI32(0)) {
-          // Create and save new snapshot
+          // Use the stored balance from lastData since it hasn't changed
           createAndSaveSnapshot(
             account.id,
             block.timestamp,
@@ -279,11 +283,4 @@ export function handleBlock(block: ethereum.Block): void {
       }
     }
   }
-  
-  log.info("Block {} - RPC: {}s, Point calc: {}s, Storage: {}s", [
-    block.number.toString(),
-    rpcTime.toString(),
-    pointCalcTime.toString(),
-    storageTime.toString()
-  ])
 }

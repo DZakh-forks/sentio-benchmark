@@ -74,19 +74,21 @@ async function generateComparisonReport() {
   
   // Define platforms and their corresponding Parquet files for transfers
   const platformFiles = [
-    { name: 'sentio', file: 'sentio-case2-transfers.parquet' },
+    { name: 'sentio_ti', file: 'sentio-case2-transfers-ti.parquet' },
+    { name: 'sentio_bi', file: 'sentio-case2-transfers-bi.parquet' },
     { name: 'envio', file: 'envio-case2-transfers.parquet' },
     { name: 'ponder', file: 'ponder-case2-transfers.parquet' },
-    { name: 'subsquid', file: 'subsquid-case2-transfers.parquet' },
+    { name: 'subsquid', file: 'sqd-case2-transfers.parquet' },
     { name: 'subgraph', file: 'subgraph-case2-transfers.parquet' }
   ];
 
   // Define platforms and their corresponding Parquet files for accounts
   const accountFiles = [
-    { name: 'sentio', file: 'sentio-case2-accounts.parquet' },
+    { name: 'sentio_ti', file: 'sentio-case2-accounts-ti.parquet' },
+    { name: 'sentio_bi', file: 'sentio-case2-accounts-bi.parquet' },
     { name: 'envio', file: 'envio-case2-accounts.parquet' },
     { name: 'ponder', file: 'ponder-case2-accounts.parquet' },
-    { name: 'subsquid', file: 'subsquid-case2-accounts.parquet' },
+    { name: 'subsquid', file: 'sqd-case2-accounts.parquet' },
     { name: 'subgraph', file: 'subgraph-case2-accounts.parquet' }
   ];
   

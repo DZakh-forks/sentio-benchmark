@@ -11,11 +11,11 @@ if (!fs.existsSync(dataDir)) {
 
 // Local PostgreSQL database details
 const DB_CONFIG = {
-  host: 'pg.squid.subsquid.io',
-  port: 5432,
-  database: '16573_6ovpdj',
-  user: '16573_6ovpdj',
-  password: 'fL1m4VN~SuEdeX0EYDrjWqd9X65-Hs9~',
+  host: 'localhost',
+  port: 23798,
+  database: 'postgres',
+  user: 'postgres',
+  password: 'postgres',
   // Increase connection timeout to 30 seconds
   connectionTimeoutMillis: 30000,
   // Increase query timeout to 3 minutes
@@ -40,21 +40,35 @@ const accountSchema = new parquet.ParquetSchema({
 });
 
 async function fetchSubsquidData() {
-  const client = new Client(DB_CONFIG);
-  await client.connect();
-  
-  // Set statement timeout
-  await client.query(`SET statement_timeout TO ${DB_CONFIG.statement_timeout}`);
-  
-  // Fetch and save transfer data
-  await fetchTransfers(client);
-  
-  // Fetch and save account data
-  await fetchAccounts(client);
-  
-  // Close the database connection
-  await client.end();
-  console.log('Local database data fetching complete!');
+  let client;
+  try {
+    client = new Client(DB_CONFIG);
+    console.log('Connecting to local PostgreSQL database...');
+    await client.connect();
+    
+    // Set statement timeout
+    await client.query(`SET statement_timeout TO ${DB_CONFIG.statement_timeout}`);
+    
+    // Fetch and save transfer data
+    await fetchTransfers(client);
+    
+    // Fetch and save account data
+    await fetchAccounts(client);
+    
+    console.log('Local database data fetching complete!');
+  } catch (error) {
+    console.error('Error during database operations:', error);
+    throw error;
+  } finally {
+    if (client) {
+      try {
+        await client.end();
+        console.log('Database connection closed.');
+      } catch (error) {
+        console.error('Error closing database connection:', error);
+      }
+    }
+  }
 }
 
 async function fetchTransfers(client) {
@@ -73,48 +87,53 @@ async function fetchTransfers(client) {
   
   console.log('Fetching transfer data from local PostgreSQL...');
   
-  while (true) {
-    console.log(`Fetching transfers with offset ${offset}...`);
-    
-    const result = await client.query(
-      `SELECT id, block_number, 
-              encode(transaction_hash, 'hex') as transaction_hash, 
-              "from", "to", value::text 
-       FROM "transfer" 
-       ORDER BY id 
-       LIMIT $1 OFFSET $2`,
-      [batchSize, offset]
-    );
-    
-    console.log(`Received ${result.rows.length} transfers`);
-    
-    if (result.rows.length === 0) {
-      break;
-    }
-    
-    for (const row of result.rows) {
-      const record = {
-        id: row.id || '',
-        blockNumber: Number(row.block_number || 0),
-        transactionHash: row.transaction_hash || '',
-        from: row.from || '',
-        to: row.to || '',
-        value: row.value || '0'
-      };
+  try {
+    while (true) {
+      console.log(`Fetching transfers with offset ${offset}...`);
       
-      await writer.appendRow(record);
+      const result = await client.query(
+        `SELECT id, block_number, 
+                encode(transaction_hash, 'hex') as transaction_hash, 
+                "from", "to", value::text 
+         FROM "transfer" 
+         ORDER BY id 
+         LIMIT $1 OFFSET $2`,
+        [batchSize, offset]
+      );
+      
+      console.log(`Received ${result.rows.length} transfers`);
+      
+      if (result.rows.length === 0) {
+        break;
+      }
+      
+      for (const row of result.rows) {
+        const record = {
+          id: row.id || '',
+          blockNumber: Number(row.block_number || 0),
+          transactionHash: row.transaction_hash || '',
+          from: row.from || '',
+          to: row.to || '',
+          value: row.value || '0'
+        };
+        
+        await writer.appendRow(record);
+      }
+      
+      totalRows += result.rows.length;
+      offset += batchSize;
+      
+      if (result.rows.length < batchSize) {
+        break;
+      }
     }
-    
-    totalRows += result.rows.length;
-    offset += batchSize;
-    
-    if (result.rows.length < batchSize) {
-      break;
-    }
+  } catch (error) {
+    console.error('Error fetching transfers:', error);
+    throw error;
+  } finally {
+    await writer.close();
+    console.log(`Saved ${totalRows} transfer records to ${outputPath}`);
   }
-  
-  await writer.close();
-  console.log(`Saved ${totalRows} transfer records to ${outputPath}`);
 }
 
 async function fetchAccounts(client) {
@@ -131,38 +150,43 @@ async function fetchAccounts(client) {
   
   console.log('Fetching account data from local PostgreSQL...');
   
-  // Query to get the latest snapshot for each account
-  const query = `
-    WITH latest_snapshots AS (
-      SELECT DISTINCT ON (account_id) 
-        account_id AS id, 
-        balance::text AS balance,
-        point::text AS point,
-        timestamp
-      FROM "snapshot"
-      ORDER BY account_id, timestamp DESC
-    )
-    SELECT * FROM latest_snapshots
-    ORDER BY id
-  `;
-  
-  const result = await client.query(query);
-  console.log(`Received ${result.rows.length} accounts`);
-  
-  for (const row of result.rows) {
-    const record = {
-      id: row.id || '',
-      balance: row.balance || '0',
-      point: row.point || '0',
-      timestamp: row.timestamp ? Number(row.timestamp) : 0
-    };
+  try {
+    // Query to get the latest snapshot for each account
+    const query = `
+      WITH latest_snapshots AS (
+        SELECT DISTINCT ON (account_id) 
+          account_id AS id, 
+          balance::text AS balance,
+          point::text AS point,
+          timestamp
+        FROM "snapshot"
+        ORDER BY account_id, timestamp DESC
+      )
+      SELECT * FROM latest_snapshots
+      ORDER BY id
+    `;
     
-    await writer.appendRow(record);
-    totalRows++;
+    const result = await client.query(query);
+    console.log(`Received ${result.rows.length} accounts`);
+    
+    for (const row of result.rows) {
+      const record = {
+        id: row.id || '',
+        balance: row.balance || '0',
+        point: row.point || '0',
+        timestamp: row.timestamp ? Number(row.timestamp) : 0
+      };
+      
+      await writer.appendRow(record);
+      totalRows++;
+    }
+  } catch (error) {
+    console.error('Error fetching accounts:', error);
+    throw error;
+  } finally {
+    await writer.close();
+    console.log(`Saved ${totalRows} account records to ${outputPath}`);
   }
-  
-  await writer.close();
-  console.log(`Saved ${totalRows} account records to ${outputPath}`);
 }
 
 // Run the script with error handling

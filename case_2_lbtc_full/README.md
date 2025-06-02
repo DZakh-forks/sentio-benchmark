@@ -63,13 +63,75 @@ Each platform handles periodic updates differently:
 
 ## Performance Results
 
-| Indexer  | Time to Complete | Notes |
-|----------|------------------|-------|
-| Sentio   | 45m              | |
-| Envio    | 15s              | |
-| Ponder   | 4h38m            | Significantly slower with RPC calls |
-| Subsquid | 32m              | |
-| Subgraph | 18h38m           | Longest processing time |
+### Latest Benchmark Results (Block Range: 22400000 - 22500000)
+
+| Indexer | Duration | Records | RPC Time | Compute Time | Storage Time |
+|---------|----------|---------|-----------|-------------|--------------|
+| Sentio (timeInterval) | 7m | 7,634 | 181.12s | 0.55s | 53666.13s |
+| Sentio (blockInterval) | 5m | 7,634 | 149.48s | 0.75s | 55715.68s |
+| Ponder | 45m | 7,634 | 2401.97s | 0.26s | 83.49s |
+| Envio | 3m | 7,634 | 136425.85s | 294926.20s | 337790.82s |
+| Sqd | 34m | 7,634 | 1770.73s | 0.88s | 56268.61s |
+| Subgraph | 1h3m | 7,634 | - | - | - |
+| Sentio Subgraph | 56m | 7,634 | - | - | - |
+
+### Performance Analysis
+
+1. **RPC Performance**:
+   - Sentio shows the most efficient RPC handling with both modes under 200s
+   - Ponder demonstrates good RPC performance at 2401.97s
+   - Sqd maintains moderate RPC time at 1770.73s
+   - Envio shows the highest RPC time at 136425.85s
+   - Note: Subgraph does not support `performance.now()` or `Date.now()` for time measurement, so detailed timing metrics are not available
+
+2. **Compute Performance**:
+   - All platforms show very fast compute times (under 1s) except Envio
+   - Envio's compute time (294926.20s) is significantly higher due to:
+     - Double counting of calculation time for each transfer (both sender and receiver)
+     - Accumulation of calculation time in hourly updates
+     - Reuse of timing variables in batch processing
+   - Note: Envio's timing metrics are accumulated across all operations and may include double counting due to its unique batch processing architecture
+   - Sentio's compute time is consistent between modes (0.55s vs 0.75s)
+   - Note: Subgraph's compute time cannot be measured due to timing API limitations
+
+3. **Storage Performance**:
+   - Envio shows the highest storage time (337790.82s)
+   - Note: Envio's storage time includes accumulated time across all operations, including parallel processing and batch updates
+   - Sentio's storage time is high but consistent between modes (53666.13s vs 55715.68s)
+   - Ponder demonstrates excellent storage performance at 83.49s
+   - Sqd shows moderate storage time at 56268.61s
+   - Note: Subgraph's storage operations cannot be timed due to timing API limitations
+
+4. **Total Duration**:
+   - Sentio's blockInterval mode is fastest at 5m
+   - Envio follows at 3m despite high individual component times
+   - Note: Envio's high component times (RPC, Compute, Storage) are accumulated across all operations and may include double counting, but its total duration is accurate
+   - Ponder shows good overall performance at 45m
+   - Sqd completes in 34m
+   - Subgraph and Sentio Subgraph take longer at 1h3m and 56m respectively
+   - Note: Subgraph's total duration is measured from deployment to completion, as internal timing is not available
+
+### Key Observations
+
+1. **Platform Strengths**:
+   - Sentio: Best RPC performance and consistent compute times
+   - Ponder: Excellent storage performance and balanced metrics
+   - Envio: Fast total duration despite high component times, with unique batch processing architecture
+   - Sqd: Good balance between RPC and compute times
+   - Subgraph: Limited timing capabilities but provides reliable total duration measurements
+
+2. **Architectural Differences**:
+   - Sentio's dual-mode system (timeInterval/blockInterval) provides flexibility
+   - Envio's architecture prioritizes total duration over individual component times, with accumulated timing metrics that may include double counting
+   - Ponder's architecture shows strong storage optimization
+   - Sqd maintains consistent performance across all metrics
+   - Subgraph's architecture does not support fine-grained timing measurements
+
+3. **Data Consistency**:
+   - All platforms processed exactly 7,634 records
+   - Perfect correlation in point calculations between platforms
+   - Consistent data coverage across all implementations
+   - Note: While Subgraph's timing metrics are limited, its data consistency matches other platforms
 
 ## Implementation Examples
 
@@ -152,3 +214,19 @@ All the transfer event data and balances collected from each platform have been 
        }
      }'
   ``` 
+
+## Performance Comparison (Block Range: 22400000 - 22500000)
+
+| Indexer | Duration | Records | RPC Time | Compute Time | Storage Time |
+|---------|----------|---------|-----------|-------------|--------------|
+| Sentio  | 6m       | 7,634   | 183.87s   | 1.40s       | 12604.55s   |
+| Ponder  | 1h4m     | 7,634   | 3620.03s  | 0.27s       | 68.91s      |
+| Envio   | 2m       | 7,634   | 153219.90s| 0.14s       | 8.12s       |
+| Sqd     | 1h39m    | 7,634   | 5883.05s  | 2.06s       | 7.44s       |
+
+### Notes:
+- All indexers processed the same number of records (7,634)
+- Envio had the fastest total duration but highest RPC time
+- Sqd had the lowest storage time
+- Ponder had balanced performance across all metrics
+- Sentio had the highest storage time but moderate RPC time

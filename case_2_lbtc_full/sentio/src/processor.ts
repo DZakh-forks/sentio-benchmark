@@ -11,8 +11,14 @@ import { LBTCContext, LBTCProcessor, TransferEvent } from './types/eth/lbtc.js'
 import { getPriceByType, token } from "@sentio/sdk/utils"
 import { BigDecimal, Counter, Gauge } from "@sentio/sdk"
 import { EthChainId, isNullAddress } from "@sentio/sdk/eth";
-import { LBTC_PROXY, } from "./constant.js"
+import { LBTC_PROXY, MULTICALL_ADDRESS } from "./constant.js"
 import { AccountSnapshot, Transfer } from './schema/schema.js'
+import { GLOBAL_CONFIG } from "@sentio/runtime";
+import { Multicall } from "./multicall.js"
+
+GLOBAL_CONFIG.execution = {
+  sequential: true,
+};
 
 const SECOND_PER_DAY = 60 * 60 * 24;
 const DAILY_POINTS = 1000;
@@ -33,12 +39,41 @@ let pointCalcTime = 0;
 let storageTime = 0;
 let operationCount = 0;
 
+// Helper function to get timestamp
+function getTimestamp(ctx: LBTCContext): bigint {
+    // For transfer events, block timestamp is undefined, so use context timestamp
+    if (ctx.block?.timestamp === undefined) {
+        return BigInt(Math.floor(ctx.timestamp.getTime() / 1000));
+    }
+    return BigInt(ctx.block.timestamp);
+}
+
+// Helper function to get last snapshot data
+async function getLastSnapshotData(ctx: LBTCContext, account: string): Promise<{
+    timestamp: bigint;
+    lbtcBalance: BigDecimal;
+    points: BigDecimal;
+}> {
+    const storageStartTime = performance.now();
+    const snapshot = await ctx.store.get(AccountSnapshot, account);
+    storageTime += performance.now() - storageStartTime;
+
+    if (snapshot) {
+        return {
+            timestamp: snapshot.timestamp,
+            lbtcBalance: snapshot.lbtcBalance,
+            points: snapshot.points
+        };
+    }
+
+    return {
+        timestamp: 0n,
+        lbtcBalance: new BigDecimal(0),
+        points: new BigDecimal(0)
+    };
+}
+
 // event handler for Transfer event
-// record the amount of each mint event, along with token symbol as label
-// recording both instantaneous amount as gauge and cumulative amount as counter
-// Also recording a Eventlog for each transfer and mint event
-// Keep track of the balance of each account in a table
-// points are updated as funds are transferred and minted for related account
 const transferEventHandler = async function (event: TransferEvent, ctx: LBTCContext) {
     const tokenInfo = await token.getERC20TokenInfo(ctx, ctx.contract.address)
     const symbol = tokenInfo.symbol
@@ -58,10 +93,36 @@ const transferEventHandler = async function (event: TransferEvent, ctx: LBTCCont
     await ctx.store.upsert(transfer);
     storageTime += performance.now() - storageStartTime;
 
+    // Get balances for both accounts using multicall
+    const rpcStartTime = performance.now();
+    const multicall = new Multicall(ctx, MULTICALL_ADDRESS);
+    const balances = await multicall.aggregate(
+        async (account) => {
+            const result = await ctx.contract.balanceOf(account)
+            return result
+        },
+        [from, to].filter(account => !isNullAddress(account)),
+        50 // batch size to avoid RPC timeouts
+    );
+    rpcBalanceTime += performance.now() - rpcStartTime;
+
+    // Create a map of account balances
+    const balanceMap = new Map<string, BigDecimal>();
+    let balanceIndex = 0;
+    for (const account of [from, to]) {
+        if (!isNullAddress(account)) {
+            balanceMap.set(account, BigDecimal(balances[balanceIndex].toString()).div(BigDecimal(10).pow(tokenInfo.decimal)));
+            balanceIndex++;
+        }
+    }
+
     const newSnapshots = await Promise.all(
-        [event.args.from, event.args.to]
+        [from, to]
             .filter((account) => !isNullAddress(account))
-            .map((account) => process(ctx, account, undefined, event.name))
+            .map(async (account) => {
+                const lastData = await getLastSnapshotData(ctx, account);
+                return process(ctx, account, lastData, event.name, balanceMap.get(account));
+            })
     );
 
     // Measure storage time for snapshots upsert
@@ -71,56 +132,57 @@ const transferEventHandler = async function (event: TransferEvent, ctx: LBTCCont
 }
 
 async function updateAll(ctx: LBTCContext, triggerEvent: string) {
+    // Get all snapshots
+    const storageStartTime = performance.now();
     const snapshots = await ctx.store.list(AccountSnapshot, []);
+    storageTime += performance.now() - storageStartTime;
+    
+    if (!snapshots || snapshots.length === 0) {
+        return;
+    }
+    
+    const accounts = snapshots.map(s => s.id);
+    
+    // For interval updates, we don't need to query balances since they haven't changed
     const newSnapshots = await Promise.all(
-        snapshots.map((snapshot) =>
-            process(ctx, snapshot.id.toString(), snapshot, triggerEvent)
-        )
+        accounts.map(async (account: string) => {
+            const lastData = await getLastSnapshotData(ctx, account);
+            // Pass undefined for newBalance to use the stored balance
+            return process(ctx, account, lastData, triggerEvent);
+        })
     );
 
     // Measure storage time for bulk snapshot updates
-    const storageStartTime = performance.now();
+    const snapshotStorageStartTime = performance.now();
     await ctx.store.upsert(newSnapshots);
-    storageTime += performance.now() - storageStartTime;
+    storageTime += performance.now() - snapshotStorageStartTime;
 }
 
 // process function to update the balance and points of each account
 async function process(
     ctx: LBTCContext,
     account: string,
-    snapshot: AccountSnapshot | undefined,
-    triggerEvent: string
+    lastData: {
+        timestamp: bigint;
+        lbtcBalance: BigDecimal;
+        points: BigDecimal;
+    },
+    triggerEvent: string,
+    newBalance?: BigDecimal
 ) {
-    const startTime = performance.now();
+    const snapshotTimestamp = lastData.timestamp;
+    const snapshotLbtcBalance = lastData.lbtcBalance;
     
-    if (!snapshot) {
-        // Measure storage time for account snapshot fetch
-        const fetchStartTime = performance.now();
-        snapshot = await ctx.store.get(AccountSnapshot, account);
-        storageTime += performance.now() - fetchStartTime;
-    }
-    const snapshotTimestamp = snapshot?.timestamp ?? 0n;
-    const snapshotLbtcBalance: BigDecimal = snapshot?.lbtcBalance ?? new BigDecimal(0);
+    // Get current timestamp
+    const newTimestamp = getTimestamp(ctx);
     
     // Measure point calculation time
     const pointStartTime = performance.now();
-    const points = (snapshot?.points ?? new BigDecimal(0)).plus(calcPoints(ctx, snapshotTimestamp, snapshotLbtcBalance));
+    const points = lastData.points.plus(calcPoints(ctx, snapshotTimestamp, snapshotLbtcBalance));
     pointCalcTime += performance.now() - pointStartTime;
 
-    const newTimestamp = BigInt(ctx.timestamp.getTime() / 1000);
-    const tokenInfo = await token.getERC20TokenInfo(ctx, ctx.contract.address)
-    
-    let newLbtcBalance: BigDecimal;
-    // Only make RPC call if this is from transferEventHandler
-    if (triggerEvent === "Transfer") {
-        // Measure balanceOf RPC call time
-        const rpcStartTime = performance.now();
-        newLbtcBalance = await (await ctx.contract.balanceOf(account)).scaleDown(tokenInfo.decimal);
-        rpcBalanceTime += performance.now() - rpcStartTime;
-    } else {
-        // For hourly updates, use the existing balance
-        newLbtcBalance = snapshotLbtcBalance;
-    }
+    // For interval updates (when newBalance is undefined), use the existing balance
+    const newLbtcBalance = newBalance || snapshotLbtcBalance;
     
     const newSnapshot = new AccountSnapshot({
         id: account,
@@ -143,12 +205,13 @@ async function process(
     storageTime += performance.now() - storageStartTime;
 
     operationCount++;
-    if (operationCount % 1000 === 0) {
-        console.log(`block number: ${ctx.blockNumber}`);
-        console.log(`Performance metrics after ${operationCount} operations:`);
-        console.log(`RPC balanceOf time: ${(rpcBalanceTime / 1000).toFixed(2)}s`);
-        console.log(`Point calculation time: ${(pointCalcTime / 1000).toFixed(2)}s`);
-        console.log(`Storage operation time: ${(storageTime / 1000).toFixed(2)}s`);
+    if (operationCount % 1000 === 0 || ctx.blockNumber >= 22500000) {
+        console.log(
+            `[TRACE] Block ${ctx.blockNumber} (${newTimestamp}) - Performance metrics after ${operationCount} operations:\n` +
+            `RPC balanceOf: ${(rpcBalanceTime / 1000).toFixed(2)}s, ` +
+            `Point calc: ${(pointCalcTime / 1000).toFixed(2)}s, ` +
+            `Storage: ${(storageTime / 1000).toFixed(2)}s`
+        );
     }
 
     return newSnapshot;
@@ -160,22 +223,10 @@ function calcPoints(
     snapshotTimestamp: bigint,
     snapshotLbtcBalance: BigDecimal
 ): BigDecimal {
-    const now = ctx.timestamp.getTime() / 1000;
+    const now = Number(getTimestamp(ctx));
     const snapshot = Number(snapshotTimestamp);
-    if (now < snapshot) {
-        console.error(
-            "unexpected account snapshot from the future",
-            now,
-            snapshotTimestamp,
-            snapshotLbtcBalance
-        );
-        return new BigDecimal(0);
-    } else if (now == snapshot) {
-        // account affected for multiple times in the block
-        return new BigDecimal(0);
-    }
+    
     const deltaDay = (now - snapshot) / SECOND_PER_DAY;
-
     const lPoints = snapshotLbtcBalance
       .multipliedBy(deltaDay)
       .multipliedBy(DAILY_POINTS);
@@ -183,14 +234,20 @@ function calcPoints(
     return lPoints;
 }
 
-// processor binding logic to bind the right contract address and attach right event and block handlers
-// onTimeInterval is used to update the balance and points of each account every hour
+// Update processor binding
 LBTCProcessor.bind({ address: LBTC_PROXY, startBlock: 22400000, endBlock: 22500000 })
     .onEventTransfer(transferEventHandler) // if filter by mint LBTC Processor.filters.Transfer(0x0, null)
-    .onTimeInterval(
-        async (_, ctx) => {
-            await updateAll(ctx, "TimeInterval");
+    // .onTimeInterval(
+    //     async (_, ctx) => {
+    //         await updateAll(ctx, "TimeInterval");
+    //     },
+    //     60,
+    //     60 * 24
+    // )
+    .onBlockInterval(
+        async (_: unknown, ctx: LBTCContext) => {
+            await updateAll(ctx, "BlockInterval");
         },
-        60,
-        60 * 24
+        60*24/12,
+        60*60*24/12
     )
