@@ -97,7 +97,7 @@ Our benchmark cases are designed to test different aspects of indexer performanc
 | Event Handler | ✅ | ✅ | ✅ | ✅ | ✅ |
 | Block Handler | ✅ | ⚠️$ | ✅ | ✅ | ✅ |
 | Transaction Handler | ✅ | ⚠️$ | ✅ | ✅ | ❌ |
-| Trace/Internal Tx Handler | ✅ | ⚠️$ | ✅ | ✅ | ⚠️† |
+| Trace/Internal Tx Handler | ✅ | ⚠️$ | ❌ | ✅$$ | ⚠️† |
 | Native RPC | ✅ | ⚠️$ | ❌ | ❌ | ❌ |
 | SQL Querying | ✅ | ✅ | ✅ | ✅ | ❌ |
 | GraphQL API | ✅ | ✅ | ✅ | ❌ | ✅ |
@@ -109,7 +109,10 @@ Our benchmark cases are designed to test different aspects of indexer performanc
 
 $ Envio does not support natively, but one can utilize HyperSync to retrieve data, but it requires manual decoding and client-side processing of reorgs.
 
+$$ Subsquid does have access internal call trace as bytes, however, it requires manual decoding
+
 † Subgraph has limited internal transaction visibility, only detecting direct contract calls, not internal transactions. This leads to incomplete data (~40% fewer records) and inaccurate sender identification in trace-level indexing as documented in the [case_5_on_trace](./case_5_on_trace/) benchmark.
+
 
 \* Subsquid requires manual configuration updates at fixed blocks to optimize template indexing, with limitations on the number of contracts (up to tens of thousands) and requiring periodic maintenance to minimize sync overhead.
 
@@ -165,7 +168,7 @@ This benchmark provides a comparative analysis of indexer performance across dif
 ### Key Observations
 
 1. **Performance Comparison**:
-   - Envio's HyperSync, a RPC substitute, technology shows exceptional performance across relevent test cases
+   - Envio's HyperSync, a RPC alternative, technology shows exceptional performance across relevent test cases
    - Envio HyperIndex provides a full-featured indexing solution with competitive performance
    - Sentio performs consistently well across all test cases, showing strong performance
    - Ponder shows improved performance in case_2 (45m) compared to previous benchmarks
