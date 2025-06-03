@@ -19,13 +19,13 @@ processor.run(new TypeormDatabase({supportHotBlocks: true}), async (ctx) => {
                 const gasValue = gasUsed * priceForCalculation
                 
                 // Debug logging for the first few transactions
-                if (gasRecords.length < 5 || block.header.height === 22280000) {
-                    console.log(`Gas Calculation Details for tx ${txn.hash}:`);
-                    console.log(`- gasUsed: ${gasUsed.toString()}`);
-                    console.log(`- gasPrice: ${gasPrice.toString()}`);
-                    console.log(`- effectiveGasPrice: ${effectiveGasPrice !== undefined ? effectiveGasPrice.toString() : 'N/A'}`);
-                    console.log(`- gasValue (gasUsed * price): ${gasValue.toString()}`);
-                }
+                // if (gasRecords.length < 5 || block.header.height === 22280000) {
+                //     console.log(`Gas Calculation Details for tx ${txn.hash}:`);
+                //     console.log(`- gasUsed: ${gasUsed.toString()}`);
+                //     console.log(`- gasPrice: ${gasPrice.toString()}`);
+                //     console.log(`- effectiveGasPrice: ${effectiveGasPrice !== undefined ? effectiveGasPrice.toString() : 'N/A'}`);
+                //     console.log(`- gasValue (gasUsed * price): ${gasValue.toString()}`);
+                // }
                 
                 gasRecords.push(
                     new GasSpent({

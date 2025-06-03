@@ -140,7 +140,7 @@ This benchmark provides a comparative analysis of indexer performance across dif
 | case_1_lbtc_event_only | 8m | | 2m | 1h40m | 10m | 3h9m | 2h36m |  |
 | case_2_lbtc_full | 6m | | 3m | 45m | 34m | 1h3m | 56m |  |
 | case_3_ethereum_block | 18m | 7.9s | | 33m | 1m‡ | 10m | 15m |  |
-| case_4_on_transaction | 23m | 1m26s | | 33m | 5m | N/A | |  |
+| case_4_on_transaction | 17m | 1m26s | | 33m | 7m | N/A | |  |
 | case_5_on_trace | 16m | 41s | | N/A§ | 2m | 8m | 1h21m |  |
 | case_6_template | 19m | | 30s | 21m | 2m | 19m | 10m | 20h24m |
 

@@ -15,8 +15,8 @@ This benchmark tests the performance of various indexers when processing transac
 
 | Indexer  | Processing Time | Records | Block Range | 
 |----------|----------------|---------|-------------|
-| Sentio   | 23m            | 1,696,641 | 22,280,000-22,290,000 |
-| Subsquid | 5m             | 1,696,641 | 22,280,000-22,290,000 |
+| Sentio   | 17m            | 1,696,641 | 22,280,000-22,290,000 |
+| Subsquid | 7m             | 1,696,641 | 22,280,000-22,290,000 |
 | Envio    | 1m 26s         | 1,696,423 | 22,280,000-22,289,999 |
 | Ponder   | 33m            | 1,696,423 | 22,280,000-22,289,999 |
 | Subgraph | N/A            | N/A       | N/A                   | 
@@ -69,7 +69,7 @@ Each subdirectory contains the implementation for a specific indexing platform:
 
 ### Subsquid
 - Complete coverage of all transactions
-- Processing time: 5 minutes (18:47:50 - 18:52:17)
+- Processing time: 7 minutes 
 - Total transaction records: ~1,700,000
 
 ### Envio

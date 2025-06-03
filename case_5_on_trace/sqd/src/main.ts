@@ -134,7 +134,7 @@ processor.run(new TypeormDatabase(), async (ctx) => {
             }
             
             // Let's log we found a potential swap
-            ctx.log.info(`Found potential swap in tx ${transaction.hash}`)
+            // ctx.log.info(`Found potential swap in tx ${transaction.hash}`)
             
             // Skip function selector (first 4 bytes)
             const data = input.slice(10)
@@ -217,7 +217,7 @@ processor.run(new TypeormDatabase(), async (ctx) => {
                 })
                 
                 // Log successful swap creation with trace address
-                ctx.log.info(`Created swap in tx ${txHash} from ${fromAddress} with trace address ${traceAddressPath}`)
+                // ctx.log.info(`Created swap in tx ${txHash} from ${fromAddress} with trace address ${traceAddressPath}`)
                 
                 // Add to current block batch
                 blockSwaps.push(swap)
@@ -225,7 +225,7 @@ processor.run(new TypeormDatabase(), async (ctx) => {
                 // If we've reached the mini-batch size, save immediately to avoid memory accumulation
                 if (blockSwaps.length >= BATCH_SIZE) {
                     await ctx.store.insert(blockSwaps)
-                    ctx.log.info(`Stored mini-batch of ${blockSwaps.length} swaps from block ${blockHeight}`)
+                    // ctx.log.info(`Stored mini-batch of ${blockSwaps.length} swaps from block ${blockHeight}`)
                     
                     // Add to our collection for Parquet file
                     allSwaps.push(...blockSwaps)
@@ -241,7 +241,7 @@ processor.run(new TypeormDatabase(), async (ctx) => {
         // Save any remaining swaps for this block
         if (blockSwaps.length > 0) {
             await ctx.store.insert(blockSwaps)
-            ctx.log.info(`Stored remaining ${blockSwaps.length} swaps from block ${blockHeight}`)
+            // ctx.log.info(`Stored remaining ${blockSwaps.length} swaps from block ${blockHeight}`)
             
             // Add to our collection for Parquet file
             allSwaps.push(...blockSwaps)
