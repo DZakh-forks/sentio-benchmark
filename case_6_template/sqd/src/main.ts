@@ -76,21 +76,21 @@ const db = new TypeormDatabase({supportHotBlocks: true})
 // direct RPC calls, external APIs etc.
 processor.run(db, async (ctx) => {
   console.log(`Processing batch of ${ctx.blocks.length} blocks`);
-  
+
   // Create maps to store entities for batch insertion
   const pairsToSave = new Map<string, Pair>();
   const eventsToSave: UniswapV2Event[] = [];
-  
+
   for (let block of ctx.blocks) {
     for (let log of block.logs) {
       if (log.address.toLowerCase() === '0x5c69bee701ef814a2b6a3edd4b1652cb9cc5aa6f'.toLowerCase()) {
         // Handle PairCreated event
         const event = UniswapV2FactoryEvents.PairCreated.decode(log);
         if (!event) continue;
-        
+
         // Add to valid pairs set
         validPairs.add(event.pair.toLowerCase());
-        
+
         // Store pair for batch insertion
         const pair = new Pair({
           id: event.pair,
@@ -102,15 +102,11 @@ processor.run(db, async (ctx) => {
       } else if (validPairs.has(log.address.toLowerCase())) {
         const event = UniswapV2PairEvents.Swap.decode(log);
         if (!event) continue;
-        
-        // Get the pair entity
-        const pair = await ctx.store.get(Pair, log.address);
-        if (!pair) continue;
 
         // Store event for batch insertion
         const uniswapEvent = new UniswapV2Event({
           id: `${log.transaction?.hash}-${log.logIndex}`,
-          pair: pair,
+          pair: log.address,
           sender: event.sender,
           to: event.to,
           amount0In: event.amount0In,
@@ -123,7 +119,7 @@ processor.run(db, async (ctx) => {
         eventsToSave.push(uniswapEvent);
       }
     }
-    
+
     // Save all pairs and events at the end of each block
     if (pairsToSave.size > 0) {
       await ctx.store.insert([...pairsToSave.values()]);

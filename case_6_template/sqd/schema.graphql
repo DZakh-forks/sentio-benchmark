@@ -3,12 +3,11 @@ type Pair @entity {
   token0: String!
   token1: String!
   createdAt: BigInt!
-  swaps: [UniswapV2Event!]! @derivedFrom(field: "pair")
 }
 
 type UniswapV2Event @entity {
   id: ID!
-  pair: Pair!
+  pair: String!
   sender: String!
   to: String!
   amount0In: BigInt!
@@ -17,4 +16,4 @@ type UniswapV2Event @entity {
   amount1Out: BigInt!
   timestamp: BigInt!
   blockNumber: BigInt!
-} 
+}
