@@ -39,7 +39,6 @@ See the [complete benchmark results](#current-benchmark-results---april-2025) fo
 Our benchmark cases are designed to test different aspects of indexer performance:
 
 1. **Chain Selection**:
-
    - Ethereum Mainnet for all test cases
 
 2. **Data Types**:
@@ -98,18 +97,18 @@ Our benchmark cases are designed to test different aspects of indexer performanc
 
 ### Supported Features
 
-| Feature                              | Sentio | Envio | Ponder | Subsquid | Subgraph |
-| ------------------------------------ | ------ | ----- | ------ | -------- | -------- |
-| Event Handler                        | ✅     | ✅    | ✅     | ✅       | ✅       |
-| Block Handler                        | ✅     | ⚠️$   | ✅     | ✅       | ✅       |
-| Transaction Handler                  | ✅     | ⚠️$   | ✅     | ✅       | ❌       |
-| Trace/Internal Tx Handler            | ✅     | ⚠️$   | ❌     | ✅$$     | ⚠️†      |
-| Native RPC                           | ✅     | ⚠️$   | ❌     | ❌       | ❌       |
-| SQL Querying                         | ✅     | ✅    | ✅     | ✅       | ❌       |
-| GraphQL API                          | ✅     | ✅    | ✅     | ❌       | ✅       |
-| Decentralized Network                | ❌     | ❌    | ❌     | ✅       | ✅       |
-| Factory Template Dynamic Registation | ✅     | ✅    | ✅     | ⚠️\*     | ✅       |
-| Batch RPC calls                      | ✅^    | ✅^   | ✅^    | ✅^      | ❌       |
+| Feature | Sentio | Envio | Ponder | Subsquid | Subgraph |
+|---------|--------|-------|--------|----------|----------|
+| Event Handler | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Block Handler | ✅ | ⚠️$ | ✅ | ✅ | ✅ |
+| Transaction Handler | ✅ | ⚠️$ | ✅ | ✅ | ❌ |
+| Trace/Internal Tx Handler | ✅ | ⚠️$ | ❌ | ✅$$ | ⚠️† |
+| Native RPC | ✅ | ⚠️$ | ❌ | ❌ | ❌ |
+| SQL Querying | ✅ | ✅ | ✅ | ✅ | ❌ |
+| GraphQL API | ✅ | ✅ | ✅ | ❌ | ✅ |
+| Decentralized Network | ❌ | ❌ | ❌ | ✅ | ✅ |
+| Factory Template Dynamic Registation | ✅ | ✅ | ✅ | ⚠️* | ✅ |
+| Batch RPC calls | ✅^ | ✅^ | ✅^ | ✅^ | ❌ |
 
 ⚠️ Limited capability or requires additional configuration
 
@@ -151,23 +150,21 @@ This benchmark provides a comparative analysis of indexer performance across dif
 
 ### Data Completeness
 
-| Case                   | Sentio    | Envio       | Ponder    | Subsquid  | Subgraph |
-| ---------------------- | --------- | ----------- | --------- | --------- | -------- |
-| case_1_lbtc_event_only | 296,734   | 296,734     | 296,138\* | 296,734   | 296,734  |
-| case_2_lbtc_full       | 7,634     | 7,634       | 7,634     | 7,634     | 7,634    |
-| case_3_ethereum_block  | 100,001   | 100,001     | 100,001   | 13,156†   | 100,001  |
-| case_4_on_transaction  | 1,696,641 | 1,696,423†† | 1,696,423 | 1,696,641 | N/A&     |
-| case_5_on_trace        | 50,191    | 50,191      | 0\*\*     | 50,191    | 29,058§§ |
-| case_6_template        | 35,039    | 35,039      | 35,039    | 33,972††† | 35,039   |
+| Case | Sentio | Envio | Ponder | Subsquid | Subgraph |
+|------|--------|-------|--------|----------|----------|
+| case_1_lbtc_event_only | 296,734 | 296,734 | 296,138* | 296,734 | 296,734 |
+| case_2_lbtc_full | 7,634 | 7,634 | 7,634 | 7,634 | 7,634 |
+| case_3_ethereum_block | 100,001 | 100,001 | 100,001 | 100,001 | 100,001 |
+| case_4_on_transaction | 1,696,641 | 1,696,423†† | 1,696,423 | 1,696,641 | N/A& |
+| case_5_on_trace | 50,191 | 50,191 | 0** | 50,191 | 29,058§§ |
+| case_6_template | 35,039 | 35,039 | 35,039 | 35,039 | 35,039 |
 
 \* Missing ~5% of events
-‡ Some implementations include 0x0000000000000000000000000000000000000000 address
-† Missing 86,844 blocks (86.84% of target range)
-†† Envio processes blocks 22,280,000 to 22,289,999 due to exclusive end block handling, resulting in 218 fewer transactions
-& Subgraph does not support transaction level access
-\*\* Ponder documentation indicates trace support, but our implementation encountered configuration issues that prevented successful trace capture
-§§ Subgraph captured only ~58% of swap traces due to architectural limitations in accessing internal transactions
-††† Subsquid captured 1,067 fewer swaps than other platforms
+‡   Some implementations include 0x0000000000000000000000000000000000000000 address
+††  Envio processes blocks 22,280,000 to 22,289,999 due to exclusive end block handling, resulting in 218 fewer transactions
+&   Subgraph does not support transaction level access
+**  Ponder documentation indicates trace support, but our implementation encountered configuration issues that prevented successful trace capture
+§§  Subgraph captured only ~58% of swap traces due to architectural limitations in accessing internal transactions
 
 ### Key Observations
 
@@ -183,7 +180,6 @@ This benchmark provides a comparative analysis of indexer performance across dif
 
    - All platforms achieved complete data coverage (7,634 records) in case_2 with perfect correlation in point calculations (Pearson: 0.9917-1.0000, Spearman: 0.9971-1.0000)
    - Ponder is missing approximately 5% of data in case_1
-   - Subsquid is missing about 87% of blocks in case_3, primarily indexing blocks in the 45,000-100,000 range
    - Envio/Ponder processes blocks up to but not including the end block in case_4 (stopping at 22,289,999) due to its exclusive end block handling
    - Sentio processed fewer traces in case_5 (45,895 vs 50,191 for Subsquid/Envio)
    - Subgraph captured only ~58% of swap transactions in case_5

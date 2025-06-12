@@ -39,6 +39,10 @@ export const processor = new EvmBatchProcessor()
         from: 0,
         to:   100000
     })
+    .includeAllBlocks({
+        from: 0,
+        to:   100000
+    })
     .addTransaction({
     })
 
