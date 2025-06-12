@@ -29,6 +29,7 @@ pnpm dev
 ```
 
 This will:
+
 - Start the local indexer service
 - Begin indexing event data with RPC calls using HyperSync technology
 - Process events and fetch token balances
@@ -37,9 +38,11 @@ This will:
 ### 4. Access the GraphQL API
 
 Once running, you can access the GraphQL Playground at:
+
 ```
 http://localhost:8080
 ```
+
 Local password is `testing`.
 
 ## Project Structure
@@ -52,6 +55,7 @@ Local password is `testing`.
 ## Implementation Details
 
 This implementation:
+
 1. Uses Envio's HyperSync technology for ultra-fast blockchain data access
 2. Processes Transfer events from the LBTC token contract
 3. Makes balanceOf() RPC calls to fetch current token balances
@@ -63,14 +67,11 @@ This implementation:
 ## Performance Advantages
 
 Envio's HyperSync technology offers significant advantages for this complex use case:
+
 - Optimized RPC call handling with minimized latency
 - Efficient data retrieval with field selection to reduce bandwidth
 - Flexible join modes to control how related data is connected
 - Transaction streaming with automatic retry and error handling
-
-## Performance Results
-
-In the benchmark test, this Envio implementation indexed LBTC transfers with RPC calls in **15 seconds**, showing excellent performance for complex data processing with external contract calls.
 
 ## Additional Commands
 
@@ -97,4 +98,4 @@ curl -X POST \
   http://localhost:8080/graphql
 ```
 
-For more details on Envio and HyperSync, refer to the [official documentation](https://docs.envio.dev). 
+For more details on Envio and HyperSync, refer to the [official documentation](https://docs.envio.dev).

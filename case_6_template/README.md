@@ -13,13 +13,13 @@ This benchmark tests the performance of various indexers when processing Uniswap
 
 ## Performance Results
 
-| Indexer    | Processing Time | Records | Block Range |
-|------------|----------------|---------|-------------|
-| Envio HyperIndex | 30s            | 35,039  | 19000000-19010000 |
-| Subsquid   | 2m             | 33,972  | 19000000-19010000 |
-| Sentio     | 19m            | 35,039  | 19000000-19010000 |
-| Subgraph   | 19m            | 35,039  | 19000000-19010000 |
-| Ponder     | 21m            | 35,039  | 19000000-19010000 |
+| Indexer          | Processing Time | Records | Block Range       |
+| ---------------- | --------------- | ------- | ----------------- |
+| Envio HyperIndex | 8s              | 35,039  | 19000000-19010000 |
+| Subsquid         | 2m              | 33,972  | 19000000-19010000 |
+| Sentio           | 19m             | 35,039  | 19000000-19010000 |
+| Subgraph         | 19m             | 35,039  | 19000000-19010000 |
+| Ponder           | 21m             | 35,039  | 19000000-19010000 |
 
 ## Data Distribution Details
 
@@ -44,11 +44,13 @@ The distribution of factory events and pairs across platforms shows some variati
 ## Key Findings
 
 1. **Data Completeness**:
+
    - **Complete Coverage**: Sentio, Envio HyperIndex, Ponder, and Subgraph all captured 35,039 records
    - **Partial Coverage**: Subsquid captured 33,972 records (~97% of total)
    - The difference in Subsquid's record count is due to template configuration limitations
 
 2. **Performance Differences**:
+
    - **Envio HyperIndex** demonstrated exceptional performance at 30 seconds
    - **Subsquid** showed excellent performance at 2 minutes
    - **Sentio** and **Subgraph** completed in 19 minutes
@@ -62,7 +64,8 @@ The distribution of factory events and pairs across platforms shows some variati
 ## Implementation Details
 
 Each subdirectory contains the implementation for a specific indexing platform:
-- `/sentio`: Sentio implementation 
+
+- `/sentio`: Sentio implementation
 - `/envio`: Envio HyperIndex implementation
 - `/ponder`: Ponder implementation
 - `/sqd`: Subsquid implementation
@@ -71,30 +74,35 @@ Each subdirectory contains the implementation for a specific indexing platform:
 ## Platform Notes
 
 ### Sentio
+
 - Complete coverage of all factory events
 - Processing time: 19 minutes
 - Total records: 35,039
 - Accurate pair tracking and analysis
 
 ### Subsquid
+
 - Partial coverage with 33,972 records
 - Processing time: 2 minutes
 - Limited by template configuration constraints
 - Requires manual updates for optimal performance
 
 ### Envio HyperIndex
+
 - Uses optimized template processing
-- Processing time: 30 seconds
+- Processing time: 8 seconds
 - Total records: 35,039
 - Complete and accurate pair tracking
 
 ### Ponder
+
 - Complete coverage of all factory events
 - Processing time: 21 minutes
 - Total records: 35,039
 - Accurate pair tracking
 
 ### Subgraph
+
 - Complete coverage of all factory events
 - Processing time: 19 minutes
 - Total records: 35,039
@@ -109,11 +117,14 @@ These results emphasize the importance of choosing the right indexing solution b
 ## Access Information
 
 ### Exported Data
+
 All the factory event data collected from each platform has been exported and is available via Google Drive:
+
 - **Google Drive Folder**: [Case 6 - Uniswap V2 Template Data](https://drive.google.com/drive/folders/1407EeP-KzUwzujdnkoP_DiewJNbOHqcY)
 - Contains datasets with factory event data from all platforms
 - Includes comparative analysis and benchmark results
 
 ### Sentio
+
 - **Dashboard URL**: https://app.sentio.xyz/yufei/case_6_template/data-explorer/sql
-- **Data Summary**: 35,039 records with complete coverage 
+- **Data Summary**: 35,039 records with complete coverage

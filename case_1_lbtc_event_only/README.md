@@ -14,6 +14,7 @@ This benchmark tests the performance of various indexers when processing simple 
 ## Implementation Details
 
 The benchmark requires each indexer to:
+
 1. Listen for `Transfer(address indexed from, address indexed to, uint256 value)` events
 2. Create a record for each Transfer event with the following fields:
    - ID (unique identifier)
@@ -25,18 +26,19 @@ The benchmark requires each indexer to:
 
 ## Performance Results
 
-| Indexer  | Time to Complete | Records Indexed | Notes |
-|----------|------------------|----------------|-------|
-| Sentio   | 8m               | 296,734        | |
-| Envio HyperIndex | 2m        | 296,734        | Fastest processing time |
-| Ponder   | 1h40m            | 296,138        | Missing ~5% of events |
-| Subsquid | 10m              | 296,734        | |
-| Subgraph | 3h9m             | 296,734        | |
+| Indexer          | Time to Complete | Records Indexed | Notes                   |
+| ---------------- | ---------------- | --------------- | ----------------------- |
+| Sentio           | 8m               | 296,734         |                         |
+| Envio HyperIndex | 3m               | 296,734         | Fastest processing time |
+| Ponder           | 1h40m            | 296,138         | Missing ~5% of events   |
+| Subsquid         | 10m              | 296,734         |                         |
+| Subgraph         | 3h9m             | 296,734         |                         |
 
 ## Implementation Examples
 
 Each subdirectory contains the implementation for a specific indexing platform:
-- `/sentio`: Sentio implementation 
+
+- `/sentio`: Sentio implementation
 - `/envio`: Envio implementation
 - `/ponder`: Ponder implementation
 - `/sqd`: Subsquid implementation
@@ -64,14 +66,17 @@ This benchmark showcases performance differences when handling straightforward e
 ## Access Information
 
 ### Exported Data
+
 All the transfer event data collected from each platform has been exported and is available via Google Drive:
+
 - **Google Drive Folder**: [Case 1 - LBTC Event-Only Data](https://drive.google.com/drive/u/0/folders/1D8HXn7U7qQjzaEh1TLUZbNzVW_6nIRpT)
 - Contains datasets with transfer events from all platforms
 - Includes comparative analysis and benchmark results
 
 ### Sentio
+
 - **Dashboard URL**: https://app.sentio.xyz/yufei/case_1_lbtc_event_only/data-explorer/sql
-- **API Access**: 
+- **API Access**:
   ```
   READ_ONLY KEY: hnZ7Z8cRsoxRadrVdhih2jRjBlH0lIYWl
   curl -L -X POST 'https://app.sentio.xyz/api/v1/analytics/yufei/case_1_lbtc_event_only/sql/execute' \
@@ -87,13 +92,15 @@ All the transfer event data collected from each platform has been exported and i
 - **Block Range**: 0 to 22200000
 
 ### Envio
+
 - **Dashboard URL**: https://envio.dev/app/0xdatapunk/case_1_lbtc_event_only
 - **GraphQL Endpoint**: https://indexer.dev.hyperindex.xyz/6c63ec1/v1/graphql
-- **Data Summary**: 
+- **Data Summary**:
   - Block Range: 0 to 22200000
   - Total Records: 296,734
 
 ### Sentio Subgraph
+
 - **Dashboard URL**: https://app.sentio.xyz/yufei/case_1_lbtc_event_only_subgraph/data-explorer/sql
 - **API Access**:
   ```
@@ -107,4 +114,3 @@ All the transfer event data collected from each platform has been exported and i
        }
      }'
   ```
-
