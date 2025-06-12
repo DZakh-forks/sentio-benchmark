@@ -18,10 +18,11 @@
     "chai": "4.3.10",
     "mocha": "10.2.0",
     "ts-mocha": "^10.0.0",
-    "typescript": "5.2.2"
+    "typescript": "5.2.2",
+    "viem": "2.31.0"
   },
   "dependencies": {
-    "envio": "2.22.0"
+    "envio": "2.22.1"
   },
   "optionalDependencies": {
     "generated": "./generated"
